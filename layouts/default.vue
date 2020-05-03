@@ -21,7 +21,8 @@
 }
 
 html {
-  color: map-get($colors, "black");
+  background: map-get($colors, "black");
+  color: #fff;
   font-family: 'Circular', sans-serif;
   font-size: 16px;
   word-spacing: 1px;

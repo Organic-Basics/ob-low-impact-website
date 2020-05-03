@@ -27,7 +27,7 @@ export default Vue.extend({
       url: process.env.VUE_APP_GRAPHQL_URI,
       data: {
         query: `query {
-          products(first:10) {
+          products(first:24) {
             pageInfo {
               hasNextPage
               hasPreviousPage
@@ -61,7 +61,7 @@ export default Vue.extend({
 <style lang="scss">
 
 .container {
-  margin: 0 auto;
+  margin: 20px auto;
   min-height: 100vh;
   display: flex;
   flex-direction: column;

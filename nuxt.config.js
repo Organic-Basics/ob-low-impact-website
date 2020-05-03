@@ -22,19 +22,19 @@ module.exports = {
   /*
   ** Global CSS
   */
-  css: [
-    
-  ],
+  css: [],
   /*
   ** Plugins to load before mounting the App
   */
   plugins: [
+    
   ],
   /*
   ** Nuxt.js dev-modules
   */
   buildModules: [
-    '@nuxt/typescript-build'
+    '@nuxt/typescript-build',
+    '~/plugins/web_impact_module'
   ],
   /*
   ** Nuxt.js modules

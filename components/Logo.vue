@@ -24,7 +24,7 @@
 
 .logo--main {
   svg {
-    fill: map-get($colors, "brand");
+    fill: #fff;
     max-width: 200px;
   }
 }

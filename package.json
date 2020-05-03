@@ -23,11 +23,14 @@
     "@nuxt/typescript-build": "^0.6.0",
     "@nuxtjs/eslint-config-typescript": "^1.0.0",
     "@nuxtjs/eslint-module": "^1.0.0",
+    "@tgwf/co2": "^0.6.1",
     "babel-eslint": "^10.0.1",
     "eslint": "^6.1.0",
     "eslint-plugin-nuxt": ">=0.4.2",
+    "fs": "^0.0.1-security",
     "node-sass": "^4.14.0",
     "nodemon": "^1.18.9",
+    "puppeteer": "^3.0.2",
     "sass-loader": "^8.0.2"
   }
 }
