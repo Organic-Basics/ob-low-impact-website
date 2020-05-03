@@ -26,27 +26,29 @@ export default Vue.extend({
       method: 'post',
       url: process.env.VUE_APP_GRAPHQL_URI,
       data: {
-        query: `query {
-          products(first:24) {
-            pageInfo {
-              hasNextPage
-              hasPreviousPage
-            }
-            edges {
-              node {
-                handle,
-                title,
-                images(first: 1) {
-                  edges {
-                    node {
-                      transformedSrc(maxWidth: 300, maxHeight: 390, crop: CENTER)
+        query: `
+          query {
+            products(first:24) {
+              pageInfo {
+                hasNextPage
+                hasPreviousPage
+              }
+              edges {
+                node {
+                  handle,
+                  title,
+                  images(first: 1) {
+                    edges {
+                      node {
+                        transformedSrc(maxWidth: 300, maxHeight: 390, crop: CENTER)
+                      }
                     }
                   }
                 }
               }
             }
           }
-        }`
+        `
       },
       headers: {
         'X-Shopify-Storefront-Access-Token': process.env.VUE_APP_GRAPHQL_SECRET
@@ -54,6 +56,44 @@ export default Vue.extend({
     })
     let products = response.data.data.products.edges
     return { products : response.data.data.products.edges }
+  },
+  async mounted () {
+    if(!this.$store.state.checkoutId) {
+      let response = await axios({
+        method: 'post',
+        url: process.env.VUE_APP_GRAPHQL_URI,
+        data: {
+          query: `
+            mutation {
+              checkoutCreate(input: {}) {
+                userErrors {
+                  message
+                  field
+                }
+                checkout {
+                  id
+                }
+              }
+            }
+          `
+        },
+        headers: {
+          'X-Shopify-Storefront-Access-Token': process.env.VUE_APP_GRAPHQL_SECRET
+        }
+      })
+      try {
+        console.log('New ID: ' + response.data.data.checkoutCreate.checkout.id)
+        if(response.data.data.checkoutCreate.checkout.id) {
+          this.$store.commit('set', response.data.data.checkoutCreate.checkout.id)
+        }
+      } catch(err) {
+        console.error(err)
+      }
+
+    }
+    else {
+      console.log('Old ID: ' + this.$store.state.checkoutId)
+    }
   }
 })
 </script>
