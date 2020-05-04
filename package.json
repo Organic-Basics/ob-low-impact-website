@@ -12,11 +12,14 @@
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore ."
   },
   "dependencies": {
+    "@nuxtjs/apollo": "^4.0.0-rc19",
     "@nuxtjs/axios": "^5.3.6",
     "@nuxtjs/dotenv": "^1.4.0",
     "@nuxtjs/pwa": "^3.0.0-0",
+    "core-js": "2",
     "cross-env": "^5.2.0",
     "fastify": "^1.13.3",
+    "graphql-tag": "^2.10.3",
     "nuxt": "^2.0.0"
   },
   "devDependencies": {
@@ -27,7 +30,6 @@
     "babel-eslint": "^10.0.1",
     "eslint": "^6.1.0",
     "eslint-plugin-nuxt": ">=0.4.2",
-    "fs": "^0.0.1-security",
     "node-sass": "^4.14.0",
     "nodemon": "^1.18.9",
     "puppeteer": "^3.0.2",

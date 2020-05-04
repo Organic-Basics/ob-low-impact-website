@@ -1,4 +1,5 @@
 let WebImpactPlugin = require('./plugins/web_impact_entry');
+require('dotenv').config()
 
 module.exports = {
   mode: 'universal',
@@ -39,6 +40,7 @@ module.exports = {
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     '@nuxtjs/pwa',
+    '@nuxtjs/apollo',
     // Doc: https://github.com/nuxt-community/dotenv-module
     '@nuxtjs/dotenv'
   ],
@@ -47,6 +49,24 @@ module.exports = {
   ** See https://axios.nuxtjs.org/options
   */
   axios: {
+  },
+  /*
+  ** Apollo module configuration
+  ** See https://github.com/nuxt-community/apollo-module
+  */
+  apollo: {
+    clientConfigs: {
+      default: {
+        // required  
+        httpEndpoint: process.env.VUE_APP_GRAPHQL_URI,
+        // See https://www.apollographql.com/docs/link/links/http.html#options
+        httpLinkOptions: {
+          headers: {
+            'X-Shopify-Storefront-Access-Token': process.env.VUE_APP_GRAPHQL_SECRET
+          }
+        }
+      }
+    }
   },
   /*
   ** Build configuration

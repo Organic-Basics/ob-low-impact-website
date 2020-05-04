@@ -4,6 +4,7 @@
     <h2 class="subtitle">
       Low Impact Website
     </h2>
+    <button @click="fetchCart()">Fetch Cart</button>
     <div class="product-grid">
       <product v-for="(product, index) in products" :key="index" :productData="product.node" />
     </div>
@@ -11,22 +12,22 @@
 </template>
 
 <script lang="ts">
-import axios from 'axios'
 import Vue from 'vue'
 import Logo from '~/components/Logo.vue'
 import Product from '~/components/Product.vue'
+import VueApollo from 'vue-apollo'
+import gql from 'graphql-tag'
 
 export default Vue.extend({
   components: {
     Logo,
     Product
   },
-  async asyncData({ params }) {
-    let response = await axios({
-      method: 'post',
-      url: process.env.VUE_APP_GRAPHQL_URI,
-      data: {
-        query: `
+  async asyncData(context:any) {
+    try {
+      let client = context.app.apolloProvider.defaultClient
+      let result = await client.query({
+        query: gql`
           query {
             products(first:24) {
               pageInfo {
@@ -37,10 +38,18 @@ export default Vue.extend({
                 node {
                   handle,
                   title,
+                  id,
                   images(first: 1) {
                     edges {
                       node {
                         transformedSrc(maxWidth: 300, maxHeight: 390, crop: CENTER)
+                      }
+                    }
+                  },
+                  variants(first: 1) {
+                    edges {
+                      node {
+                        id
                       }
                     }
                   }
@@ -49,42 +58,42 @@ export default Vue.extend({
             }
           }
         `
-      },
-      headers: {
-        'X-Shopify-Storefront-Access-Token': process.env.VUE_APP_GRAPHQL_SECRET
-      }
-    })
-    let products = response.data.data.products.edges
-    return { products : response.data.data.products.edges }
+      })
+      let products = result.data.products.edges.map((a:any, i:number, arr:any) => {
+        if(a.node.variants !== undefined) {
+          a.node.variant = a.node.variants.edges[0]
+          delete a.node.variants
+        }
+        return a
+      })
+      return { products : result.data.products.edges }
+    } catch(err) {
+      console.error(err)
+      return { products : [] }
+    }
   },
   async mounted () {
     if(!this.$store.state.checkoutId) {
-      let response = await axios({
-        method: 'post',
-        url: process.env.VUE_APP_GRAPHQL_URI,
-        data: {
-          query: `
-            mutation {
-              checkoutCreate(input: {}) {
-                userErrors {
-                  message
-                  field
-                }
-                checkout {
-                  id
-                }
+      let result = await this.$apollo.mutate({
+        mutation: gql`
+          mutation {
+            checkoutCreate(input: {}) {
+              userErrors {
+                message
+                field
+              }
+              checkout {
+                id
               }
             }
-          `
-        },
-        headers: {
-          'X-Shopify-Storefront-Access-Token': process.env.VUE_APP_GRAPHQL_SECRET
-        }
+          }
+        `
       })
+
       try {
-        console.log('New ID: ' + response.data.data.checkoutCreate.checkout.id)
-        if(response.data.data.checkoutCreate.checkout.id) {
-          this.$store.commit('set', response.data.data.checkoutCreate.checkout.id)
+        console.log('Fresh Checkout ID: ' + result.data.checkoutCreate.checkout.id)
+        if(result.data.checkoutCreate.checkout.id) {
+          this.$store.commit('setCheckoutId', result.data.checkoutCreate.checkout.id)
         }
       } catch(err) {
         console.error(err)
@@ -92,7 +101,12 @@ export default Vue.extend({
 
     }
     else {
-      console.log('Old ID: ' + this.$store.state.checkoutId)
+      console.log('Stored Checkout ID: ' + this.$store.state.checkoutId)
+    }
+  },
+  methods: {
+    async fetchCart () {
+      this.$store.dispatch('fetchCart')
     }
   }
 })
