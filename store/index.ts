@@ -15,11 +15,8 @@ export const mutations: MutationTree<RootState> = {
 
 export const actions: ActionTree<RootState, RootState> = {
   async fetchCart (store:any) {
-  		console.log(store)
+  	if(this && this.app && this.app.apolloProvider && this.app.apolloProvider.defaultClient) {
       	let client = this.app.apolloProvider.defaultClient
-      	console.log(store.state.checkoutId)
-      	console.log(client)
-      	console.time('fetchCart')
       	let result = await client.query({
 	        query: gql`
 	          query ($checkoutId: ID!) {
@@ -55,6 +52,6 @@ export const actions: ActionTree<RootState, RootState> = {
 		})
 		store.commit('setLineItems', result.data.node.lineItems)
 		console.log(result.data)
-		console.timeEnd('fetchCart')
+  	}
   }
 }
