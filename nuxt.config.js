@@ -1,3 +1,4 @@
+let WebImpactPlugin = require('./plugins/web_impact_entry');
 
 module.exports = {
   mode: 'universal',
@@ -20,10 +21,6 @@ module.exports = {
   */
   loading: { color: '#fff' },
   /*
-  ** Global CSS
-  */
-  css: [],
-  /*
   ** Plugins to load before mounting the App
   */
   plugins: [
@@ -33,8 +30,7 @@ module.exports = {
   ** Nuxt.js dev-modules
   */
   buildModules: [
-    '@nuxt/typescript-build',
-    '~/plugins/web_impact_module'
+    '@nuxt/typescript-build'
   ],
   /*
   ** Nuxt.js modules
@@ -60,6 +56,7 @@ module.exports = {
     ** You can extend webpack config here
     */
     extend (config, ctx) {
+      if(process.env.NODE_ENV === 'development' && ctx.isClient) config.plugins.push(new WebImpactPlugin(false))
     }
   }
 }
