@@ -4,6 +4,18 @@
   </div>
 </template>
 
+<script lang="ts">
+import Vue from 'vue'
+
+export default Vue.extend({
+  name: 'default',
+  async mounted() {
+    await this.$store.dispatch('fetchCheckoutId')
+    await this.$store.dispatch('fetchCart')
+  }
+})
+</script>
+
 <style lang="scss">
 @import "~assets/scss/variables.scss";
 

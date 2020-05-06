@@ -4,7 +4,7 @@
     <h2 class="subtitle">
       Low Impact Website
     </h2>
-    <button @click="fetchCart()">Fetch Cart</button>
+    <div>Cart count: {{ cartCount }}</div>
     <div class="product-grid">
       <product v-for="(product, index) in products" :key="index" :productData="product.node" />
     </div>
@@ -22,6 +22,36 @@ export default Vue.extend({
   components: {
     Logo,
     Product
+  },
+  computed: {
+    cartCount() {
+      if(this.$store.state.lineItems.length < 1) {
+        return 0
+      }
+      else {
+        // console.log(this.$store.state.lineItems)
+        return this.$store.state.lineItems.edges.reduce((acc:any, cur:any) => {
+          if(typeof acc !== 'number') {
+            try {
+              let count = parseInt(cur.node.quantity)
+              return count
+            } catch(err) {
+              console.error(err)
+              return acc
+            }
+          }
+          else {
+            try {
+              let count = parseInt(cur.node.quantity)
+              return acc + count
+            } catch(err) {
+              console.error(err)
+              return acc
+            }
+          }
+        })
+      }
+    }
   },
   async asyncData(context:any) {
     try {
@@ -70,43 +100,6 @@ export default Vue.extend({
     } catch(err) {
       console.error(err)
       return { products : [] }
-    }
-  },
-  async mounted () {
-    if(!this.$store.state.checkoutId) {
-      let result = await this.$apollo.mutate({
-        mutation: gql`
-          mutation {
-            checkoutCreate(input: {}) {
-              userErrors {
-                message
-                field
-              }
-              checkout {
-                id
-              }
-            }
-          }
-        `
-      })
-
-      try {
-        console.log('Fresh Checkout ID: ' + result.data.checkoutCreate.checkout.id)
-        if(result.data.checkoutCreate.checkout.id) {
-          this.$store.commit('setCheckoutId', result.data.checkoutCreate.checkout.id)
-        }
-      } catch(err) {
-        console.error(err)
-      }
-
-    }
-    else {
-      console.log('Stored Checkout ID: ' + this.$store.state.checkoutId)
-    }
-  },
-  methods: {
-    async fetchCart () {
-      this.$store.dispatch('fetchCart')
     }
   }
 })

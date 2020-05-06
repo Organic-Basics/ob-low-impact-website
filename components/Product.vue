@@ -27,6 +27,7 @@ export default Vue.extend({
   methods: {
     async addToCart () {
       console.log(`Adding ${this.productData.title} to cart...`)
+      console.log(this.$store.state)
       this.isAdding = true
       let result = await this.$apollo.mutate({
         mutation: gql`
@@ -49,6 +50,7 @@ export default Vue.extend({
       })
       this.isAdding = false
       console.log(`Added ${this.productData.title} to cart.`)
+      this.$store.dispatch('fetchCart')
     }
   }
 })
