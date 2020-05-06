@@ -3,14 +3,14 @@ import gql from 'graphql-tag'
 
 export const state = () => ({
   checkoutId: '',
-  lineItems: [] as any[]
+  cart: {}
 })
 
 export type RootState = ReturnType<typeof state>
 
 export const mutations: MutationTree<RootState> = {
 	setCheckoutId: (state, newId:string) => (state.checkoutId = newId),
-	setLineItems: (state, newLineItems:any[]) => (state.lineItems = newLineItems)
+	saveCart: (state, cart:any) => (state.cart = cart)
 }
 
 export const actions: ActionTree<RootState, RootState> = {
@@ -54,7 +54,7 @@ export const actions: ActionTree<RootState, RootState> = {
 	      },
 	      fetchPolicy: 'network-only'
 			})
-			store.commit('setLineItems', result.data.node.lineItems)
+			store.commit('saveCart', result.data.node)
 			console.log(result.data)
     }
   },

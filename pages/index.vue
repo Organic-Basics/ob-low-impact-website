@@ -4,7 +4,11 @@
     <h2 class="subtitle">
       Low Impact Website
     </h2>
-    <div>Cart count: {{ cartCount }}</div>
+    <div>
+      <span>Items in cart: {{ cartCount }}</span>
+      <span> / </span>
+      <span><a :href="cleanCheckout">Checkout</a></span>
+    </div>
     <div class="product-grid">
       <product v-for="(product, index) in products" :key="index" :productData="product.node" />
     </div>
@@ -25,12 +29,13 @@ export default Vue.extend({
   },
   computed: {
     cartCount() {
-      if(this.$store.state.lineItems.length < 1) {
+      if(!this.$store.state.cart.lineItems) {
         return 0
       }
       else {
         // console.log(this.$store.state.lineItems)
-        return this.$store.state.lineItems.edges.reduce((acc:any, cur:any) => {
+        return 5
+        return this.$store.state.cart.lineItems.edges.reduce((acc:any, cur:any) => {
           if(typeof acc !== 'number') {
             try {
               let count = parseInt(cur.node.quantity)
@@ -50,6 +55,39 @@ export default Vue.extend({
             }
           }
         })
+      }
+    },
+    cleanCheckout() {
+      let checkoutUrls = [
+        {
+          oldUrl: 'aoftd.myshopify.com',
+          newUrl: 'dk.organicbasics.com'
+        },
+        {
+          oldUrl: 'euorganicbasics.myshopify.com',
+          newUrl: 'organicbasics.com'
+        },
+        {
+          oldUrl: 'ukorganicbasics.myshopify.com',
+          newUrl: 'uk.organicbasics.com'
+        },
+        {
+          oldUrl: 'usorganicbasics.myshopify.com',
+          newUrl: 'us.organicbasics.com'
+        }
+      ]
+      if(!this.$store.state.cart.webUrl) {
+        return '#'
+      }
+      else {
+        let theUrl = checkoutUrls.find((url) => this.$store.state.cart.webUrl.includes(url.oldUrl))
+        console.log(theUrl)
+        if(theUrl !== undefined) {
+          return this.$store.state.cart.webUrl.replace(theUrl.oldUrl, theUrl.newUrl)
+        }
+        else {
+          return this.$store.state.cart.webUrl
+        }
       }
     }
   },
