@@ -4,11 +4,12 @@
     <h2 class="subtitle">
       Low Impact Website
     </h2>
-    <div>
+    <header class="header">
       <span>Items in cart: {{ cartCount }}</span>
       <span> / </span>
-      <span><a :href="cleanCheckout">Checkout</a></span>
-    </div>
+      <span class="header__checkout"><a :href="cleanCheckout">Checkout</a></span>
+      <div :class="'header__carbon header__carbon--' + carbonIndex">Carbon intensity is currently {{carbonIndex}} in London</div>
+    </header>
     <div class="product-grid">
       <product v-for="(product, index) in products" :key="index" :productData="product.node" />
     </div>
@@ -88,6 +89,14 @@ export default Vue.extend({
         else {
           return this.$store.state.cart.webUrl
         }
+      }
+    },
+    carbonIndex() {
+      if(!this.$store.state.carbonIntensity.intensity) {
+        return '...'
+      }
+      else {
+        return this.$store.state.carbonIntensity.intensity.index
       }
     }
   },
@@ -175,6 +184,20 @@ export default Vue.extend({
   flex-wrap: wrap;
   justify-content: center;
   max-width: 75vw;
+}
+
+.header {
+  margin-bottom: 10px;
+
+  a {
+    color: #fff;
+  }
+}
+
+.header__carbon {
+  &.header__carbon--moderate {
+    color: yellow;
+  }
 }
 
 </style>

@@ -1,16 +1,19 @@
 import { GetterTree, ActionTree, MutationTree } from 'vuex'
 import gql from 'graphql-tag'
+import axios from 'axios'
 
 export const state = () => ({
   checkoutId: '',
-  cart: {}
+  cart: {},
+  carbonIntensity: {}
 })
 
 export type RootState = ReturnType<typeof state>
 
 export const mutations: MutationTree<RootState> = {
 	setCheckoutId: (state, newId:string) => (state.checkoutId = newId),
-	saveCart: (state, cart:any) => (state.cart = cart)
+	saveCart: (state, cart:any) => (state.cart = cart),
+	setCarbonIntensity: (state, intensity:any) => (state.carbonIntensity = intensity)
 }
 
 export const actions: ActionTree<RootState, RootState> = {
@@ -97,5 +100,23 @@ export const actions: ActionTree<RootState, RootState> = {
   	    }
   		}
 	  }
+	},
+
+  async fetchCarbonIntensity (store:any) {
+  	try {
+  		let result = await axios.get('https://api.carbonintensity.org.uk/regional/regionid/13')
+  		let carbonIntensity = result.data.data.pop().data.pop()
+  		console.log(carbonIntensity)
+  		store.commit('setCarbonIntensity', carbonIntensity)
+  	} catch(err) {
+  		console.error(err)
+  	}
+  },
+
+  async initStore (store:any) {
+  	store.dispatch('fetchCarbonIntensity')
+
+  	await store.dispatch('fetchCheckoutId')
+  	store.dispatch('fetchCart')
   }
 }

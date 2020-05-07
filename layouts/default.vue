@@ -10,8 +10,7 @@ import Vue from 'vue'
 export default Vue.extend({
   name: 'default',
   async mounted() {
-    await this.$store.dispatch('fetchCheckoutId')
-    await this.$store.dispatch('fetchCart')
+    await this.$store.dispatch('initStore')
   }
 })
 </script>
