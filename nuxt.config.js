@@ -68,6 +68,16 @@ module.exports = {
       }
     }
   },
+  pwa: {
+    /*workbox: {
+      dev: true,
+      debug: true,
+      importScripts: ['sw_custom.js']
+    },
+    manifest: {
+      display: 'browser'
+    }*/
+  },
   /*
   ** Build configuration
   */

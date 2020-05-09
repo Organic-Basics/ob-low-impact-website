@@ -23,7 +23,6 @@ export const actions: ActionTree<RootState, RootState> = {
       	client = this.app.apolloProvider.defaultClient
     }
     if(client) {
-    	console.log(store.state.checkoutId)
 	  	let result = await client.query({
 	      query: gql`
 	        query ($checkoutId: ID!) {
@@ -58,7 +57,6 @@ export const actions: ActionTree<RootState, RootState> = {
 	      fetchPolicy: 'network-only'
 			})
 			store.commit('saveCart', result.data.node)
-			console.log(result.data)
     }
   },
 
@@ -90,7 +88,6 @@ export const actions: ActionTree<RootState, RootState> = {
   	    })
 
   	    try {
-  	      console.log('Fresh Checkout ID: ' + result.data.checkoutCreate.checkout.id)
   	      if(result.data.checkoutCreate.checkout.id) {
   	        store.commit('setCheckoutId', result.data.checkoutCreate.checkout.id)
   	        localStorage.setItem('OB_LOW_checkoutID', result.data.checkoutCreate.checkout.id)
@@ -106,7 +103,6 @@ export const actions: ActionTree<RootState, RootState> = {
   	try {
   		let result = await axios.get('https://api.carbonintensity.org.uk/regional/regionid/13')
   		let carbonIntensity = result.data.data.pop().data.pop()
-  		console.log(carbonIntensity)
   		store.commit('setCarbonIntensity', carbonIntensity)
   	} catch(err) {
   		console.error(err)

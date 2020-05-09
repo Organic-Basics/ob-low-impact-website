@@ -36,7 +36,7 @@ class WebImpactPlugin {
       let output = []
       result.forEach((a) => {
         if(a.status === 'fulfilled') {
-          output.push(a.value.url + ' · ' + a.value.emissionsPerView.toFixed(3) + 'CO2e per view')
+          output.push(a.value.url + ' · ' + a.value.emissionsPerView.toFixed(3) + 'g CO2e per view')
         }
       })
       console.log(output)

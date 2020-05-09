@@ -5,6 +5,7 @@
       Low Impact Website
     </h2>
     <header class="header">
+      <span>Totalbytes: {{ totalBytes }}</span>
       <span>Items in cart: {{ cartCount }}</span>
       <span> / </span>
       <span class="header__checkout"><a :href="cleanCheckout">Checkout</a></span>
@@ -28,34 +29,39 @@ export default Vue.extend({
     Logo,
     Product
   },
+  data: () => {
+    return {
+      transferredObjects: []
+    }
+  },
+  updated() {
+    console.log('updated')
+    let entries = performance.getEntriesByType('resource')
+    for(let ent of entries) {
+      let entJson = ent.toJSON()
+      let newEntry = {
+        name: entJson.name,
+        byteSize: entJson.transferSize
+      }
+      if(!this.transferredObjects.some((a) => {
+        return a.name === newEntry.name
+      })) {
+        this.transferredObjects.push(newEntry)
+      }
+    }
+    console.log(this.transferredObjects)
+  },
   computed: {
     cartCount() {
-      if(!this.$store.state.cart.lineItems) {
+      if(!this.$store.state.cart.lineItems || !this.$store.state.cart.lineItems.edges.length) {
         return 0
       }
       else {
-        // console.log(this.$store.state.lineItems)
-        return 5
-        return this.$store.state.cart.lineItems.edges.reduce((acc:any, cur:any) => {
-          if(typeof acc !== 'number') {
-            try {
-              let count = parseInt(cur.node.quantity)
-              return count
-            } catch(err) {
-              console.error(err)
-              return acc
-            }
-          }
-          else {
-            try {
-              let count = parseInt(cur.node.quantity)
-              return acc + count
-            } catch(err) {
-              console.error(err)
-              return acc
-            }
-          }
+        let cartCount = 0
+        this.$store.state.cart.lineItems.edges.forEach((a:any) => {
+          cartCount += a.node.quantity
         })
+        return cartCount
       }
     },
     cleanCheckout() {
@@ -82,7 +88,6 @@ export default Vue.extend({
       }
       else {
         let theUrl = checkoutUrls.find((url) => this.$store.state.cart.webUrl.includes(url.oldUrl))
-        console.log(theUrl)
         if(theUrl !== undefined) {
           return this.$store.state.cart.webUrl.replace(theUrl.oldUrl, theUrl.newUrl)
         }
@@ -97,6 +102,22 @@ export default Vue.extend({
       }
       else {
         return this.$store.state.carbonIntensity.intensity.index
+      }
+    },
+    totalBytes() {
+      if(this.transferredObjects.length > 0) {
+        return this.transferredObjects.reduce((acc:any, cur:any) => {
+          if(typeof acc !== 'number') {
+            acc = cur.byteSize
+          }
+          else {
+            acc += cur.byteSize
+          }
+          return acc
+        })
+      }
+      else {
+        return 0
       }
     }
   },
@@ -195,8 +216,14 @@ export default Vue.extend({
 }
 
 .header__carbon {
+  &.header__carbon--low {
+    color: seagreen;
+  }
   &.header__carbon--moderate {
-    color: yellow;
+    color: gold;
+  }
+  &.header__carbon--high {
+    color: tomato;
   }
 }
 
