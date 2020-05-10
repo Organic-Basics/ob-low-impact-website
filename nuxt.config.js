@@ -86,7 +86,12 @@ module.exports = {
     ** You can extend webpack config here
     */
     extend (config, ctx) {
-      if(process.env.NODE_ENV === 'development' && ctx.isClient) config.plugins.push(new WebImpactPlugin(false))
+      if(process.env.NODE_ENV === 'development' && ctx.isClient) {
+        config.plugins.push(new WebImpactPlugin(false))
+        config.node = {
+          fs: 'empty'
+        }
+      }
     }
   }
 }

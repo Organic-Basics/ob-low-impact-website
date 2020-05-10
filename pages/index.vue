@@ -5,7 +5,11 @@
       Low Impact Website
     </h2>
     <header class="header">
-      <span>Totalbytes: {{ totalBytes }}</span>
+      <div>
+        <span>Total bytes: {{ totalBytes }}</span>
+        <span> / </span>
+        <span>Total carbon: {{ totalCarbon }}</span>
+      </div>
       <span>Items in cart: {{ cartCount }}</span>
       <span> / </span>
       <span class="header__checkout"><a :href="cleanCheckout">Checkout</a></span>
@@ -24,6 +28,9 @@ import Product from '~/components/Product.vue'
 import VueApollo from 'vue-apollo'
 import gql from 'graphql-tag'
 
+import * as CO2 from '@tgwf/co2/src/co2.js'
+const emissions = new CO2()
+
 export default Vue.extend({
   components: {
     Logo,
@@ -35,7 +42,6 @@ export default Vue.extend({
     }
   },
   updated() {
-    console.log('updated')
     let entries = performance.getEntriesByType('resource')
     for(let ent of entries) {
       let entJson = ent.toJSON()
@@ -52,7 +58,7 @@ export default Vue.extend({
     console.log(this.transferredObjects)
   },
   computed: {
-    cartCount() {
+    cartCount: function() {
       if(!this.$store.state.cart.lineItems || !this.$store.state.cart.lineItems.edges.length) {
         return 0
       }
@@ -64,7 +70,7 @@ export default Vue.extend({
         return cartCount
       }
     },
-    cleanCheckout() {
+    cleanCheckout: function() {
       let checkoutUrls = [
         {
           oldUrl: 'aoftd.myshopify.com',
@@ -96,7 +102,7 @@ export default Vue.extend({
         }
       }
     },
-    carbonIndex() {
+    carbonIndex: function() {
       if(!this.$store.state.carbonIntensity.intensity) {
         return '...'
       }
@@ -104,7 +110,7 @@ export default Vue.extend({
         return this.$store.state.carbonIntensity.intensity.index
       }
     },
-    totalBytes() {
+    totalBytes: function() {
       if(this.transferredObjects.length > 0) {
         return this.transferredObjects.reduce((acc:any, cur:any) => {
           if(typeof acc !== 'number') {
@@ -119,6 +125,10 @@ export default Vue.extend({
       else {
         return 0
       }
+    },
+    totalCarbon() {
+      let estimatedCO2 = emissions.perByte(this.totalBytes, true)
+      return estimatedCO2
     }
   },
   async asyncData(context:any) {
