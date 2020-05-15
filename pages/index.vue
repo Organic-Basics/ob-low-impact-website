@@ -10,6 +10,7 @@
         <span> / </span>
         <span>Total carbon: {{ totalCarbon }}</span>
       </div>
+      <button @click="saveEntries()">Update</button>
       <span>Items in cart: {{ cartCount }}</span>
       <span> / </span>
       <span class="header__checkout"><a :href="cleanCheckout">Checkout</a></span>
@@ -42,20 +43,28 @@ export default Vue.extend({
     }
   },
   updated() {
-    let entries = performance.getEntriesByType('resource')
-    for(let ent of entries) {
-      let entJson = ent.toJSON()
-      let newEntry = {
-        name: entJson.name,
-        byteSize: entJson.transferSize
+    this.saveEntries()
+  },
+  mounted() {
+    this.saveEntries()
+  },
+  methods: {
+    saveEntries: function() {
+      let entries = performance.getEntriesByType('resource')
+      for(let ent of entries) {
+        let entJson = ent.toJSON()
+        let newEntry = {
+          name: entJson.name,
+          byteSize: entJson.transferSize
+        }
+        if(!this.transferredObjects.some((a) => {
+          return a.name === newEntry.name
+        })) {
+          this.transferredObjects.push(newEntry)
+        }
       }
-      if(!this.transferredObjects.some((a) => {
-        return a.name === newEntry.name
-      })) {
-        this.transferredObjects.push(newEntry)
-      }
+      console.log(this.transferredObjects)
     }
-    console.log(this.transferredObjects)
   },
   computed: {
     cartCount: function() {
