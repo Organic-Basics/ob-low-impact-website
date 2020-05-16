@@ -1,31 +1,16 @@
 <template>
-  <main class="container">
-    <logo />
-    <h2 class="subtitle">
-      Low Impact Website
+  <div>
+    <h2>
+      <nuxt-link to="/collections/all-womens-products">All women's</nuxt-link>
     </h2>
-    <header class="header">
-      <div>
-        <span>Total bytes: {{ totalBytes }}</span>
-        <span> / </span>
-        <span>Total carbon: {{ totalCarbon }}</span>
-      </div>
-      <button @click="saveEntries()">Update</button>
-      <span>Items in cart: {{ cartCount }}</span>
-      <span> / </span>
-      <span class="header__checkout"><a :href="cleanCheckout">Checkout</a></span>
-      <div :class="'header__carbon header__carbon--' + carbonIndex">Carbon intensity is currently {{carbonIndex}} in London</div>
-    </header>
-    <div class="product-grid">
-      <product v-for="(product, index) in products" :key="index" :productData="product.node" />
-    </div>
-  </main>
+    <h2>
+      <nuxt-link to="/collections/all-mens-products">All men's</nuxt-link>
+    </h2>
+  </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import Logo from '~/components/Logo.vue'
-import Product from '~/components/Product.vue'
 import VueApollo from 'vue-apollo'
 import gql from 'graphql-tag'
 
@@ -33,10 +18,6 @@ import * as CO2 from '@tgwf/co2/src/co2.js'
 const emissions = new CO2()
 
 export default Vue.extend({
-  components: {
-    Logo,
-    Product
-  },
   data: () => {
     return {
       transferredObjects: []
@@ -194,56 +175,6 @@ export default Vue.extend({
 
 <style lang="scss">
 
-.container {
-  margin: 20px auto;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
 
-.title {
-  font-family: 'Circular', sans-serif;
-  display: block;
-  font-weight: bold;
-  font-size: 100px;
-  letter-spacing: 1px;
-}
-
-.subtitle {
-  font-weight: normal;
-  font-size: 42px;
-  word-spacing: 5px;
-  padding-bottom: 15px;
-}
-
-.product-grid {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  max-width: 75vw;
-}
-
-.header {
-  margin-bottom: 10px;
-
-  a {
-    color: #fff;
-  }
-}
-
-.header__carbon {
-  &.header__carbon--low {
-    color: seagreen;
-  }
-  &.header__carbon--moderate {
-    color: gold;
-  }
-  &.header__carbon--high {
-    color: tomato;
-  }
-}
 
 </style>

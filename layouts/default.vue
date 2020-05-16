@@ -1,17 +1,141 @@
 <template>
-  <div>
+  <main class="container">
+    <nuxt-link to="/" class="logo--default">
+      <logo />
+    </nuxt-link>
+    <header class="header">
+      <div>
+        <span>Total bytes: {{ totalBytes }}</span>
+        <span> / </span>
+        <span>Total carbon: {{ totalCarbon }}</span>
+      </div>
+      <!-- <button @click="saveEntries()">Update</button> -->
+      <span>Items in cart: {{ cartCount }}</span>
+      <span> / </span>
+      <span class="header__checkout"><a :href="cleanCheckout">Checkout</a></span>
+      <div :class="'header__carbon header__carbon--' + carbonIndex">Carbon intensity is currently {{carbonIndex}} in London</div>
+    </header>
     <nuxt />
-  </div>
+  </main>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
 
+import Logo from '~/components/Logo.vue'
+
+import * as CO2 from '@tgwf/co2/src/co2.js'
+const emissions = new CO2()
+
 export default Vue.extend({
   name: 'default',
+  components: {
+    Logo
+  },
   async mounted() {
     await this.$store.dispatch('initStore')
-  }
+    this.saveEntries()
+  },
+  updated() {
+    this.saveEntries()
+  },
+  data: () => {
+    return {
+      transferredObjects: []
+    }
+  },
+  methods: {
+    saveEntries: function() {
+      let entries = performance.getEntriesByType('resource')
+      for(let ent of entries) {
+        let entJson = ent.toJSON()
+        let newEntry = {
+          name: entJson.name,
+          byteSize: entJson.transferSize
+        }
+        if(!this.transferredObjects.some((a) => {
+          return a.name === newEntry.name
+        })) {
+          this.transferredObjects.push(newEntry)
+        }
+      }
+      // console.log(this.transferredObjects)
+    }
+  },
+  computed: {
+    cartCount: function() {
+      if(!this.$store.state.cart.lineItems || !this.$store.state.cart.lineItems.edges.length) {
+        return 0
+      }
+      else {
+        let cartCount = 0
+        this.$store.state.cart.lineItems.edges.forEach((a:any) => {
+          cartCount += a.node.quantity
+        })
+        return cartCount
+      }
+    },
+    cleanCheckout: function() {
+      let checkoutUrls = [
+        {
+          oldUrl: 'aoftd.myshopify.com',
+          newUrl: 'dk.organicbasics.com'
+        },
+        {
+          oldUrl: 'euorganicbasics.myshopify.com',
+          newUrl: 'organicbasics.com'
+        },
+        {
+          oldUrl: 'ukorganicbasics.myshopify.com',
+          newUrl: 'uk.organicbasics.com'
+        },
+        {
+          oldUrl: 'usorganicbasics.myshopify.com',
+          newUrl: 'us.organicbasics.com'
+        }
+      ]
+      if(!this.$store.state.cart.webUrl) {
+        return '#'
+      }
+      else {
+        let theUrl = checkoutUrls.find((url) => this.$store.state.cart.webUrl.includes(url.oldUrl))
+        if(theUrl !== undefined) {
+          return this.$store.state.cart.webUrl.replace(theUrl.oldUrl, theUrl.newUrl)
+        }
+        else {
+          return this.$store.state.cart.webUrl
+        }
+      }
+    },
+    carbonIndex: function() {
+      if(!this.$store.state.carbonIntensity.intensity) {
+        return '...'
+      }
+      else {
+        return this.$store.state.carbonIntensity.intensity.index
+      }
+    },
+    totalBytes: function() {
+      if(this.transferredObjects.length > 0) {
+        return this.transferredObjects.reduce((acc:any, cur:any) => {
+          if(typeof acc !== 'number') {
+            acc = cur.byteSize
+          }
+          else {
+            acc += cur.byteSize
+          }
+          return acc
+        })
+      }
+      else {
+        return 0
+      }
+    },
+    totalCarbon() {
+      let estimatedCO2 = emissions.perByte(this.totalBytes, true)
+      return estimatedCO2
+    }
+  },
 })
 </script>
 
@@ -49,6 +173,55 @@ html {
 *:after {
   box-sizing: border-box;
   margin: 0;
+}
+
+a {
+  color: #fff;
+}
+
+.container {
+  margin: 20px auto;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  text-align: center;
+}
+
+.title {
+  font-family: 'Circular', sans-serif;
+  display: block;
+  font-weight: bold;
+  font-size: 100px;
+  letter-spacing: 1px;
+}
+
+.subtitle {
+  font-weight: normal;
+  font-size: 42px;
+  word-spacing: 5px;
+  padding-bottom: 15px;
+}
+
+.logo--default {
+  margin: 20px 0;
+}
+
+.header {
+  margin-bottom: 10px;
+}
+
+.header__carbon {
+  &.header__carbon--low {
+    color: seagreen;
+  }
+  &.header__carbon--moderate {
+    color: gold;
+  }
+  &.header__carbon--high {
+    color: tomato;
+  }
 }
 
 </style>
