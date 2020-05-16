@@ -3,19 +3,21 @@
     <nuxt-link to="/" class="logo--default">
       <logo />
     </nuxt-link>
+    <button class="read-more" @click="isOverlayActive = true">Read more</button>
     <header class="header">
-      <div>
-        <span>Total bytes: {{ totalBytes }}</span>
-        <span> / </span>
-        <span>Total carbon: {{ totalCarbon }}</span>
+      <div class="stats">
+        <span>kB · {{ (totalBytes / 1024).toFixed(0) }}</span>
+        <span> | </span>
+        <span>g CO2e · {{ totalCarbon.toFixed(2) }}</span>
       </div>
       <!-- <button @click="saveEntries()">Update</button> -->
-      <span>Items in cart: {{ cartCount }}</span>
+      <span>Cart: {{ cartCount }}</span>
       <span> / </span>
       <span class="header__checkout"><a :href="cleanCheckout">Checkout</a></span>
       <div :class="'header__carbon header__carbon--' + carbonIndex">Carbon intensity is currently {{carbonIndex}} in London</div>
     </header>
     <nuxt />
+    <overlay :active="isOverlayActive" @filterClosed="isOverlayActive = false"/>
   </main>
 </template>
 
@@ -23,6 +25,7 @@
 import Vue from 'vue'
 
 import Logo from '~/components/Logo.vue'
+import Overlay from '~/components/Overlay.vue'
 
 import * as CO2 from '@tgwf/co2/src/co2.js'
 const emissions = new CO2()
@@ -30,7 +33,8 @@ const emissions = new CO2()
 export default Vue.extend({
   name: 'default',
   components: {
-    Logo
+    Logo,
+    Overlay
   },
   async mounted() {
     await this.$store.dispatch('initStore')
@@ -41,8 +45,17 @@ export default Vue.extend({
   },
   data: () => {
     return {
-      transferredObjects: []
+      transferredObjects: [],
+      isOverlayActive: false
     }
+  },
+  watch: {
+    '$route': {
+      handler: function(val) {
+        this.saveEntries()
+      },
+      deep: true
+    },
   },
   methods: {
     saveEntries: function() {
@@ -59,7 +72,7 @@ export default Vue.extend({
           this.transferredObjects.push(newEntry)
         }
       }
-      // console.log(this.transferredObjects)
+      console.log('transferredObjects updated.')
     }
   },
   computed: {
@@ -222,6 +235,26 @@ a {
   &.header__carbon--high {
     color: tomato;
   }
+}
+
+.read-more {
+  border: 0;
+  border-radius: 100%;
+  cursor: pointer;
+  left: 10vw;
+  min-height: 50px;
+  position: fixed;
+  top: 20vh;
+  max-width: 50px;
+}
+
+.stats {
+  background: map-get($colors, 'brand');
+  left: 0;
+  padding: 5px 0;
+  position: fixed;
+  top: 0;
+  width: 100vw;
 }
 
 </style>

@@ -1,11 +1,11 @@
 <template>
   <div class="product">
-    <img :src="productData.images.edges[0].node.transformedSrc">
-    <div class="product__slate">
-      <p>{{ productData.title }}</p>
-      <button @click="addToCart()" v-if="!isAdding">Add to cart</button>
-      <button v-else>Adding...</button>
-    </div>
+    <nuxt-link :to="'/products/' + productData.handle">
+      <img :src="productData.images.edges[0].node.transformedSrc">
+      <div class="product__slate">
+        <p>{{ productData.title }}</p>
+      </div>
+    </nuxt-link>
   </div>
 </template>
 
@@ -15,7 +15,7 @@ import VueApollo from 'vue-apollo'
 import gql from 'graphql-tag'
 
 export default Vue.extend({
-  name: 'Product',
+  name: 'GridProduct',
   props: {
     productData: Object
   },
@@ -65,7 +65,11 @@ export default Vue.extend({
   flex: 33%;
   margin: 0 10px 15px 0;
   padding-bottom: 15px;
-  max-width: 300px;
+  max-width: 50%;
+
+  img {
+    width: 100%;
+  }
 }
 
 .product__slate {
