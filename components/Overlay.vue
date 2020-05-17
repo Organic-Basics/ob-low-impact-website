@@ -1,5 +1,5 @@
 <template>
-  <div :class="'overlay overlay--' + active">
+  <div :class="'overlay overlay--' + open">
     <span @click="closeOverlay()">Close</span>
   </div>
 </template>
@@ -10,7 +10,7 @@ import Vue from 'vue'
 export default Vue.extend({
   name: 'Overlay',
   props: {
-    active: Boolean
+    open: Boolean
   },
   methods: {
     closeOverlay: function () {

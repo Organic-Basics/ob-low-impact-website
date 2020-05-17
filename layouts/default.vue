@@ -1,23 +1,28 @@
 <template>
   <main class="container">
-    <nuxt-link to="/" class="logo--default">
-      <logo />
-    </nuxt-link>
-    <button class="read-more" @click="isOverlayActive = true">Read more</button>
+    <button class="read-more" @click="isOverlayOpen = true">Read more</button>
+
+    <div class="stats">
+      <span>kB · {{ (totalBytes / 1024).toFixed(0) }}</span>
+      <span> | </span>
+      <span>g CO2e · {{ totalCarbon.toFixed(2) }}</span>
+      <span> | </span>
+      <span :class="'stats__carbon stats__carbon--' + carbonIndex">{{carbonIndex}}</span>
+    </div>
+
     <header class="header">
-      <div class="stats">
-        <span>kB · {{ (totalBytes / 1024).toFixed(0) }}</span>
-        <span> | </span>
-        <span>g CO2e · {{ totalCarbon.toFixed(2) }}</span>
-      </div>
+      <nuxt-link to="/" class="header__logo">
+        <logo />
+      </nuxt-link>
       <!-- <button @click="saveEntries()">Update</button> -->
-      <span>Cart: {{ cartCount }}</span>
-      <span> / </span>
-      <span class="header__checkout"><a :href="cleanCheckout">Checkout</a></span>
-      <div :class="'header__carbon header__carbon--' + carbonIndex">Carbon intensity is currently {{carbonIndex}} in London</div>
+      <div class="header__cart" @click="isCartOpen = true">
+        <span>{{ cartCount }}</span>
+      </div>
+      <!-- <span class="header__checkout"><a :href="cleanCheckout">Checkout</a></span> -->
     </header>
     <nuxt />
-    <overlay :active="isOverlayActive" @filterClosed="isOverlayActive = false"/>
+    <cartDrawer :open="isCartOpen" @drawerClosed="isCartOpen = false"/>
+    <overlay :open="isOverlayOpen" @filterClosed="isOverlayOpen = false"/>
   </main>
 </template>
 
@@ -26,6 +31,7 @@ import Vue from 'vue'
 
 import Logo from '~/components/Logo.vue'
 import Overlay from '~/components/Overlay.vue'
+import CartDrawer from '~/components/CartDrawer.vue'
 
 import * as CO2 from '@tgwf/co2/src/co2.js'
 const emissions = new CO2()
@@ -34,10 +40,12 @@ export default Vue.extend({
   name: 'default',
   components: {
     Logo,
-    Overlay
+    Overlay,
+    CartDrawer
   },
   async mounted() {
     await this.$store.dispatch('initStore')
+    console.log(this)
     this.saveEntries()
   },
   updated() {
@@ -46,7 +54,8 @@ export default Vue.extend({
   data: () => {
     return {
       transferredObjects: [],
-      isOverlayActive: false
+      isOverlayOpen: false,
+      isCartOpen: false
     }
   },
   watch: {
@@ -217,24 +226,13 @@ a {
   padding-bottom: 15px;
 }
 
-.logo--default {
-  margin: 20px 0;
-}
-
 .header {
-  margin-bottom: 10px;
-}
-
-.header__carbon {
-  &.header__carbon--low {
-    color: seagreen;
-  }
-  &.header__carbon--moderate {
-    color: gold;
-  }
-  &.header__carbon--high {
-    color: tomato;
-  }
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  margin: 15px 0 10px;
+  padding: 0 10px;
+  width: 100vw;
 }
 
 .read-more {
@@ -255,6 +253,18 @@ a {
   position: fixed;
   top: 0;
   width: 100vw;
+}
+
+.stats__carbon {
+  &.stats__carbon--low {
+    color: seagreen;
+  }
+  &.stats__carbon--moderate {
+    color: gold;
+  }
+  &.stats__carbon--high {
+    color: tomato;
+  }
 }
 
 </style>

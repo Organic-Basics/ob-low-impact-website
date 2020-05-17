@@ -25,13 +25,21 @@
       <div class="product__option product__option--color">
         <h3>Color</h3>
         <div>
-          <span v-for="(color, index) in product.options.color.values">{{color}} · </span>
+          <span v-for="(color, index) in product.options.color.values"
+          :class="color === chosenColor ? 'chosen' : ''"
+          @click="chosenColor = color">
+            {{color}} · 
+          </span>
         </div>
       </div>
       <div class="product__option product__option--size">
         <h3>Size</h3>
         <div>
-          <span v-for="(size, index) in product.options.size.values">{{size}} · </span>
+          <span v-for="(size, index) in product.options.size.values"
+          :class="size === chosenSize ? 'chosen' : ''"
+          @click="chosenSize = size">
+            {{size}} · 
+          </span>
         </div>
       </div>
       <div class="product__text product__text--desc">
@@ -91,6 +99,7 @@ export default Vue.extend({
                   currencyCode
                 }
               },
+              tags,
               options {
                 name,
                 values
@@ -118,8 +127,8 @@ export default Vue.extend({
         `
       })
       let product = result.data.productByHandle
-      let size = product.options.find((a) => a.name === 'Size')
-      let color = product.options.find((a) => a.name === 'Color')
+      let size = product.options.find((a:any) => a.name === 'Size')
+      let color = product.options.find((a:any) => a.name === 'Color')
       product.options = {
         size: size,
         color: color
@@ -135,8 +144,8 @@ export default Vue.extend({
         features : []
       }
       if(product.variants.edges.length > 1) {
-        newData.chosenColor = product.variants.edges[0].node.selectedOptions.find((a) => a.name === 'Color').value
-        newData.chosenSize = product.variants.edges[0].node.selectedOptions.find((a) => a.name === 'Size').value
+        newData.chosenColor = product.variants.edges[0].node.selectedOptions.find((a:any) => a.name === 'Color').value
+        newData.chosenSize = product.variants.edges[0].node.selectedOptions.find((a:any) => a.name === 'Size').value
         newData.chosenId = product.variants.edges[0].node.id
       }
       if(product.description.split('|').length > 0) {
@@ -203,6 +212,10 @@ export default Vue.extend({
 
     &.product__option--size {
       margin-bottom: 30px;
+    }
+
+    .chosen {
+      text-decoration: underline;
     }
   }
 
