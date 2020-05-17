@@ -84,79 +84,84 @@ export default Vue.extend({
   },
   async asyncData({app, params}) {
     try {
-      let client = app.apolloProvider.defaultClient
-      let result = await client.query({
-        query: gql`
-          query {
-            productByHandle(handle: "${params.handle}") {
-              handle,
-              title,
-              id,
-              description,
-              priceRange {
-                minVariantPrice {
-                  amount,
-                  currencyCode
-                }
-              },
-              tags,
-              options {
-                name,
-                values
-              }
-              images(first: 10) {
-                edges {
-                  node {
-                    transformedSrc(maxWidth: 300, maxHeight: 390, crop: CENTER)
+      if(app && app.apolloProvider && app.apolloProvider.defaultClient) {
+        let client = app.apolloProvider.defaultClient
+        let result = await client.query({
+          query: gql`
+            query {
+              productByHandle(handle: "${params.handle}") {
+                handle,
+                title,
+                id,
+                description,
+                priceRange {
+                  minVariantPrice {
+                    amount,
+                    currencyCode
                   }
+                },
+                tags,
+                options {
+                  name,
+                  values
                 }
-              },
-              variants(first: 50) {
-                edges {
-                  node {
-                    selectedOptions {
-                      name,
-                      value
-                    },
-                    id
+                images(first: 10) {
+                  edges {
+                    node {
+                      transformedSrc(maxWidth: 300, maxHeight: 390, crop: CENTER)
+                    }
+                  }
+                },
+                variants(first: 50) {
+                  edges {
+                    node {
+                      selectedOptions {
+                        name,
+                        value
+                      },
+                      id
+                    }
                   }
                 }
               }
             }
-          }
-        `
-      })
-      let product = result.data.productByHandle
-      let size = product.options.find((a:any) => a.name === 'Size')
-      let color = product.options.find((a:any) => a.name === 'Color')
-      product.options = {
-        size: size,
-        color: color
+          `
+        })
+        let product = result.data.productByHandle
+        let size = product.options.find((a:any) => a.name === 'Size')
+        let color = product.options.find((a:any) => a.name === 'Color')
+        product.options = {
+          size: size,
+          color: color
+        }
+        let newData = {
+          product : product,
+          chosenColor : '...',
+          chosenSize : '...',
+          chosenId : '...',
+          desc : [],
+          fitSize : [],
+          materialCare : [],
+          features : []
+        }
+        if(product.variants.edges.length > 1) {
+          newData.chosenColor = product.variants.edges[0].node.selectedOptions.find((a:any) => a.name === 'Color').value
+          newData.chosenSize = product.variants.edges[0].node.selectedOptions.find((a:any) => a.name === 'Size').value
+          newData.chosenId = product.variants.edges[0].node.id
+        }
+        if(product.description.split('|').length > 0) {
+          let productText = product.description.split('|')
+          newData.desc = productText[0].split('///')
+          newData.fitSize = productText[1].split('///')
+          newData.materialCare = productText[2].split('///')
+          newData.features = productText[3].split(',')
+        }
+        console.log(newData)
+        return newData
       }
-      let newData = {
-        product : product,
-        chosenColor : '...',
-        chosenSize : '...',
-        chosenId : '...',
-        desc : [],
-        fitSize : [],
-        materialCare : [],
-        features : []
+      else {
+        return { product : {} }
       }
-      if(product.variants.edges.length > 1) {
-        newData.chosenColor = product.variants.edges[0].node.selectedOptions.find((a:any) => a.name === 'Color').value
-        newData.chosenSize = product.variants.edges[0].node.selectedOptions.find((a:any) => a.name === 'Size').value
-        newData.chosenId = product.variants.edges[0].node.id
-      }
-      if(product.description.split('|').length > 0) {
-        let productText = product.description.split('|')
-        newData.desc = productText[0].split('///')
-        newData.fitSize = productText[1].split('///')
-        newData.materialCare = productText[2].split('///')
-        newData.features = productText[3].split(',')
-      }
-      console.log(newData)
-      return newData
     } catch(err) {
       console.error(err)
       return { product : {} }

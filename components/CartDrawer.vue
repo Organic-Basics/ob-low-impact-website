@@ -26,7 +26,7 @@ export default Vue.extend({
   },
   methods: {
     closeDrawer: function () {
-      this.$emit('drawerClosed', true)
+      this.$emit('closed', true)
     }
   },
   computed: {

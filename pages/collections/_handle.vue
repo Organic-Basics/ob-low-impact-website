@@ -16,28 +16,30 @@ export default Vue.extend({
   },
   async asyncData({app, params}) {
     try {
-      let client = app.apolloProvider.defaultClient
-      let result = await client.query({
-        query: gql`
-          query {
-            collectionByHandle(handle: "${params.handle}") {
-              products(first: 100) {
-                edges {
-                  node {
-                    handle,
-                    title,
-                    id,
-                    images(first: 1) {
-                      edges {
-                        node {
-                          transformedSrc(maxWidth: 300, maxHeight: 390, crop: CENTER)
+      if(app && app.apolloProvider && app.apolloProvider.defaultClient) {
+        let client = app.apolloProvider.defaultClient
+        let result = await client.query({
+          query: gql`
+            query {
+              collectionByHandle(handle: "${params.handle}") {
+                products(first: 100) {
+                  edges {
+                    node {
+                      handle,
+                      title,
+                      id,
+                      images(first: 1) {
+                        edges {
+                          node {
+                            transformedSrc(maxWidth: 300, maxHeight: 390, crop: CENTER)
+                          }
                         }
-                      }
-                    },
-                    variants(first: 1) {
-                      edges {
-                        node {
-                          id
+                      },
+                      variants(first: 1) {
+                        edges {
+                          node {
+                            id
+                          }
                         }
                       }
                     }
@@ -45,18 +47,21 @@ export default Vue.extend({
                 }
               }
             }
-          }
-        `
-      })
+          `
+        })
 
-      let products = result.data.collectionByHandle.products.edges.map((a:any, i:number, arr:any) => {
-        if(a.node.variants !== undefined) {
-          a.node.variant = a.node.variants.edges[0]
-          delete a.node.variants
-        }
-        return a
-      })
-      return { products : result.data.collectionByHandle.products.edges }
+        let products = result.data.collectionByHandle.products.edges.map((a:any, i:number, arr:any) => {
+          if(a.node.variants !== undefined) {
+            a.node.variant = a.node.variants.edges[0]
+            delete a.node.variants
+          }
+          return a
+        })
+        return { products : result.data.collectionByHandle.products.edges }
+      }
+      else {
+        return { products : [] }
+      }
     } catch(err) {
       console.error(err)
       return { products : [] }

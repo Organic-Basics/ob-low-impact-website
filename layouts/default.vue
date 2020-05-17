@@ -6,11 +6,12 @@
       <span>kB · {{ (totalBytes / 1024).toFixed(0) }}</span>
       <span> | </span>
       <span>g CO2e · {{ totalCarbon.toFixed(2) }}</span>
-      <span> | </span>
-      <span :class="'stats__carbon stats__carbon--' + carbonIndex">{{carbonIndex}}</span>
     </div>
 
     <header class="header">
+      <div class="header__menu" @click="isSidebarOpen = true">
+        <span>Menu</span>
+      </div>
       <nuxt-link to="/" class="header__logo">
         <logo />
       </nuxt-link>
@@ -18,11 +19,11 @@
       <div class="header__cart" @click="isCartOpen = true">
         <span>{{ cartCount }}</span>
       </div>
-      <!-- <span class="header__checkout"><a :href="cleanCheckout">Checkout</a></span> -->
     </header>
     <nuxt />
-    <cartDrawer :open="isCartOpen" @drawerClosed="isCartOpen = false"/>
-    <overlay :open="isOverlayOpen" @filterClosed="isOverlayOpen = false"/>
+    <sidebar :open="isSidebarOpen" @closed="isSidebarOpen = false"/>
+    <cartDrawer :open="isCartOpen" @closed="isCartOpen = false"/>
+    <overlay :open="isOverlayOpen" @closed="isOverlayOpen = false"/>
   </main>
 </template>
 
@@ -31,6 +32,7 @@ import Vue from 'vue'
 
 import Logo from '~/components/Logo.vue'
 import Overlay from '~/components/Overlay.vue'
+import Sidebar from '~/components/Sidebar.vue'
 import CartDrawer from '~/components/CartDrawer.vue'
 
 import * as CO2 from '@tgwf/co2/src/co2.js'
@@ -41,6 +43,7 @@ export default Vue.extend({
   components: {
     Logo,
     Overlay,
+    Sidebar,
     CartDrawer
   },
   async mounted() {
@@ -55,7 +58,8 @@ export default Vue.extend({
     return {
       transferredObjects: [],
       isOverlayOpen: false,
-      isCartOpen: false
+      isCartOpen: false,
+      isSidebarOpen: false
     }
   },
   watch: {
@@ -95,46 +99,6 @@ export default Vue.extend({
           cartCount += a.node.quantity
         })
         return cartCount
-      }
-    },
-    cleanCheckout: function() {
-      let checkoutUrls = [
-        {
-          oldUrl: 'aoftd.myshopify.com',
-          newUrl: 'dk.organicbasics.com'
-        },
-        {
-          oldUrl: 'euorganicbasics.myshopify.com',
-          newUrl: 'organicbasics.com'
-        },
-        {
-          oldUrl: 'ukorganicbasics.myshopify.com',
-          newUrl: 'uk.organicbasics.com'
-        },
-        {
-          oldUrl: 'usorganicbasics.myshopify.com',
-          newUrl: 'us.organicbasics.com'
-        }
-      ]
-      if(!this.$store.state.cart.webUrl) {
-        return '#'
-      }
-      else {
-        let theUrl = checkoutUrls.find((url) => this.$store.state.cart.webUrl.includes(url.oldUrl))
-        if(theUrl !== undefined) {
-          return this.$store.state.cart.webUrl.replace(theUrl.oldUrl, theUrl.newUrl)
-        }
-        else {
-          return this.$store.state.cart.webUrl
-        }
-      }
-    },
-    carbonIndex: function() {
-      if(!this.$store.state.carbonIntensity.intensity) {
-        return '...'
-      }
-      else {
-        return this.$store.state.carbonIntensity.intensity.index
       }
     },
     totalBytes: function() {
@@ -253,18 +217,6 @@ a {
   position: fixed;
   top: 0;
   width: 100vw;
-}
-
-.stats__carbon {
-  &.stats__carbon--low {
-    color: seagreen;
-  }
-  &.stats__carbon--moderate {
-    color: gold;
-  }
-  &.stats__carbon--high {
-    color: tomato;
-  }
 }
 
 </style>
