@@ -18,7 +18,7 @@
       </div>
       <div class="product__sticky-bottom">
         <input type="number" name="quantity" v-model="quantity">
-        <input type="button" name="add-to-cart" v-model="addMessage">
+        <input type="button" name="add-to-cart" v-model="addMessage" @click="addToCart()">
       </div>
     </div>
     <div class="product__select-area">
@@ -27,7 +27,7 @@
         <div>
           <span v-for="(color, index) in product.options.color.values"
           :class="color === chosenColor ? 'chosen' : ''"
-          @click="chosenColor = color">
+          @click="chosenColor = color; chooseId()">
             {{color}} · 
           </span>
         </div>
@@ -37,7 +37,7 @@
         <div>
           <span v-for="(size, index) in product.options.size.values"
           :class="size === chosenSize ? 'chosen' : ''"
-          @click="chosenSize = size">
+          @click="chosenSize = size; chooseId()">
             {{size}} · 
           </span>
         </div>
@@ -79,7 +79,7 @@ export default Vue.extend({
   data() {
     return {
       quantity: 1,
-      addMessage: 'Add to cart'
+      isAdding: false
     }
   },
   async asyncData({app, params}) {
@@ -156,7 +156,6 @@ export default Vue.extend({
           newData.materialCare = productText[2].split('///')
           newData.features = productText[3].split(',')
         }
-        console.log(newData)
         return newData
       }
       else {
@@ -165,6 +164,53 @@ export default Vue.extend({
     } catch(err) {
       console.error(err)
       return { product : {} }
+    }
+  },
+  computed: {
+    addMessage () {
+      if(this.isAdding) return 'Adding...'
+      else if(this.incomplete) return 'Select color and size'
+      else return 'Add to cart'
+    }
+  },
+  methods: {
+    async addToCart () {
+      console.log(`Adding ${this.product.title} to cart...`)
+      this.isAdding = true
+      let result = await this.$apollo.mutate({
+        mutation: gql`
+          mutation ($checkoutId: ID!, $lineItems: [CheckoutLineItemInput!]!) {
+            checkoutLineItemsAdd(checkoutId: $checkoutId, lineItems: $lineItems) {
+              userErrors {
+                message
+                field
+              }
+              checkout {
+                id
+              }
+            }
+          }
+        `,
+        variables: {
+          checkoutId: this.$store.state.checkoutId,
+          lineItems: [{variantId: this.chosenId, quantity: parseInt(this.quantity)}]
+        }
+      })
+      this.isAdding = false
+      console.log(`Added ${this.product.title} to cart.`)
+      this.$store.dispatch('fetchCart')
+    },
+    chooseId() {
+      let chosenVariant = this.product.variants.edges.find((a) => {
+        let colorOpt = a.node.selectedOptions.find((b) => {
+          return b.name === 'Color'
+        })
+        let sizeOpt = a.node.selectedOptions.find((b) => {
+          return b.name === 'Size'
+        })
+        return this.chosenColor === colorOpt.value && this.chosenSize === sizeOpt.value
+      })
+      this.chosenId = chosenVariant.node.id
     }
   }
 })

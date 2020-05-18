@@ -11,46 +11,11 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import VueApollo from 'vue-apollo'
-import gql from 'graphql-tag'
 
 export default Vue.extend({
   name: 'GridProduct',
   props: {
     productData: Object
-  },
-  data() {
-    return {
-      isAdding: false
-    }
-  },
-  methods: {
-    async addToCart () {
-      console.log(`Adding ${this.productData.title} to cart...`)
-      this.isAdding = true
-      let result = await this.$apollo.mutate({
-        mutation: gql`
-          mutation ($checkoutId: ID!, $lineItems: [CheckoutLineItemInput!]!) {
-            checkoutLineItemsAdd(checkoutId: $checkoutId, lineItems: $lineItems) {
-              userErrors {
-                message
-                field
-              }
-              checkout {
-                id
-              }
-            }
-          }
-        `,
-        variables: {
-          checkoutId: this.$store.state.checkoutId,
-          lineItems: [{variantId: this.productData.variant.node.id, quantity: 1}]
-        }
-      })
-      this.isAdding = false
-      console.log(`Added ${this.productData.title} to cart.`)
-      this.$store.dispatch('fetchCart')
-    }
   }
 })
 </script>
