@@ -1,1 +1,11 @@
-$colors: ("brand": #a1a4a9, "black": #15181D);
+$colors: (
+  "brand": #a1a4a9,
+  "black": #000000,
+  "bgGrey": #D8D8D8,
+  "green": #285246,
+  "bgYellow": #FFFAEC
+);
+
+$mobile: (
+  "sectionPadding": 40px 20px
+)

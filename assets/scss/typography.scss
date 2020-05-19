@@ -1,0 +1,51 @@
+@font-face {
+  font-family: 'Circular';
+  font-weight: bold;
+  src: url('~assets/fonts/CircularAirPro-Bold-Small.woff2') format('woff2'),
+       url('~assets/fonts/CircularAirPro-Bold-Small.woff') format('woff2');
+}
+@font-face {
+  font-family: 'Circular';
+  font-weight: normal;
+  src: url('~assets/fonts/CircularAirPro-Book-Small.woff2') format('woff2'),
+       url('~assets/fonts/CircularAirPro-Book-Small.woff') format('woff2');
+}
+
+html {
+  color: map-get($colors, "black");
+  font-family: 'Circular', sans-serif;
+  font-size: 14px;
+}
+
+h1 {
+  font-size: 47px;
+}
+
+h2 {
+  font-size: 38px;
+}
+
+h3 {
+  font-size: 24px;
+}
+
+h4 {
+  font-size: 21px;
+}
+
+h5 {
+  font-size: 18px;
+}
+
+h6 {
+  font-size: 14px;
+}
+
+p {
+  font-size: 12px;
+}
+
+a {
+  font-size: 18px;
+  color: map-get($colors, 'black');
+}

@@ -13,7 +13,7 @@
         <span>Menu</span>
       </div>
       <nuxt-link to="/" class="header__logo">
-        <logo />
+        <Logo />
       </nuxt-link>
       <!-- <button @click="saveEntries()">Update</button> -->
       <div class="header__cart" @click="isCartOpen = true">
@@ -24,6 +24,7 @@
     <sidebar :open="isSidebarOpen" @closed="isSidebarOpen = false"/>
     <cartDrawer :open="isCartOpen" @closed="isCartOpen = false"/>
     <overlay :open="isOverlayOpen" @closed="isOverlayOpen = false"/>
+    <Footer />
   </main>
 </template>
 
@@ -34,6 +35,7 @@ import Logo from '~/components/Logo.vue'
 import Overlay from '~/components/Overlay.vue'
 import Sidebar from '~/components/Sidebar.vue'
 import CartDrawer from '~/components/CartDrawer.vue'
+import Footer from '~/components/Footer.vue'
 
 import * as CO2 from '@tgwf/co2/src/co2.js'
 const emissions = new CO2()
@@ -44,7 +46,8 @@ export default Vue.extend({
     Logo,
     Overlay,
     Sidebar,
-    CartDrawer
+    CartDrawer,
+    Footer
   },
   async mounted() {
     await this.$store.dispatch('initStore')
@@ -127,26 +130,15 @@ export default Vue.extend({
 
 <style lang="scss">
 @import "~assets/scss/variables.scss";
+@import "~assets/scss/mixins.scss";
+@import "~assets/scss/typography.scss";
+@import "~assets/scss/main.scss";
 
-@font-face {
-  font-family: 'Circular';
-  font-weight: bold;
-  src: url('~assets/fonts/CircularAirPro-Bold-Small.woff2') format('woff2'),
-       url('~assets/fonts/CircularAirPro-Bold-Small.woff') format('woff2');
-}
-@font-face {
-  font-family: 'Circular';
-  font-weight: normal;
-  src: url('~assets/fonts/CircularAirPro-Book-Small.woff2') format('woff2'),
-       url('~assets/fonts/CircularAirPro-Book-Small.woff') format('woff2');
-}
 
 html {
-  background: map-get($colors, "black");
-  color: #fff;
-  font-family: 'Circular', sans-serif;
-  font-size: 16px;
+  background: map-get($colors, "bgGrey");
   word-spacing: 1px;
+  font-weight: normal;
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
   -moz-osx-font-smoothing: grayscale;
@@ -161,8 +153,8 @@ html {
   margin: 0;
 }
 
-a {
-  color: #fff;
+section {
+  padding: map-get($mobile, "sectionPadding");
 }
 
 .container {
