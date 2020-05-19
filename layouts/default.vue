@@ -138,6 +138,7 @@ export default Vue.extend({
 html {
   background: map-get($colors, "bgGrey");
   word-spacing: 1px;
+  font-weight: normal;
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
   -moz-osx-font-smoothing: grayscale;
