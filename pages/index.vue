@@ -9,7 +9,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import Vue from 'vue'
 import VueApollo from 'vue-apollo'
 import gql from 'graphql-tag'
