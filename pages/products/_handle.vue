@@ -70,7 +70,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import Vue from 'vue'
 import VueApollo from 'vue-apollo'
 import gql from 'graphql-tag'
@@ -128,8 +128,8 @@ export default Vue.extend({
           `
         })
         let product = result.data.productByHandle
-        let size = product.options.find((a:any) => a.name === 'Size')
-        let color = product.options.find((a:any) => a.name === 'Color')
+        let size = product.options.find((a) => a.name === 'Size')
+        let color = product.options.find((a) => a.name === 'Color')
         product.options = {
           size: size,
           color: color
@@ -145,8 +145,8 @@ export default Vue.extend({
           features : []
         }
         if(product.variants.edges.length > 1) {
-          newData.chosenColor = product.variants.edges[0].node.selectedOptions.find((a:any) => a.name === 'Color').value
-          newData.chosenSize = product.variants.edges[0].node.selectedOptions.find((a:any) => a.name === 'Size').value
+          newData.chosenColor = product.variants.edges[0].node.selectedOptions.find((a) => a.name === 'Color').value
+          newData.chosenSize = product.variants.edges[0].node.selectedOptions.find((a) => a.name === 'Size').value
           newData.chosenId = product.variants.edges[0].node.id
         }
         if(product.description.split('|').length > 0) {
@@ -179,7 +179,8 @@ export default Vue.extend({
       this.isAdding = true
       let result = await this.$apollo.mutate({
         mutation: gql`
-          mutation ($checkoutId: ID!, $lineItems: [CheckoutLineItemInput!]!) {
+          mutation ($checkoutId: ID!, $lineItems: [CheckoutLineItemInput!]!, $checkoutAttributes: CheckoutAttributesUpdateV2Input!) {
+
             checkoutLineItemsAdd(checkoutId: $checkoutId, lineItems: $lineItems) {
               userErrors {
                 message
@@ -188,12 +189,29 @@ export default Vue.extend({
               checkout {
                 id
               }
+            },
+
+            checkoutAttributesUpdateV2(checkoutId: $checkoutId, input: $checkoutAttributes) {
+              checkoutUserErrors {
+                message
+                field
+              }
+              checkout {
+                id
+              }
             }
+
           }
         `,
         variables: {
           checkoutId: this.$store.state.checkoutId,
-          lineItems: [{variantId: this.chosenId, quantity: parseInt(this.quantity)}]
+          lineItems: [{variantId: this.chosenId, quantity: parseInt(this.quantity)}],
+          checkoutAttributes: {
+            customAttributes: [{
+              key: 'isLowImpactWebsite',
+              value: 'true'
+            }]
+          }
         }
       })
       this.isAdding = false

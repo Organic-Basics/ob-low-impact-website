@@ -4,7 +4,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import Vue from 'vue'
 import GridProduct from '~/components/GridProduct.vue'
 import VueApollo from 'vue-apollo'
@@ -50,7 +50,7 @@ export default Vue.extend({
           `
         })
 
-        let products = result.data.collectionByHandle.products.edges.map((a:any, i:number, arr:any) => {
+        let products = result.data.collectionByHandle.products.edges.map((a, i, arr) => {
           if(a.node.variants !== undefined) {
             a.node.variant = a.node.variants.edges[0]
             delete a.node.variants

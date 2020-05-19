@@ -28,7 +28,7 @@
   </main>
 </template>
 
-<script lang="ts">
+<script>
 import Vue from 'vue'
 
 import Logo from '~/components/Logo.vue'
@@ -98,7 +98,7 @@ export default Vue.extend({
       }
       else {
         let cartCount = 0
-        this.$store.state.cart.lineItems.edges.forEach((a:any) => {
+        this.$store.state.cart.lineItems.edges.forEach((a) => {
           cartCount += a.node.quantity
         })
         return cartCount
@@ -106,7 +106,7 @@ export default Vue.extend({
     },
     totalBytes: function() {
       if(this.transferredObjects.length > 0) {
-        return this.transferredObjects.reduce((acc:any, cur:any) => {
+        return this.transferredObjects.reduce((acc, cur) => {
           if(typeof acc !== 'number') {
             acc = cur.byteSize
           }
