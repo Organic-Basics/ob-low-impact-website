@@ -1,0 +1,28 @@
+/* Most-commonly used: phoneSmall, phone, tabletPortrait, desktop */
+@mixin screenSizes($size) {
+    @if $size == phoneSmall {
+        @media (max-width: 360px) {
+            @content;}
+    }
+    @else if $size == phone {
+        @media (max-width: 420px) {@content;}
+    }
+    @else if $size == tabletSmall {
+        @media (max-width: 600px) {@content;}
+    }
+    @else if $size == tabletPortrait {
+        @media (max-width: 768px) {@content;}
+    }
+    @else if $size == desktopSmall {
+        @media (max-width: 1280px) {@content;}
+    }
+    @else if $size == desktop {
+        @media (max-width: 1366px) {@content;}
+    }
+    @else if $size == desktopLarge {
+        @media (max-width: 1920px) {@content;}
+    }
+    @else if $size == largeDevices {
+        @media (min-width: 1921px) {@content;}
+    }
+}

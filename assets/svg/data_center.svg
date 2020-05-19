@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="327px" height="75px" viewBox="0 0 327 75" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Group 30</title>
+    <defs>
+        <polygon id="path-1" points="0 72.2327586 325.428853 72.2327586 325.428853 0.767948276 0 0.767948276"></polygon>
+    </defs>
+    <g id="Mobile" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="iPhone-11-Pro-Copy-118" transform="translate(-23.000000, -928.000000)">
+            <g id="Group-30" transform="translate(23.551724, 928.285484)">
+                <g id="Group-7" transform="translate(130.525862, 18.240292)" stroke="#005245" stroke-width="2">
+                    <polyline id="Stroke-1" points="29.189131 54.2939431 37.3755103 0.860710345 54.5681741 0.860710345 62.7558207 54.2939431"></polyline>
+                    <polyline id="Stroke-3" points="0.231271552 54.2939431 5.52834052 20.6119345 16.6509181 20.6119345 21.9479871 54.2939431"></polyline>
+                    <line x1="80.8124897" y1="54.2939431" x2="80.8124897" y2="22.7523052" id="Stroke-5"></line>
+                </g>
+                <line x1="211.338352" y1="40.9929776" x2="207.368084" y2="23.2820121" id="Stroke-8" stroke="#005245" stroke-width="2" stroke-linecap="round"></line>
+                <line x1="211.338352" y1="40.9929776" x2="228.661541" y2="46.4104345" id="Stroke-9" stroke="#005245" stroke-width="2" stroke-linecap="round"></line>
+                <line x1="211.338352" y1="40.9929776" x2="198.09061" y2="53.4018052" id="Stroke-10" stroke="#005245" stroke-width="2" stroke-linecap="round"></line>
+                <g id="Group-29" transform="translate(0.000000, 0.498913)">
+                    <path d="M142.432152,32.6604853 C142.448576,25.3839853 138.375662,23.077606 134.02649,26.826106 C133.166033,23.6871491 128.140153,20.8029078 124.319421,25.145744 C120.545576,19.2809509 116.577843,21.7127871 113.504783,26.4041147" id="Stroke-11" stroke="#005245" stroke-width="2" stroke-linejoin="round"></path>
+                    <path d="M176.139582,11.6061569 C176.201677,2.85078621 167.679478,0.412613793 162.566159,7.32795 C161.834961,-0.184256897 156.191935,1.31488966 153.903297,5.56775172" id="Stroke-13" stroke="#005245" stroke-width="2" stroke-linejoin="round"></path>
+                    <mask id="mask-2" fill="white">
+                        <use xlink:href="#path-1"></use>
+                    </mask>
+                    <g id="Clip-16"></g>
+                    <polygon id="Stroke-15" stroke="#005245" stroke-width="2" mask="url(#mask-2)" points="1.26724138 64.8650172 53.429431 64.8650172 53.429431 47.7572586 1.26724138 47.7572586"></polygon>
+                    <polygon id="Stroke-17" stroke="#005245" stroke-width="2" mask="url(#mask-2)" points="1.26724138 42.0267931 53.429431 42.0267931 53.429431 24.9190345 1.26724138 24.9190345"></polygon>
+                    <line x1="33.1282241" y1="36.1428647" x2="33.1282241" y2="30.8027095" id="Stroke-18" stroke="#005245" stroke-width="2" mask="url(#mask-2)"></line>
+                    <line x1="38.9087457" y1="36.1428647" x2="38.9087457" y2="30.8027095" id="Stroke-19" stroke="#005245" stroke-width="2" mask="url(#mask-2)"></line>
+                    <line x1="44.6886336" y1="36.1428647" x2="44.6886336" y2="30.8027095" id="Stroke-20" stroke="#005245" stroke-width="2" mask="url(#mask-2)"></line>
+                    <line x1="33.1282241" y1="59.1574888" x2="33.1282241" y2="53.8173336" id="Stroke-21" stroke="#005245" stroke-width="2" mask="url(#mask-2)"></line>
+                    <line x1="38.9087457" y1="59.1574888" x2="38.9087457" y2="53.8173336" id="Stroke-22" stroke="#005245" stroke-width="2" mask="url(#mask-2)"></line>
+                    <line x1="44.6886336" y1="59.1574888" x2="44.6886336" y2="53.8173336" id="Stroke-23" stroke="#005245" stroke-width="2" mask="url(#mask-2)"></line>
+                    <path d="M319.614497,19.4546897 L303.978005,19.4546897 C301.4676,19.4546897 299.431143,21.4898793 299.431143,24.0015517 L299.431143,63.3354569 C299.431143,65.8458621 301.4676,67.882319 303.978005,67.882319 L319.614497,67.882319 C322.124902,67.882319 324.161359,65.8458621 324.161359,63.3354569 L324.161359,24.0015517 C324.161359,21.4898793 322.124902,19.4546897 319.614497,19.4546897 Z" id="Stroke-24" stroke="#005245" stroke-width="2" mask="url(#mask-2)"></path>
+                    <path d="M317.85151,20.2083181 L305.740484,20.2083181 L305.740484,24.150706 C305.740484,24.6576026 306.151071,25.0669216 306.655433,25.0669216 L316.936562,25.0669216 C317.442191,25.0669216 317.85151,24.6576026 317.85151,24.150706 L317.85151,20.2083181 Z" id="Stroke-25" stroke="#005245" stroke-width="2" mask="url(#mask-2)"></path>
+                    <path d="M210.977568,58.2663647 C220.647887,61.5041664 232.305241,63.3948905 244.852197,63.3948905 C269.773766,63.3948905 290.12693,57.3539509 299.431016,46.6989853" id="Stroke-26" stroke="#005245" stroke-width="2" mask="url(#mask-2)"></path>
+                    <path d="M133.092913,58.2663647 C123.422594,61.5041664 111.765241,63.3948905 99.2182836,63.3948905 C80.9307233,63.3948905 64.5364216,59.3802698 53.4277836,53.0326578" id="Stroke-27" stroke="#005245" stroke-width="2" mask="url(#mask-2)"></path>
+                    <polyline id="Stroke-28" stroke="#005245" stroke-width="2" mask="url(#mask-2)" points="179.686971 40.3926853 172.340772 50.6674784 179.389169 50.6674784 172.743755 60.5367543"></polyline>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,30 @@
+/* BACKGROUND */
+
+.bg--green {
+  background: map-get($colors, 'green');
+  color: white;
+}
+
+.bg--yellow {
+  background: map-get($colors, 'bgYellow');
+  color: map-get($colors, 'green');
+}
+
+.bg--grey {
+  background: map-get($colors, 'bgGrey');
+}
+
+.bg--white {
+  background: white;
+  text: map-get($colors, 'black');
+}
+
+/* TEXT */
+
+.text--left {
+  text-align: left;
+}
+
+.text--green {
+  color: map-get($colors, 'green');
+}

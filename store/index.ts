@@ -2,6 +2,7 @@ import { GetterTree, ActionTree, MutationTree } from 'vuex'
 import gql from 'graphql-tag'
 import axios from 'axios'
 
+// init Vuex state object
 export const state = () => ({
   checkoutId: '',
   cart: {},
@@ -10,12 +11,15 @@ export const state = () => ({
 
 export type RootState = ReturnType<typeof state>
 
+// provide Vuex mutations
 export const mutations: MutationTree<RootState> = {
+    // access the state object with state.checkoutId
 	setCheckoutId: (state, newId:string) => (state.checkoutId = newId),
 	saveCart: (state, cart:any) => (state.cart = cart),
 	setCarbonIntensity: (state, intensity:any) => (state.carbonIntensity = intensity)
 }
 
+// register a Vuex action
 export const actions: ActionTree<RootState, RootState> = {
   async fetchCart (store:any) {
   	let client:any
@@ -52,10 +56,12 @@ export const actions: ActionTree<RootState, RootState> = {
 	        }
 	      `,
 	      variables: {
+            // access state object
 	        checkoutId: store.state.checkoutId
 	      },
 	      fetchPolicy: 'network-only'
 			})
+            // trigger a change with store.commit
 			store.commit('saveCart', result.data.node)
     }
   },
