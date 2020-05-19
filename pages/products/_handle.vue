@@ -177,11 +177,29 @@ export default Vue.extend({
     async addToCart () {
       console.log(`Adding ${this.product.title} to cart...`)
       this.isAdding = true
+      // If this id is already in the cart, increase the quantity of it before sending to Shopify
+      let cartIds = this.$store.getters.cartIds.map((a) => {
+        if(a.variantId === this.chosenId) {
+          a.quantity += parseInt(this.quantity)
+          return a
+        }
+        else {
+          return a
+        }
+      })
+
+      // If this id is not in the cart, add it to the cartIds that are sent to Shopify
+      if(!cartIds.some((a) => {
+        return a.variantId === this.chosenId
+      })) {
+        cartIds = [...cartIds, ...[{variantId: this.chosenId, quantity: parseInt(this.quantity)}]]
+      }
+
       let result = await this.$apollo.mutate({
         mutation: gql`
           mutation ($checkoutId: ID!, $lineItems: [CheckoutLineItemInput!]!, $checkoutAttributes: CheckoutAttributesUpdateV2Input!) {
 
-            checkoutLineItemsAdd(checkoutId: $checkoutId, lineItems: $lineItems) {
+            checkoutLineItemsReplace(checkoutId: $checkoutId, lineItems: $lineItems) {
               userErrors {
                 message
                 field
@@ -205,7 +223,7 @@ export default Vue.extend({
         `,
         variables: {
           checkoutId: this.$store.state.checkoutId,
-          lineItems: [{variantId: this.chosenId, quantity: parseInt(this.quantity)}],
+          lineItems: cartIds,
           checkoutAttributes: {
             customAttributes: [{
               key: 'isLowImpactWebsite',
