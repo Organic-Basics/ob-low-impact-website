@@ -37,7 +37,7 @@ import Sidebar from '~/components/Sidebar.vue'
 import CartDrawer from '~/components/CartDrawer.vue'
 import Footer from '~/components/Footer.vue'
 
-import * as CO2 from '@tgwf/co2/src/co2.js'
+import * as CO2 from '~/node_modules/@tgwf/co2/src/co2.js'
 const emissions = new CO2()
 
 export default Vue.extend({
@@ -51,7 +51,6 @@ export default Vue.extend({
   },
   async mounted() {
     await this.$store.dispatch('initStore')
-    console.log(this)
     this.saveEntries()
   },
   updated() {

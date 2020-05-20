@@ -4,6 +4,9 @@
   "description": "Organic Basics&#39; Low Impact Website project",
   "author": "Jesper Fogh",
   "private": true,
+  "engines": {
+    "node": "12.x.x"
+  },
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon server/index.js --watch server",
     "build": "nuxt build",
@@ -18,12 +21,12 @@
     "@nuxtjs/pwa": "^3.0.0-0",
     "core-js": "2",
     "cross-env": "^5.2.0",
-    "fastify": "^1.13.3",
+    "fastify": "^2.14.1",
     "graphql-tag": "^2.10.3",
     "nuxt": "^2.0.0"
   },
   "devDependencies": {
-    "@nuxt/typescript-build": "^0.6.0",
+    "@nuxt/typescript-build": "^1.0.0",
     "@nuxtjs/eslint-config-typescript": "^1.0.0",
     "@nuxtjs/eslint-module": "^1.0.0",
     "@tgwf/co2": "^0.6.1",
