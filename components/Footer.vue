@@ -20,7 +20,7 @@
           <nuxt-link to="/collections/all-mens-products">Shop Men</nuxt-link>
         </h2>
         <p>Need help?<p/>
-        <h6><b><a href = "mailto:support@organicbasics.com?subject=Low Energy Website inquiry">support@organicbasics.com</a></b>(2g of CO<sub>2</sub>)</h6>
+        <h6><b><a href = "mailto:support@organicbasics.com?subject=Low Energy Website inquiry">support@organicbasics.com</a></b>(~4g of CO<sub>2</sub>)</h6>
       </footer>
     </section>
   </div>
