@@ -25,7 +25,7 @@
       <div class="product__option product__option--color">
         <h3>Color</h3>
         <div>
-          <span v-for="(color, index) in product.options.color.values"
+          <span v-for="(color, index) in product.cleanOptions.color.values"
           :class="color === chosenColor ? 'chosen' : ''"
           @click="chosenColor = color; chooseId()">
             {{color}} · 
@@ -35,7 +35,7 @@
       <div class="product__option product__option--size">
         <h3>Size</h3>
         <div>
-          <span v-for="(size, index) in product.options.size.values"
+          <span v-for="(size, index) in product.cleanOptions.size.values"
           :class="size === chosenSize ? 'chosen' : ''"
           @click="chosenSize = size; chooseId()">
             {{size}} · 
@@ -128,9 +128,10 @@ export default Vue.extend({
           `
         })
         let product = result.data.productByHandle
+        console.log(result)
         let size = product.options.find((a) => a.name === 'Size')
         let color = product.options.find((a) => a.name === 'Color')
-        product.options = {
+        product.cleanOptions = {
           size: size,
           color: color
         }
@@ -159,9 +160,11 @@ export default Vue.extend({
         return newData
       }
       else {
+        console.log('SOMETHINGS OFF')
         return { product : {} }
       }
     } catch(err) {
+      console.log('SOMETHINGS ERR')
       console.error(err)
       return { product : {} }
     }
