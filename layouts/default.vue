@@ -2,12 +2,6 @@
   <main class="container">
     <button class="read-more" @click="isOverlayOpen = true">Read more</button>
 
-    <div class="stats">
-      <span>kB · {{ (totalBytes / 1024).toFixed(0) }}</span>
-      <span> | </span>
-      <span>g CO2e · {{ totalCarbon.toFixed(2) }}</span>
-    </div>
-
     <header class="header">
       <div class="header__menu" @click="isSidebarOpen = true">
         <span>Menu</span>
@@ -24,7 +18,7 @@
     <sidebar :open="isSidebarOpen" @closed="isSidebarOpen = false"/>
     <cartDrawer :open="isCartOpen" @closed="isCartOpen = false"/>
     <overlay :open="isOverlayOpen" @closed="isOverlayOpen = false"/>
-    <Footer />
+    <Footer :currentBytes="currentBytes" :currentPage="currentPage" />
   </main>
 </template>
 
@@ -51,6 +45,9 @@ export default Vue.extend({
   },
   async mounted() {
     await this.$store.dispatch('initStore')
+    this.currentPage = this.pageMap.find((a) => {
+      return this.$route.name === a.key
+    })
     this.saveEntries()
   },
   updated() {
@@ -61,13 +58,39 @@ export default Vue.extend({
       transferredObjects: [],
       isOverlayOpen: false,
       isCartOpen: false,
-      isSidebarOpen: false
+      isSidebarOpen: false,
+      pageMap: [
+        {
+          key: 'index',
+          name: 'front page',
+          normalSize: 14240040
+        },
+        {
+          key: 'collections-handle',
+          name: 'collection page',
+          normalSize: 8908927
+        },
+        {
+          key: 'products-handle',
+          name: 'product page',
+          normalSize: 11323705
+        }
+      ],
+      currentPage: {
+        key: '',
+        name: '',
+        normalSize: 1
+      },
+      currentBytes: 0
     }
   },
   watch: {
     '$route': {
       handler: function(val) {
-        this.saveEntries()
+        this.currentPage = this.pageMap.find((a) => {
+          return val.name === a.key
+        })
+        setTimeout(this.saveEntries, 500)
       },
       deep: true
     },
@@ -86,6 +109,21 @@ export default Vue.extend({
         })) {
           this.transferredObjects.push(newEntry)
         }
+      }
+
+      if(entries.length > 0) {
+        this.currentBytes = entries.reduce((acc, cur) => {
+          if(typeof acc !== 'number') {
+            acc = cur.transferSize
+          }
+          else {
+            acc += cur.transferSize
+          }
+          return acc
+        })
+      }
+      else {
+        this.currentBytes = 0
       }
       console.log('transferredObjects updated.')
     }
@@ -119,7 +157,7 @@ export default Vue.extend({
         return 0
       }
     },
-    totalCarbon() {
+    totalCarbon: function() {
       let estimatedCO2 = emissions.perByte(this.totalBytes, true)
       return estimatedCO2
     }
@@ -199,15 +237,6 @@ section {
   position: fixed;
   top: 20vh;
   max-width: 50px;
-}
-
-.stats {
-  background: map-get($colors, 'brand');
-  left: 0;
-  padding: 5px 0;
-  position: fixed;
-  top: 0;
-  width: 100vw;
 }
 
 </style>

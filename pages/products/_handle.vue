@@ -21,7 +21,9 @@
         <input type="button" name="add-to-cart" v-model="addMessage" @click="addToCart()">
       </div>
     </div>
-    <productSelect v-for="(prod, index) in products" :key="index" :product="prod" @optClicked="onIdChosen"/>
+    <productSelect v-for="(prod, index) in products" v-if="prod.switchId == 0 || prod.switchId == switchId" 
+    :key="index" :product="prod"
+    @optClicked="onIdChosen" @switched="switchId = switchId == 1 ? 2 : 1" />
   </div>
 </template>
 
@@ -36,7 +38,8 @@ export default Vue.extend({
   data() {
     return {
       quantity: 1,
-      isAdding: false
+      isAdding: false,
+      switchId: 1
     }
   },
   components: {
@@ -108,7 +111,6 @@ export default Vue.extend({
         }
 
         if(isSingleProduct) {
-          console.log(app)
           newData.products = prepProducts([product])
         }
         else {
@@ -156,47 +158,37 @@ export default Vue.extend({
             if(a.node.title === 'Gift Box') return true
           })
           if(giftboxIndex > -1) bundleProducts.splice(giftboxIndex, 1)
-          newData.products = prepProducts(bundleProducts)
+
+          newData.bundleData = {
+            tag : bundleTag,
+            name : product.title
+          }
+
+          newData.products = prepProducts(bundleProducts, newData.bundleData)
         }
         return newData
       }
       else {
         return {
           mainProduct : {},
-          products: [
-            {
-              chosenColor : '...',
-              chosenSize : '...',
-              chosenId : '...',
-              description : {
-                desc : [],
-                fitSize : [],
-                materialCare : [],
-                features : [],
-              },
-            }
-          ],
-          isSingleProduct : true
+          products: [],
+          isSingleProduct : true,
+          bundleData : {
+            tag : '',
+            name : ''
+          }
         }
       }
     } catch(err) {
       console.error(err)
       return {
         mainProduct : {},
-        products: [
-          {
-            chosenColor : '...',
-            chosenSize : '...',
-            chosenId : '...',
-            description : {
-              desc : [],
-              fitSize : [],
-              materialCare : [],
-              features : [],
-            },
-          }
-        ],
-        isSingleProduct : true
+        products: [],
+        isSingleProduct : true,
+        bundleData : {
+          tag : '',
+          name : ''
+        }
       }
     }
   },
@@ -212,6 +204,7 @@ export default Vue.extend({
       this.isAdding = true
       let cartIds = this.$store.getters.cartIds
       for(let prod of this.products) {
+        if(prod.switchId != 0 && prod.switchId != this.switchId) continue
         // If this id is already in the cart, increase the quantity of it before sending to Shopify
         cartIds = cartIds.map((a) => {
           if(a.variantId === prod.chosenId) {
@@ -227,7 +220,24 @@ export default Vue.extend({
         if(!cartIds.some((a) => {
           return a.variantId === prod.chosenId
         })) {
-          cartIds = [...cartIds, ...[{variantId: prod.chosenId, quantity: parseInt(this.quantity)}]]
+          let newCartId = {
+            variantId: prod.chosenId,
+            quantity: parseInt(this.quantity)
+          }
+          if(this.bundleData && this.bundleData.tag && this.bundleData.name) {
+            newCartId.customAttributes = [
+              {
+                key: '_bundle_id',
+                value: this.bundleData.tag
+              },
+              {
+                key: 'Bundle',
+                value: this.bundleData.name
+              }
+            ]
+          }
+          cartIds = [...cartIds, ...[newCartId]]
+
         }
       }
 
@@ -283,7 +293,7 @@ export default Vue.extend({
   }
 })
 
-function prepProducts (products) {
+function prepProducts (products, bundleData) {
   let productTemplate = {
     chosenColor : '...',
     chosenSize : '...',
@@ -293,7 +303,7 @@ function prepProducts (products) {
       fitSize : [],
       materialCare : [],
       features : [],
-    },
+    }
   }
 
   for(let i = 0; i < products.length; i++) {
@@ -311,6 +321,14 @@ function prepProducts (products) {
       products[i].tabs.fitSize = productText[1].split('///')
       products[i].tabs.materialCare = productText[2].split('///')
       products[i].tabs.features = productText[3].split(',')
+    }
+
+    if(bundleData) {
+      let productBundleTag = products[i].tags.find((tag) => {
+        console.log(tag)
+        return tag.includes(bundleData.tag)
+      })
+      products[i].switchId = productBundleTag.split('-')[3]
     }
   }
   return products

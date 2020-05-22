@@ -3,12 +3,12 @@
     <section class="bg--green">
       <div>
         <img src="~/assets/svg/data_icon.svg" alt="Data usage of this web page">
-        <h6>This page is using <b>XXX kb</b> of data</br>(That is <b>XXX x</b> smaller the regular <b>front page</b>)</h6>
+        <h6>This page is using <b>{{ (currentBytes / 1024).toFixed(0) }}kb</b> of data</br>(That is <b>{{pageSavingsMultiplier}}x</b> smaller than the regular <b>{{ currentPage ? currentPage.name ? currentPage.name : '...' : '...' }}</b>)</h6>
       </div>
 
       <div>
         <img src="~/assets/svg/energy_icon.svg" alt="Saved energy while browsing on this website">
-        <h6>You’ve saved <b>XXX kg</b> of CO<sub>2</sub> so far this session<br/>(compared to browsing our regular website)</h6>
+        <h6>You’ve saved <b>{{ 999 }} kg</b> of CO<sub>2</sub> so far this session<br/>(compared to browsing our regular website)</h6>
       </div>
     </section>
     <section>
@@ -20,17 +20,31 @@
           <nuxt-link to="/collections/all-mens-products">Shop Men</nuxt-link>
         </h2>
         <p>Need help?<p/>
-        <h6><b><a href = "mailto:support@organicbasics.com?subject=Low Energy Website inquiry">support@organicbasics.com</a></b>(~4g of CO<sub>2</sub>)</h6>
+        <h6><b><a href = "mailto:support@organicbasics.com?subject=Low Impact Website inquiry">support@organicbasics.com</a></b>(~4g of CO<sub>2</sub>)</h6>
       </footer>
     </section>
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import Vue from 'vue'
 
 export default Vue.extend({
-  name: 'Footer'
+  name: 'Footer',
+  props: {
+    currentBytes: Number,
+    currentPage: Object
+  },
+  computed: {
+    pageSavingsMultiplier: function() {
+      if(this.$props.currentPage && this.$props.currentPage.key) {
+        return (1 / (this.$props.currentBytes / this.$props.currentPage.normalSize)).toFixed(2)
+      }
+      else {
+        return 0
+      }
+    }
+  }
 })
 
 </script>

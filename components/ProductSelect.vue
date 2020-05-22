@@ -1,6 +1,7 @@
 <template>
   <div class="product__select-area">
-    <h3>{{product.title}}</h3>
+    <h3>{{product.title}} </h3>
+    <button @click="$emit('switched')" v-if="product.switchId != 0">Switch to ...</button>
     <div class="product__option product__option--color">
       <h3>Color</h3>
       <div>
