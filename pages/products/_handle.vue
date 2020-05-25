@@ -21,7 +21,7 @@
         <input type="button" name="add-to-cart" v-model="addMessage" @click="addToCart()">
       </div>
     </div>
-    <productSelect v-for="(prod, index) in products" v-if="prod.switchId == 0 || prod.switchId == switchId" 
+    <productSelect v-for="(prod, index) in products" v-if="prod.switchId == 0 || prod.switchId == switchId"
     :key="index" :product="prod"
     @optClicked="onIdChosen" @switched="switchId = switchId == 1 ? 2 : 1" />
   </div>
@@ -42,13 +42,8 @@ export default Vue.extend({
       switchId: 1
     }
   },
-<<<<<<< HEAD
-  head() {
-    // set meta tags for this page
-=======
   components: {
     ProductSelect
->>>>>>> 98fcdbd4116ea1a72cdb8e9861722c599c172d5e
   },
   async asyncData({app, params}) {
     try {
@@ -374,7 +369,6 @@ function prepProducts (products, bundleData) {
   }
 }
 
-<<<<<<< HEAD
 .product__select-area {
   align-items: flex-start;
   display: flex;
@@ -410,6 +404,4 @@ function prepProducts (products, bundleData) {
   }
 }
 
-=======
->>>>>>> 98fcdbd4116ea1a72cdb8e9861722c599c172d5e
 </style>

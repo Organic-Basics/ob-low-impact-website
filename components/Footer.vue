@@ -12,18 +12,6 @@
       </div>
     </section>
     <section>
-<<<<<<< HEAD
-      <footer class="text--left">
-        <nuxt-link class="footer__links" to="/collections/all-womens-products"><h3>Shop Women</h3></nuxt-link>
-        <nuxt-link class="footer__links" to="/collections/all-mens-products"><h3>Shop Men</h3></nuxt-link>
-        <div class="footer__help">
-          <p>Need help?<p/>
-          <h6>
-            <a href="mailto:support@organicbasics.com?subject=Low Energy Website inquiry"><b>support@organicbasics.com</b></a>
-            (2g of CO<sub>2</sub>)
-          </h6>
-        </div>
-=======
       <footer>
         <h2>
           <nuxt-link to="/collections/all-womens-products">Shop Women</nuxt-link>
@@ -33,7 +21,6 @@
         </h2>
         <p>Need help?<p/>
         <h6><b><a href = "mailto:support@organicbasics.com?subject=Low Impact Website inquiry">support@organicbasics.com</a></b>(~4g of CO<sub>2</sub>)</h6>
->>>>>>> 98fcdbd4116ea1a72cdb8e9861722c599c172d5e
       </footer>
     </section>
   </div>
