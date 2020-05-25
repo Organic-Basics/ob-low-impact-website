@@ -31,6 +31,7 @@ h3 {
 
 h4 {
   font-size: 21px;
+  margin: 20px auto;
 }
 
 h5 {
@@ -46,6 +47,6 @@ p {
 }
 
 a {
-  font-size: 18px;
   color: map-get($colors, 'black');
+  text-decoration: none;
 }

@@ -1,6 +1,9 @@
 <template>
-  <div class="product-grid">
-    <gridProduct v-for="(product, index) in products" :key="index" :productData="product.node" />
+  <div>
+    <h5 class="collection__heading">{{ collectionTitle }}</h5>
+    <div class="product-grid">
+      <gridProduct v-for="(product, index) in products" :key="index" :productData="product.node" />
+    </div>
   </div>
 </template>
 
@@ -14,31 +17,41 @@ export default Vue.extend({
   components: {
     GridProduct
   },
+  head() {
+    // WIP: set meta tags for this page
+  },
   async asyncData({app, params}) {
     try {
       if(app && app.apolloProvider && app.apolloProvider.defaultClient) {
         let client = app.apolloProvider.defaultClient
         let result = await client.query({
+          // Apollo GraphQL query: fetch data
           query: gql`
             query {
               collectionByHandle(handle: "${params.handle}") {
+                title,
                 products(first: 100) {
                   edges {
                     node {
                       handle,
                       title,
                       id,
+                      options {
+                        name,
+                        values
+                      },
+                      variants(first:50) {
+                        edges {
+                          node {
+                            price,
+                            compareAtPrice
+                          }
+                        }
+                      },
                       images(first: 1) {
                         edges {
                           node {
                             transformedSrc(maxWidth: 300, maxHeight: 390, crop: CENTER)
-                          }
-                        }
-                      },
-                      variants(first: 1) {
-                        edges {
-                          node {
-                            id
                           }
                         }
                       }
@@ -50,27 +63,54 @@ export default Vue.extend({
           `
         })
 
-        let products = result.data.collectionByHandle.products.edges.map((a, i, arr) => {
-          if(a.node.variants !== undefined) {
-            a.node.variant = a.node.variants.edges[0]
-            delete a.node.variants
+        // Once we have the result, populate that data (e.g. in product, title) and return it
+        let title = result.data.collectionByHandle.title
+        // let variantPrice = result.data.collectionByHandle.products.edges.node.variants.edges.node.price
+
+        // create new array that only contains the Color product options
+        let products = result.data.collectionByHandle.products.edges.map((a) => {
+          if(a.node.options) {
+            // find the Color product option
+            let colorOpt = a.node.options.find(b => b.name === 'Color')
+            if(colorOpt) a.node.colorValues = colorOpt.values
+            else a.node.colorValues = []
+
           }
+          else {
+            a.node.colorValues = []
+          }
+
+
           return a
         })
-        return { products : result.data.collectionByHandle.products.edges }
+        return {
+          // nuxt el : query var
+          products : products,
+          collectionTitle : title
+        }
       }
       else {
-        return { products : [] }
+        return { products : [], collectionTitle : '' }
       }
     } catch(err) {
       console.error(err)
-      return { products : [] }
+      return { products : [], collectionTitle : '' }
     }
+
   }
 })
+
 </script>
 
 <style lang="scss">
+
+html {
+  background: white;
+}
+
+.collection__heading {
+  margin: 40px auto 20px;
+}
 
 .product-grid {
   display: flex;

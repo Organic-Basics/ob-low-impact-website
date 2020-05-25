@@ -1,7 +1,7 @@
 <template lang="html">
   <div>
-    <div v-for="point in manifestoPoints">
-      <h6>{{ point.description }}</h6>
+    <div class="manifesto__group" v-for="(point, index) in manifestoPoints">
+      <h6 class="text--left"><span><b>{{ index + 1 }}. </b></span>{{ point.description }}</h6>
       <img :src="point.imgSrc" :alt="point.imgAlt">
     </div>
   </div>
@@ -72,4 +72,26 @@ export default Vue.extend({
 </script>
 
 <style lang="scss">
+  .manifesto__group {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: center;
+    margin: 50px auto;
+
+    h6 {
+      max-width: 42%;
+      margin-right: 8%;
+    }
+  }
+
+  .manifesto__group:nth-of-type(2n) {
+    flex-direction: row-reverse;
+
+    h6 {
+      max-width: 42%;
+      margin-left: 8%;
+      margin-right: 0;
+    }
+  }
 </style>

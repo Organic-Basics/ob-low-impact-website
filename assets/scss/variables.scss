@@ -3,9 +3,37 @@ $colors: (
   "black": #000000,
   "bgGrey": #D8D8D8,
   "green": #285246,
-  "bgYellow": #FFFAEC
+  "bgYellow": #FFFAEC,
+  "grey": #c5c1c2,
+  // product colors:
+  "rosenude": #debeab,
+  "burgundy": #aa1d4e,
+  "navy": #00325e,
+  "forestgreen": #006738,
+  "darkgreen": #484f26,
+  "stonegrey": #929189,
+  "cloudyblue": #dce9f4,
+  "dustyrose": #9f7a83,
+  "dustyclay": #f7bba1,
+  "bluestone": #a5b0c2,
+  "seablue": #a5b0c2,
+  "beige": #ffecdb,
+  "variantWhite": #EBEBEB,
+  "whitelily": #f5f1ef,
+  "deeptaupe": #734e46,
+  "steel": #B9B9B9,
+  "bamboo": #B59074,
+  "brown": #8E7357,
+  "camel": #ad805d
 );
 
 $mobile: (
-  "sectionPadding": 40px 20px
-)
+  "sectionPadding": 40px 30px
+);
+
+/* Variant colors */
+@each $color in $colors {
+  .variant--#{nth($color, 1)} {
+    background: nth($color, 2);
+  }
+}

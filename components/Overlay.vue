@@ -1,37 +1,38 @@
 <template>
   <div :class="'bg--grey overlay overlay--' + open">
     <header class="overlay__header">
-      <span>Switch to normal website</span>
-      <span @click="closeOverlay()">Close</span>
+      <p>Switch to normal website</p>
+      <h5 @click="closeOverlay()">Close</h5>
     </header>
 
     <section>
-      <div>Meter illustration</div>
+      <ImpactMeter />
       <h5 :class="'overlay__carbon overlay__carbon--' + carbonIntensity.index">Carbon intensity: {{carbonIntensity.forecast}}g CO2/kWh</h5>
-      <h6>Our server’s carbon intensity is currently <span class="overlay__carbon-lvl">{{carbonIntensity.index}}</span>. This site will continuously adapt to reflect the amount of renewable energy it’s running on.</h6>
+      <h6 class="overlay__carbon--desc">Our server’s carbon intensity is currently <span class="overlay__carbon-lvl">{{carbonIntensity.index}}</span>. This site will continuously adapt to reflect the amount of renewable energy it’s running on.</h6>
       <ul class="overlay__carbon-indices">
         <li v-for="carbonIndex in carbonIndices" :class="(carbonIndex.key === carbonIntensity.index ? 'active' : '')">
           <h6>{{carbonIndex.name}}</h6>
           <h6>{{carbonIndex.description}}</h6>
         </li>
       </ul>
-      <div>
-        <h5 class="text--green">Whay, why, how?</h5>
+      <div class="overlay__questions">
+        <h5 class="text--green">What, why, how?</h5>
+        <img class="overlay__arrow-down" src="~/assets/svg/arrow_down.svg" alt="Arrow pointing down">
       </div>
     </section>
 
     <section class="bg--white">
       <h3 class="text--left">The internet uses electricity.</br>Quite a bit.</h3>
-      <img src="~/assets/svg/data_center.svg" alt="Internet energy consumption illustration">
+      <img class="image--data-center" src="~/assets/svg/data_center.svg" alt="Internet energy consumption illustration">
 
-      <div v-for="item in threeQuestions">
+      <div class="overlay__questions--description text--left" v-for="item in threeQuestions">
         <span>{{ item.question }}</span>
         <h6>{{ item.description }}</h6>
       </div>
 
       <nuxt-link to="" class="text--green"><h5> WIP LINK</h5></nuxt-link>
 
-      <h1>The low impact manifesto</h1>
+      <h1 class="manifesto__heading--dramatic">The low impact manifesto</h1>
     </section>
 
     <Footer />
@@ -41,6 +42,7 @@
 <script>
 import Vue from 'vue'
 import Footer from '~/components/Footer.vue'
+import ImpactMeter from '~/components/ImpactMeter.vue'
 
 export default Vue.extend({
   name: 'Overlay',
@@ -48,7 +50,8 @@ export default Vue.extend({
     open: Boolean
   },
   components: {
-    Footer
+    Footer,
+    ImpactMeter
   },
   data() {
     return {
@@ -135,6 +138,7 @@ export default Vue.extend({
   align-items: center;
   display: flex;
   justify-content: space-between;
+  margin: 20px;
 }
 
 .overlay__carbon {
@@ -157,10 +161,52 @@ export default Vue.extend({
   list-style: none;
   padding: 0;
   text-align: left;
+  margin-top: 20px;
 
   li:not(.active) {
     opacity: 0.25;
   }
+
+  li {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 7px 0;
+  }
+}
+
+.overlay__carbon--desc {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.overlay__questions {
+  margin: 40px auto;
+
+  .overlay__arrow-down {
+    width: 20px;
+    margin-top: 10px;
+  }
+}
+
+.image--data-center {
+  margin: 40px auto;
+}
+
+.overlay__questions--description {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  margin-bottom: 30px;
+
+  span {
+    margin-right: 20px;
+    min-width: 45px;
+  }
+}
+
+.manifesto__heading--dramatic {
+  margin: 60px auto 40px;
 }
 
 </style>

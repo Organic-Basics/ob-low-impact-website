@@ -82,6 +82,9 @@ export default Vue.extend({
       isAdding: false
     }
   },
+  head() {
+    // set meta tags for this page
+  },
   async asyncData({app, params}) {
     try {
       if(app && app.apolloProvider && app.apolloProvider.defaultClient) {
@@ -297,7 +300,7 @@ export default Vue.extend({
     ul {
       align-items: flex-start;
       display: flex;
-      flex-direction: column;      
+      flex-direction: column;
       text-align: left;
     }
   }
