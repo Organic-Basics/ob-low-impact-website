@@ -30,9 +30,6 @@ import Manifesto from '~/components/Manifesto.vue'
 import ImpactMeter from '~/components/ImpactMeter.vue'
 
 
-import * as CO2 from '@tgwf/co2/src/co2.js'
-const emissions = new CO2()
-
 export default Vue.extend({
   components: {
     Manifesto,

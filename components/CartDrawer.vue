@@ -8,6 +8,11 @@
       <div v-for="(item) in cleanCart" class="cart-drawer__item">
         <div>{{item.node.quantity}} x {{item.node.title}}</div>
         <div>{{item.node.variant.title}}</div>
+        <div class="cart-drawer__quantity">
+          <span @click="updateLineItem(item.node.variant.id, item.node.quantity - 1)">–</span>
+           / 
+          <span @click="updateLineItem(item.node.variant.id, item.node.quantity + 1)">+</span>
+         </div>
       </div>
     </main>
     <footer>
@@ -27,6 +32,11 @@ export default Vue.extend({
   methods: {
     closeDrawer: function () {
       this.$emit('closed', true)
+    },
+    updateLineItem: function (variantId, quantity) {
+      this.$store.dispatch('updateLineItem',
+        {variantId: variantId, quantity: quantity}
+      )
     }
   },
   computed: {
@@ -119,6 +129,19 @@ export default Vue.extend({
   flex-direction: column;
   padding: 5px 0;
   width: 100%;
+}
+
+.cart-drawer__quantity {
+  span {
+    cursor: pointer;
+    display: inline-block;
+    height: 10px;
+    width: 10px;
+
+    &:hover {
+      text-decoration: overline;
+    }
+  }
 }
 
 </style>

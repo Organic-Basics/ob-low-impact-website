@@ -1,4 +1,7 @@
-let WebImpactPlugin = require('./plugins/web_impact_entry');
+let WebImpactPlugin
+if(process.env.NODE_ENV === 'development') {
+  WebImpactPlugin = require('./plugins/web_impact_entry');
+}
 require('dotenv').config()
 
 module.exports = {
@@ -68,16 +71,7 @@ module.exports = {
       }
     }
   },
-  pwa: {
-    /*workbox: {
-      dev: true,
-      debug: true,
-      importScripts: ['sw_custom.js']
-    },
-    manifest: {
-      display: 'browser'
-    }*/
-  },
+  pwa: {},
   /*
   ** Build configuration
   */
