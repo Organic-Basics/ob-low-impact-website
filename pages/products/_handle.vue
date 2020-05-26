@@ -22,7 +22,7 @@
       </div>
     </div>
     <productSelect v-for="(prod, index) in products" v-if="prod.switchId == 0 || prod.switchId == switchId || prod.switchId === undefined"
-    :key="index" :product="prod"
+    :key="index" :idx="index" :product="prod"
     @optClicked="onIdChosen" @switched="switchId = switchId == 1 ? 2 : 1" />
   </div>
 </template>
@@ -201,8 +201,13 @@ export default Vue.extend({
   },
   methods: {
     async addToCart () {
+
+    	console.log(this.products[0].chosenColor + ' / ' + this.products[0].chosenSize)
+    	console.log(this.products[1].chosenColor + ' / ' + this.products[1].chosenSize)
+
       this.isAdding = true
       let cartIds = this.$store.getters.cartIds
+
       for(let prod of this.products) {
       	// If the product has a switchId, and it's not the active one, skip loop
         if(prod.switchId != 0 && prod.switchId != this.switchId && prod.switchId !== undefined) continue
@@ -285,12 +290,14 @@ export default Vue.extend({
     },
 
     onIdChosen(data) {
-      let parentProduct = this.products.find((a) => {
-        return a.id === data.prodId
-      })
+    	console.log(data.idx)
+      let parentProduct = this.products[data.idx]
+      console.log(this.products)
       parentProduct.chosenId = data.id
       parentProduct.chosenColor = data.color
       parentProduct.chosenSize = data.size
+      console.log(this.products[0].chosenColor + ' / ' + this.products[0].chosenSize)
+      console.log(this.products[1].chosenColor + ' / ' + this.products[1].chosenSize)
     }
   }
 })
@@ -330,6 +337,12 @@ function prepProducts (products, bundleData) {
         return tag.includes(bundleData.tag)
       })
       products[i].switchId = productBundleTag.split('-')[3]
+
+      if(productBundleTag.includes('quant')) {
+      	let quantCount = parseInt(productBundleTag.split('-')[4])
+      	let quantProduct = products[0]
+      	products = new Array(quantCount).fill(quantProduct)
+      }
     }
   }
 
