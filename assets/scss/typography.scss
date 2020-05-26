@@ -43,10 +43,11 @@ h6 {
 }
 
 p {
-  font-size: 12px;
+  font-size: 13px;
 }
 
 a {
   color: map-get($colors, 'black');
   text-decoration: none;
+  cursor: pointer;
 }

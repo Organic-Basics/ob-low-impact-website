@@ -5,25 +5,35 @@
         <img :src="image.node.transformedSrc">
       </div>
     </div>
+    <!-- Sticky bar -->
     <div class="product__sticky">
       <div class="product__sticky-top">
         <div class="product__sticky-top-left">
-          <span class="product__sticky-title">{{mainProduct.title}}</span>
-          <span class="product__sticky-price">{{parseInt(mainProduct.priceRange.minVariantPrice.amount)}} {{mainProduct.priceRange.minVariantPrice.currencyCode}}</span>
+          <h6 class="product__sticky-title">{{mainProduct.title}}</h6>
+          <p class="product__sticky-price">{{parseInt(mainProduct.priceRange.minVariantPrice.amount)}} {{mainProduct.priceRange.minVariantPrice.currencyCode}}</p>
         </div>
         <div class="product__sticky-top-right" v-if="isSingleProduct">
-          <span class="product__sticky-size">{{products[0].chosenSize}}</span>
-          <span class="product__sticky-color">{{products[0].chosenColor}}</span>
+          <div class="product__sticky-size">{{products[0].chosenSize}}</div>
+          <div class="product__sticky-color">{{products[0].chosenColor}}
+            <span></span>
+          </div>
         </div>
       </div>
       <div class="product__sticky-bottom">
-        <input type="number" name="quantity" v-model="quantity">
-        <input type="button" name="add-to-cart" v-model="addMessage" @click="addToCart()">
+        <div class="product__sticky--buttons">
+          <div class="product__main--quantity">
+            <a class="product__main--decrement" href="">-</a>
+            <input class="product__main--quant-picker" type="number" name="quantity" v-model="quantity">
+            <a class="product__main--increment" href="">+</a>
+          </div>
+          <button class="product__main--add-to-cart" type="button" name="add-to-cart" v-model="addMessage"
+          @click="addToCart()">Add to cart</button>
+        </div>
       </div>
     </div>
     <productSelect v-for="(prod, index) in products" v-if="prod.switchId == 0 || prod.switchId == switchId || prod.switchId === undefined"
     :key="index" :propsIdx="index" :propsProduct="prod"
-    @sizeClicked="onSizeChosen" @colorClicked="onColorChosen" @switched="switchId = switchId == 1 ? 2 : 1" />
+    @sizeClicked="onSizeChosen" @colorClicked="onColorChosen" @switched="switchId = switchId == 1 ? 2 : 1" @addFromChild="addToCart()"/>
   </div>
 </template>
 
@@ -460,68 +470,179 @@ function prepProducts (products, bundleData) {
 <style lang="scss">
 @import "~assets/scss/variables.scss";
 
-.product__slideshow {
-  display: flex;
-  overflow-x: scroll;
-  width: 100vw;
+body {
+  background: #fff;
 
-  img {
-    min-width: 100vw;
-    max-width: 100%;
+  .container {
+    margin-top: 0;
   }
-}
 
-.product__sticky {
-  background: white;
-  bottom: 0;
-  color: map-get($colors, 'black');
-  display: flex;
-  flex-direction: column;
-  max-height: 300px;
-  position: fixed;
-  left: 0;
-  width: 100vw;
+  .header {
+    position: absolute;
+    top: 0;
+  }
 
-  .product__sticky-top {
+  .product__slideshow {
     display: flex;
+    overflow-x: scroll;
+    width: 100vw;
 
-    .product__sticky-top-left {
-      flex: 50%;
+    img {
+      min-width: 100vw;
+      max-width: 100%;
     }
   }
-}
 
-.product__select-area {
-  align-items: flex-start;
-  display: flex;
-  flex-direction: column;
+  .product__sticky {
+    color: map-get($colors, 'black');
+    background: #fff;
+    border-top: 1px solid #a1a4a9;
+    bottom: 0;
+    left: 0;
+    position: fixed;
+    transition: transform .3s ease-in-out;
+    transition: transform .3s ease-in-out,-webkit-transform .3s ease-in-out;
+    width: 100vw;
 
-  .product__option {
+    .product__sticky-top {
+      display: flex;
+      height: 4rem;
+      justify-content: space-between;
+      padding: 1rem;
+      align-items: center;
+
+      .product__sticky-top-left {
+        display: flex;
+
+        .product__sticky-title {
+          margin-right: 10px;
+        }
+
+        .product__sticky-price {
+          color: map-get($colors, 'brand');
+        }
+      }
+
+      .product__sticky-top-right {
+        align-items: center;
+        display: flex;
+
+        .product__sticky-size {
+          padding-right: .5rem;
+        }
+
+        .product__sticky-color {
+          height: 30px;
+          position: relative;
+          width: 30px;
+
+          span {
+            border-radius: 30px;
+            height: 30px;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 30px;
+          }
+        }
+      }
+    }
+
+    .product__sticky-bottom {
+      .product__sticky--buttons {
+        margin-bottom: 0;
+        display: flex;
+        justify-content: space-between;
+
+        .product__main--quantity {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          position: relative;
+          flex-basis: 50%;
+          border-top: 1px solid map-get($colors, 'brand');
+          height: 3.6rem;
+
+          .product__main--decrement, .product__main--increment {
+            color: map-get($colors, 'black');
+            width: 40px;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 40px;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 19px;
+          }
+
+          .product__main--increment {
+            right: 0;
+            left: auto;
+          }
+
+          .product__main--decrement {
+            left: 0;
+          }
+
+          .product__main--quant-picker {
+            border: none;
+            color: map-get($colors, 'black');
+            height: 100%;
+            text-align: center;
+            font-size: 13px;
+          }
+        }
+
+        .product__main--add-to-cart {
+          flex-basis: 50%;
+          border: 1px solid map-get($colors, 'black');
+        }
+      }
+    }
+  }
+
+  .product__main {
     align-items: flex-start;
     display: flex;
     flex-direction: column;
 
-    &.product__option--size {
-      margin-bottom: 30px;
-    }
-
-    .chosen {
-      text-decoration: underline;
-    }
-  }
-
-  .product__text {
-    align-items: flex-start;
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 5px;
-
-    ul {
+    .product__option {
       align-items: flex-start;
       display: flex;
       flex-direction: column;
-      text-align: left;
+
+      &.product__option--size {
+        margin-bottom: 30px;
+      }
+
+      .chosen {
+        text-decoration: underline;
+      }
     }
+
+    .product__text {
+      align-items: flex-start;
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 5px;
+
+      ul {
+        align-items: flex-start;
+        display: flex;
+        flex-direction: column;
+        text-align: left;
+      }
+    }
+  }
+
+  .product__main--add-to-cart {
+    height: 3.6rem;
+    text-align: center;
+    background: map-get($colors, 'black');
+    color: white;
+    cursor: pointer;
+    font-size: 13px;
   }
 }
 
