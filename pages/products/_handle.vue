@@ -21,7 +21,7 @@
         <input type="button" name="add-to-cart" v-model="addMessage" @click="addToCart()">
       </div>
     </div>
-    <productSelect v-for="(prod, index) in products" v-if="prod.switchId == 0 || prod.switchId == switchId"
+    <productSelect v-for="(prod, index) in products" v-if="prod.switchId == 0 || prod.switchId == switchId || prod.switchId === undefined"
     :key="index" :product="prod"
     @optClicked="onIdChosen" @switched="switchId = switchId == 1 ? 2 : 1" />
   </div>
@@ -204,7 +204,9 @@ export default Vue.extend({
       this.isAdding = true
       let cartIds = this.$store.getters.cartIds
       for(let prod of this.products) {
-        if(prod.switchId != 0 && prod.switchId != this.switchId) continue
+      	// If the product has a switchId, and it's not the active one, skip loop
+        if(prod.switchId != 0 && prod.switchId != this.switchId && prod.switchId !== undefined) continue
+
         // If this id is already in the cart, increase the quantity of it before sending to Shopify
         cartIds = cartIds.map((a) => {
           if(a.variantId === prod.chosenId) {
@@ -325,12 +327,26 @@ function prepProducts (products, bundleData) {
 
     if(bundleData) {
       let productBundleTag = products[i].tags.find((tag) => {
-        console.log(tag)
         return tag.includes(bundleData.tag)
       })
       products[i].switchId = productBundleTag.split('-')[3]
     }
   }
+
+	products = products.map((a) => {
+		if(a.switchId == 1) {
+			a.switchProduct = products.find((a) => {
+				return a.switchId == 2
+			}).title
+		}
+		else if(a.switchId == 2) {
+			a.switchProduct = products.find((a) => {
+				return a.switchId == 1
+			}).title
+		}
+		return a
+	})
+
   return products
 }
 </script>
@@ -373,7 +389,6 @@ function prepProducts (products, bundleData) {
   align-items: flex-start;
   display: flex;
   flex-direction: column;
-  height: 50vh;
 
   .product__option {
     align-items: flex-start;
