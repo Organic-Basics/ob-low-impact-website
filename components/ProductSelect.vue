@@ -9,6 +9,7 @@
         :class="color === chosenColor ? 'chosen' : ''"
         @click="chosenColor = color; chooseId()">
           {{color}} · 
+          test
         </span>
       </div>
     </div>
@@ -94,7 +95,7 @@ export default Vue.extend({
         this.chosenId = chosenVariant.node.id
       }
       this.$emit('optClicked', {
-        prodId: this.$props.product.id, 
+        prodId: this.$props.product.id,
         id: this.chosenId,
         color: this.chosenColor,
         size: this.chosenSize,
