@@ -245,10 +245,6 @@ export default Vue.extend({
   methods: {
     async addToCart () {
 
-    	console.log('addToCart')
-    	console.log(this.products[0].chosenColor + ' / ' + this.products[0].chosenSize)
-    	console.log(this.products[1].chosenColor + ' / ' + this.products[1].chosenSize)
-
       this.isAdding = true
       let cartIds = this.$store.getters.cartIds
 
