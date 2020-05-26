@@ -112,7 +112,8 @@ import Vue from 'vue'
 export default Vue.extend({
   name: 'ProductSelect',
   props: {
-    product: Object
+    product: Object,
+    idx: Number
   },
   data() {
     return {
@@ -152,7 +153,8 @@ export default Vue.extend({
         prodId: this.$props.product.id,
         id: this.chosenId,
         color: this.chosenColor,
-        size: this.chosenSize
+        size: this.chosenSize,
+        idx: this.$props.idx
       })
     },
     addFromChild() {
