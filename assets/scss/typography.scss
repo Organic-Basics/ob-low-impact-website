@@ -51,3 +51,22 @@ a {
   text-decoration: none;
   cursor: pointer;
 }
+
+/* Additional styles */
+
+.text--left {
+  text-align: left;
+}
+
+.text--green {
+  color: map-get($colors, 'green');
+}
+
+.text--black {
+  color: map-get($colors, 'black');
+}
+
+.text--link {
+  text-decoration: underline;
+  line-height: 22.4px;
+}

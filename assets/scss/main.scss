@@ -18,17 +18,3 @@
   background: white;
   text: map-get($colors, 'black');
 }
-
-/* TEXT */
-
-.text--left {
-  text-align: left;
-}
-
-.text--green {
-  color: map-get($colors, 'green');
-}
-
-.text--black {
-  color: map-get($colors, 'black');
-}

@@ -34,6 +34,14 @@
     <productSelect v-for="(prod, index) in products" v-if="prod.switchId == 0 || prod.switchId == switchId || prod.switchId === undefined"
     :key="index" :idx="index" :product="prod"
     @optClicked="onIdChosen" @switched="switchId = switchId == 1 ? 2 : 1" @addFromChild="addToCart()"/>
+
+    <section class="product__content-block text--left">
+      <div class="content-block__text">
+        <h3 class="content-block__title">Lorem ipsum</h3>
+        <h6 class="content-block__desc">Created in premium Italian recycled nylon which takes 80% less water to make and creates 90% fewer CO2 emissions in comparison to the virgin fabric. It’s a minimal visible pantyline with a minimal environmental impact.</h6>
+      </div>
+    </section>
+
   </div>
 </template>
 
@@ -550,6 +558,34 @@ body {
     color: white;
     cursor: pointer;
     font-size: 13px;
+  }
+
+  .product__content-block {
+    background: rgb(167, 143, 122);
+    height: 500px;
+    padding: 5vw 20px;
+    color: #fff;
+    width: 100%;
+
+    .content-block__text {
+      justify-content: space-around;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+
+      .content-block__title {
+        width: 95%;
+        color: #fff;
+        font-size: 26px;
+      }
+
+      .content-block__desc {
+        font-size: 16px;
+        max-width: 350px;
+        color: #fff;
+        margin-top: 20px;
+      }
+    }
   }
 }
 
