@@ -32,8 +32,8 @@
       </div>
     </div>
     <productSelect v-for="(prod, index) in products" v-if="prod.switchId == 0 || prod.switchId == switchId || prod.switchId === undefined"
-    :key="index" :idx="index" :product="prod"
-    @optClicked="onIdChosen" @switched="switchId = switchId == 1 ? 2 : 1" @addFromChild="addToCart()"/>
+    :key="index" :propsIdx="index" :propsProduct="prod"
+    @sizeClicked="onSizeChosen" @colorClicked="onColorChosen" @switched="switchId = switchId == 1 ? 2 : 1" @addFromChild="addToCart()"/>
 
     <section class="product__content-block text--left">
       <div class="content-block__text">
@@ -99,7 +99,8 @@ export default Vue.extend({
                         name,
                         value
                       },
-                      id
+                      id,
+                      availableForSale
                     }
                   }
                 }
@@ -159,7 +160,8 @@ export default Vue.extend({
                               name,
                               value
                             },
-                            id
+                            id,
+                            availableForSale
                           }
                         }
                       }
@@ -184,12 +186,28 @@ export default Vue.extend({
 
           newData.products = prepProducts(bundleProducts, newData.bundleData)
         }
+
         return newData
       }
       else {
         return {
-          mainProduct : {},
-          products: [],
+          mainProduct : {
+          	images : {
+          		edges : [{
+          			node : {
+          				transformedSrc: ''
+          			}
+          		}]
+          	},
+          	title : '',
+          	priceRange : {
+          		minVariantPrice : {
+          			amount : '',
+          			currencyCode : ''
+          		}
+          	}
+          },
+          products : [],
           isSingleProduct : true,
           bundleData : {
             tag : '',
@@ -200,8 +218,23 @@ export default Vue.extend({
     } catch(err) {
       console.error(err)
       return {
-        mainProduct : {},
-        products: [],
+        mainProduct : {
+        	images : {
+        		edges : [{
+        			node : {
+        				transformedSrc: ''
+        			}
+        		}]
+        	},
+        	title: '',
+        	priceRange : {
+        		minVariantPrice : {
+        			amount : '',
+        			currencyCode : ''
+        		}
+        	}
+        },
+        products : [],
         isSingleProduct : true,
         bundleData : {
           tag : '',
@@ -219,9 +252,6 @@ export default Vue.extend({
   },
   methods: {
     async addToCart () {
-
-    	console.log(this.products[0].chosenColor + ' / ' + this.products[0].chosenSize)
-    	console.log(this.products[1].chosenColor + ' / ' + this.products[1].chosenSize)
 
       this.isAdding = true
       let cartIds = this.$store.getters.cartIds
@@ -307,15 +337,68 @@ export default Vue.extend({
       this.$store.dispatch('fetchCart')
     },
 
-    onIdChosen(data) {
-    	console.log(data.idx)
-      let parentProduct = this.products[data.idx]
-      console.log(this.products)
-      parentProduct.chosenId = data.id
-      parentProduct.chosenColor = data.color
-      parentProduct.chosenSize = data.size
+    updateChosenId(idx) {
+    	/*for(let i = 0; i < this.products.length; i++) {
+    		let chosenVariant = this.products[i].variants.edges.find((a) => {
+	    	  let colorOpt = a.node.selectedOptions.find((b) => {
+	    	    return b.name === 'Color'
+	    	  })
+	    	  let sizeOpt = a.node.selectedOptions.find((b) => {
+	    	    return b.name === 'Size'
+	    	  })
+	    	  return this.products[i].chosenColor === colorOpt.value && this.products[i].chosenSize === sizeOpt.value
+	    	})
+	    	this.products = this.products.map((a, i) => {
+	    		if(i === idx) {
+	    			a.chosenId = chosenVariant.node.id
+	    		}
+	    		return a
+	    	})
+    	}*/
+    	/*let chosenVariant = this.propsProduct.variants.edges.find((a) => {
+    	  let colorOpt = a.node.selectedOptions.find((b) => {
+    	    return b.name === 'Color'
+    	  })
+    	  let sizeOpt = a.node.selectedOptions.find((b) => {
+    	    return b.name === 'Size'
+    	  })
+    	  return data.dataColor === colorOpt.value && this.dataSize === sizeOpt.value
+    	})
+
+    	console.log('onIdChosen')
+    	console.log(data)
+    	// TODO: What is going on? Why is it updating both
+    	this.products = this.products.map((a, i) => {
+    		if(i === data.idx) {
+    			console.log(i + '/' + data.idx)
+    			a.chosenId = data.id
+    		}
+    		return a
+    	})
       console.log(this.products[0].chosenColor + ' / ' + this.products[0].chosenSize)
-      console.log(this.products[1].chosenColor + ' / ' + this.products[1].chosenSize)
+      console.log(this.products[1].chosenColor + ' / ' + this.products[1].chosenSize)*/
+    },
+
+    onSizeChosen(data) {
+    	console.log(data)
+    	this.products = this.products.map((a, i) => {
+    		if(i === data.idx) {
+    			a.chosenSize = data.size
+    		}
+    		return a
+    	})
+    	this.updateChosenId(data.idx)
+    },
+
+    onColorChosen(data) {
+    	console.log(data)
+    	this.products = this.products.map((a, i) => {
+    		if(i === data.idx) {
+    			a.chosenColor = data.color
+    		}
+    		return a
+    	})
+    	this.updateChosenId(data.idx)
     }
   }
 })
@@ -332,6 +415,8 @@ function prepProducts (products, bundleData) {
       features : [],
     }
   }
+
+  let quantProducts = []
 
   for(let i = 0; i < products.length; i++) {
     if(products[i].node) products[i] = {...productTemplate, ...products[i].node}
@@ -358,25 +443,29 @@ function prepProducts (products, bundleData) {
 
       if(productBundleTag.includes('quant')) {
       	let quantCount = parseInt(productBundleTag.split('-')[4])
-      	let quantProduct = products[0]
-      	products = new Array(quantCount).fill(quantProduct)
+      	let quantProduct = JSON.parse(JSON.stringify(products[0]))
+      	for(let j = 0; j < quantCount - 1; j++) quantProducts.push(quantProduct)
       }
     }
   }
 
-	products = products.map((a) => {
-		if(a.switchId == 1) {
-			a.switchProduct = products.find((a) => {
-				return a.switchId == 2
-			}).title
-		}
-		else if(a.switchId == 2) {
-			a.switchProduct = products.find((a) => {
-				return a.switchId == 1
-			}).title
-		}
-		return a
-	})
+  products = products.concat(quantProducts)
+
+	if(bundleData) {
+		products = products.map((a) => {
+			if(a.switchId == 1) {
+				a.switchProduct = products.find((a) => {
+					return a.switchId == 2
+				}).title
+			}
+			else if(a.switchId == 2) {
+				a.switchProduct = products.find((a) => {
+					return a.switchId == 1
+				}).title
+			}
+			return a
+		})
+	}
 
   return products
 }

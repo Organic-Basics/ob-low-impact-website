@@ -9,14 +9,14 @@
       <div class="product__main--selection-container">
         <div class="product__main--selection">
           <div class="product__main--option-container">
-            <button @click="$emit('switched')" v-if="product.switchId != 0 && product.switchId !== undefined">Switch to {{product.switchProduct}}</button>
+            <button @click="$emit('switched')" v-if="propsProduct.switchId != 0 && propsProduct.switchId !== undefined">Switch to {{propsProduct.switchProduct}}</button>
             <!-- Color -->
             <div class="product__main--option product__main--color">
               <h6 class="product__main--option--title">Color</h6>
               <div class="product__main--option-picker">
                 <span v-for="(color, index) in cleanOptions.color.values"
-                :class="color === chosenColor ? 'chosen' : ''"
-                @click="chosenColor = color; chooseId()">
+                :class="color === propsProduct.chosenColor ? 'chosen' : ''"
+                @click="chooseColor(color, propsIdx)">
                   {{color}} · 
                 </span>
               </div>
@@ -26,8 +26,8 @@
               <h6 class="product__main--option--title">Size</h6>
               <div class="product__main--option-picker">
                 <span v-for="(size, index) in cleanOptions.size.values"
-                :class="size === chosenSize ? 'chosen' : ''"
-                @click="chosenSize = size; chooseId()">
+                :class="size === propsProduct.chosenSize ? 'chosen' : ''"
+                @click="chooseSize(size, propsIdx)">
                   {{size}} · 
                 </span>
               </div>
@@ -57,25 +57,25 @@
       <div class="product__text product__text--desc">
         <h4 @click="descOpen = !descOpen">Description</h4>
         <ul v-if="descOpen">
-          <li v-for="(d, index) in product.tabs.desc">{{d}}</li>
+          <li v-for="(d, index) in propsProduct.tabs.desc">{{d}}</li>
         </ul>
       </div>
       <div class="product__text product__text--fit">
         <h4 @click="fitOpen = !fitOpen">Fit & Sizing</h4>
         <ul v-if="fitOpen">
-          <li v-for="(fs, index) in product.tabs.fitSize">{{fs}}</li>
+          <li v-for="(fs, index) in propsProduct.tabs.fitSize">{{fs}}</li>
         </ul>
       </div>
       <div class="product__text product__text--mat">
         <h4 @click="careOpen = !careOpen">Material & Care</h4>
         <ul v-if="careOpen">
-          <li v-for="(mc, index) in product.tabs.materialCare">{{mc}}</li>
+          <li v-for="(mc, index) in propsProduct.tabs.materialCare">{{mc}}</li>
         </ul>
       </div>
       <div class="product__text product__text--feat">
         <h4 @click="featOpen = !featOpen">Features</h4>
         <ul v-if="featOpen">
-          <li v-for="(f, index) in product.tabs.features">{{f}}</li>
+          <li v-for="(f, index) in propsProduct.tabs.features">{{f}}</li>
         </ul>
       </div>
     </div>
@@ -115,13 +115,11 @@ import Vue from 'vue'
 export default Vue.extend({
   name: 'ProductSelect',
   props: {
-    product: Object,
-    idx: Number
+    propsProduct: Object,
+    propsIdx: Number
   },
   data() {
     return {
-      chosenColor: '...',
-      chosenSize: '...',
       descOpen: false,
       fitOpen: false,
       careOpen: false,
@@ -130,8 +128,8 @@ export default Vue.extend({
   },
   computed: {
     cleanOptions() {
-      let size = this.$props.product.options.find((a) => a.name === 'Size')
-      let color = this.$props.product.options.find((a) => a.name === 'Color')
+      let size = this.propsProduct.options.find((a) => a.name === 'Size')
+      let color = this.propsProduct.options.find((a) => a.name === 'Color')
       return {
         size: size,
         color: color
@@ -139,25 +137,16 @@ export default Vue.extend({
     }
   },
   methods: {
-    chooseId() {
-      let chosenVariant = this.$props.product.variants.edges.find((a) => {
-        let colorOpt = a.node.selectedOptions.find((b) => {
-          return b.name === 'Color'
-        })
-        let sizeOpt = a.node.selectedOptions.find((b) => {
-          return b.name === 'Size'
-        })
-        return this.chosenColor === colorOpt.value && this.chosenSize === sizeOpt.value
+    chooseColor(color) {
+      this.$emit('colorClicked', {
+        color: color,
+        idx: this.propsIdx
       })
-      if(chosenVariant) {
-        this.chosenId = chosenVariant.node.id
-      }
-      this.$emit('optClicked', {
-        prodId: this.$props.product.id,
-        id: this.chosenId,
-        color: this.chosenColor,
-        size: this.chosenSize,
-        idx: this.$props.idx
+    },
+    chooseSize(size) {
+      this.$emit('sizeClicked', {
+        size: size,
+        idx: this.propsIdx
       })
     },
     addFromChild() {
