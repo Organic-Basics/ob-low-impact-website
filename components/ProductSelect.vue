@@ -82,15 +82,15 @@
 
     <!-- Upsells -->
     <div class="product__upsells text--left">
-      <h4>Save with packs</h4>
+      <h4 class="product__upsells--title">Save with packs</h4>
         <a href="#">
           <div class="product__upsells--bundle">
             <div class="product__upsells--left">
-              <img src="" alt="">
+              <img src="~/assets/svg/manifesto/manifesto_1.svg" alt="">
             </div>
             <div class="product__upsells--right">
               <div class="product__upsells--right-left">
-                <h6 class="product__upsells--product-title"></h6>
+                <h6 class="product__upsells--product-title">Starter Pack</h6>
                 <div>
                     <div class="product__upsells--prices">
                       <span class="product__upsells--price">€70.00</span>
@@ -102,6 +102,9 @@
             </div>
           </div>
         </a>
+        <div class="product__upsells--gender">
+          <nuxt-link to="/">View all W / M packs</nuxt-link>
+        </div>
     </div>
   </section>
 </template>
@@ -250,6 +253,80 @@ export default Vue.extend({
         padding: 0;
         text-align: left;
       }
+    }
+  }
+
+  // UPSELLS
+  .product__upsells {
+    margin-top: 20px;
+    margin-bottom: 80px;
+    width: 100%;
+
+    .product__upsells--title {
+      margin-bottom: 2rem;
+    }
+
+    .product__upsells--bundle {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+
+      .product__upsells--left {
+        flex-basis: auto;
+        margin-right: 1rem;
+      }
+
+      .product__upsells--right {
+        display: flex;
+        flex-basis: 69%;
+        justify-content: space-between;
+        flex-direction: column;
+        padding: 10px 0;
+
+        .product__upsells--right-left {
+          display: flex;
+          flex-direction: column;
+          height: 100%;
+          justify-content: space-between;
+          max-width: 320px;
+
+          .product__upsells--product-title {
+            font-size: 14px;
+            margin-right: 10px;
+          }
+
+          .product__upsells--prices {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            padding-right: 10px;
+            font-size: 14px;
+            margin-bottom: 10px;
+
+            .product__upsells--price-compare {
+              text-decoration: line-through;
+              color: map-get($colors, 'brand');
+            }
+          }
+        }
+
+        .product__upsells--button {
+          display: inline-block;
+          line-height: 36px;
+          width: 100%;
+          padding: 3px;
+          text-align: center;
+          transition: .3s;
+          font-size: 15px;
+          color: #fff;
+          background: map-get($colors, 'black');
+        }
+      }
+    }
+
+    .product__upsells--gender {
+      margin-top: 20px;
+      text-align: center;
     }
   }
 
