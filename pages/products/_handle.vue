@@ -32,7 +32,7 @@
         </div>
       </div>
     </div>
-    <ProductSelect v-for="(prod, index) in products" v-if="prod.switchId == 0 || prod.switchId == switchId || prod.switchId === undefined"
+    <productSelect v-for="(prod, index) in products" v-if="prod.switchId == 0 || prod.switchId == switchId || prod.switchId === undefined"
     :key="index" :propsIdx="index" :propsProduct="prod"
     @sizeClicked="onSizeChosen" @colorClicked="onColorChosen" @switched="switchId = switchId == 1 ? 2 : 1" @addFromChild="addToCart()"/>
 
