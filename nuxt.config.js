@@ -27,9 +27,7 @@ module.exports = {
   /*
   ** Plugins to load before mounting the App
   */
-  plugins: [
-    
-  ],
+  plugins: [],
   /*
   ** Nuxt.js dev-modules
   */
@@ -45,7 +43,8 @@ module.exports = {
     '@nuxtjs/pwa',
     '@nuxtjs/apollo',
     // Doc: https://github.com/nuxt-community/dotenv-module
-    '@nuxtjs/dotenv'
+    '@nuxtjs/dotenv',
+    '@nuxtjs/svg'
   ],
   /*
   ** Axios module configuration

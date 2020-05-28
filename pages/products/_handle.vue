@@ -1,8 +1,9 @@
 <template>
   <div>
     <div class="product__slideshow">
+      <div v-html="productIllustration" @click="showImages = true" v-if="!showImages"></div>
       <div v-for="(image, index) in mainProduct.images.edges">
-        <img :src="image.node.transformedSrc">
+        <img :src="showImages ? image.node.transformedSrc : ''" v-if="showImages">
       </div>
     </div>
     <!-- Sticky bar -->
@@ -31,7 +32,7 @@
         </div>
       </div>
     </div>
-    <productSelect v-for="(prod, index) in products" v-if="prod.switchId == 0 || prod.switchId == switchId || prod.switchId === undefined"
+    <ProductSelect v-for="(prod, index) in products" v-if="prod.switchId == 0 || prod.switchId == switchId || prod.switchId === undefined"
     :key="index" :propsIdx="index" :propsProduct="prod"
     @sizeClicked="onSizeChosen" @colorClicked="onColorChosen" @switched="switchId = switchId == 1 ? 2 : 1" @addFromChild="addToCart()"/>
   </div>
@@ -41,7 +42,7 @@
 import Vue from 'vue'
 import VueApollo from 'vue-apollo'
 import gql from 'graphql-tag'
-import ProductSelect from '~/components/ProductSelect.vue'
+import productSelect from '~/components/ProductSelect.vue'
 
 export default Vue.extend({
 
@@ -49,11 +50,12 @@ export default Vue.extend({
     return {
       quantity: 1,
       isAdding: false,
-      switchId: 1
+      switchId: 1,
+      showImages: false
     }
   },
   components: {
-    ProductSelect
+    productSelect
   },
   async asyncData({app, params}) {
     try {
@@ -178,6 +180,10 @@ export default Vue.extend({
 
           newData.products = prepProducts(bundleProducts, newData.bundleData)
         }
+
+        // Load product illustration
+        let productSvg = await import('~/assets/svg/products/' + params.handle + '.svg?raw')
+        if(productSvg.default) newData.productIllustration = productSvg.default
         
         return newData
       }
@@ -192,6 +198,7 @@ export default Vue.extend({
           		}]
           	},
           	title : '',
+            productIllustration: '',
           	priceRange : {
           		minVariantPrice : {
           			amount : '',
@@ -219,6 +226,7 @@ export default Vue.extend({
         		}]
         	},
         	title: '',
+          productIllustration: '',
         	priceRange : {
         		minVariantPrice : {
         			amount : '',
@@ -240,7 +248,13 @@ export default Vue.extend({
       if(this.isAdding) return 'Adding...'
       else if(this.incomplete) return 'Select color and size'
       else return 'Add to cart'
-    }
+    }/*,
+    productIllustration () {
+      const fileName = this.$route.params.handle
+      console.log(require(``))
+
+      return require(`@/assets/svg/products/${fileName}.svg?inline`) // the module request
+    }*/
   },
   methods: {
     async addToCart () {
@@ -482,6 +496,25 @@ body {
     display: flex;
     overflow-x: scroll;
     width: 100vw;
+
+    > div {
+      align-items: center;
+      background: map-get($colors, 'brand');
+      display: flex;
+      justify-content: center;
+    }
+
+    svg {
+      width: 100vw;
+
+      *[fill="none"] {
+        stroke: #fff !important;
+      }
+
+      *:not([fill="none"]) {
+        fill: map-get($colors, 'brand') !important;
+      }
+    }
 
     img {
       min-width: 100vw;
