@@ -1,12 +1,17 @@
 $colors: (
-  // low-impact colors
   "brand": #a1a4a9,
   "black": #000000,
   "bgGrey": #D8D8D8,
   "green": #285246,
   "bgYellow": #FFFAEC,
   "grey": #c5c1c2,
-  // product colors
+  "darkGrey": #868686,
+  "newsletterButton": #404652
+);
+
+$productColors: (
+  "black": #000000,
+  "grey": #c5c1c2,
   "rosenude": #debeab,
   "burgundy": #aa1d4e,
   "navy": #00325e,
@@ -19,7 +24,7 @@ $colors: (
   "bluestone": #a5b0c2,
   "seablue": #a5b0c2,
   "beige": #ffecdb,
-  "variantWhite": #EBEBEB,
+  "white": #EBEBEB,
   "whitelily": #f5f1ef,
   "deeptaupe": #734e46,
   "steel": #B9B9B9,
@@ -34,7 +39,7 @@ $mobile: (
 );
 
 /* Variant colors */
-@each $color in $colors {
+@each $color in $productColors {
   .variant--#{nth($color, 1)} {
     background: nth($color, 2);
   }

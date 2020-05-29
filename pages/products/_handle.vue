@@ -14,9 +14,10 @@
         </div>
         <div class="product__sticky-top-right" v-if="isSingleProduct">
           <div class="product__sticky-size">{{products[0].chosenSize}}</div>
-          <div class="product__sticky-color">{{products[0].chosenColor}}
+          <div :class="'product__sticky-color variant--' + [ products[0].chosenColor.toLowerCase().split(' ').join('') ]">
             <span></span>
           </div>
+
         </div>
       </div>
       <div class="product__sticky-bottom">
@@ -33,7 +34,7 @@
     </div>
     <productSelect v-for="(prod, index) in products" v-if="prod.switchId == 0 || prod.switchId == switchId || prod.switchId === undefined"
     :key="index" :propsIdx="index" :propsProduct="prod"
-    @sizeClicked="onSizeChosen" @colorClicked="onColorChosen" @switched="switchId = switchId == 1 ? 2 : 1" @addFromChild="addToCart()"/>
+    @sizeClicked="onSizeChosen" @colorClicked="onColorChosen" @switched="switchId = switchId == 1 ? 2 : 1" @addToCartFromChild="addToCart()"/>
 
     <section class="product__content-block text--left">
       <div class="content-block__text">
@@ -41,6 +42,8 @@
         <h6 class="content-block__desc">Created in premium Italian recycled nylon which takes 80% less water to make and creates 90% fewer CO2 emissions in comparison to the virgin fabric. It’s a minimal visible pantyline with a minimal environmental impact.</h6>
       </div>
     </section>
+
+    <Newsletter />
 
   </div>
 </template>
@@ -50,6 +53,7 @@ import Vue from 'vue'
 import VueApollo from 'vue-apollo'
 import gql from 'graphql-tag'
 import ProductSelect from '~/components/ProductSelect.vue'
+import Newsletter from '~/components/Newsletter.vue'
 
 export default Vue.extend({
 
@@ -61,7 +65,8 @@ export default Vue.extend({
     }
   },
   components: {
-    ProductSelect
+    ProductSelect,
+    Newsletter
   },
   async asyncData({app, params}) {
     try {
@@ -539,6 +544,7 @@ body {
           height: 30px;
           position: relative;
           width: 30px;
+          border-radius: 50px;
 
           span {
             border-radius: 30px;
@@ -620,7 +626,7 @@ body {
         margin-bottom: 30px;
       }
 
-      .chosen {
+      .variant--chosen {
         text-decoration: underline;
       }
     }
@@ -676,6 +682,10 @@ body {
       }
     }
   }
+}
+
+.footer__container {
+  margin-bottom: 90px;
 }
 
 </style>
