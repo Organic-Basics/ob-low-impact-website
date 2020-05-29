@@ -190,7 +190,12 @@ export default Vue.extend({
         }
 
         // Load product illustration
-        let productSvg = await import('~/assets/svg/products/' + params.handle + '.svg?raw')
+        let illuHandle = params.handle
+        if(illuHandle.includes('accessories') || illuHandle.includes('socks')) {
+          illuHandle = illuHandle.replace(/womens-/g, '').replace(/mens-/g, '')
+        }
+
+        let productSvg = await import('~/assets/svg/products/' + illuHandle + '.svg?raw')
         if(productSvg.default) newData.productIllustration = productSvg.default
         
         return newData
@@ -256,13 +261,7 @@ export default Vue.extend({
       if(this.isAdding) return 'Adding...'
       else if(this.incomplete) return 'Select color and size'
       else return 'Add to cart'
-    }/*,
-    productIllustration () {
-      const fileName = this.$route.params.handle
-      console.log(require(``))
-
-      return require(`@/assets/svg/products/${fileName}.svg?inline`) // the module request
-    }*/
+    }
   },
   methods: {
     async addToCart () {

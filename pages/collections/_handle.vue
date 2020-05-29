@@ -68,7 +68,9 @@ export default Vue.extend({
         // let variantPrice = result.data.collectionByHandle.products.edges.node.variants.edges.node.price
 
         // create new array that only contains the Color product options
-        let products = result.data.collectionByHandle.products.edges.map((a) => {
+        let products = []
+        for(let i = 0; i < result.data.collectionByHandle.products.edges.length; i++) {
+          let a = result.data.collectionByHandle.products.edges[i]
           if(a.node.options) {
             // find the Color product option
             let colorOpt = a.node.options.find(b => b.name === 'Color')
@@ -80,9 +82,20 @@ export default Vue.extend({
             a.node.colorValues = []
           }
 
+          let productIllustration = ''
+          try {
+            let illuHandle = a.node.handle
+            if(illuHandle.includes('accessories') || illuHandle.includes('socks')) {
+              illuHandle = illuHandle.replace(/womens-/g, '').replace(/mens-/g, '')
+            }
+            let productSvg = await import('~/assets/svg/products/' + illuHandle + '.svg?raw')
+            if(productSvg.default) a.node.productIllustration = productSvg.default
+          } catch(err) {
+            a.node.productIllustration = ''
+          }
 
-          return a
-        })
+          products.push(a)
+        }
         return {
           // nuxt el : query var
           products : products,
