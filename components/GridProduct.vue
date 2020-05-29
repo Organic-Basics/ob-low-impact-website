@@ -83,15 +83,15 @@ export default Vue.extend({
 }
 
 .product__illustration {
-  background: map-get($colors, 'brand');
+  background: map-get($colors, 'productGrey');
 
   svg {
     *[stroke*="#"] {
-      stroke: #fff !important;
+      stroke: map-get($colors, 'black') !important;
     }
 
     *[fill*="#"] {
-      fill: map-get($colors, 'brand') !important;
+      fill: map-get($colors, 'productGrey') !important;
     }
   }
 }

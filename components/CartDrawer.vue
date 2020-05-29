@@ -10,7 +10,7 @@
         <div>{{item.node.variant.title}}</div>
         <div class="cart-drawer__quantity">
           <span @click="updateLineItem(item.node.variant.id, item.node.quantity - 1)">–</span>
-           / 
+           /
           <span @click="updateLineItem(item.node.variant.id, item.node.quantity + 1)">+</span>
          </div>
       </div>
@@ -89,7 +89,7 @@ export default Vue.extend({
 
 .cart-drawer {
   align-items: flex-start;
-  background: map-get($colors, 'brand');
+  background: #fff;
   display: flex;
   flex-direction: column;
   height: 100vh;
@@ -111,6 +111,8 @@ export default Vue.extend({
   display: flex;
   justify-content: space-between;
   width: 100%;
+  border-bottom: 1px solid map-get($colors, 'brand');
+  padding: 5px 0 15px;
 }
 
 .cart-drawer__items {
