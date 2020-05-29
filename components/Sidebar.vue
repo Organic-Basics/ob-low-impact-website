@@ -7,46 +7,13 @@
 
     <section class="sidebar__body text--left">
       <div class="sidebar__body--women">
-        <nuxt-link to="/collections/all-womens-products"><h2>Shop Women</h2></nuxt-link>
-        <nuxt-link to="/collections/all-womens-products"><h3>All Women's</h3></nuxt-link>
-        <nuxt-link to="/collections/all-womens-products/style-bras"><h3>Bras</h3></nuxt-link>
-        <nuxt-link to="/collections/all-womens-products/style-bottoms"><h3>Bottoms</h3></nuxt-link>
-        <nuxt-link to="/collections/all-womens-products/style-tops"><h3>Tees & Tops</h3></nuxt-link>
-        <nuxt-link to="/collections/all-womens-products/style-socks"><h3>Socks</h3></nuxt-link>
-        <nuxt-link to="/collections/all-womens-products/style-leggings"><h3>Leggings</h3></nuxt-link>
-        <nuxt-link to="/collections/womens-accessories"><h3>Accessories</h3></nuxt-link>
-        <nuxt-link to="/collections/womens-save-with-packs"><h3>Save with packs</h3></nuxt-link>
-        <nuxt-link to="/products/e-gift-card"><h3>Gift Cards</h3></nuxt-link>
-        <nuxt-link to="/collections/climate-credits"><h3>Climate credits</h3></nuxt-link>
-
-        <nuxt-link to="/collections/womens-theme-basics"><h3>Basics</h3></nuxt-link>
-        <nuxt-link to="/collections/womens-theme-activewear"><h3>Activewear</h3></nuxt-link>
-        <nuxt-link to="/collections/womens-theme-invisible"><h3>Invisible</h3></nuxt-link>
-        <nuxt-link to="/collections/womens-theme-recycled-materials"><h3>Recycled materials</h3></nuxt-link>
-        <nuxt-link to="/collections/womens-theme-organic-cotton"><h3>Organic cotton</h3></nuxt-link>
-        <nuxt-link to="/collections/womens-recycled-cashmere-winter-accessories"><h3>Recycled cashmere</h3></nuxt-link>
-        <nuxt-link to="/collections/womens-theme-tencel"><h3>TENCEL™</h3></nuxt-link>
-        <nuxt-link to="/collections/womens-theme-silvertech"><h3>SilverTech™</h3></nuxt-link>
+        <nuxt-link to="/collections/all-womens-products" @click.native="closeSidebar()"><h2>Shop Women</h2></nuxt-link>
+        <nuxt-link v-for="(link, index) in womensLinks" :key="index" :to="link.url" @click.native="closeSidebar()"><h3>{{link.name}}</h3></nuxt-link>
       </div>
 
       <div class="sidebar__body--men">
-        <nuxt-link to="/collections/all-mens-products"><h2>Shop Men</h2></nuxt-link>
-        <nuxt-link to="/collections/all-mens-products"><h3>All men's</h3></nuxt-link>
-        <nuxt-link to="/collections/all-mens-products/style-bottoms"><h3>Underwear</h3></nuxt-link>
-        <nuxt-link to="/collections/all-mens-products/style-socks"><h3>Socks</h3></nuxt-link>
-        <nuxt-link to="/collections/all-mens-products/style-tops"><h3>Tees & Tops</h3></nuxt-link>
-        <nuxt-link to="/collections/mens-accessories"><h3>Accessories</h3></nuxt-link>
-        <nuxt-link to="/collections/mens-save-with-packs"><h3>Save with packs</h3></nuxt-link>
-        <nuxt-link to="/products/e-gift-card"><h3>Gift cards</h3></nuxt-link>
-        <nuxt-link to="/collections/climate-credits"><h3>Climate credits</h3></nuxt-link>
-
-        <nuxt-link to="/collections/mens-theme-basics"><h3>Basics</h3></nuxt-link>
-        <nuxt-link to="/collections/mens-theme-activewear"><h3>Activewear</h3></nuxt-link>
-        <nuxt-link to="/collections/mens-theme-recycled-materials"><h3>Recycled materials</h3></nuxt-link>
-        <nuxt-link to="/collections/mens-theme-organic-cotton"><h3>Organic cotton</h3></nuxt-link>
-        <nuxt-link to="/collections/mens-recycled-cashmere-winter-accessories"><h3>Recycled cashmere</h3></nuxt-link>
-        <nuxt-link to="/collections/mens-theme-tencel"><h3>TENCEL™</h3></nuxt-link>
-        <nuxt-link to="/collections/mens-theme-silvertech"><h3>SilverTech™</h3></nuxt-link>
+        <nuxt-link to="/collections/all-mens-products" @click.native="closeSidebar()"><h2>Shop Men</h2></nuxt-link>
+        <nuxt-link v-for="(link, index) in mensLinks" :key="index" :to="link.url" @click.native="closeSidebar()"><h3>{{link.name}}</h3></nuxt-link>
       </div>
     </section>
 
@@ -65,8 +32,149 @@ export default Vue.extend({
   props: {
     open: Boolean
   },
+  data() {
+    return {
+      womensLinks: [
+        {
+          'url' : '/collections/all-womens-products',
+          'name' : 'All Women\'s'
+        },
+        {
+          'url' : '/collections/all-womens-products/style-bras',
+          'name' : 'Bras'
+        },
+        {
+          'url' : '/collections/all-womens-products/style-bottoms',
+          'name' : 'Bottoms'
+        },
+        {
+          'url' : '/collections/all-womens-products/style-tops',
+          'name' : 'Tees & Tops'
+        },
+        {
+          'url' : '/collections/all-womens-products/style-socks',
+          'name' : 'Socks'
+        },
+        {
+          'url' : '/collections/all-womens-products/style-leggings',
+          'name' : 'Leggings'
+        },
+        {
+          'url' : '/collections/womens-accessories',
+          'name' : 'Accessories'
+        },
+        {
+          'url' : '/collections/womens-save-with-packs',
+          'name' : 'Save with packs'
+        },
+        {
+          'url' : '/products/e-gift-card',
+          'name' : 'Gift Cards'
+        },
+        {
+          'url' : '/collections/climate-credits',
+          'name' : 'Climate credits'
+        },
+        {
+          'url' : '/collections/womens-theme-basics',
+          'name' : 'Basics'
+        },
+        {
+          'url' : '/collections/womens-theme-activewear',
+          'name' : 'Activewear'
+        },
+        {
+          'url' : '/collections/womens-theme-invisible',
+          'name' : 'Invisible'
+        },
+        {
+          'url' : '/collections/womens-theme-recycled-materials',
+          'name' : 'Recycled materials'
+        },
+        {
+          'url' : '/collections/womens-theme-organic-cotton',
+          'name' : 'Organic cotton'
+        },
+        {
+          'url' : '/collections/womens-recycled-cashmere-winter-accessories',
+          'name' : 'Recycled cashmere'
+        },
+        {
+          'url' : '/collections/womens-theme-tencel',
+          'name' : 'TENCEL™'
+        },
+        {
+          'url' : '/collections/womens-theme-silvertech',
+          'name' : 'SilverTech™'
+        }
+      ],
+      mensLinks: [
+        {
+          'url' : '/collections/all-mens-products',
+          'name' : 'All men\'s'
+        },
+        {
+          'url' : '/collections/all-mens-products/style-bottoms',
+          'name' : 'Underwear'
+        },
+        {
+          'url' : '/collections/all-mens-products/style-socks',
+          'name' : 'Socks'
+        },
+        {
+          'url' : '/collections/all-mens-products/style-tops',
+          'name' : 'Tees & Tops'
+        },
+        {
+          'url' : '/collections/mens-accessories',
+          'name' : 'Accessories'
+        },
+        {
+          'url' : '/collections/mens-save-with-packs',
+          'name' : 'Save with packs'
+        },
+        {
+          'url' : '/products/e-gift-card',
+          'name' : 'Gift cards'
+        },
+        {
+          'url' : '/collections/climate-credits',
+          'name' : 'Climate credits'
+        },
+        {
+          'url' : '/collections/mens-theme-basics',
+          'name' : 'Basics'
+        },
+        {
+          'url' : '/collections/mens-theme-activewear',
+          'name' : 'Activewear'
+        },
+        {
+          'url' : '/collections/mens-theme-recycled-materials',
+          'name' : 'Recycled materials'
+        },
+        {
+          'url' : '/collections/mens-theme-organic-cotton',
+          'name' : 'Organic cotton'
+        },
+        {
+          'url' : '/collections/mens-recycled-cashmere-winter-accessories',
+          'name' : 'Recycled cashmere'
+        },
+        {
+          'url' : '/collections/mens-theme-tencel',
+          'name' : 'TENCEL™'
+        },
+        {
+          'url' : '/collections/mens-theme-silvertech',
+          'name' : 'SilverTech™'
+        }
+      ]
+    }
+  },
   methods: {
     closeSidebar: function () {
+      console.log('closeSidebar')
       this.$emit('closed', true)
     }
   }

@@ -1,8 +1,9 @@
 <template>
   <div>
     <div class="product__slideshow">
+      <div v-html="productIllustration" @click="showImages = true" v-if="!showImages"></div>
       <div v-for="(image, index) in mainProduct.images.edges">
-        <img :src="image.node.transformedSrc">
+        <img :src="showImages ? image.node.transformedSrc : ''" v-if="showImages">
       </div>
     </div>
     <!-- Sticky bar -->
@@ -61,7 +62,8 @@ export default Vue.extend({
     return {
       quantity: 1,
       isAdding: false,
-      switchId: 1
+      switchId: 1,
+      showImages: false
     }
   },
   components: {
@@ -192,6 +194,15 @@ export default Vue.extend({
           newData.products = prepProducts(bundleProducts, newData.bundleData)
         }
 
+        // Load product illustration
+        let illuHandle = params.handle
+        if(illuHandle.includes('accessories') || illuHandle.includes('socks')) {
+          illuHandle = illuHandle.replace(/womens-/g, '').replace(/mens-/g, '')
+        }
+
+        let productSvg = await import('~/assets/svg/products/' + illuHandle + '.svg?raw')
+        if(productSvg.default) newData.productIllustration = productSvg.default
+
         return newData
       }
       else {
@@ -205,6 +216,7 @@ export default Vue.extend({
           		}]
           	},
           	title : '',
+            productIllustration: '',
           	priceRange : {
           		minVariantPrice : {
           			amount : '',
@@ -232,6 +244,7 @@ export default Vue.extend({
         		}]
         	},
         	title: '',
+          productIllustration: '',
         	priceRange : {
         		minVariantPrice : {
         			amount : '',
@@ -495,6 +508,25 @@ body {
     display: flex;
     overflow-x: scroll;
     width: 100vw;
+
+    > div {
+      align-items: center;
+      background: map-get($colors, 'brand');
+      display: flex;
+      justify-content: center;
+    }
+
+    svg {
+      width: 100vw;
+
+      *[stroke*="#"] {
+        stroke: #fff !important;
+      }
+
+      *[fill*="#"] {
+        fill: map-get($colors, 'brand') !important;
+      }
+    }
 
     img {
       min-width: 100vw;

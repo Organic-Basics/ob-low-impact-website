@@ -1,7 +1,7 @@
 <template>
-  <div class="product">
+  <div class="product" v-if="productData.onlineStoreUrl">
     <nuxt-link :to="'/products/' + productData.handle">
-      <img :src="productData.images.edges[0].node.transformedSrc">
+      <div class="product__illustration" v-html="productData.productIllustration"></div>
       <div class="product__slate">
         <p>{{ productData.title }}</p>
         <div class="product__price">
@@ -18,7 +18,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import Vue from 'vue'
 
 export default Vue.extend({
@@ -78,6 +78,20 @@ export default Vue.extend({
       height: 18px;
       margin-right: 7px;
 
+    }
+  }
+}
+
+.product__illustration {
+  background: map-get($colors, 'brand');
+
+  svg {
+    *[stroke*="#"] {
+      stroke: #fff !important;
+    }
+
+    *[fill*="#"] {
+      fill: map-get($colors, 'brand') !important;
     }
   }
 }

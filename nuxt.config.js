@@ -23,12 +23,12 @@ module.exports = {
   /*
   ** Customize the progress-bar color
   */
-  loading: { color: '#fff' },
+  loading: { color: '#285246' },
   /*
   ** Plugins to load before mounting the App
   */
   plugins: [
-    
+    { src: '~plugins/ga.js', mode: 'client' }
   ],
   /*
   ** Nuxt.js dev-modules
@@ -45,7 +45,8 @@ module.exports = {
     '@nuxtjs/pwa',
     '@nuxtjs/apollo',
     // Doc: https://github.com/nuxt-community/dotenv-module
-    '@nuxtjs/dotenv'
+    '@nuxtjs/dotenv',
+    '@nuxtjs/svg'
   ],
   /*
   ** Axios module configuration
