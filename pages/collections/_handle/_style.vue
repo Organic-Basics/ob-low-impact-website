@@ -24,53 +24,76 @@ export default Vue.extend({
     try {
       if(app && app.apolloProvider && app.apolloProvider.defaultClient) {
         let client = app.apolloProvider.defaultClient
-        let result = await client.query({
-          // Apollo GraphQL query: fetch data
-          query: gql`
-            query {
-              collectionByHandle(handle: "${params.handle}") {
-                title,
-                products(first: 100) {
-                  edges {
-                    node {
-                      handle,
-                      title,
-                      id,
-                      options {
-                        name,
-                        values
-                      },
-                      variants(first:50) {
-                        edges {
-                          node {
-                            price,
-                            compareAtPrice
-                          }
-                        }
-                      },
-                      images(first: 1) {
-                        edges {
-                          node {
-                            transformedSrc(maxWidth: 300, maxHeight: 390, crop: CENTER)
-                          }
-                        }
-                      }
-                    }
-                  }
+        let result
+
+        let productsQuery = `edges {
+          node {
+            handle,
+            title,
+            id,
+            options {
+              name,
+              values
+            },
+            variants(first:50) {
+              edges {
+                node {
+                  price,
+                  compareAtPrice
+                }
+              }
+            },
+            images(first: 1) {
+              edges {
+                node {
+                  transformedSrc(maxWidth: 300, maxHeight: 390, crop: CENTER)
                 }
               }
             }
-          `
-        })
+          }
+        }`
 
-        // Once we have the result, populate that data (e.g. in product, title) and return it
-        let title = result.data.collectionByHandle.title
+        let title = ''
+        if(params.style) {
+          let gender = params.handle.match(/[wo]*mens/g)
+          let style = params.style.replace(/style-/, '')
+          title = style.charAt(0).toUpperCase() + style.slice(1)
+          let styleQuery = `${gender}, ${style}`
+          result = await client.query({
+            // Apollo GraphQL query: fetch data
+            query: gql`
+              query {
+                products(first: 100, query: "${styleQuery}") {
+                  ${productsQuery}
+                }
+              }
+            `
+          })
+        }
+        else {
+          result = await client.query({
+            // Apollo GraphQL query: fetch data
+            query: gql`
+              query {
+                collectionByHandle(handle: "${params.handle}") {
+                  title,
+                  products(first: 100) {
+                    ${productsQuery}
+                  }
+                }
+              }
+            `
+          })
+          title = result.data.collectionByHandle.title
+        }
+
         // let variantPrice = result.data.collectionByHandle.products.edges.node.variants.edges.node.price
 
         // create new array that only contains the Color product options
+        let productsData = result.data.collectionByHandle == true ? result.data.collectionByHandle.products.edges : result.data.products.edges
         let products = []
-        for(let i = 0; i < result.data.collectionByHandle.products.edges.length; i++) {
-          let a = result.data.collectionByHandle.products.edges[i]
+        for(let i = 0; i < productsData.length; i++) {
+          let a = productsData[i]
           if(a.node.options) {
             // find the Color product option
             let colorOpt = a.node.options.find(b => b.name === 'Color')

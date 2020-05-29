@@ -23,7 +23,7 @@ module.exports = {
   /*
   ** Customize the progress-bar color
   */
-  loading: { color: '#fff' },
+  loading: { color: '#285246' },
   /*
   ** Plugins to load before mounting the App
   */
