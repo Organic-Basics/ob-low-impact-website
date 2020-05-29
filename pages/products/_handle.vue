@@ -514,11 +514,11 @@ body {
     svg {
       width: 100vw;
 
-      *[fill="none"] {
+      *[stroke*="#"] {
         stroke: #fff !important;
       }
 
-      *:not([fill="none"]) {
+      *[fill*="#"] {
         fill: map-get($colors, 'brand') !important;
       }
     }

@@ -86,11 +86,11 @@ export default Vue.extend({
   background: map-get($colors, 'brand');
 
   svg {
-    *[fill="none"] {
+    *[stroke*="#"] {
       stroke: #fff !important;
     }
 
-    *:not([fill="none"]) {
+    *[fill*="#"] {
       fill: map-get($colors, 'brand') !important;
     }
   }
