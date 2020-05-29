@@ -1,5 +1,5 @@
 <template>
-  <div class="product">
+  <div class="product" v-if="productData.onlineStoreUrl">
     <nuxt-link :to="'/products/' + productData.handle">
       <div class="product__illustration" v-html="productData.productIllustration"></div>
       <div class="product__slate">

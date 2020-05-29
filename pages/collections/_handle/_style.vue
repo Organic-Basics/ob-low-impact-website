@@ -35,6 +35,7 @@ export default Vue.extend({
               name,
               values
             },
+            onlineStoreUrl,
             variants(first:50) {
               edges {
                 node {
@@ -90,7 +91,13 @@ export default Vue.extend({
         // let variantPrice = result.data.collectionByHandle.products.edges.node.variants.edges.node.price
 
         // create new array that only contains the Color product options
-        let productsData = result.data.collectionByHandle == true ? result.data.collectionByHandle.products.edges : result.data.products.edges
+        let productsData = []
+        if(result.data.collectionByHandle) {
+          productsData = result.data.collectionByHandle.products.edges
+        }
+        else {
+          productsData = result.data.products.edges
+        }
         let products = []
         for(let i = 0; i < productsData.length; i++) {
           let a = productsData[i]
