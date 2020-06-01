@@ -44,7 +44,9 @@ export default Vue.extend({
     Footer
   },
   async beforeMount() {
+    console.time('initStore')
     await this.$store.dispatch('initStore')
+    console.timeEnd('initStore')
   },
   async mounted() {
     this.currentPage = this.pageMap.find((a) => {

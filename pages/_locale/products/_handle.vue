@@ -250,7 +250,7 @@ export default Vue.extend({
           newData.productIllustration = ''
         }
 
-        newData.upSells = []
+        newData.upSells = newData.upSells ? newData.upSells : []
 
         return newData
       }

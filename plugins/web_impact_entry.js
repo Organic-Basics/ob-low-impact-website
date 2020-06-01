@@ -22,10 +22,17 @@ class WebImpactPlugin {
 
   async calculate(isVerbose) {
     let pages = [
-      {
-        url: 'http://localhost:3000',
+      /*{
+        url: 'http://lowimpact.organicbasics.com/eur/collections/all-womens-products',
         isGreen: true
-      }
+      },
+      {
+        url: 'http://organicbasics.com/collections/all-womens-products?no_rule=true',
+        isGreen: true
+      },
+      {
+        url: 'https://www.thereformation.com/categories/shop'
+      }*/
     ]
     let urlPromiseQueue = []
     for(let p of pages) {
