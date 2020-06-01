@@ -17,7 +17,7 @@
     <nuxt />
     <sidebar :open="isSidebarOpen" @closed="isSidebarOpen = false" v-if="!$route.path.includes('offline')"/>
     <cartDrawer :open="isCartOpen" @closed="isCartOpen = false" v-if="!$route.path.includes('offline')"/>
-    <overlay :open="isOverlayOpen" :carbonIntensity="carbonIntensity" @closed="isOverlayOpen = false" v-if="!$route.path.includes('offline')"/>
+    <overlay :open="isOverlayOpen" :carbonIntensity="carbonIntensity" :footerData="{currentBytes, currentPage}" @closed="isOverlayOpen = false" v-if="!$route.path.includes('offline')"/>
     <Footer :currentBytes="currentBytes" :currentPage="currentPage" v-if="!$route.path.includes('offline')"/>
   </main>
 </template>
@@ -219,6 +219,12 @@ section {
   justify-content: flex-start;
   align-items: center;
   text-align: center;
+  
+  // Animations are only allowed on very low carbon intensity
+  &.container-carbon--low *, &.container-carbon--moderate *, &.container-carbon--high * {
+    animation: none !important;
+    transition: none !important;
+  }
 }
 
 .title {

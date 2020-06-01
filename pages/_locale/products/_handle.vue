@@ -44,8 +44,6 @@
       </div>
     </section>
 
-    <Newsletter />
-
   </div>
 </template>
 
@@ -54,7 +52,6 @@ import Vue from 'vue'
 import VueApollo from 'vue-apollo'
 import gql from 'graphql-tag'
 import ProductSelect from '~/components/ProductSelect.vue'
-import Newsletter from '~/components/Newsletter.vue'
 
 export default Vue.extend({
 
@@ -67,8 +64,7 @@ export default Vue.extend({
     }
   },
   components: {
-    ProductSelect,
-    Newsletter
+    ProductSelect
   },
   async asyncData({app, params}) {
     try {

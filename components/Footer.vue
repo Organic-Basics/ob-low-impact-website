@@ -14,10 +14,10 @@
     <section>
       <footer>
         <h2>
-          <nuxt-link to="/collections/all-womens-products">Shop Women</nuxt-link>
+          <nuxt-link :to="`/${$store.state.activeCurrency}/collections/all-womens-products`">Shop Women</nuxt-link>
         </h2>
         <h2>
-          <nuxt-link to="/collections/all-mens-products">Shop Men</nuxt-link>
+          <nuxt-link :to="`/${$store.state.activeCurrency}/collections/all-mens-products`">Shop Men</nuxt-link>
         </h2>
         <p>Need help?<p/>
         <h6><b><a href = "mailto:support@organicbasics.com?subject=Low Impact Website inquiry">support@organicbasics.com</a></b>(~4g of CO<sub>2</sub>)</h6>

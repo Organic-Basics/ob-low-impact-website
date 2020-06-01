@@ -35,7 +35,7 @@
       <h1 class="manifesto__heading--dramatic">The low impact manifesto</h1>
     </section>
 
-    <Footer />
+    <Footer :currentBytes="footerData.currentBytes" :currentPage="footerData.currentPage" />
   </div>
 </template>
 
@@ -48,7 +48,8 @@ export default Vue.extend({
   name: 'Overlay',
   props: {
     open: Boolean,
-    carbonIntensity: Object
+    carbonIntensity: Object,
+    footerData: Object
   },
   components: {
     Footer,

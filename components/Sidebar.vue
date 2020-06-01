@@ -13,12 +13,12 @@
 
     <section class="sidebar__body text--left">
       <div class="sidebar__body--women">
-        <nuxt-link :to="`${$store.state.activeCurrency}/collections/all-womens-products`" @click.native="closeSidebar()"><h2>Shop Women</h2></nuxt-link>
+        <nuxt-link :to="`/${$store.state.activeCurrency}/collections/all-womens-products`" @click.native="closeSidebar()"><h2>Shop Women</h2></nuxt-link>
         <nuxt-link v-for="(link, index) in womensLinks" :key="index" :to="`/${$store.state.activeCurrency}${link.url}`" @click.native="closeSidebar()"><h3>{{link.name}}</h3></nuxt-link>
       </div>
 
       <div class="sidebar__body--men">
-        <nuxt-link :to="`${$store.state.activeCurrency}/collections/all-mens-products`" @click.native="closeSidebar()"><h2>Shop Men</h2></nuxt-link>
+        <nuxt-link :to="`/${$store.state.activeCurrency}/collections/all-mens-products`" @click.native="closeSidebar()"><h2>Shop Men</h2></nuxt-link>
         <nuxt-link v-for="(link, index) in mensLinks" :key="index" :to="`/${$store.state.activeCurrency}${link.url}`" @click.native="closeSidebar()"><h3>{{link.name}}</h3></nuxt-link>
       </div>
     </section>
