@@ -60,13 +60,35 @@ module.exports = {
   */
   apollo: {
     clientConfigs: {
-      default: {
-        // required  
-        httpEndpoint: process.env.VUE_APP_GRAPHQL_URI,
-        // See https://www.apollographql.com/docs/link/links/http.html#options
+      eur: {
+        httpEndpoint: process.env.VUE_APP_GRAPHQL_URI_EU,
         httpLinkOptions: {
           headers: {
-            'X-Shopify-Storefront-Access-Token': process.env.VUE_APP_GRAPHQL_SECRET
+            'X-Shopify-Storefront-Access-Token': process.env.VUE_APP_GRAPHQL_SECRET_EU
+          }
+        }
+      },
+      dkk: {
+        httpEndpoint: process.env.VUE_APP_GRAPHQL_URI_DK,
+        httpLinkOptions: {
+          headers: {
+            'X-Shopify-Storefront-Access-Token': process.env.VUE_APP_GRAPHQL_SECRET_DK
+          }
+        }
+      },
+      gbp: {
+        httpEndpoint: process.env.VUE_APP_GRAPHQL_URI_UK,
+        httpLinkOptions: {
+          headers: {
+            'X-Shopify-Storefront-Access-Token': process.env.VUE_APP_GRAPHQL_SECRET_UK
+          }
+        }
+      },
+      usd: {
+        httpEndpoint: process.env.VUE_APP_GRAPHQL_URI_US,
+        httpLinkOptions: {
+          headers: {
+            'X-Shopify-Storefront-Access-Token': process.env.VUE_APP_GRAPHQL_SECRET_US
           }
         }
       }

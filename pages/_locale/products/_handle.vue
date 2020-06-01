@@ -73,7 +73,7 @@ export default Vue.extend({
   async asyncData({app, params}) {
     try {
       if(app && app.apolloProvider && app.apolloProvider.defaultClient) {
-        let client = app.apolloProvider.defaultClient
+        let client = app.apolloProvider.clients[params.locale]
         let result = await client.query({
           query: gql`
             query {

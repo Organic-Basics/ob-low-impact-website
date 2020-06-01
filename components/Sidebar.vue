@@ -1,19 +1,25 @@
 <template>
   <div :class="'sidebar sidebar--' + open">
     <div class="sidebar__header">
+      <div class="sidebar__currency">
+        <span @click="changeCurrency('eur')" :class="$store.state.activeCurrency === 'eur' ? 'sidebar__currency--active' : ''">EUR</span>
+        <span @click="changeCurrency('dkk')" :class="$store.state.activeCurrency === 'dkk' ? 'sidebar__currency--active' : ''">DKK</span>
+        <span @click="changeCurrency('gbp')" :class="$store.state.activeCurrency === 'gbp' ? 'sidebar__currency--active' : ''">GBP</span>
+        <span @click="changeCurrency('usd')" :class="$store.state.activeCurrency === 'usd' ? 'sidebar__currency--active' : ''">USD</span>
+      </div>
       <Logo />
       <span class="sidebar__close" @click="closeSidebar()">Close</span>
     </div>
 
     <section class="sidebar__body text--left">
       <div class="sidebar__body--women">
-        <nuxt-link to="/collections/all-womens-products" @click.native="closeSidebar()"><h2>Shop Women</h2></nuxt-link>
-        <nuxt-link v-for="(link, index) in womensLinks" :key="index" :to="link.url" @click.native="closeSidebar()"><h3>{{link.name}}</h3></nuxt-link>
+        <nuxt-link :to="`${$store.state.activeCurrency}/collections/all-womens-products`" @click.native="closeSidebar()"><h2>Shop Women</h2></nuxt-link>
+        <nuxt-link v-for="(link, index) in womensLinks" :key="index" :to="`/${$store.state.activeCurrency}${link.url}`" @click.native="closeSidebar()"><h3>{{link.name}}</h3></nuxt-link>
       </div>
 
       <div class="sidebar__body--men">
-        <nuxt-link to="/collections/all-mens-products" @click.native="closeSidebar()"><h2>Shop Men</h2></nuxt-link>
-        <nuxt-link v-for="(link, index) in mensLinks" :key="index" :to="link.url" @click.native="closeSidebar()"><h3>{{link.name}}</h3></nuxt-link>
+        <nuxt-link :to="`${$store.state.activeCurrency}/collections/all-mens-products`" @click.native="closeSidebar()"><h2>Shop Men</h2></nuxt-link>
+        <nuxt-link v-for="(link, index) in mensLinks" :key="index" :to="`/${$store.state.activeCurrency}${link.url}`" @click.native="closeSidebar()"><h3>{{link.name}}</h3></nuxt-link>
       </div>
     </section>
 
@@ -174,8 +180,10 @@ export default Vue.extend({
   },
   methods: {
     closeSidebar: function () {
-      console.log('closeSidebar')
       this.$emit('closed', true)
+    },
+    changeCurrency: function (currency) {
+      this.$store.dispatch('changeCurrency', currency)
     }
   }
 })
@@ -196,6 +204,21 @@ export default Vue.extend({
 
   &.sidebar--true {
     right: 0%;
+  }
+
+  .sidebar__currency {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+
+    > span {
+      position: relative;
+      top: 0;
+    }
+
+    .sidebar__currency--active {
+      font-weight: bold;
+    }
   }
 
   .sidebar__header {

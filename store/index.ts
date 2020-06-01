@@ -6,7 +6,8 @@ import axios from 'axios'
 export const state = () => ({
   checkoutId: '',
   cart: {},
-  carbonIntensity: {}
+  carbonIntensity: {},
+  activeCurrency: 'eur'
 })
 
 export type RootState = ReturnType<typeof state>
@@ -29,6 +30,7 @@ export const getters: GetterTree<RootState, RootState> = {
 export const mutations: MutationTree<RootState> = {
   // access the state object with state.checkoutId
   setCheckoutId: (state, newId:string) => (state.checkoutId = newId),
+  setActiveCurrency: (state, currency:string) => (state.activeCurrency = currency),
   saveCart: (state, cart:any) => (state.cart = cart),
   setCarbonIntensity: (state, intensity:any) => (state.carbonIntensity = intensity)
 }
@@ -47,6 +49,7 @@ export const actions: ActionTree<RootState, RootState> = {
 	          node(id: $checkoutId) {
 	            ... on Checkout {
 	              webUrl
+                orderStatusUrl
 	              subtotalPrice
 	              totalTax
 	              totalPrice
@@ -76,7 +79,8 @@ export const actions: ActionTree<RootState, RootState> = {
 	      },
 	      fetchPolicy: 'network-only'
 			})
-            // trigger a change with store.commit
+
+      // trigger a change with store.commit
 			store.commit('saveCart', result.data.node)
     }
   },
@@ -88,8 +92,8 @@ export const actions: ActionTree<RootState, RootState> = {
 	  }
 	  if(client) {
   		// Check if the ID exists
-  		if(localStorage.getItem('OB_LOW_checkoutID')) {
-  			store.commit('setCheckoutId', localStorage.getItem('OB_LOW_checkoutID'))
+  		if(localStorage.getItem('OB_LOW_checkoutID_' + store.state.activeCurrency)) {
+  			store.commit('setCheckoutId', localStorage.getItem('OB_LOW_checkoutID_' + store.state.activeCurrency))
   		}
   		else {
   			let result = await client.mutate({
@@ -111,7 +115,7 @@ export const actions: ActionTree<RootState, RootState> = {
   	    try {
   	      if(result.data.checkoutCreate.checkout.id) {
   	        store.commit('setCheckoutId', result.data.checkoutCreate.checkout.id)
-  	        localStorage.setItem('OB_LOW_checkoutID', result.data.checkoutCreate.checkout.id)
+  	        localStorage.setItem('OB_LOW_checkoutID_' + store.state.activeCurrency, result.data.checkoutCreate.checkout.id)
   	      }
   	    } catch(err) {
   	      console.error(err)
@@ -172,7 +176,35 @@ export const actions: ActionTree<RootState, RootState> = {
   	}
   },
 
+  async fetchActiveCurrency (store:any) {
+    try {
+      console.log(store)
+      if(localStorage.getItem('OB_LOW_currency')) {
+        store.commit('setActiveCurrency', localStorage.getItem('OB_LOW_currency'))
+      }
+      else {
+        localStorage.setItem('OB_LOW_currency', store.state.activeCurrency)
+      }
+      if(this && this.app && this.app.apolloProvider) {
+        this.app.apolloProvider.defaultClient = this.app.apolloProvider.clients[store.state.activeCurrency]
+      }
+    } catch(err) {
+      console.error(err)
+    }
+  },
+
+  async changeCurrency (store:any, data:any) {
+    if(this && this.app && this.app.apolloProvider) {
+      this.app.apolloProvider.defaultClient = this.app.apolloProvider.clients[data]
+      store.commit('setActiveCurrency', data)
+      localStorage.setItem('OB_LOW_currency', store.state.activeCurrency)
+      console.log('activeCurrency: ' + store.state.activeCurrency)
+    }
+  },
+
   async initStore (store:any) {
+    store.dispatch('fetchActiveCurrency')
+
   	store.dispatch('fetchCarbonIntensity')
 
   	await store.dispatch('fetchCheckoutId')

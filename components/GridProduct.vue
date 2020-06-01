@@ -1,6 +1,6 @@
 <template>
   <div class="product" v-if="productData.onlineStoreUrl">
-    <nuxt-link :to="'/products/' + productData.handle">
+    <nuxt-link :to="'/' + $store.state.activeCurrency + '/products/' + productData.handle">
       <div class="product__illustration" v-html="productData.productIllustration"></div>
       <div class="product__slate">
         <p>{{ productData.title }}</p>

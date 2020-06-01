@@ -20,10 +20,11 @@ export default Vue.extend({
   head() {
     // WIP: set meta tags for this page
   },
-  async asyncData({app, params}) {
+  // TODO: Fix async data and currency
+  async asyncData(ctx) {
     try {
-      if(app && app.apolloProvider && app.apolloProvider.defaultClient) {
-        let client = app.apolloProvider.defaultClient
+      if(ctx.app && ctx.app.apolloProvider && ctx.app.apolloProvider.defaultClient) {
+        let client = ctx.app.apolloProvider.clients[ctx.params.locale]
         let result
 
         let productsQuery = `edges {
@@ -55,9 +56,9 @@ export default Vue.extend({
         }`
 
         let title = ''
-        if(params.style) {
-          let gender = params.handle.match(/[wo]*mens/g)
-          let style = params.style.replace(/style-/, '')
+        if(ctx.params.style) {
+          let gender = ctx.params.handle.match(/[wo]*mens/g)
+          let style = ctx.params.style.replace(/style-/, '')
           title = style.charAt(0).toUpperCase() + style.slice(1)
           let styleQuery = `${gender}, ${style}`
           result = await client.query({
@@ -76,7 +77,7 @@ export default Vue.extend({
             // Apollo GraphQL query: fetch data
             query: gql`
               query {
-                collectionByHandle(handle: "${params.handle}") {
+                collectionByHandle(handle: "${ctx.params.handle}") {
                   title,
                   products(first: 100) {
                     ${productsQuery}

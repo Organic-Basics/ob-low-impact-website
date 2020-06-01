@@ -43,8 +43,10 @@ export default Vue.extend({
     CartDrawer,
     Footer
   },
-  async mounted() {
+  async beforeMount() {
     await this.$store.dispatch('initStore')
+  },
+  async mounted() {
     this.currentPage = this.pageMap.find((a) => {
       return this.$route.name === a.key
     })
@@ -125,7 +127,7 @@ export default Vue.extend({
       else {
         this.currentBytes = 0
       }
-      console.log('transferredObjects updated.')
+      console.log('transferredObjects: ' + this.transferredObjects.length)
     }
   },
   computed: {
