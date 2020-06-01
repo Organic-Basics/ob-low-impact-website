@@ -118,6 +118,7 @@ export default Vue.extend({
 
           let productIllustration = ''
           try {
+            // Handle unisex products not having separate illustrations
             let illuHandle = a.node.handle
             if(illuHandle.includes('accessories') || illuHandle.includes('socks')) {
               illuHandle = illuHandle.replace(/womens-/g, '').replace(/mens-/g, '')

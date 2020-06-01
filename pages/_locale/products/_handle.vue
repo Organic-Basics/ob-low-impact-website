@@ -48,7 +48,7 @@
       </div>
     </div>
     <productSelect v-for="(prod, index) in products" v-if="prod.switchId == 0 || prod.switchId == switchId || prod.switchId === undefined"
-    :key="index" :propsIdx="index" :propsProduct="prod" :propsUpSells="upSells"
+    :key="prod.key.toString()" :propsIdx="index" :propsProduct="prod" :propsUpSells="upSells"
     @sizeClicked="onSizeChosen" @colorClicked="onColorChosen" @switched="switchId = switchId == 1 ? 2 : 1" @addToCartFromChild="addToCart()"/>
 
     <section class="product__content-block text--left">
@@ -432,54 +432,33 @@ export default Vue.extend({
     },
 
     showImages () {
-      console.log('shouldShowImages: ' + this.shouldShowImages)
+      // Only show images if intensity is lower than high
       this.shouldShowImages = this.$store.state.carbonIntensity.intensity.index === 'high' ? false : true
     },
 
     updateChosenId(idx) {
-    	/*for(let i = 0; i < this.products.length; i++) {
-    		let chosenVariant = this.products[i].variants.edges.find((a) => {
-	    	  let colorOpt = a.node.selectedOptions.find((b) => {
-	    	    return b.name === 'Color'
-	    	  })
-	    	  let sizeOpt = a.node.selectedOptions.find((b) => {
-	    	    return b.name === 'Size'
-	    	  })
-	    	  return this.products[i].chosenColor === colorOpt.value && this.products[i].chosenSize === sizeOpt.value
-	    	})
-	    	this.products = this.products.map((a, i) => {
-	    		if(i === idx) {
-	    			a.chosenId = chosenVariant.node.id
-	    		}
-	    		return a
-	    	})
-    	}*/
-    	/*let chosenVariant = this.propsProduct.variants.edges.find((a) => {
-    	  let colorOpt = a.node.selectedOptions.find((b) => {
-    	    return b.name === 'Color'
-    	  })
-    	  let sizeOpt = a.node.selectedOptions.find((b) => {
-    	    return b.name === 'Size'
-    	  })
-    	  return data.dataColor === colorOpt.value && this.dataSize === sizeOpt.value
-    	})
-
-    	console.log('onIdChosen')
-    	console.log(data)
-    	// TODO: What is going on? Why is it updating both
-    	this.products = this.products.map((a, i) => {
-    		if(i === data.idx) {
-    			console.log(i + '/' + data.idx)
-    			a.chosenId = data.id
-    		}
-    		return a
-    	})
-      console.log(this.products[0].chosenColor + ' / ' + this.products[0].chosenSize)
-      console.log(this.products[1].chosenColor + ' / ' + this.products[1].chosenSize)*/
+    	for(let i = 0; i < this.products.length; i++) {
+        if(i === idx) {
+          let chosenVariant = this.products[i].variants.edges.find((a) => {
+            let colorOpt = a.node.selectedOptions.find((b) => {
+              return b.name === 'Color'
+            })
+            let sizeOpt = a.node.selectedOptions.find((b) => {
+              return b.name === 'Size'
+            })
+            return this.products[i].chosenColor === colorOpt.value && this.products[i].chosenSize === sizeOpt.value
+          })
+          this.products = this.products.map((a, index) => {
+            if(index === idx) {
+              a.chosenId = chosenVariant.node.id
+            }
+            return a
+          })
+        }
+    	}
     },
 
     onSizeChosen(data) {
-    	console.log(data)
     	this.products = this.products.map((a, i) => {
     		if(i === data.idx) {
     			a.chosenSize = data.size
@@ -490,7 +469,6 @@ export default Vue.extend({
     },
 
     onColorChosen(data) {
-    	console.log(data)
     	this.products = this.products.map((a, i) => {
     		if(i === data.idx) {
     			a.chosenColor = data.color
@@ -542,13 +520,20 @@ function prepProducts (products, bundleData) {
 
       if(productBundleTag.includes('quant')) {
       	let quantCount = parseInt(productBundleTag.split('-')[4])
-      	let quantProduct = JSON.parse(JSON.stringify(products[0]))
-      	for(let j = 0; j < quantCount - 1; j++) quantProducts.push(quantProduct)
+      	for(let j = 0; j < quantCount - 1; j++) {
+          let quantProduct = JSON.parse(JSON.stringify(products[0]))
+          quantProducts.push(quantProduct)
+        }
       }
     }
   }
 
   products = products.concat(quantProducts)
+
+  // Add a unique key to the products
+  for(let i = 0; i < products.length; i++) {
+    products[i].key = i
+  }
 
 	if(bundleData) {
 		products = products.map((a) => {
@@ -624,7 +609,7 @@ function prepProducts (products, bundleData) {
     }
 
     *[fill*="#"] {
-      fill: map-get($colors, 'brand') !important;
+      fill: map-get($colors, 'productGrey') !important;
     }
   }
 

@@ -247,7 +247,9 @@ export default Vue.extend({
       })
     },
     addToCartFromChild() {
-      this.$emit('addToCartFromChild')
+      this.$emit('addToCartFromChild', {
+        idx: this.propsIdx
+      })
       this.isAdding = true
     },
     toggleTab(tabName) {
