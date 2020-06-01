@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="product__slideshow">
-      <div v-html="productIllustration" @click="showImages = true" v-if="!showImages"></div>
+      <div v-html="productIllustration" @click="showImages = true" v-if="!showImages && productIllustration"></div>
       <div v-for="(image, index) in mainProduct.images.edges">
         <img :src="showImages ? image.node.transformedSrc : ''" v-if="showImages">
       </div>
@@ -34,7 +34,7 @@
       </div>
     </div>
     <productSelect v-for="(prod, index) in products" v-if="prod.switchId == 0 || prod.switchId == switchId || prod.switchId === undefined"
-    :key="index" :propsIdx="index" :propsProduct="prod"
+    :key="index" :propsIdx="index" :propsProduct="prod" :propsUpSells="upSells"
     @sizeClicked="onSizeChosen" @colorClicked="onColorChosen" @switched="switchId = switchId == 1 ? 2 : 1" @addToCartFromChild="addToCart()"/>
 
     <section class="product__content-block text--left">
@@ -72,7 +72,7 @@ export default Vue.extend({
   },
   async asyncData({app, params}) {
     try {
-      if(app && app.apolloProvider && app.apolloProvider.defaultClient) {
+      if(app && app.apolloProvider) {
         let client = app.apolloProvider.clients[params.locale]
         let result = await client.query({
           query: gql`
@@ -117,6 +117,7 @@ export default Vue.extend({
         })
         let product = result.data.productByHandle
         let bundleTag = ''
+
         let isSingleProduct = result.data.productByHandle.tags.some((tag) => {
           let isBundleTag = tag.includes('combo') || tag.includes('quant')
           if(isBundleTag) {
@@ -138,9 +139,49 @@ export default Vue.extend({
 
         if(isSingleProduct) {
           newData.products = prepProducts([product])
+
+          let bundleTags = []
+          for(let tag of product.tags) {
+            // Bundle Tags are tags with 'quant' or 'combo' in them
+            // and with more than 5 characters
+            if((tag.includes('combo') || tag.includes('quant')) && tag.length > 5) {
+              let parsedTag = tag.split('-').splice(0, 2)
+              bundleTags.push(`tag:'${parsedTag}'`)
+            }
+          }
+
+          let bundleTagsStr = bundleTags.join(' OR ')
+          let upSellsResult = await client.query({
+            query: gql`{
+              products(query: "${bundleTagsStr} AND (NOT tag:'combo' OR NOT tag:'quant')", first: 15) {
+                edges {
+                  node {
+                    title,
+                    handle,
+                    variants(first: 1) {
+                      edges {
+                        node {
+                          priceV2 {
+                            amount,
+                            currencyCode
+                          }
+                          compareAtPriceV2 {
+                            amount,
+                            currencyCode
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }`
+          })
+
+          newData.upSells = upSellsResult.data.products.edges
         }
         else {
-          let result = await client.query({
+          let bundleResult = await client.query({
             query: gql`
               query {
                 products(query: "tag:${bundleTag} AND (tag:'combo' OR tag:'quant)", first: 5) {
@@ -178,7 +219,7 @@ export default Vue.extend({
               }
             `
           })
-          let bundleProducts = result.data.products.edges
+          let bundleProducts = bundleResult.data.products.edges
 
           // Remove Gift boxes
           let giftboxIndex = bundleProducts.findIndex((a) => {
@@ -200,8 +241,16 @@ export default Vue.extend({
           illuHandle = illuHandle.replace(/womens-/g, '').replace(/mens-/g, '')
         }
 
-        let productSvg = await import('~/assets/svg/products/' + illuHandle + '.svg?raw')
-        if(productSvg.default) newData.productIllustration = productSvg.default
+        try {
+          let productSvg = await import('~/assets/svg/products/' + illuHandle + '.svg?raw')
+          if(productSvg.default) newData.productIllustration = productSvg.default
+          else newData.productIllustration = ''
+        } catch(err) {
+          console.error(err)
+          newData.productIllustration = ''
+        }
+
+        newData.upSells = []
 
         return newData
       }
@@ -224,6 +273,7 @@ export default Vue.extend({
           		}
           	}
           },
+          upSells : [],
           products : [],
           isSingleProduct : true,
           bundleData : {
@@ -252,6 +302,7 @@ export default Vue.extend({
         		}
         	}
         },
+        upSells : [],
         products : [],
         isSingleProduct : true,
         bundleData : {

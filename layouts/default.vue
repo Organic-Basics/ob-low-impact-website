@@ -1,8 +1,8 @@
 <template>
-  <main class="container">
-    <button class="read-more" @click="isOverlayOpen = true">Read more</button>
+  <main :class="'container container-carbon--' + carbonIntensity.index">
+    <button class="read-more" @click="isOverlayOpen = true" v-if="!$route.path.includes('offline')">Read more</button>
 
-    <header class="header">
+    <header class="header" v-if="!$route.path.includes('offline')">
       <div class="header__menu" @click="isSidebarOpen = true">
         <span>Menu</span>
       </div>
@@ -15,10 +15,10 @@
       </div>
     </header>
     <nuxt />
-    <sidebar :open="isSidebarOpen" @closed="isSidebarOpen = false"/>
-    <cartDrawer :open="isCartOpen" @closed="isCartOpen = false"/>
-    <overlay :open="isOverlayOpen" @closed="isOverlayOpen = false"/>
-    <Footer :currentBytes="currentBytes" :currentPage="currentPage" />
+    <sidebar :open="isSidebarOpen" @closed="isSidebarOpen = false" v-if="!$route.path.includes('offline')"/>
+    <cartDrawer :open="isCartOpen" @closed="isCartOpen = false" v-if="!$route.path.includes('offline')"/>
+    <overlay :open="isOverlayOpen" :carbonIntensity="carbonIntensity" @closed="isOverlayOpen = false" v-if="!$route.path.includes('offline')"/>
+    <Footer :currentBytes="currentBytes" :currentPage="currentPage" v-if="!$route.path.includes('offline')"/>
   </main>
 </template>
 
@@ -123,6 +123,7 @@ export default Vue.extend({
           }
           return acc
         })
+        console.log('currentBytes: ' + this.currentBytes)
       }
       else {
         this.currentBytes = 0
@@ -162,6 +163,18 @@ export default Vue.extend({
     totalCarbon: function() {
       let estimatedCO2 = emissions.perByte(this.totalBytes, true)
       return estimatedCO2
+    },
+    carbonIntensity: function() {
+      if(!this.$store.state.carbonIntensity.intensity) {
+        return {
+          index: '...',
+          forecast: 0
+        }
+      }
+      else {
+        this.$store.state.carbonIntensity.intensity.index = this.$store.state.carbonIntensity.intensity.index.replace(' ', '-')
+        return this.$store.state.carbonIntensity.intensity
+      }
     }
   },
 })

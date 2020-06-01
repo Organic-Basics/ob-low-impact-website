@@ -7,7 +7,7 @@
 
     <section>
       <ImpactMeter />
-      <h5 :class="'overlay__carbon overlay__carbon--' + carbonIntensity.index">Carbon intensity: {{carbonIntensity.forecast}}g CO2/kWh</h5>
+      <h5 class="overlay__carbon">Carbon intensity: {{carbonIntensity.forecast}}g CO2/kWh</h5>
       <h6 class="overlay__carbon--desc">Our server’s carbon intensity is currently <span class="overlay__carbon-lvl">{{carbonIntensity.index}}</span>. This site will continuously adapt to reflect the amount of renewable energy it’s running on.</h6>
       <ul class="overlay__carbon-indices">
         <li v-for="carbonIndex in carbonIndices" :class="(carbonIndex.key === carbonIntensity.index ? 'active' : '')">
@@ -47,7 +47,8 @@ import ImpactMeter from '~/components/ImpactMeter.vue'
 export default Vue.extend({
   name: 'Overlay',
   props: {
-    open: Boolean
+    open: Boolean,
+    carbonIntensity: Object
   },
   components: {
     Footer,
@@ -102,17 +103,6 @@ export default Vue.extend({
     closeOverlay: function () {
       this.$emit('closed', true)
     }
-  },
-  computed: {
-    carbonIntensity: function() {
-      if(!this.$store.state.carbonIntensity.intensity) {
-        return '...'
-      }
-      else {
-        this.$store.state.carbonIntensity.intensity.index = this.$store.state.carbonIntensity.intensity.index.replace(' ', '-')
-        return this.$store.state.carbonIntensity.intensity
-      }
-    }
   }
 })
 </script>
@@ -142,13 +132,16 @@ export default Vue.extend({
 }
 
 .overlay__carbon {
-  &.overlay__carbon--low {
+  .container-carbon--very-low & {
     color: seagreen;
   }
-  &.overlay__carbon--moderate {
+  .container-carbon--low & {
+    color: seagreen;
+  }
+  .container-carbon--moderate & {
     color: gold;
   }
-  &.overlay__carbon--high {
+  .container-carbon--high & {
     color: tomato;
   }
 }
@@ -191,6 +184,7 @@ export default Vue.extend({
 
 .image--data-center {
   margin: 40px auto;
+  max-width: calc(100vw - 80px);
 }
 
 .overlay__questions--description {

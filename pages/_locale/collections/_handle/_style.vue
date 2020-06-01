@@ -23,7 +23,7 @@ export default Vue.extend({
   // TODO: Fix async data and currency
   async asyncData(ctx) {
     try {
-      if(ctx.app && ctx.app.apolloProvider && ctx.app.apolloProvider.defaultClient) {
+      if(ctx.app && ctx.app.apolloProvider) {
         let client = ctx.app.apolloProvider.clients[ctx.params.locale]
         let result
 
