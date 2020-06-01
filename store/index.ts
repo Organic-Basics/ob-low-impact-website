@@ -177,7 +177,7 @@ export const actions: ActionTree<RootState, RootState> = {
 
       // DEBUG HERE
       // Change value to 'very low', 'low', 'moderate', 'high' or 'very high' at your leisure
-      carbonIntensity.intensity.index = 'very low'
+      // carbonIntensity.intensity.index = 'very low'
 
       if(carbonIntensity.intensity.index === 'very high') {
         if(this.app.router) {
@@ -234,5 +234,7 @@ export const actions: ActionTree<RootState, RootState> = {
 
   	await store.dispatch('fetchCheckoutId')
   	store.dispatch('fetchCart')
+
+    return Promise.resolve('initStore finished.')
   }
 }

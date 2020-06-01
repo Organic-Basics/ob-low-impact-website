@@ -1,7 +1,7 @@
 <template>
   <div :class="'bg--grey overlay overlay--' + open">
     <header class="overlay__header">
-      <p>Switch to normal website</p>
+      <a :href="mainSiteLink">Switch to normal website</a>
       <h5 @click="closeOverlay()">Close</h5>
     </header>
 
@@ -97,6 +97,24 @@ export default Vue.extend({
           question: 'How?',
           description: 'We have formulated a set of 10 guidelines to help radically limit the amount of data transfer required to run an online store or website. We call it “The Low Impact Manifesto”.'
         }
+      ],
+      mainSiteMap: [
+        {
+          currency: 'dkk',
+          url: 'dk.organicbasics.com'
+        },
+        {
+          currency: 'gbp',
+          url: 'uk.organicbasics.com'
+        },
+        {
+          currency: 'usd',
+          url: 'us.organicbasics.com'
+        },
+        {
+          currency: 'eur',
+          url: 'organicbasics.com'
+        }
       ]
     }
   },
@@ -112,6 +130,13 @@ export default Vue.extend({
       })
       if(carbonName) return carbonName.name.toLowerCase()
       else return '...'
+    },
+    mainSiteLink () {
+      let mainSite = this.mainSiteMap.find((a) => {
+        return a.currency == this.$store.state.activeCurrency
+      })
+      let mainSiteUrl = 'https://' + mainSite.url + this.$route.path.replace('/' + this.$store.state.activeCurrency, '')
+      return mainSiteUrl
     }
   }
 })

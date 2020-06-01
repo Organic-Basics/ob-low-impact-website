@@ -156,7 +156,7 @@ html {
 }
 
 .collection__heading {
-  margin: 40px auto 20px;
+  margin: 100px auto 20px;
 }
 
 .product-grid {

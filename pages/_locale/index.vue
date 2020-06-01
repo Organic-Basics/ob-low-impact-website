@@ -1,6 +1,6 @@
 <template>
-<div>
-  <section>
+<div class="index">
+  <section class="index__intro">
     <ImpactMeter />
     <div class="index__intro--links">
       <nuxt-link :to="`${$store.state.activeCurrency}/collections/all-womens-products`"><h2>Shop women</h2></nuxt-link>
@@ -39,6 +39,16 @@ export default Vue.extend({
 </script>
 
 <style lang="scss">
+@import "~assets/scss/variables.scss";
+
+.index {
+  background: map-get($colors, 'bgGrey');
+}
+
+.index__intro {
+  margin-top: 100px;
+}
+
 .index__intro--links {
   display: flex;
   flex-direction: column;

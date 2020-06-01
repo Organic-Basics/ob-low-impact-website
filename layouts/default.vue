@@ -4,7 +4,9 @@
 
     <header class="header" v-if="!$route.path.includes('offline')">
       <div class="header__menu" @click="isSidebarOpen = true">
-        <span>Menu</span>
+        <span></span>
+        <span></span>
+        <span></span>
       </div>
       <nuxt-link to="/" class="header__logo">
         <Logo />
@@ -45,7 +47,9 @@ export default Vue.extend({
   },
   async beforeMount() {
     console.time('initStore')
-    await this.$store.dispatch('initStore')
+    console.log('ready for dispatch')
+    let dispatch = await this.$store.dispatch('initStore')
+    console.log(dispatch)
     console.timeEnd('initStore')
   },
   async mounted() {
@@ -215,7 +219,7 @@ section {
 }
 
 .container {
-  margin: 20px auto;
+  margin: 0 auto 20px;
   min-height: calc(100vh - 40px);
   display: flex;
   flex-direction: column;
@@ -249,9 +253,41 @@ section {
   align-items: center;
   display: flex;
   justify-content: space-between;
-  margin: 15px 0 10px;
+  margin: 0 10px;
   padding: 0 10px;
+  position: sticky;
+  top: 15px;
   width: 100vw;
+
+  .header__menu {
+    cursor: pointer;
+    display: block;
+    height: 18px;
+    position: relative;
+    width: 20px;
+
+    span {
+      background: map-get($colors, 'black');
+      display: block;
+      height: 2px;
+      left: 0;
+      position: absolute;
+      top: 0;
+      width: 20px;
+
+      &:first-child {
+        transform: translateY(12px);
+      }
+
+      &:last-child {
+        transform: translateY(6px);
+      }
+    }
+  }
+
+  .header__logo {
+    transform: translateY(20px);
+  }
 }
 
 .read-more {
