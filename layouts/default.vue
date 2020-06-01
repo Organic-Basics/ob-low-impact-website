@@ -174,8 +174,10 @@ export default Vue.extend({
         }
       }
       else {
-        this.$store.state.carbonIntensity.intensity.index = this.$store.state.carbonIntensity.intensity.index.replace(' ', '-')
-        return this.$store.state.carbonIntensity.intensity
+        return {
+          index: this.$store.state.carbonIntensity.intensity.index.replace(' ', '-'),
+          forecast: this.$store.state.carbonIntensity.intensity.forecast
+        }
       }
     }
   },
@@ -187,6 +189,7 @@ export default Vue.extend({
 @import "~assets/scss/mixins.scss";
 @import "~assets/scss/typography.scss";
 @import "~assets/scss/main.scss";
+@import "~assets/scss/z-index.scss";
 
 
 html {
@@ -213,7 +216,7 @@ section {
 
 .container {
   margin: 20px auto;
-  min-height: 100vh;
+  min-height: calc(100vh - 40px);
   display: flex;
   flex-direction: column;
   justify-content: flex-start;

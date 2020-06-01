@@ -7,6 +7,7 @@ export const state = () => ({
   checkoutId: '',
   cart: {},
   carbonIntensity: {},
+  carbonForecast: [],
   activeCurrency: 'eur'
 })
 
@@ -32,7 +33,8 @@ export const mutations: MutationTree<RootState> = {
   setCheckoutId: (state, newId:string) => (state.checkoutId = newId),
   setActiveCurrency: (state, currency:string) => (state.activeCurrency = currency),
   saveCart: (state, cart:any) => (state.cart = cart),
-  setCarbonIntensity: (state, intensity:any) => (state.carbonIntensity = intensity)
+  setCarbonIntensity: (state, intensity:any) => (state.carbonIntensity = intensity),
+  setCarbonForecast: (state, forecast:any) => (state.carbonForecast = forecast)
 }
 
 // register a Vuex action
@@ -168,18 +170,23 @@ export const actions: ActionTree<RootState, RootState> = {
 
   async fetchCarbonIntensity (store:any) {
   	try {
-  		let result = await axios.get('https://api.carbonintensity.org.uk/regional/regionid/13')
-  		let carbonIntensity = result.data.data.pop().data.pop()
+      let now = new Date()
+      let eightHoursAhead = new Date(new Date().setTime(now.getTime() + (16 * 60 * 60 * 1000)))
+  		let result = await axios.get(`https://api.carbonintensity.org.uk/regional/intensity/${now.toISOString()}/${eightHoursAhead.toISOString()}/regionid/13`)
+  		let carbonIntensity = result.data.data.data[0]
 
-      let debugging = false
-      // debugging = true
+      // DEBUG HERE
+      // Change value to 'very low', 'low', 'moderate', 'high' or 'very high' at your leisure
+      carbonIntensity.intensity.index = 'very low'
 
-      if(carbonIntensity.intensity.index === 'very high' || debugging) {
+      if(carbonIntensity.intensity.index === 'very high') {
         if(this.app.router) {
           this.app.router.replace('/offline')
         }
       }
+
   		store.commit('setCarbonIntensity', carbonIntensity)
+      store.commit('setCarbonForecast', result.data.data.data)
   	} catch(err) {
   		console.error(err)
   	}

@@ -8,7 +8,7 @@
     <section>
       <ImpactMeter />
       <h5 class="overlay__carbon">Carbon intensity: {{carbonIntensity.forecast}}g CO2/kWh</h5>
-      <h6 class="overlay__carbon--desc">Our server’s carbon intensity is currently <span class="overlay__carbon-lvl">{{carbonIntensity.index}}</span>. This site will continuously adapt to reflect the amount of renewable energy it’s running on.</h6>
+      <h6 class="overlay__carbon--desc">Our server’s carbon intensity is currently <span class="overlay__carbon-lvl">{{ carbonIndexName }}</span>. This site will continuously adapt to reflect the amount of renewable energy it’s running on.</h6>
       <ul class="overlay__carbon-indices">
         <li v-for="carbonIndex in carbonIndices" :class="(carbonIndex.key === carbonIntensity.index ? 'active' : '')">
           <h6>{{carbonIndex.name}}</h6>
@@ -59,7 +59,7 @@ export default Vue.extend({
     return {
       carbonIndices: [
         {
-          key: 'very low',
+          key: 'very-low',
           name: 'Lowest',
           description: 'Full resolution photos available'
         },
@@ -79,7 +79,7 @@ export default Vue.extend({
           description: 'Only illustrations available'
         },
         {
-          key: 'very high',
+          key: 'very-high',
           name: 'Highest',
           description: 'Our site closes down'
         }
@@ -103,6 +103,15 @@ export default Vue.extend({
   methods: {
     closeOverlay: function () {
       this.$emit('closed', true)
+    }
+  },
+  computed: {
+    carbonIndexName () {
+      let carbonName = this.carbonIndices.find((a) => {
+        return a.key === this.$props.carbonIntensity.index
+      })
+      if(carbonName) return carbonName.name.toLowerCase()
+      else return '...'
     }
   }
 })

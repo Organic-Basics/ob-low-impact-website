@@ -1,9 +1,23 @@
 <template>
   <div>
-    <div class="product__slideshow">
-      <div v-html="productIllustration" @click="showImages = true" v-if="!showImages && productIllustration"></div>
+    <div class="product__slideshow" @click="showImages()">
+      <div v-html="productIllustration" v-if="!shouldShowImages && productIllustration"></div>
+      <div class="product__image-label" v-if="!shouldShowImages">
+        <span class="product__image-label--bold">
+          <span v-if="$store.state.carbonIntensity.intensity.index !== 'high'">Tap to see real photos</span>
+          <span v-else>Real photos unavailable</span>
+        </span>
+        <span>
+          <span v-if="$store.state.carbonIntensity.intensity.index !== 'high'">
+            (~{{ ($store.state.carbonIntensity.intensity.index === 'very low' ? highResCost : lowResCost).toFixed(2)}}g CO2)
+          </span>
+          <span v-else>
+            (Our server energy mix needs to be more green)
+          </span>
+        </span>
+      </div>
       <div v-for="(image, index) in mainProduct.images.edges">
-        <img :src="showImages ? image.node.transformedSrc : ''" v-if="showImages">
+        <img :src="shouldShowImages ? image.node.transformedSrc : ''" v-if="shouldShowImages">
       </div>
     </div>
     <!-- Sticky bar -->
@@ -60,7 +74,7 @@ export default Vue.extend({
       quantity: 1,
       isAdding: false,
       switchId: 1,
-      showImages: false
+      shouldShowImages: false
     }
   },
   components: {
@@ -69,6 +83,10 @@ export default Vue.extend({
   async asyncData({app, params}) {
     try {
       if(app && app.apolloProvider) {
+        await app.store.dispatch('fetchCarbonIntensity')
+        // Use hi-res images on very low carbon intensity
+        let imageScale = app.store.state.carbonIntensity.intensity.index === 'very low' ? 2 : 1
+
         let client = app.apolloProvider.clients[params.locale]
         let result = await client.query({
           query: gql`
@@ -91,7 +109,7 @@ export default Vue.extend({
                 images(first: 10) {
                   edges {
                     node {
-                      transformedSrc(maxWidth: 300, maxHeight: 390, crop: CENTER)
+                      transformedSrc(maxWidth: 300, maxHeight: 390, crop: CENTER, scale: ${imageScale})
                     }
                   }
                 },
@@ -313,6 +331,17 @@ export default Vue.extend({
       if(this.isAdding) return 'Adding...'
       else if(this.incomplete) return 'Select color and size'
       else return 'Add to cart'
+    },
+    // g CO2 per byte: 0,000002318
+    // Avg per low image: 6,5 kb => 6656 bytes
+    // Avg per high image: 22 kb => 22528 bytes
+    highResCost () {
+      const co2PerHighImage = 0.05
+      return this.mainProduct.images.edges.length * co2PerHighImage
+    },
+    lowResCost () {
+      const co2PerLowImage = 0.015
+      return this.mainProduct.images.edges.length * co2PerLowImage
     }
   },
   methods: {
@@ -400,6 +429,11 @@ export default Vue.extend({
       })
       this.isAdding = false
       this.$store.dispatch('fetchCart')
+    },
+
+    showImages () {
+      console.log('shouldShowImages: ' + this.shouldShowImages)
+      this.shouldShowImages = this.$store.state.carbonIntensity.intensity.index === 'high' ? false : true
     },
 
     updateChosenId(idx) {
@@ -544,6 +578,10 @@ body {
 
   .container {
     margin-top: 0;
+
+    &.container-carbon--high .product__image-label {
+      color: map-get($colors, 'carbonHigh');
+    }
   }
 
   .header {
@@ -554,11 +592,29 @@ body {
   .product__slideshow {
     display: flex;
     overflow-x: scroll;
+    position: relative;
     width: 100vw;
+
+    .product__image-label {
+      bottom: 25px;
+      display: flex;
+      flex-direction: column;
+      position: absolute;
+      width: 100vw;
+
+      .product__image-label--bold {
+        font-weight: bold;
+      }
+
+      > span {
+        display: block;
+        max-width: 75vw;
+      }
+    }
 
     > div {
       align-items: center;
-      background: map-get($colors, 'brand');
+      background: map-get($colors, 'productGrey');
       display: flex;
       justify-content: center;
     }
@@ -567,7 +623,7 @@ body {
       width: 100vw;
 
       *[stroke*="#"] {
-        stroke: #fff !important;
+        stroke: map-get($colors, 'black') !important;
       }
 
       *[fill*="#"] {
