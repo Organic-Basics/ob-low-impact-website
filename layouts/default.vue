@@ -1,5 +1,5 @@
 <template>
-  <main :class="'container container-carbon--' + carbonIntensity.index">
+  <main :class="'container container-carbon--' + carbonIntensity.index + ' ' + $route.name">
     <button class="read-more" @click="isOverlayOpen = true" v-if="!$route.path.includes('offline')">Read more</button>
 
     <header class="header" v-if="!$route.path.includes('offline')">
@@ -8,7 +8,7 @@
         <span></span>
         <span></span>
       </div>
-      <nuxt-link to="/" class="header__logo">
+      <nuxt-link :to="'/' + $store.state.activeCurrency" class="header__logo">
         <Logo />
       </nuxt-link>
       <!-- <button @click="saveEntries()">Update</button> -->
@@ -232,6 +232,23 @@ section {
     animation: none !important;
     transition: none !important;
   }
+
+  // Styling for specific pages
+  &.locale {
+    position: relative;
+
+    .index {
+      position: absolute;
+      top: 0;
+    }
+  }
+
+  &.locale-products-handle {
+    .header {
+      position: absolute;
+      top: 0;
+    }
+  }
 }
 
 .title {
@@ -256,7 +273,7 @@ section {
   margin: 0 10px;
   padding: 0 10px;
   position: sticky;
-  top: 15px;
+  top: 0;
   width: 100vw;
 
   .header__menu {

@@ -160,11 +160,13 @@ export default Vue.extend({
             // and with more than 5 characters
             if((tag.includes('combo') || tag.includes('quant')) && tag.length > 5) {
               let parsedTag = tag.split('-').splice(0, 2)
+              parsedTag = parsedTag.join('-')
               bundleTags.push(`tag:'${parsedTag}'`)
             }
           }
 
           let bundleTagsStr = bundleTags.join(' OR ')
+          console.log(`"${bundleTagsStr} AND (NOT tag:'combo' OR NOT tag:'quant')"`)
           let upSellsResult = await client.query({
             query: gql`{
               products(query: "${bundleTagsStr} AND (NOT tag:'combo' OR NOT tag:'quant')", first: 15) {
@@ -192,7 +194,10 @@ export default Vue.extend({
             }`
           })
 
-          newData.upSells = upSellsResult.data.products.edges
+          // Sometimes query returns mainProduct as well. Filter that out.
+          newData.upSells = upSellsResult.data.products.edges.filter((a) => {
+            return a.node.title !== newData.mainProduct.title
+          })
         }
         else {
           let bundleResult = await client.query({
@@ -564,11 +569,6 @@ function prepProducts (products, bundleData) {
 
 .container-carbon--high .product__image-label {
   color: map-get($colors, 'carbonHigh');
-}
-
-.header {
-  position: absolute;
-  top: 0;
 }
 
 .product__slideshow {

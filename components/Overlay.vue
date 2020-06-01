@@ -146,7 +146,7 @@ export default Vue.extend({
 @import "~assets/scss/variables.scss";
 
 .overlay {
-  background: map-get($colors, 'brand');
+  background: map-get($colors, 'bgGrey');
   height: 100vh;
   overflow-y: scroll;
   position: fixed;

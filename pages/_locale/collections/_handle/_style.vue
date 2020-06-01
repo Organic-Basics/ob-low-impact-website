@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="collection">
     <h5 class="collection__heading">{{ collectionTitle }}</h5>
     <div class="product-grid">
       <gridProduct v-for="(product, index) in products" :key="index" :productData="product.node" />
@@ -157,7 +157,7 @@ html {
 }
 
 .collection__heading {
-  margin: 100px auto 20px;
+  margin: 30px auto 20px;
 }
 
 .product-grid {
