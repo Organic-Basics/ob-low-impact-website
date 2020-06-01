@@ -208,6 +208,7 @@ export default Vue.extend({
   }
 
   .sidebar__currency {
+    cursor: pointer;
     display: flex;
     flex-direction: column;
     position: absolute;
@@ -235,6 +236,7 @@ export default Vue.extend({
     }
 
     .sidebar__close {
+      cursor: pointer;
       position: absolute;
       right: 20px;
       top: 20px;

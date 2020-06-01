@@ -11,7 +11,6 @@
       <nuxt-link :to="'/' + $store.state.activeCurrency" class="header__logo">
         <Logo />
       </nuxt-link>
-      <!-- <button @click="saveEntries()">Update</button> -->
       <div class="header__cart" @click="isCartOpen = true">
         <span>{{ cartCount }}</span>
       </div>
@@ -46,11 +45,7 @@ export default Vue.extend({
     Footer
   },
   async beforeMount() {
-    console.time('initStore')
-    console.log('ready for dispatch')
     let dispatch = await this.$store.dispatch('initStore')
-    console.log(dispatch)
-    console.timeEnd('initStore')
   },
   async mounted() {
     this.currentPage = this.pageMap.find((a) => {
@@ -235,12 +230,7 @@ section {
 
   // Styling for specific pages
   &.locale {
-    position: relative;
-
-    .index {
-      position: absolute;
-      top: 0;
-    }
+    background: map-get($colors, 'bgGrey');
   }
 
   &.locale-products-handle {
@@ -303,7 +293,12 @@ section {
   }
 
   .header__logo {
+    // Move logo down a bit to match mockup
     transform: translateY(20px);
+  }
+
+  .header__cart {
+    cursor: pointer;
   }
 }
 

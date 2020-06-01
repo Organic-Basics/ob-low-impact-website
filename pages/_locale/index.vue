@@ -41,14 +41,6 @@ export default Vue.extend({
 <style lang="scss">
 @import "~assets/scss/variables.scss";
 
-.index {
-  background: map-get($colors, 'bgGrey');
-}
-
-.index__intro {
-  margin-top: 100px;
-}
-
 .index__intro--links {
   display: flex;
   flex-direction: column;

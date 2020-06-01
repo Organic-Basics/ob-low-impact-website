@@ -166,7 +166,6 @@ export default Vue.extend({
           }
 
           let bundleTagsStr = bundleTags.join(' OR ')
-          console.log(`"${bundleTagsStr} AND (NOT tag:'combo' OR NOT tag:'quant')"`)
           let upSellsResult = await client.query({
             query: gql`{
               products(query: "${bundleTagsStr} AND (NOT tag:'combo' OR NOT tag:'quant')", first: 15) {
@@ -342,11 +341,13 @@ export default Vue.extend({
     // Avg per high image: 22 kb => 22528 bytes
     highResCost () {
       const co2PerHighImage = 0.05
-      return this.mainProduct.images.edges.length * co2PerHighImage
+      if(this.mainProduct) return this.mainProduct.images.edges.length * co2PerHighImage
+      else return co2PerHighImage
     },
     lowResCost () {
       const co2PerLowImage = 0.015
-      return this.mainProduct.images.edges.length * co2PerLowImage
+      if(this.mainProduct) return this.mainProduct.images.edges.length * co2PerLowImage
+      else return co2PerLowImage
     }
   },
   methods: {

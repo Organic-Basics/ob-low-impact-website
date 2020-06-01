@@ -164,6 +164,10 @@ export default Vue.extend({
   display: flex;
   justify-content: space-between;
   margin: 20px;
+
+  h5 {
+    cursor: pointer;
+  }
 }
 
 .overlay__carbon {
