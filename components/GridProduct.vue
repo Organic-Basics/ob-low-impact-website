@@ -5,8 +5,10 @@
       <div class="product__slate">
         <p>{{ productData.title }}</p>
         <div class="product__price">
-          <p>{{ productData.variants.edges[0].node.price }}</p>
-          <p class="product__compare-price" v-if="productData.variants.edges[0].node.compareAtPrice !== '0.00'">{{ productData.variants.edges[0].node.compareAtPrice }}</p>
+          <p>{{ productData.variants.edges[0].node.priceV2.amount }} {{ productData.variants.edges[0].node.priceV2.currencyCode }}</p>
+          <p class="product__compare-price" v-if="productData.variants.edges[0].node.compareAtPrice !== null && productData.variants.edges[0].node.compareAtPrice !== '0.00'">
+            {{ productData.variants.edges[0].node.compareAtPrice }} {{ productData.variants.edges[0].node.priceV2.currencyCode }}
+          </p>
         </div>
         <div class="variant__container">
           <span v-for="color in productData.colorValues"

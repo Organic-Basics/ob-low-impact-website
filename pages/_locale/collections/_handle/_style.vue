@@ -40,7 +40,10 @@ export default Vue.extend({
             variants(first:50) {
               edges {
                 node {
-                  price,
+                  priceV2 {
+                    amount,
+                    currencyCode
+                  },
                   compareAtPrice
                 }
               }

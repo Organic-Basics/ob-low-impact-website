@@ -184,6 +184,7 @@ export default Vue.extend({
     },
     changeCurrency: function (currency) {
       this.$store.dispatch('changeCurrency', currency)
+      this.$emit('closed', true)
     }
   }
 })

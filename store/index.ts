@@ -178,7 +178,6 @@ export const actions: ActionTree<RootState, RootState> = {
 
   async fetchActiveCurrency (store:any) {
     try {
-      console.log(store)
       if(localStorage.getItem('OB_LOW_currency')) {
         store.commit('setActiveCurrency', localStorage.getItem('OB_LOW_currency'))
       }
@@ -198,8 +197,13 @@ export const actions: ActionTree<RootState, RootState> = {
       this.app.apolloProvider.defaultClient = this.app.apolloProvider.clients[data]
       store.commit('setActiveCurrency', data)
       localStorage.setItem('OB_LOW_currency', store.state.activeCurrency)
-      console.log('activeCurrency: ' + store.state.activeCurrency)
     }
+    let currentPath = this.$router.history.current.path
+    let oldCurrency = this.$router.history.current.params.locale
+    let newPath = currentPath.replace(oldCurrency, store.state.activeCurrency)
+    this.$router.replace(newPath)
+
+    store.dispatch('initStore')
   },
 
   async initStore (store:any) {
