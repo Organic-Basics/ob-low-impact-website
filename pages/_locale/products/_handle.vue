@@ -564,10 +564,6 @@ function prepProducts (products, bundleData) {
 <style lang="scss">
 @import "~assets/scss/variables.scss";
 
-.product__container {
-  background: #fff;
-}
-
 .container-carbon--high .product__image-label {
   color: map-get($colors, 'carbonHigh');
 }
@@ -734,6 +730,7 @@ function prepProducts (products, bundleData) {
   align-items: flex-start;
   display: flex;
   flex-direction: column;
+  max-width: 100vw;
 
   .product__option {
     align-items: flex-start;

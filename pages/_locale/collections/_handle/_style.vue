@@ -152,10 +152,6 @@ export default Vue.extend({
 
 <style lang="scss">
 
-html {
-  background: white;
-}
-
 .collection__heading {
   margin: 30px auto 20px;
 }

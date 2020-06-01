@@ -233,7 +233,13 @@ section {
     background: map-get($colors, 'bgGrey');
   }
 
+  &.locale-collections-handle-style {
+    background: #fff;
+  }
+
   &.locale-products-handle {
+    background: #fff;
+    
     .header {
       position: absolute;
       top: 0;
