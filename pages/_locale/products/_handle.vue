@@ -576,7 +576,7 @@ function prepProducts (products, bundleData) {
 .product__container {
   .bundle__slideshow {
     background: map-get($colors, 'bgGrey');
-    height: 60vh;
+    height: 30vh;
   }
 
 

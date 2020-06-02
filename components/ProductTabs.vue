@@ -1,7 +1,7 @@
 <template>
   <section class="product__tabs">
     <div class="product__text product__text--feat">
-      <div @click="toggleTab('featOpen')" :class="{'product__tabs--title': true, 'tab--open':(featOpen == true)}">
+      <div @click="toggleTab('featOpen')" :class="{'product__tabs--title': true, 'tab--open':featOpen}">
         <h6>Features</h6>
         <h5 class="tab__plus">+</h5>
       </div>
@@ -25,7 +25,7 @@
       </ul>
     </div>
     <div class="product__text product__text--desc">
-      <div @click="toggleTab('descOpen')" :class="{'product__tabs--title': true, 'tab--open':(descOpen == true)}">
+      <div @click="toggleTab('descOpen')" :class="{'product__tabs--title': true, 'tab--open':descOpen}">
         <h6>Description</h6>
         <h5 class="tab__plus">+</h5>
       </div>
@@ -34,7 +34,7 @@
       </ul>
     </div>
     <div class="product__text product__text--fit">
-      <div @click="toggleTab('fitOpen')" :class="{'product__tabs--title': true, 'tab--open':(fitOpen == true)}">
+      <div @click="toggleTab('fitOpen')" :class="{'product__tabs--title': true, 'tab--open':fitOpen}">
         <h6>Fit & Sizing</h6>
         <h5 class="tab__plus">+</h5>
       </div>
@@ -43,7 +43,7 @@
       </ul>
     </div>
     <div class="product__text product__text--mat">
-      <div @click="toggleTab('careOpen')" :class="{'product__tabs--title': true, 'tab--open':(careOpen == true)}">
+      <div @click="toggleTab('careOpen')" :class="{'product__tabs--title': true, 'tab--open':careOpen}">
         <h6>Material & Care</h6>
         <h5 class="tab__plus">+</h5>
       </div>

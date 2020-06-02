@@ -1,7 +1,7 @@
 <template>
   <section class="product__main">
     <div class="product__main--form">
-      <div>
+      <div v-if="isSingleProd">
         <h6 class="product__top--description">Clean-cut, seamless look and feel thongs made with recycled materials.</h6>
       </div>
 
@@ -39,36 +39,42 @@
       <!-- Bundle selection -->
       <div v-if="!isSingleProd" class="bundle__selection product__main--selection-container">
         <div class="product__main--selection">
-          <div class="product__bundle--container bundle--open">
-            <a href="#" class="product__bundle--title">
-              <!-- Title -->
-              <div class="product__bundle--left-desktop">
-                <div class="product__bundle--title-left">
-                  <span class="product__bundle--title-left-main">
-                    <span class="product__bundle--circle">
-                      <span class="product__bundle--index">1</span>
+          <div class="product__bundle--container">
+            <div class="product__bundle--top">
+              <a href="#"
+                :class="{'product__bundle--title': true, 'product--open':isProdOpen}"
+                @click="toggleBundleProd()">
+                <!-- Title -->
+                <div class="product__bundle--left-desktop">
+                  <div class="product__bundle--title-left">
+                    <span class="product__bundle--title-left-main">
+                      <span class="product__bundle--circle">
+                        <span class="product__bundle--index">1</span>
+                      </span>
+                      <span class="product__bundle--check"></span>
+                      <span class="product__bundle--plus"></span>
                     </span>
-                    <span class="product__bundle--check"></span>
-                    <span class="product__bundle--plus"></span>
-                  </span>
-                  <h5 class="product__bundle--title-txt-mobile">{{propsProduct.title}}</h5>
+                    <h5 class="product__bundle--title-txt-mobile">{{propsProduct.title}}</h5>
+                  </div>
                 </div>
-              </div>
+              </a>
               <!-- Info | Summary -->
-              <div class="product__bundle--title-right product__choice--summary">
+              <div @click="toggleBundleTabs()"
+                class="product__bundle--title-right product__choice--summary" :class="{'closed': !isProdOpen}">
                   <span class="product__bundle--choice-color"></span>
                   <span class="product__bundle--choice-size"></span>
                   <span class="product__mobile--more-info">
-                      <span class="product__mobile--more-info-txt">Info</span>
-                      <span class="product__mobile--circle">
-                          <span class="product__mobile--plus">+</span>
-                          <span class="product__mobile--close"></span>
-                      </span>
+                    <span class="product__mobile--more-info-txt">Info</span>
+                    <span class="product__mobile--circle">
+                      <span class="product__mobile--plus">+</span>
+                      <span class="product__mobile--close"></span>
+                    </span>
                   </span>
               </div>
-            </a>
+            </div>
             <!-- Accordion option container -->
-            <div class="product__main--option-container">
+            <div class="product__main--option-container"
+              :class="(isProdOpen && !isTabOpen) ? 'open' : 'closed'">
               <!-- Color -->
               <div class="product__main--option product__main--color">
                 <span class="product__main--option--title product__main--option--mobile">Color</span>
@@ -93,7 +99,7 @@
               </div>
             </div>
             <!-- Product tabs -->
-            <div class="product__mobile--tabs">
+            <div class="product__mobile--tabs" :class="isTabOpen ? 'open' : 'closed'">
               <ProductTabs  :propsProduct="propsProduct" />
             </div>
 
@@ -102,7 +108,7 @@
       </div>
 
       <!-- Button area -->
-      <div class="product__main--button-area">
+      <div v-if="isSingleProd" class="product__main--button-area">
         <div class="product__main--buttons">
           <button class="product__main--add-to-cart" type="button" name="add-to-cart" @click="addToCartFromChild">Add to cart</button>
         </div>
@@ -117,7 +123,6 @@
           </span>
         </div>
       </div>
-
       <!-- Tabs -->
       <ProductTabs v-if="isSingleProd" :propsProduct="propsProduct" />
     </div>
@@ -165,6 +170,12 @@ export default Vue.extend({
   components: {
     ProductTabs
   },
+  data () {
+    return {
+      isProdOpen: false,
+      isTabOpen: false
+    }
+  },
   props: {
     propsProduct: Object,
     propsIdx: Number,
@@ -209,8 +220,14 @@ export default Vue.extend({
 
       if(currencyCode === 'DKK') price = price.replace('.00', '')
       return price
+    },
+    toggleBundleProd() {
+      this.isProdOpen = !this.isProdOpen
+    },
+    toggleBundleTabs() {
+      this.isTabOpen = !this.isTabOpen
     }
-  }
+  },
 })
 </script>
 
@@ -327,6 +344,16 @@ export default Vue.extend({
         flex-direction: column;
         justify-content: flex-start;
 
+        .closed {
+          display: none !important;
+        }
+
+        .product__bundle--top {
+          display: flex;
+          flex-direction: row;
+          align-items: flex-start;
+        }
+
         .product__bundle--title {
           display: flex;
           align-items: center;
@@ -346,48 +373,48 @@ export default Vue.extend({
               cursor: pointer;
             }
           }
+        }
 
-          .product__bundle--circle, .product__mobile--circle {
-            display: inline-flex;
-            justify-content: center;
-            align-items: center;
-            border: 1.5px solid map-get($colors, 'black');
-            border-radius: 50%;
-            height: 26.5px;
-            width: 26.5px;
-            font-size: 17px;
+        .product__bundle--circle, .product__mobile--circle {
+          display: inline-flex;
+          justify-content: center;
+          align-items: center;
+          border: 1.5px solid map-get($colors, 'black');
+          border-radius: 50%;
+          height: 26.5px;
+          width: 26.5px;
+          font-size: 17px;
 
-            .product__bundle--index {
-              display: inline;
-              width: auto;
-              font-size: .9rem;
-            }
+          .product__bundle--index {
+            display: inline;
+            width: auto;
+            font-size: .9rem;
+          }
+        }
+
+        .product__choice--summary {
+          display: flex;
+          flex-basis: 28%;
+          align-items: flex-end;
+          flex-direction: row;
+          justify-content: flex-end;
+          flex-wrap: wrap;
+          font-size: 12px;
+          text-align: right;
+
+          .product__bundle--choice-color, .product__bundle--choice-size {
+            font-size: 13px;
+            padding-right: 2px;
           }
 
-          .product__choice--summary {
+          .product__mobile--more-info {
             display: flex;
-            flex-basis: 28%;
-            align-items: flex-end;
             flex-direction: row;
-            justify-content: flex-end;
-            flex-wrap: wrap;
-            font-size: 12px;
-            text-align: right;
+            align-items: center;
 
-            .product__bundle--choice-color, .product__bundle--choice-size {
+            .product__mobile--more-info-txt {
               font-size: 13px;
-              padding-right: 2px;
-            }
-
-            .product__mobile--more-info {
-              display: flex;
-              flex-direction: row;
-              align-items: center;
-
-              .product__mobile--more-info-txt {
-                font-size: 13px;
-                margin-right: 7px;
-              }
+              margin-right: 7px;
             }
           }
         }
