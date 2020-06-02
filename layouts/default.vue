@@ -221,7 +221,7 @@ section {
   justify-content: flex-start;
   align-items: center;
   text-align: center;
-  
+
   // Animations are only allowed on very low carbon intensity
   &.container-carbon--low *, &.container-carbon--moderate *, &.container-carbon--high * {
     animation: none !important;
@@ -239,7 +239,7 @@ section {
 
   &.locale-products-handle {
     background: #fff;
-    
+
     .header {
       position: absolute;
       top: 0;
@@ -266,8 +266,8 @@ section {
   align-items: center;
   display: flex;
   justify-content: space-between;
-  margin: 0 10px;
-  padding: 0 10px;
+  margin: 0;
+  padding: 10px;
   position: sticky;
   top: 0;
   width: 100vw;
@@ -296,11 +296,6 @@ section {
         transform: translateY(6px);
       }
     }
-  }
-
-  .header__logo {
-    // Move logo down a bit to match mockup
-    transform: translateY(20px);
   }
 
   .header__cart {
