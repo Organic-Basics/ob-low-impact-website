@@ -8,7 +8,25 @@ export const state = () => ({
   cart: {},
   carbonIntensity: {},
   carbonForecast: [],
-  activeCurrency: 'eur'
+  activeCurrency: 'eur',
+  cookieConsent: [
+    {
+      'type': 'necessary',
+      'consent': true
+    },
+    {
+      'type': 'statistics',
+      'consent': false
+    },
+    {
+      'type': 'marketing',
+      'consent': false
+    },
+    {
+      'type': 'preferences',
+      'consent': false
+    }
+  ]
 })
 
 export type RootState = ReturnType<typeof state>
@@ -34,7 +52,8 @@ export const mutations: MutationTree<RootState> = {
   setActiveCurrency: (state, currency:string) => (state.activeCurrency = currency),
   saveCart: (state, cart:any) => (state.cart = cart),
   setCarbonIntensity: (state, intensity:any) => (state.carbonIntensity = intensity),
-  setCarbonForecast: (state, forecast:any) => (state.carbonForecast = forecast)
+  setCarbonForecast: (state, forecast:any) => (state.carbonForecast = forecast),
+  updateCookieConsent: (state, newState:any) => (state.cookieConsent = newState)
 }
 
 // register a Vuex action
@@ -236,5 +255,23 @@ export const actions: ActionTree<RootState, RootState> = {
   	store.dispatch('fetchCart')
 
     return Promise.resolve('initStore finished.')
+  },
+
+  fetchCookieConsent (store:any, data:any) {
+    try {
+      if(localStorage.getItem('OB_LOW_cookie_accept')) {
+        store.commit('updateCookieConsent', JSON.parse(localStorage.getItem('OB_LOW_cookie_accept') || '{}'))
+      }
+    } catch(err) {
+      console.error(err)
+    }
+  },
+
+  saveCookieConsent (store:any, data:any) {
+    try {
+      localStorage.setItem('OB_LOW_cookie_accept', JSON.stringify(store.state.cookieConsent))
+    } catch(err) {
+      console.error(err)
+    }
   }
 }

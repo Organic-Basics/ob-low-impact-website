@@ -20,6 +20,7 @@
     <cartDrawer :open="isCartOpen" @closed="isCartOpen = false" v-if="!$route.path.includes('offline')"/>
     <overlay :open="isOverlayOpen" :carbonIntensity="carbonIntensity" :footerData="{currentBytes, currentPage}" @closed="isOverlayOpen = false" v-if="!$route.path.includes('offline')"/>
     <Footer :currentBytes="currentBytes" :currentPage="currentPage" v-if="!$route.path.includes('offline')"/>
+    <CookieBar/>
   </main>
 </template>
 
@@ -31,6 +32,7 @@ import Overlay from '~/components/Overlay.vue'
 import Sidebar from '~/components/Sidebar.vue'
 import CartDrawer from '~/components/CartDrawer.vue'
 import Footer from '~/components/Footer.vue'
+import CookieBar from '~/components/CookieBar.vue'
 
 import * as CO2 from '~/node_modules/@tgwf/co2/src/co2.js'
 const emissions = new CO2()
@@ -42,7 +44,8 @@ export default Vue.extend({
     Overlay,
     Sidebar,
     CartDrawer,
-    Footer
+    Footer,
+    CookieBar
   },
   async beforeMount() {
     let dispatch = await this.$store.dispatch('initStore')
