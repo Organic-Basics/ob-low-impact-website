@@ -26,7 +26,7 @@
               <h6 class="product__main--option--title">Size</h6>
               <div class="product__main--option-picker">
                 <span v-for="(size, index) in cleanOptions.size.values"
-                :class="['variant__size', size === propsProduct.chosenSize ? 'variant--chosen' : '']"
+                :class="['variant__size', size === propsProduct.chosenSize ? 'variant--chosen' : '', oosSizes.includes(size) ? 'variant--oos' : '']"
                 @click="chooseSize(size, propsIdx)">
                   {{size}}
                 </span>
@@ -91,7 +91,7 @@
                 <h6 class="product__main--option--title">Size</h6>
                 <div class="product__main--option-picker">
                   <span v-for="(size, index) in cleanOptions.size.values"
-                  :class="['variant__size', size === propsProduct.chosenSize ? 'variant--chosen' : '']"
+                  :class="['variant__size', size === propsProduct.chosenSize ? 'variant--chosen' : '', oosSizes.includes(size) ? 'variant--oos' : '']"
                   @click="chooseSize(size, propsIdx)">
                     {{size}}
                   </span>
@@ -187,11 +187,26 @@ export default Vue.extend({
     cleanOptions() {
       let size = this.propsProduct.options.find((a) => a.name === 'Size')
       let color = this.propsProduct.options.find((a) => a.name === 'Color')
+
       return {
         size: size,
         color: color
       }
     },
+    oosSizes() {
+      let oosVariants = this.propsProduct.variants.edges.filter((a) => {
+        let colorOpt = a.node.selectedOptions.find((b) => {
+          return b.name === 'Color'
+        })
+        return this.propsProduct.chosenColor === colorOpt.value && !a.node.availableForSale
+      })
+      return oosVariants.map((a) => {
+        let sizeOpt = a.node.selectedOptions.find((b) => {
+          return b.name === 'Size'
+        })
+        return sizeOpt.value
+      })
+    }
   },
   methods: {
     chooseColor(color) {
@@ -201,10 +216,12 @@ export default Vue.extend({
       })
     },
     chooseSize(size) {
-      this.$emit('sizeClicked', {
-        size: size,
-        idx: this.propsIdx
-      })
+      if(!this.oosSizes.includes(size)) {
+        this.$emit('sizeClicked', {
+          size: size,
+          idx: this.propsIdx
+        })
+      }
     },
     addToCartFromChild() {
       this.$emit('addToCartFromChild', {
@@ -256,10 +273,6 @@ export default Vue.extend({
 
       &.product__main--size {
         margin-bottom: 30px;
-      }
-
-      .variant--chosen {
-        text-decoration: underline;
       }
     }
 
@@ -332,6 +345,11 @@ export default Vue.extend({
 
           .variant--chosen {
             border-bottom: 2px solid map-get($colors, 'black');
+          }
+
+          .variant--oos {
+            color: map-get($colors, 'brand');
+            cursor: not-allowed;
           }
         }
       }
