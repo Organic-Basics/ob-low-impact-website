@@ -60,14 +60,14 @@
               </a>
               <!-- Info | Summary -->
               <div @click="toggleBundleTabs()"
-                class="product__bundle--title-right product__choice--summary" :class="{'closed': !isProdOpen}">
+                class="product__bundle--title-right product__choice--summary">
                   <span class="product__bundle--choice-color"></span>
                   <span class="product__bundle--choice-size"></span>
-                  <span class="product__mobile--more-info">
-                    <span class="product__mobile--more-info-txt">Info</span>
+                  <span class="product__mobile--more-info" :class="{'closed': !isProdOpen}">
+                    <span class="product__mobile--more-info-txt">{{ !isTabOpen ? 'Info' : 'Close'}}</span>
                     <span class="product__mobile--circle">
-                      <span class="product__mobile--plus">+</span>
-                      <span class="product__mobile--close"></span>
+                      <span v-if="!isTabOpen" class="product__mobile--plus">+</span>
+                      <span v-if="isTabOpen" class="product__mobile--close">+</span>
                     </span>
                   </span>
               </div>
@@ -260,6 +260,7 @@ export default Vue.extend({
   text-align: left;
 
   .product__main--form {
+    width: 100%;
 
     .product__top--description {
       text-align: center;
@@ -357,6 +358,8 @@ export default Vue.extend({
 
     /* Bundles */
     .bundle__selection {
+      margin-top: 0;
+
       .product__main--selection {
         display: flex;
         flex-direction: column;
@@ -370,6 +373,7 @@ export default Vue.extend({
           display: flex;
           flex-direction: row;
           align-items: flex-start;
+          justify-content: space-between;
         }
 
         .product__bundle--title {
@@ -408,6 +412,14 @@ export default Vue.extend({
             width: auto;
             font-size: .9rem;
           }
+
+          .product__mobile--close {
+            transform: rotate(45deg);
+          }
+        }
+
+        .product__main--size {
+          margin-bottom: 0;
         }
 
         .product__choice--summary {

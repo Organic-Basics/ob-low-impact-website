@@ -12,7 +12,8 @@
         <Logo />
       </nuxt-link>
       <div class="header__cart" @click="isCartOpen = true">
-        <span>{{ cartCount }}</span>
+        <CartIcon />
+        <span class="header__cart-count">{{ cartCount }}</span>
       </div>
     </header>
     <nuxt />
@@ -28,6 +29,7 @@
 import Vue from 'vue'
 
 import Logo from '~/components/Logo.vue'
+import CartIcon from '~/components/CartIcon.vue'
 import Overlay from '~/components/Overlay.vue'
 import Sidebar from '~/components/Sidebar.vue'
 import CartDrawer from '~/components/CartDrawer.vue'
@@ -45,7 +47,8 @@ export default Vue.extend({
     Sidebar,
     CartDrawer,
     Footer,
-    CookieBar
+    CookieBar,
+    CartIcon
   },
   async beforeMount() {
     let dispatch = await this.$store.dispatch('initStore')
@@ -303,6 +306,13 @@ section {
 
   .header__cart {
     cursor: pointer;
+
+    .header__cart-count {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      font-size: 10px;
+    }
   }
 }
 
