@@ -1,6 +1,7 @@
 <template>
   <div class="product__container">
-    <div class="product__slideshow" @click="showImages()">
+    <!-- Single product slideshow -->
+    <div v-if="isSingleProduct" class="product__slideshow" @click="showImages()">
       <div v-html="productIllustration" v-if="!shouldShowImages && productIllustration"></div>
       <div class="product__image-label" v-if="!shouldShowImages">
         <span class="product__image-label--bold">
@@ -19,6 +20,10 @@
       <div v-for="(image, index) in mainProduct.images.edges">
         <img :src="shouldShowImages ? image.node.transformedSrc : ''" v-if="shouldShowImages">
       </div>
+    </div>
+    <!-- Bundle slideshow -->
+    <div v-if="!isSingleProduct" class="bundle__slideshow">
+
     </div>
     <!-- Sticky bar -->
     <div class="product__sticky">
@@ -48,7 +53,7 @@
       </div>
     </div>
     <productSelect v-for="(prod, index) in products" v-if="prod.switchId == 0 || prod.switchId == switchId || prod.switchId === undefined"
-    :key="prod.key.toString()" :propsIdx="index" :propsProduct="prod" :propsUpSells="upSells"
+    :key="prod.key.toString()" :propsIdx="index" :propsProduct="prod" :propsUpSells="upSells" :isSingleProd="isSingleProduct"
     @sizeClicked="onSizeChosen" @colorClicked="onColorChosen" @switched="switchId = switchId == 1 ? 2 : 1" @addToCartFromChild="addToCart()"/>
 
     <section class="product__content-block text--left">
@@ -568,232 +573,240 @@ function prepProducts (products, bundleData) {
   color: map-get($colors, 'carbonHigh');
 }
 
-.product__slideshow {
-  display: flex;
-  overflow-x: scroll;
-  position: relative;
-  width: 100vw;
+.product__container {
+  .bundle__slideshow {
+    background: map-get($colors, 'bgGrey');
+    height: 60vh;
+  }
 
-  .product__image-label {
-    bottom: 25px;
+
+  .product__slideshow {
     display: flex;
-    flex-direction: column;
-    position: absolute;
+    overflow-x: scroll;
+    position: relative;
     width: 100vw;
 
-    .product__image-label--bold {
-      font-weight: bold;
-    }
-
-    > span {
-      display: block;
-      max-width: 75vw;
-    }
-  }
-
-  > div {
-    align-items: center;
-    background: map-get($colors, 'productGrey');
-    display: flex;
-    justify-content: center;
-  }
-
-  svg {
-    width: 100vw;
-
-    *[stroke*="#"] {
-      stroke: map-get($colors, 'black') !important;
-    }
-
-    *[fill*="#"] {
-      fill: map-get($colors, 'productGrey') !important;
-    }
-  }
-
-  img {
-    min-width: 100vw;
-    max-width: 100%;
-  }
-}
-
-.product__sticky {
-  color: map-get($colors, 'black');
-  background: #fff;
-  border-top: 1px solid #a1a4a9;
-  bottom: 0;
-  left: 0;
-  position: fixed;
-  transition: transform .3s ease-in-out;
-  transition: transform .3s ease-in-out,-webkit-transform .3s ease-in-out;
-  width: 100vw;
-
-  .product__sticky-top {
-    display: flex;
-    height: 4rem;
-    justify-content: space-between;
-    padding: 1rem;
-    align-items: center;
-
-    .product__sticky-top-left {
+    .product__image-label {
+      bottom: 25px;
       display: flex;
+      flex-direction: column;
+      position: absolute;
+      width: 100vw;
 
-      .product__sticky-title {
-        margin-right: 10px;
+      .product__image-label--bold {
+        font-weight: bold;
       }
 
-      .product__sticky-price {
-        color: map-get($colors, 'brand');
+      > span {
+        display: block;
+        max-width: 75vw;
       }
     }
 
-    .product__sticky-top-right {
+    > div {
       align-items: center;
+      background: map-get($colors, 'productGrey');
       display: flex;
+      justify-content: center;
+    }
 
-      .product__sticky-size {
-        padding-right: .5rem;
+    svg {
+      width: 100vw;
+
+      *[stroke*="#"] {
+        stroke: map-get($colors, 'black') !important;
       }
 
-      .product__sticky-color {
-        height: 30px;
-        position: relative;
-        width: 30px;
-        border-radius: 50px;
+      *[fill*="#"] {
+        fill: map-get($colors, 'productGrey') !important;
+      }
+    }
 
-        span {
-          border-radius: 30px;
+    img {
+      min-width: 100vw;
+      max-width: 100%;
+    }
+  }
+
+  .product__sticky {
+    color: map-get($colors, 'black');
+    background: #fff;
+    border-top: 1px solid #a1a4a9;
+    bottom: 0;
+    left: 0;
+    position: fixed;
+    transition: transform .3s ease-in-out;
+    transition: transform .3s ease-in-out,-webkit-transform .3s ease-in-out;
+    width: 100vw;
+
+    .product__sticky-top {
+      display: flex;
+      height: 4rem;
+      justify-content: space-between;
+      padding: 1rem;
+      align-items: center;
+
+      .product__sticky-top-left {
+        display: flex;
+
+        .product__sticky-title {
+          margin-right: 10px;
+        }
+
+        .product__sticky-price {
+          color: map-get($colors, 'brand');
+        }
+      }
+
+      .product__sticky-top-right {
+        align-items: center;
+        display: flex;
+
+        .product__sticky-size {
+          padding-right: .5rem;
+        }
+
+        .product__sticky-color {
           height: 30px;
-          left: 0;
-          position: absolute;
-          top: 0;
+          position: relative;
           width: 30px;
+          border-radius: 50px;
+
+          span {
+            border-radius: 30px;
+            height: 30px;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 30px;
+          }
         }
       }
     }
-  }
 
-  .product__sticky-bottom {
-    .product__sticky--buttons {
-      margin-bottom: 0;
-      display: flex;
-      justify-content: space-between;
-
-      .product__main--quantity {
+    .product__sticky-bottom {
+      .product__sticky--buttons {
+        margin-bottom: 0;
         display: flex;
-        justify-content: center;
-        align-items: center;
-        position: relative;
-        flex-basis: 50%;
-        border-top: 1px solid map-get($colors, 'brand');
-        height: 3.6rem;
+        justify-content: space-between;
 
-        .product__main--decrement, .product__main--increment {
-          color: map-get($colors, 'black');
-          width: 40px;
-          position: absolute;
-          top: 0;
-          bottom: 0;
-          width: 40px;
-          display: inline-flex;
+        .product__main--quantity {
+          display: flex;
           justify-content: center;
           align-items: center;
-          font-size: 19px;
+          position: relative;
+          flex-basis: 50%;
+          border-top: 1px solid map-get($colors, 'brand');
+          height: 3.6rem;
+
+          .product__main--decrement, .product__main--increment {
+            color: map-get($colors, 'black');
+            width: 40px;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 40px;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 19px;
+          }
+
+          .product__main--increment {
+            right: 0;
+            left: auto;
+          }
+
+          .product__main--decrement {
+            left: 0;
+          }
+
+          .product__main--quant-picker {
+            border: none;
+            color: map-get($colors, 'black');
+            height: 100%;
+            text-align: center;
+            font-size: 13px;
+          }
         }
 
-        .product__main--increment {
-          right: 0;
-          left: auto;
+        .product__main--add-to-cart {
+          flex-basis: 50%;
+          border: 1px solid map-get($colors, 'black');
         }
-
-        .product__main--decrement {
-          left: 0;
-        }
-
-        .product__main--quant-picker {
-          border: none;
-          color: map-get($colors, 'black');
-          height: 100%;
-          text-align: center;
-          font-size: 13px;
-        }
-      }
-
-      .product__main--add-to-cart {
-        flex-basis: 50%;
-        border: 1px solid map-get($colors, 'black');
       }
     }
   }
-}
 
-.product__main {
-  align-items: flex-start;
-  display: flex;
-  flex-direction: column;
-  max-width: 100vw;
-
-  .product__option {
+  .product__main {
     align-items: flex-start;
     display: flex;
     flex-direction: column;
+    max-width: 100vw;
 
-    &.product__option--size {
-      margin-bottom: 30px;
-    }
-
-    .variant--chosen {
-      text-decoration: underline;
-    }
-  }
-
-  .product__text {
-    align-items: flex-start;
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 5px;
-
-    ul {
+    .product__option {
       align-items: flex-start;
       display: flex;
       flex-direction: column;
-      text-align: left;
+
+      &.product__option--size {
+        margin-bottom: 30px;
+      }
+
+      .variant--chosen {
+        text-decoration: underline;
+      }
+    }
+
+    .product__text {
+      align-items: flex-start;
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 5px;
+
+      ul {
+        align-items: flex-start;
+        display: flex;
+        flex-direction: column;
+        text-align: left;
+      }
     }
   }
-}
 
-.product__main--add-to-cart {
-  height: 3.6rem;
-  text-align: center;
-  background: map-get($colors, 'black');
-  color: white;
-  cursor: pointer;
-  font-size: 13px;
-}
+  .product__main--add-to-cart {
+    height: 3.6rem;
+    text-align: center;
+    background: map-get($colors, 'black');
+    color: white;
+    cursor: pointer;
+    font-size: 13px;
+  }
 
-.product__content-block {
-  background: rgb(167, 143, 122);
-  height: 500px;
-  padding: 5vw 20px;
-  color: #fff;
-  width: 100%;
+  .product__content-block {
+    background: rgb(167, 143, 122);
+    height: 500px;
+    padding: 5vw 20px;
+    color: #fff;
+    width: 100%;
 
-  .content-block__text {
-    justify-content: space-around;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
+    .content-block__text {
+      justify-content: space-around;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
 
-    .content-block__title {
-      width: 95%;
-      color: #fff;
-      font-size: 26px;
-    }
+      .content-block__title {
+        width: 95%;
+        color: #fff;
+        font-size: 26px;
+      }
 
-    .content-block__desc {
-      font-size: 16px;
-      max-width: 350px;
-      color: #fff;
-      margin-top: 20px;
+      .content-block__desc {
+        font-size: 16px;
+        max-width: 350px;
+        color: #fff;
+        margin-top: 20px;
+      }
     }
   }
 }

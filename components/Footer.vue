@@ -12,14 +12,14 @@
       </div>
     </section>
     <section>
-      <footer>
+      <footer class="text--left">
         <h2>
           <nuxt-link :to="`/${$store.state.activeCurrency}/collections/all-womens-products`">Shop Women</nuxt-link>
         </h2>
         <h2>
           <nuxt-link :to="`/${$store.state.activeCurrency}/collections/all-mens-products`">Shop Men</nuxt-link>
         </h2>
-        <p>Need help?<p/>
+        <p class="help__text">Need help?<p/>
         <h6><b><a href = "mailto:support@organicbasics.com?subject=Low Impact Website inquiry">support@organicbasics.com</a></b>(~4g of CO<sub>2</sub>)</h6>
       </footer>
     </section>
@@ -67,6 +67,10 @@ export default Vue.extend({
 
   .footer__help {
     margin-top: 60px;
+  }
+
+  .help__text {
+    margin-top: 50px;
   }
 }
 </style>
