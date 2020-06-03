@@ -21,13 +21,13 @@
     <footer class="cart-drawer__footer">
       <h6 class="footer__text--discount">
         <span>Total discount:</span>
-        <span>xxxxx</span>
+        <span>{{$store.state.cart.subtotalPrice}}</span>
       </h6>
       <h6 class="footer__text--subtotal">
         <span>Subtotal</span>
-        <span>xxxx</span>
+        <span>{{$store.state.cart.subtotalPrice}}</span>
       </h6>
-      <a :href="cleanCheckout"><button class="cart-drawer__checkout">Checkout</button></a>
+      <a :href="cleanCheckoutURL"><button class="cart-drawer__checkout">Checkout</button></a>
     </footer>
   </div>
 </template>
@@ -59,7 +59,7 @@ export default Vue.extend({
         return []
       }
     },
-    cleanCheckout: function() {
+    cleanCheckoutURL: function() {
       let checkoutUrls = [
         {
           oldUrl: 'aoftd.myshopify.com',
@@ -78,6 +78,7 @@ export default Vue.extend({
           newUrl: 'us.organicbasics.com'
         }
       ]
+      console.log(this.$store.state.cart)
       if(!this.$store.state.cart.webUrl) {
         return '#'
       }
