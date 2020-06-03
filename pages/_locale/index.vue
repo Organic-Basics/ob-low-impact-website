@@ -29,7 +29,6 @@ import gql from 'graphql-tag'
 import Manifesto from '~/components/Manifesto.vue'
 import ImpactMeter from '~/components/ImpactMeter.vue'
 
-
 export default Vue.extend({
   components: {
     Manifesto,

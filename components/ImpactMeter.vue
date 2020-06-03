@@ -1,5 +1,11 @@
 <template>
-  <svg id="speedometer" viewBox="0 0 240 133" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <div class="spedometer__container">
+    <span class="label--lowest">Lowest</span>
+    <span class="label--low">Low</span>
+    <span class="label--medium">Medium</span>
+    <span class="label--high">High</span>
+    <span class="label--highest">Highest</span>
+    <svg id="speedometer" viewBox="0 0 240 133" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
       <title>Low Impact Speedometer</title>
       <g id="Mobile" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
           <g id="iPhone-11-Pro-Copy-124" transform="translate(-69.000000, -343.000000)">
@@ -18,7 +24,8 @@
               </g>
           </g>
       </g>
-  </svg>
+    </svg>
+  </div>
 </template>
 
 <script>
@@ -32,41 +39,80 @@ export default Vue.extend({
 
 <style lang="scss">
 
-#speedometer {
-  width: 100%;
+.spedometer__container {
+  position: relative;
 
-  .container-carbon--very-low & #speedometer__needle {
-    transform: rotate(45deg);
-    transform-origin: 2% 84%;
+  @mixin spedometer__label {
+    font-size: 12px;
+    position: relative;
   }
 
-  .container-carbon--low & #speedometer__needle {
-    transform: rotate(75deg);
-    transform-origin: 20% 75%;
+  .label--medium {
+    @include spedometer__label;
+    left: 0;
+    top: -5px;
   }
 
-  .container-carbon--moderate & #speedometer__needle {
-    transform: rotate(105deg);
-    transform-origin: 30% 66%;
+  .label--low {
+    @include spedometer__label;
+    left: -14%;
+    top: 15px;
   }
 
-  .container-carbon--high & #speedometer__needle {
-    transform: rotate(135deg);
-    transform-origin: 37% 61%;
+  .label--lowest {
+    @include spedometer__label;
+    left: -26%;
+    top: 85px;
+  }
 
-    #needle__line {
-      transform: scale(0.8) rotate(130deg);
-      transform-origin: 17% 31%;
+  .label--high {
+    @include spedometer__label;
+    left: 14%;
+    top: 13px;
+  }
+
+  .label--highest {
+    @include spedometer__label;
+    left: 26%;
+    top: 85px;
+  }
+
+  #speedometer {
+    width: 90%;
+
+    .container-carbon--very-low & #speedometer__needle {
+      transform: rotate(45deg);
+      transform-origin: 2% 84%;
     }
 
-    #needle__arrow-up {
-      transform-origin: 5.5% 44%;
-      transform: rotate(130deg) scale(.8);
+    .container-carbon--low & #speedometer__needle {
+      transform: rotate(75deg);
+      transform-origin: 20% 75%;
     }
 
-    #needle__arrow-down {
-      transform-origin: 28.5% 18%;
-      transform: rotate(130deg) scale(.8);
+    .container-carbon--moderate & #speedometer__needle {
+      transform: rotate(105deg);
+      transform-origin: 30% 66%;
+    }
+
+    .container-carbon--high & #speedometer__needle {
+      transform: rotate(135deg);
+      transform-origin: 37% 61%;
+
+      #needle__line {
+        transform: scale(0.8) rotate(130deg);
+        transform-origin: 17% 31%;
+      }
+
+      #needle__arrow-up {
+        transform-origin: 5.5% 44%;
+        transform: rotate(130deg) scale(.8);
+      }
+
+      #needle__arrow-down {
+        transform-origin: 28.5% 18%;
+        transform: rotate(130deg) scale(.8);
+      }
     }
   }
 }

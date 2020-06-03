@@ -9,12 +9,19 @@
         <img class="item__image" :src="item.node.variant.image.src" :alt="item.node.title">
         <div class="item__text-container">
           <h6 class="item__heading">{{item.node.title}}</h6>
-          <h6>{{item.node.variant.title}}</h6>
-          <div class="cart-drawer__quantity">
-            <h6 class="quant--decrement" @click="updateLineItem(item.node.variant.id, item.node.quantity - 1)">–</h6>
-            <span>{{item.node.quantity}}</span>
-            <h6 class="quant--increment" @click="updateLineItem(item.node.variant.id, item.node.quantity + 1)">+</h6>
-           </div>
+          <div class="item__details">
+            <div class="cart-drawer__quantity">
+              <h6 class="quant--decrement" @click="updateLineItem(item.node.variant.id, item.node.quantity - 1)">–</h6>
+              <span>{{item.node.quantity}}</span>
+              <h6 class="quant--increment" @click="updateLineItem(item.node.variant.id, item.node.quantity + 1)">+</h6>
+              <h6>{{item.node.variant.title}}</h6>
+            </div>
+            <h6>{{item.node.variant.price}}</h6>
+          </div>
+          <div class="item__discount">
+            <span>Insert discount message</span>
+            <span class="item__price--compare">compareAtPrice</span>
+          </div>
         </div>
       </div>
     </main>
@@ -149,7 +156,7 @@ export default Vue.extend({
     padding: 15px 0;
 
     .item__image {
-      width: 30%;
+      width: 20%;
       margin-right: 20px;
     }
 
@@ -158,11 +165,12 @@ export default Vue.extend({
       display: flex;
       flex-direction: column;
       height: 100%;
+      width: 100%;
       justify-content: center;
 
       .item__heading {
         font-weight: bold;
-        margin-bottom: 10px;
+        margin-bottom: 5px;
       }
     }
   }
@@ -171,13 +179,41 @@ export default Vue.extend({
     border-bottom: none;
   }
 
-  .cart-drawer__quantity {
+  .item__details {
     display: flex;
     flex-direction: row;
-    font-size: 14px;
+    align-items: center;
+    justify-content: space-between;
 
-    .quant--decrement, .quant--increment, span {
-      padding: 10px;
+    .cart-drawer__quantity {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      font-size: 14px;
+
+      .quant--decrement, .quant--increment, span {
+        padding: 5px 10px;
+      }
+
+      .quant--decrement {
+        margin-left: -10px;
+      }
+
+      .quant--increment {
+        margin-right: 15px;
+      }
+    }
+  }
+
+  .item__discount {
+    font-size: 11px;
+    color: map-get($colors, 'brand');
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    .item__price--compare {
+      text-decoration: line-through;
     }
   }
 

@@ -172,16 +172,16 @@ export default Vue.extend({
 
 .overlay__carbon {
   .container-carbon--very-low & {
-    color: seagreen;
+    color: map-get($colors, 'green');;
   }
   .container-carbon--low & {
-    color: seagreen;
+    color: map-get($colors, 'green');;
   }
   .container-carbon--moderate & {
-    color: gold;
+    color: map-get($colors, 'impactYellow');
   }
   .container-carbon--high & {
-    color: tomato;
+    color: map-get($colors, 'carbonHigh');
   }
 }
 
