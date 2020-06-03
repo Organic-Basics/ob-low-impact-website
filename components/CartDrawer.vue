@@ -11,16 +11,18 @@
           <h6 class="item__heading">{{item.node.title}}</h6>
           <div class="item__details">
             <div class="cart-drawer__quantity">
-              <h6 class="quant--decrement" @click="updateLineItem(item.node.variant.id, item.node.quantity - 1)">–</h6>
+              <h6 class="quant--decrement" @click="updateLineItem(item.node.variant.id, item.node.quantity - 1, item.node.customAttributes)">–</h6>
               <span>{{item.node.quantity}}</span>
-              <h6 class="quant--increment" @click="updateLineItem(item.node.variant.id, item.node.quantity + 1)">+</h6>
+              <h6 class="quant--increment" @click="updateLineItem(item.node.variant.id, item.node.quantity + 1, item.node.customAttributes)">+</h6>
               <h6>{{item.node.variant.title}}</h6>
             </div>
-            <h6>{{item.node.variant.price}}</h6>
+            <h6>{{ fetchComparePrice(item) !== 0 ? fetchComparePrice(item) : formatPrice(item.node.variant.priceV2, item.node.quantity) }}</h6>
           </div>
           <div class="item__discount">
-            <span>Insert discount message</span>
-            <span class="item__price--compare">compareAtPrice</span>
+            <span v-if="item.node.customAttributes.some((a) => (a.key === 'Bundle')) && fetchComparePrice(item) !== 0">
+              {{item.node.customAttributes.find((a) => (a.key === 'Bundle')).value}}
+            </span>
+            <span class="item__price--compare" v-if="fetchComparePrice(item) !== 0">{{ formatPrice(item.node.variant.priceV2, item.node.quantity) }}</span>
           </div>
         </div>
       </div>
@@ -51,14 +53,44 @@ export default Vue.extend({
     closeDrawer: function () {
       this.$emit('closed', true)
     },
-    updateLineItem: function (variantId, quantity) {
+    updateLineItem: function (variantId, quantity, customAttributes) {
       this.$store.dispatch('updateLineItem',
-        {variantId: variantId, quantity: quantity}
+        {variantId: variantId, quantity: quantity, customAttributes: customAttributes.map((attr) => ({key: attr.key, value: attr.value}))}
       )
+    },
+    formatPrice: function (price, quantity) {
+      if(price.amount && price.currencyCode) {
+        let amount = parseInt(price.amount) * quantity
+        let newPrice = new Intl.NumberFormat('en-US', {
+          style: 'currency',
+          currency: price.currencyCode
+        }).format(amount)
+
+        if(price.currencyCode === 'DKK') newPrice = newPrice.replace('.00', '')
+        return newPrice
+      }
+      else {
+        return ''
+      }
+    },
+    fetchComparePrice: function(item) {
+      if(item.node.discountAllocations.length > 0) {
+        let discountAmount = parseInt(item.node.discountAllocations[0].allocatedAmount.amount)
+        let originalAmount = parseInt(item.node.variant.priceV2.amount)
+        // Must be a string
+        let newPrice = {
+          amount: (originalAmount - discountAmount) + '',
+          currencyCode: item.node.variant.priceV2.currencyCode
+        }
+        return this.formatPrice(newPrice, item.node.quantity)
+      }
+      else {
+        return 0
+      }
     }
   },
   computed: {
-    cleanCart() {
+    cleanCart: function() {
       if(this.$store.state.cart && this.$store.state.cart.lineItems && this.$store.state.cart.lineItems.edges) {
         return this.$store.state.cart.lineItems.edges
       }
@@ -85,7 +117,12 @@ export default Vue.extend({
           newUrl: 'us.organicbasics.com'
         }
       ]
-      console.log(this.$store.state.cart)
+      if(this.$store.state.cart.lineItems) {
+        this.$store.state.cart.lineItems.edges.forEach((a) => {
+          console.log(a.node.discountAllocations)
+          console.log(a.node.customAttributes)
+        })
+      }
       if(!this.$store.state.cart.webUrl) {
         return '#'
       }
