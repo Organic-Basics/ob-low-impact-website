@@ -41,15 +41,18 @@ export default Vue.extend({
 <style lang="scss">
 @import "~assets/scss/variables.scss";
 
-.index__intro--links {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+.index__intro {
+  padding-top: 100px;
 
-  a {
-    text-decoration: none;
+  .index__intro--links {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    a {
+      text-decoration: none;
+    }
   }
 }
-
 
 </style>

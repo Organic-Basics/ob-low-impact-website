@@ -1,8 +1,8 @@
 <template>
-  <main :class="'container container-carbon--' + carbonIntensity.index + ' ' + $route.name">
+  <main :class="'container container-carbon--' + carbonIntensity.index + ' ' + $route.name" ref="container">
     <button class="read-more" @click="isOverlayOpen = true" v-if="!$route.path.includes('offline')">Read more</button>
 
-    <header class="header" v-if="!$route.path.includes('offline')">
+    <header class="header" v-if="!$route.path.includes('offline')" ref="header">
       <div class="header__menu" @click="isSidebarOpen = true">
         <span></span>
         <span></span>
@@ -59,8 +59,19 @@ export default Vue.extend({
     })
     this.saveEntries()
   },
+  created() {
+    if(process.client) {
+      window.addEventListener('scroll', this.handleStickyHeader)
+    }
+
+  },
   updated() {
     this.saveEntries()
+  },
+  destroyed() {
+    if(process.client) {
+      window.removeEventListener('scroll', this.handleStickyHeader)
+    }
   },
   data: () => {
     return {
@@ -136,6 +147,17 @@ export default Vue.extend({
         this.currentBytes = 0
       }
       console.log('transferredObjects: ' + this.transferredObjects.length)
+    },
+    handleStickyHeader: function() {
+      let header = this.$refs.header
+      let headerOffset = header.offsetTop
+      let headerHeight = header.offsetHeight
+
+      if(headerOffset > headerHeight) {
+        header.classList.add('header--sticky')
+      } else {
+        header.classList.remove('header--sticky')
+      }
     }
   },
   computed: {
@@ -245,11 +267,6 @@ section {
 
   &.locale-products-handle {
     background: #fff;
-
-    .header {
-      position: absolute;
-      top: 0;
-    }
   }
 }
 
@@ -274,8 +291,9 @@ section {
   justify-content: space-between;
   margin: 0;
   padding: 10px;
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
   width: 100vw;
 
   .header__menu {
@@ -314,6 +332,11 @@ section {
       font-size: 10px;
     }
   }
+}
+
+.header--sticky {
+  background: #fff;
+  transition: .2s;
 }
 
 .read-more {
