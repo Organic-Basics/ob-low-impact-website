@@ -29,7 +29,6 @@ import gql from 'graphql-tag'
 import Manifesto from '~/components/Manifesto.vue'
 import ImpactMeter from '~/components/ImpactMeter.vue'
 
-
 export default Vue.extend({
   components: {
     Manifesto,
@@ -41,15 +40,18 @@ export default Vue.extend({
 <style lang="scss">
 @import "~assets/scss/variables.scss";
 
-.index__intro--links {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+.index__intro {
+  padding-top: 100px;
 
-  a {
-    text-decoration: none;
+  .index__intro--links {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    a {
+      text-decoration: none;
+    }
   }
 }
-
 
 </style>

@@ -2,7 +2,7 @@
 <div class="page--offline">
 	<header>
 		<logo/>
-  	<h3 class="offline__carbon">The low impact website is currently offline.</h3>
+  	<h3 class="offline-header__title">The low impact website is currently offline.</h3>
 	</header>
   <div class="offline__main">
   	<ImpactMeter/>
@@ -71,31 +71,26 @@ export default Vue.extend({
 
 	header {
 		max-width: 90vw;
-	}
 
-	.offline__main {
-		padding-top: 30px;
+		.logo {
+			margin-top: 10px;
+		}
 
-		svg {
-			padding: 0 map-get($mobile, "sidePadding");
+		.offline-header__title {
+			margin: 5vh auto;
+			color: map-get($colors, 'carbonHigh');
 		}
 	}
 
-	h3 {
-		padding: 0 10px;
-		margin-top: 25px;
-	}
+	.offline__main {
+		svg, p {
+			padding: 0 map-get($mobile, "sidePadding");
+		}
 
-	h5 {
-		margin-bottom: 40px;
-	}
-
-	p {
-		padding: 0 map-get($mobile, "sidePadding");
-	}
-
-	.offline__carbon {
-		color: map-get($colors, 'carbonHigh');
+		.offline__carbon {
+			color: map-get($colors, 'carbonHigh');
+			margin-bottom: 35px;
+		}
 	}
 }
 </style>
