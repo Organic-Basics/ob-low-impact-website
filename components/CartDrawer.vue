@@ -6,35 +6,37 @@
     </header>
     <main class="cart-drawer__items">
       <div v-for="(item) in cleanCart" class="cart-drawer__item">
-        <img class="item__image" :src="item.node.variant.image.src" :alt="item.node.title">
+        <div class="item__image"></div>
         <div class="item__text-container">
           <h6 class="item__heading">{{item.node.title}}</h6>
           <div class="item__details">
             <div class="cart-drawer__quantity">
-              <h6 class="quant--decrement" @click="updateLineItem(item.node.variant.id, item.node.quantity - 1)">–</h6>
+              <h6 class="quant--decrement" @click="updateLineItem(item, -1)">–</h6>
               <span>{{item.node.quantity}}</span>
-              <h6 class="quant--increment" @click="updateLineItem(item.node.variant.id, item.node.quantity + 1)">+</h6>
+              <h6 class="quant--increment" @click="updateLineItem(item, 1)">+</h6>
               <h6>{{item.node.variant.title}}</h6>
             </div>
-            <h6>{{item.node.variant.price}}</h6>
+            <h6>{{ fetchComparePrice(item) !== 0 ? fetchComparePrice(item) : formatPrice(item.node.variant.priceV2, item.node.quantity) }}</h6>
           </div>
           <div class="item__discount">
-            <span>Insert discount message</span>
-            <span class="item__price--compare">compareAtPrice</span>
+            <span v-if="item.node.customAttributes.some((a) => (a.key === 'Bundle')) && fetchComparePrice(item) !== 0">
+              {{item.node.customAttributes.find((a) => (a.key === 'Bundle')).value}}
+            </span>
+            <span class="item__price--compare" v-if="fetchComparePrice(item) !== 0">{{ formatPrice(item.node.variant.priceV2, item.node.quantity) }}</span>
           </div>
         </div>
       </div>
     </main>
     <footer class="cart-drawer__footer">
-      <h6 class="footer__text--discount">
-        <span>Total discount:</span>
-        <span>xxxxx</span>
+      <h6 class="footer__text--discount" v-if="getDiscount($store.state.cart.lineItemsSubtotalPrice, $store.state.cart.totalPriceV2).amount !== '0.00'">
+        <span>Total discount: {{formatPrice(getDiscount($store.state.cart.lineItemsSubtotalPrice, $store.state.cart.totalPriceV2)) }}</span>
+        <span class="footer__text--subtotal">{{formatPrice($store.state.cart.lineItemsSubtotalPrice)}}</span>
       </h6>
-      <h6 class="footer__text--subtotal">
+      <h6 class="footer__text--total">
         <span>Subtotal</span>
-        <span>xxxx</span>
+        <span>{{formatPrice($store.state.cart.totalPriceV2)}}</span>
       </h6>
-      <a :href="cleanCheckout"><button class="cart-drawer__checkout">Checkout</button></a>
+      <a :href="cleanCheckoutURL"><button class="cart-drawer__checkout">Checkout</button></a>
     </footer>
   </div>
 </template>
@@ -51,14 +53,73 @@ export default Vue.extend({
     closeDrawer: function () {
       this.$emit('closed', true)
     },
-    updateLineItem: function (variantId, quantity) {
+    updateLineItem: function (item, quantity) {
+      let totalQuantity = quantity
+      for(let cartItem of this.cleanCart) {
+        if(item.node.variant.id === cartItem.node.variant.id &&
+        JSON.stringify(item.node.customAttributes) == JSON.stringify(cartItem.node.customAttributes)) {
+          totalQuantity += cartItem.node.quantity
+        }
+      }
       this.$store.dispatch('updateLineItem',
-        {variantId: variantId, quantity: quantity}
+        {variantId: item.node.variant.id, quantity: totalQuantity, customAttributes: item.node.customAttributes.map((attr) => ({key: attr.key, value: attr.value}))}
       )
+    },
+    formatPrice: function (price, quantity) {
+      if(price !== undefined) {
+        if(price.amount && price.currencyCode) {
+          if(!quantity) {
+            quantity = 1
+          }
+          let amount = parseInt(price.amount) * quantity
+          let newPrice = new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: price.currencyCode
+          }).format(amount)
+
+          if(price.currencyCode === 'DKK') newPrice = newPrice.replace('.00', '')
+          return newPrice
+        }
+        else {
+          return ''
+        }
+      }
+      else {
+        return ''
+      }
+    },
+    fetchComparePrice: function(item) {
+      if(item.node.discountAllocations.length > 0) {
+        let discountAmount = parseFloat(item.node.discountAllocations[0].allocatedAmount.amount) / item.node.quantity
+        let originalAmount = parseFloat(item.node.variant.priceV2.amount)
+        // Must be a string
+        let newPrice = {
+          amount: (originalAmount - discountAmount) + '',
+          currencyCode: item.node.variant.priceV2.currencyCode
+        }
+        return this.formatPrice(newPrice, item.node.quantity)
+      }
+      else {
+        return 0
+      }
+    },
+    getDiscount: function(subtotal, total) {
+      if(subtotal && total) {
+        let subtotalAmount = parseFloat(subtotal.amount)
+        let totalAmount = parseFloat(total.amount)
+        let discount = subtotalAmount - totalAmount
+        return {
+          amount: discount.toFixed(2),
+          currencyCode: total.currencyCode
+        }
+      }
+      else {
+        return ''
+      }
     }
   },
   computed: {
-    cleanCart() {
+    cleanCart: function() {
       if(this.$store.state.cart && this.$store.state.cart.lineItems && this.$store.state.cart.lineItems.edges) {
         return this.$store.state.cart.lineItems.edges
       }
@@ -66,7 +127,7 @@ export default Vue.extend({
         return []
       }
     },
-    cleanCheckout: function() {
+    cleanCheckoutURL: function() {
       let checkoutUrls = [
         {
           oldUrl: 'aoftd.myshopify.com',
@@ -85,6 +146,7 @@ export default Vue.extend({
           newUrl: 'us.organicbasics.com'
         }
       ]
+
       if(!this.$store.state.cart.webUrl) {
         return '#'
       }
@@ -145,8 +207,9 @@ export default Vue.extend({
     padding: 0 0 10px;
 
     .cart-drawer__close {
-      transform: rotate(45deg);
+      cursor: pointer;
       font-size: 33px;
+      transform: rotate(45deg);
     }
   }
 
@@ -204,6 +267,10 @@ export default Vue.extend({
       align-items: center;
       font-size: 14px;
 
+      h6 {
+        cursor: pointer;
+      }
+
       .quant--decrement, .quant--increment, span {
         padding: 5px 10px;
       }
@@ -254,8 +321,12 @@ export default Vue.extend({
       }
     }
 
-    .footer__text--subtotal {
+    .footer__text--total {
       font-weight: bold;
+    }
+
+    .footer__text--subtotal {
+      text-decoration: line-through;
     }
 
     .cart-drawer__checkout {

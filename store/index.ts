@@ -38,7 +38,8 @@ export const getters: GetterTree<RootState, RootState> = {
     state.cart.lineItems.edges.forEach((a:any) => {
       cartIds.push({
         variantId: a.node.variant.id,
-        quantity: a.node.quantity
+        quantity: a.node.quantity,
+        customAttributes: a.node.customAttributes.map((attr:any) => ({key: attr.key, value: attr.value}))
       })
     })
     return cartIds
@@ -71,9 +72,15 @@ export const actions: ActionTree<RootState, RootState> = {
 	            ... on Checkout {
 	              webUrl
                 orderStatusUrl
-	              subtotalPrice
+                lineItemsSubtotalPrice {
+                  amount
+                  currencyCode
+                }
 	              totalTax
-	              totalPrice
+	              totalPriceV2 {
+                  amount
+                  currencyCode
+                }
 	              lineItems (first:20) {
 	                edges {
 	                  node {
@@ -81,12 +88,28 @@ export const actions: ActionTree<RootState, RootState> = {
 	                    variant {
 	                      title
                         id
+                        product {
+                          handle
+                        }
 	                      image {
 	                        src
 	                      }
-	                      price
+	                      priceV2 {
+                          amount
+                          currencyCode
+                        }
 	                    }
 	                    quantity
+                      customAttributes {
+                        key
+                        value
+                      }
+                      discountAllocations {
+                        allocatedAmount {
+                          amount
+                          currencyCode
+                        }
+                      }
 	                  }
 	                }
 	              }
@@ -152,13 +175,15 @@ export const actions: ActionTree<RootState, RootState> = {
     }
     if(client) {
 
-      // Remove the variant we're changing quantity for, because we want to maybe remove it
-      let cartIds = store.getters.cartIds.filter((a:any) => {
-        return a.variantId !== data.variantId
+      // Filter out the variant we're changing quantity for, because we want to maybe remove it
+      let cartIds = store.getters.cartIds
+      cartIds = cartIds.filter((a:any) => {
+        return a.variantId !== data.variantId || JSON.stringify(a.customAttributes) != JSON.stringify(data.customAttributes)
       })
+
       // If the new quantity is not 0, merge it
       if(data.quantity !== 0) {
-        cartIds = [...cartIds, ...[{variantId: data.variantId, quantity: data.quantity}]]
+        cartIds = [...cartIds, ...[{variantId: data.variantId, quantity: data.quantity, customAttributes: data.customAttributes}]]
       }
 
       try {
