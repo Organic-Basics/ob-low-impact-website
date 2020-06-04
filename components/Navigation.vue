@@ -9,8 +9,12 @@
     <!-- Desktop links -->
     <div class="menu--desktop">
       <ul class="menu__links--desktop links--left">
-        <li @mouseover="hoverWomens=true" @mouseleave="hoverWomens=false">Shop women</li>
-        <li @mouseover="hoverMens=true" @mouseleave="hoverMens=false">Shop men</li>
+        <li @mouseover="hoverWomens=true" @mouseleave="hoverWomens=false" @click="hoverWomens=false">
+          <nuxt-link :to="`/${$store.state.activeCurrency}/collections/all-womens-products`">Shop Women</nuxt-link>
+        </li>
+        <li @mouseover="hoverMens=true" @mouseleave="hoverMens=false" @click="hoverMens=false">
+          <nuxt-link :to="`/${$store.state.activeCurrency}/collections/all-mens-products`">Shop Men</nuxt-link>
+        </li>
       </ul>
       <nuxt-link :to="'/' + $store.state.activeCurrency" class="header__logo">
         <Logo />
@@ -169,6 +173,10 @@ export default Vue.extend({
       padding: 0;
       width: 255px;
 
+      @include screenSizes(tabletPortrait) {
+        display: none;
+      }
+
       &.links--left {
         justify-content: flex-end;
       }
@@ -198,7 +206,7 @@ export default Vue.extend({
 
   .menu__dropdown--men, .menu__dropdown--women {
     width: 100vw;
-    height: calc(100vh - 54px);
+    height: 70vh;
     top: 54px;
     left: 0;
     overflow: scroll;

@@ -33,15 +33,24 @@ export default Vue.extend({
 
 <style lang="scss">
 @import "~assets/scss/variables.scss";
+@import "~assets/scss/mixins.scss";
 
 .product {
   border-bottom: 1px solid #fff;
   display: flex;
   flex-direction: column;
-  flex: 33%;
   margin: 0 10px 15px 0;
   padding-bottom: 15px;
-  max-width: 50%;
+  width: 23%;
+
+  @include screenSizes(tabletPortrait) {
+    width: 30%;
+  }
+
+  @include screenSizes(phone) {
+    // width: 50%;
+    flex-basis: calc(50% - 20px);
+  }
 
   img {
     width: 100%;

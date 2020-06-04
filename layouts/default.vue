@@ -332,13 +332,18 @@ section {
 }
 
 .container {
-  margin: 0 auto 20px;
+  margin: 0;
   min-height: calc(100vh - 40px);
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
   text-align: center;
+  padding-top: 90px;
+
+  // @include screenSizes(tabletPortrait) {
+  //   margin: 0 auto 20px;
+  // }
 
   // Animations are only allowed on very low carbon intensity
   &.container-carbon--low *, &.container-carbon--moderate *, &.container-carbon--high * {
