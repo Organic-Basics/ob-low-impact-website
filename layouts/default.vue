@@ -13,7 +13,9 @@
       </nuxt-link>
       <div class="header__cart" @click="isCartOpen = true">
         <CartIcon />
-        <span class="header__cart-count">{{ cartCount }}</span>
+        <div class="header__cart-count">
+          <span>{{ cartCount }}</span>
+        </div>
       </div>
     </header>
     <nuxt />
@@ -162,6 +164,7 @@ export default Vue.extend({
   },
   computed: {
     cartCount: function() {
+      console.log(this.$store.state.cart)
       if(!this.$store.state.cart.lineItems || !this.$store.state.cart.lineItems.edges.length) {
         return 0
       }
@@ -324,12 +327,18 @@ section {
 
   .header__cart {
     cursor: pointer;
+    position: relative;
 
     .header__cart-count {
-      position: absolute;
-      top: 20px;
-      right: 20px;
+      align-items: center;
+      display: flex;
       font-size: 10px;
+      font-weight: bold;
+      height: 100%;
+      justify-content: center;
+      position: absolute;
+      top: 1px;
+      width: 100%;
     }
   }
 }

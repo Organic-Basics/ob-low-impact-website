@@ -72,9 +72,15 @@ export const actions: ActionTree<RootState, RootState> = {
 	            ... on Checkout {
 	              webUrl
                 orderStatusUrl
-	              subtotalPrice
+                lineItemsSubtotalPrice {
+                  amount
+                  currencyCode
+                }
 	              totalTax
-	              totalPrice
+	              totalPriceV2 {
+                  amount
+                  currencyCode
+                }
 	              lineItems (first:20) {
 	                edges {
 	                  node {
@@ -82,6 +88,9 @@ export const actions: ActionTree<RootState, RootState> = {
 	                    variant {
 	                      title
                         id
+                        product {
+                          handle
+                        }
 	                      image {
 	                        src
 	                      }
@@ -166,9 +175,10 @@ export const actions: ActionTree<RootState, RootState> = {
     }
     if(client) {
 
-      // Remove the variant we're changing quantity for, because we want to maybe remove it
-      let cartIds = store.getters.cartIds.filter((a:any) => {
-        return a.variantId !== data.variantId && a.customAttributes !== data.customAttributes
+      // Filter out the variant we're changing quantity for, because we want to maybe remove it
+      let cartIds = store.getters.cartIds
+      cartIds = cartIds.filter((a:any) => {
+        return a.variantId !== data.variantId || JSON.stringify(a.customAttributes) != JSON.stringify(data.customAttributes)
       })
 
       // If the new quantity is not 0, merge it

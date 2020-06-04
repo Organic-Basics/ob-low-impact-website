@@ -361,13 +361,27 @@ export default Vue.extend({
       this.isAdding = true
       let cartIds = this.$store.getters.cartIds
 
+      let customAttributes = []
+      if(this.bundleData && this.bundleData.tag && this.bundleData.name) {
+        customAttributes = [
+          {
+            key: '_bundle_id',
+            value: this.bundleData.tag
+          },
+          {
+            key: 'Bundle',
+            value: this.bundleData.name
+          }
+        ]
+      }
+
       for(let prod of this.products) {
       	// If the product has a switchId, and it's not the active one, skip loop
         if(prod.switchId != 0 && prod.switchId != this.switchId && prod.switchId !== undefined) continue
 
         // If this id is already in the cart, increase the quantity of it before sending to Shopify
         cartIds = cartIds.map((a) => {
-          if(a.variantId === prod.chosenId) {
+          if(a.variantId === prod.chosenId && JSON.stringify(a.customAttributes) == JSON.stringify(customAttributes)) {
             a.quantity += parseInt(this.quantity)
             return a
           }
@@ -378,23 +392,14 @@ export default Vue.extend({
 
         // If this id is not in the cart, add it to the cartIds that are sent to Shopify
         if(!cartIds.some((a) => {
-          return a.variantId === prod.chosenId
+          return a.variantId === prod.chosenId && JSON.stringify(a.customAttributes) == JSON.stringify(customAttributes)
         })) {
           let newCartId = {
             variantId: prod.chosenId,
             quantity: parseInt(this.quantity)
           }
           if(this.bundleData && this.bundleData.tag && this.bundleData.name) {
-            newCartId.customAttributes = [
-              {
-                key: '_bundle_id',
-                value: this.bundleData.tag
-              },
-              {
-                key: 'Bundle',
-                value: this.bundleData.name
-              }
-            ]
+            newCartId.customAttributes = customAttributes
           }
           cartIds = [...cartIds, ...[newCartId]]
 

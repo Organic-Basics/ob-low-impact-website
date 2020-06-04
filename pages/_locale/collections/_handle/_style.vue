@@ -32,6 +32,7 @@ export default Vue.extend({
             handle,
             title,
             id,
+            tags,
             options {
               name,
               values
