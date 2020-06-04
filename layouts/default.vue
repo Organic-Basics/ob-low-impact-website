@@ -1,23 +1,11 @@
 <template>
   <main :class="'container container-carbon--' + carbonIntensity.index + ' ' + $route.name" ref="container">
     <button class="read-more" @click="isOverlayOpen = true" v-if="!$route.path.includes('offline')">Read more</button>
-
-    <header class="header" v-if="!$route.path.includes('offline')" ref="header">
-      <div class="header__menu" @click="isSidebarOpen = true">
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
-      <nuxt-link :to="'/' + $store.state.activeCurrency" class="header__logo">
-        <Logo />
-      </nuxt-link>
-      <div class="header__cart" @click="isCartOpen = true">
-        <CartIcon />
-        <span class="header__cart-count">{{ cartCount }}</span>
-      </div>
-    </header>
+    <Navigation :womenLinks="menuLinks.womens" :menLinks="menuLinks.mens"
+      @openCart="isCartOpen = true" @openSidebar="isSidebarOpen = true" v-if="!$route.path.includes('offline')" />
     <nuxt />
-    <sidebar :open="isSidebarOpen" @closed="isSidebarOpen = false" v-if="!$route.path.includes('offline')"/>
+    <sidebar :open="isSidebarOpen" :womenLinks="menuLinks.womens" :menLinks="menuLinks.mens"
+      @closed="isSidebarOpen = false" v-if="!$route.path.includes('offline')"/>
     <cartDrawer :open="isCartOpen" @closed="isCartOpen = false" v-if="!$route.path.includes('offline')"/>
     <overlay :open="isOverlayOpen" :carbonIntensity="carbonIntensity" :footerData="{currentBytes, currentPage}" @closed="isOverlayOpen = false" v-if="!$route.path.includes('offline')"/>
     <Footer :currentBytes="currentBytes" :currentPage="currentPage" v-if="!$route.path.includes('offline')"/>
@@ -28,13 +16,12 @@
 <script>
 import Vue from 'vue'
 
-import Logo from '~/components/Logo.vue'
-import CartIcon from '~/components/CartIcon.vue'
 import Overlay from '~/components/Overlay.vue'
 import Sidebar from '~/components/Sidebar.vue'
 import CartDrawer from '~/components/CartDrawer.vue'
 import Footer from '~/components/Footer.vue'
 import CookieBar from '~/components/CookieBar.vue'
+import Navigation from '~/components/Navigation.vue'
 
 import * as CO2 from '~/node_modules/@tgwf/co2/src/co2.js'
 const emissions = new CO2()
@@ -42,13 +29,12 @@ const emissions = new CO2()
 export default Vue.extend({
   name: 'default',
   components: {
-    Logo,
+    Navigation,
     Overlay,
     Sidebar,
     CartDrawer,
     Footer,
-    CookieBar,
-    CartIcon
+    CookieBar
   },
   async beforeMount() {
     let dispatch = await this.$store.dispatch('initStore')
@@ -59,19 +45,8 @@ export default Vue.extend({
     })
     this.saveEntries()
   },
-  created() {
-    if(process.client) {
-      window.addEventListener('scroll', this.handleStickyHeader)
-    }
-
-  },
   updated() {
     this.saveEntries()
-  },
-  destroyed() {
-    if(process.client) {
-      window.removeEventListener('scroll', this.handleStickyHeader)
-    }
   },
   data: () => {
     return {
@@ -101,7 +76,145 @@ export default Vue.extend({
         name: '',
         normalSize: 1
       },
-      currentBytes: 0
+      currentBytes: 0,
+      menuLinks: {
+        womens: [
+          {
+            'url' : '/collections/all-womens-products',
+            'name' : 'All Women\'s'
+          },
+          {
+            'url' : '/collections/all-womens-products/style-bras',
+            'name' : 'Bras'
+          },
+          {
+            'url' : '/collections/all-womens-products/style-bottoms',
+            'name' : 'Bottoms'
+          },
+          {
+            'url' : '/collections/all-womens-products/style-tops',
+            'name' : 'Tees & Tops'
+          },
+          {
+            'url' : '/collections/all-womens-products/style-socks',
+            'name' : 'Socks'
+          },
+          {
+            'url' : '/collections/all-womens-products/style-leggings',
+            'name' : 'Leggings'
+          },
+          {
+            'url' : '/collections/womens-accessories',
+            'name' : 'Accessories'
+          },
+          {
+            'url' : '/collections/womens-save-with-packs',
+            'name' : 'Save with packs'
+          },
+          {
+            'url' : '/products/e-gift-card',
+            'name' : 'Gift Cards'
+          },
+          {
+            'url' : '/collections/climate-credits',
+            'name' : 'Climate credits'
+          },
+          {
+            'url' : '/collections/womens-theme-basics',
+            'name' : 'Basics'
+          },
+          {
+            'url' : '/collections/womens-theme-activewear',
+            'name' : 'Activewear'
+          },
+          {
+            'url' : '/collections/womens-theme-invisible',
+            'name' : 'Invisible'
+          },
+          {
+            'url' : '/collections/womens-theme-recycled-materials',
+            'name' : 'Recycled materials'
+          },
+          {
+            'url' : '/collections/womens-theme-organic-cotton',
+            'name' : 'Organic cotton'
+          },
+          {
+            'url' : '/collections/womens-recycled-cashmere-winter-accessories',
+            'name' : 'Recycled cashmere'
+          },
+          {
+            'url' : '/collections/womens-theme-tencel',
+            'name' : 'TENCEL™'
+          },
+          {
+            'url' : '/collections/womens-theme-silvertech',
+            'name' : 'SilverTech™'
+          }
+        ],
+        mens: [
+          {
+            'url' : '/collections/all-mens-products',
+            'name' : 'All men\'s'
+          },
+          {
+            'url' : '/collections/all-mens-products/style-bottoms',
+            'name' : 'Underwear'
+          },
+          {
+            'url' : '/collections/all-mens-products/style-socks',
+            'name' : 'Socks'
+          },
+          {
+            'url' : '/collections/all-mens-products/style-tops',
+            'name' : 'Tees & Tops'
+          },
+          {
+            'url' : '/collections/mens-accessories',
+            'name' : 'Accessories'
+          },
+          {
+            'url' : '/collections/mens-save-with-packs',
+            'name' : 'Save with packs'
+          },
+          {
+            'url' : '/products/e-gift-card',
+            'name' : 'Gift cards'
+          },
+          {
+            'url' : '/collections/climate-credits',
+            'name' : 'Climate credits'
+          },
+          {
+            'url' : '/collections/mens-theme-basics',
+            'name' : 'Basics'
+          },
+          {
+            'url' : '/collections/mens-theme-activewear',
+            'name' : 'Activewear'
+          },
+          {
+            'url' : '/collections/mens-theme-recycled-materials',
+            'name' : 'Recycled materials'
+          },
+          {
+            'url' : '/collections/mens-theme-organic-cotton',
+            'name' : 'Organic cotton'
+          },
+          {
+            'url' : '/collections/mens-recycled-cashmere-winter-accessories',
+            'name' : 'Recycled cashmere'
+          },
+          {
+            'url' : '/collections/mens-theme-tencel',
+            'name' : 'TENCEL™'
+          },
+          {
+            'url' : '/collections/mens-theme-silvertech',
+            'name' : 'SilverTech™'
+          }
+        ]
+      }
     }
   },
   watch: {
@@ -147,32 +260,9 @@ export default Vue.extend({
         this.currentBytes = 0
       }
       console.log('transferredObjects: ' + this.transferredObjects.length)
-    },
-    handleStickyHeader: function() {
-      let header = this.$refs.header
-      let headerOffset = header.offsetTop
-      let headerHeight = header.offsetHeight
-
-      if(headerOffset > headerHeight) {
-        header.classList.add('header--sticky')
-      } else {
-        header.classList.remove('header--sticky')
-      }
     }
   },
   computed: {
-    cartCount: function() {
-      if(!this.$store.state.cart.lineItems || !this.$store.state.cart.lineItems.edges.length) {
-        return 0
-      }
-      else {
-        let cartCount = 0
-        this.$store.state.cart.lineItems.edges.forEach((a) => {
-          cartCount += a.node.quantity
-        })
-        return cartCount
-      }
-    },
     totalBytes: function() {
       if(this.transferredObjects.length > 0) {
         return this.transferredObjects.reduce((acc, cur) => {
@@ -283,60 +373,6 @@ section {
   font-size: 42px;
   word-spacing: 5px;
   padding-bottom: 15px;
-}
-
-.header {
-  align-items: center;
-  display: flex;
-  justify-content: space-between;
-  margin: 0;
-  padding: 10px;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-
-  .header__menu {
-    cursor: pointer;
-    display: block;
-    height: 18px;
-    position: relative;
-    width: 20px;
-
-    span {
-      background: map-get($colors, 'black');
-      display: block;
-      height: 2px;
-      left: 0;
-      position: absolute;
-      top: 0;
-      width: 20px;
-
-      &:first-child {
-        transform: translateY(12px);
-      }
-
-      &:last-child {
-        transform: translateY(6px);
-      }
-    }
-  }
-
-  .header__cart {
-    cursor: pointer;
-
-    .header__cart-count {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      font-size: 10px;
-    }
-  }
-}
-
-.header--sticky {
-  background: #fff;
-  transition: .2s;
 }
 
 .read-more {

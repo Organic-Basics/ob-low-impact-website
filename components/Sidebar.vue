@@ -14,12 +14,12 @@
     <section class="sidebar__body text--left">
       <div class="sidebar__body--women">
         <nuxt-link :to="`/${$store.state.activeCurrency}/collections/all-womens-products`" @click.native="closeSidebar()"><h2>Shop Women</h2></nuxt-link>
-        <nuxt-link v-for="(link, index) in womensLinks" :key="index" :to="`/${$store.state.activeCurrency}${link.url}`" @click.native="closeSidebar()"><h3>{{link.name}}</h3></nuxt-link>
+        <nuxt-link v-for="(link, index) in womenLinks" :key="index" :to="`/${$store.state.activeCurrency}${link.url}`" @click.native="closeSidebar()"><h3>{{link.name}}</h3></nuxt-link>
       </div>
 
       <div class="sidebar__body--men">
         <nuxt-link :to="`/${$store.state.activeCurrency}/collections/all-mens-products`" @click.native="closeSidebar()"><h2>Shop Men</h2></nuxt-link>
-        <nuxt-link v-for="(link, index) in mensLinks" :key="index" :to="`/${$store.state.activeCurrency}${link.url}`" @click.native="closeSidebar()"><h3>{{link.name}}</h3></nuxt-link>
+        <nuxt-link v-for="(link, index) in menLinks" :key="index" :to="`/${$store.state.activeCurrency}${link.url}`" @click.native="closeSidebar()"><h3>{{link.name}}</h3></nuxt-link>
       </div>
     </section>
 
@@ -36,147 +36,9 @@ export default Vue.extend({
     Logo
   },
   props: {
-    open: Boolean
-  },
-  data() {
-    return {
-      womensLinks: [
-        {
-          'url' : '/collections/all-womens-products',
-          'name' : 'All Women\'s'
-        },
-        {
-          'url' : '/collections/all-womens-products/style-bras',
-          'name' : 'Bras'
-        },
-        {
-          'url' : '/collections/all-womens-products/style-bottoms',
-          'name' : 'Bottoms'
-        },
-        {
-          'url' : '/collections/all-womens-products/style-tops',
-          'name' : 'Tees & Tops'
-        },
-        {
-          'url' : '/collections/all-womens-products/style-socks',
-          'name' : 'Socks'
-        },
-        {
-          'url' : '/collections/all-womens-products/style-leggings',
-          'name' : 'Leggings'
-        },
-        {
-          'url' : '/collections/womens-accessories',
-          'name' : 'Accessories'
-        },
-        {
-          'url' : '/collections/womens-save-with-packs',
-          'name' : 'Save with packs'
-        },
-        {
-          'url' : '/products/e-gift-card',
-          'name' : 'Gift Cards'
-        },
-        {
-          'url' : '/collections/climate-credits',
-          'name' : 'Climate credits'
-        },
-        {
-          'url' : '/collections/womens-theme-basics',
-          'name' : 'Basics'
-        },
-        {
-          'url' : '/collections/womens-theme-activewear',
-          'name' : 'Activewear'
-        },
-        {
-          'url' : '/collections/womens-theme-invisible',
-          'name' : 'Invisible'
-        },
-        {
-          'url' : '/collections/womens-theme-recycled-materials',
-          'name' : 'Recycled materials'
-        },
-        {
-          'url' : '/collections/womens-theme-organic-cotton',
-          'name' : 'Organic cotton'
-        },
-        {
-          'url' : '/collections/womens-recycled-cashmere-winter-accessories',
-          'name' : 'Recycled cashmere'
-        },
-        {
-          'url' : '/collections/womens-theme-tencel',
-          'name' : 'TENCEL™'
-        },
-        {
-          'url' : '/collections/womens-theme-silvertech',
-          'name' : 'SilverTech™'
-        }
-      ],
-      mensLinks: [
-        {
-          'url' : '/collections/all-mens-products',
-          'name' : 'All men\'s'
-        },
-        {
-          'url' : '/collections/all-mens-products/style-bottoms',
-          'name' : 'Underwear'
-        },
-        {
-          'url' : '/collections/all-mens-products/style-socks',
-          'name' : 'Socks'
-        },
-        {
-          'url' : '/collections/all-mens-products/style-tops',
-          'name' : 'Tees & Tops'
-        },
-        {
-          'url' : '/collections/mens-accessories',
-          'name' : 'Accessories'
-        },
-        {
-          'url' : '/collections/mens-save-with-packs',
-          'name' : 'Save with packs'
-        },
-        {
-          'url' : '/products/e-gift-card',
-          'name' : 'Gift cards'
-        },
-        {
-          'url' : '/collections/climate-credits',
-          'name' : 'Climate credits'
-        },
-        {
-          'url' : '/collections/mens-theme-basics',
-          'name' : 'Basics'
-        },
-        {
-          'url' : '/collections/mens-theme-activewear',
-          'name' : 'Activewear'
-        },
-        {
-          'url' : '/collections/mens-theme-recycled-materials',
-          'name' : 'Recycled materials'
-        },
-        {
-          'url' : '/collections/mens-theme-organic-cotton',
-          'name' : 'Organic cotton'
-        },
-        {
-          'url' : '/collections/mens-recycled-cashmere-winter-accessories',
-          'name' : 'Recycled cashmere'
-        },
-        {
-          'url' : '/collections/mens-theme-tencel',
-          'name' : 'TENCEL™'
-        },
-        {
-          'url' : '/collections/mens-theme-silvertech',
-          'name' : 'SilverTech™'
-        }
-      ]
-    }
+    open: Boolean,
+    womenLinks: Array,
+    menLinks: Array
   },
   methods: {
     closeSidebar: function () {
