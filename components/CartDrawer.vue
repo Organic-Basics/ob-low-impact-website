@@ -90,8 +90,8 @@ export default Vue.extend({
     },
     fetchComparePrice: function(item) {
       if(item.node.discountAllocations.length > 0) {
-        let discountAmount = parseInt(item.node.discountAllocations[0].allocatedAmount.amount)
-        let originalAmount = parseInt(item.node.variant.priceV2.amount)
+        let discountAmount = parseFloat(item.node.discountAllocations[0].allocatedAmount.amount) / item.node.quantity
+        let originalAmount = parseFloat(item.node.variant.priceV2.amount)
         // Must be a string
         let newPrice = {
           amount: (originalAmount - discountAmount) + '',
