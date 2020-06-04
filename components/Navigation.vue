@@ -194,9 +194,13 @@ export default Vue.extend({
 
     .header__cart-count {
       position: absolute;
-      top: 20px;
+      top: 25px;
       right: 20px;
       font-size: 10px;
+
+      @include screenSizes(tabletPortrait) {
+        top: 20px;
+      }
     }
   }
 
