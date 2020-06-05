@@ -26,7 +26,9 @@
     </div>
     <div class="header__cart" @click="openCart()">
       <CartIcon />
-      <span class="header__cart-count">{{ cartCount }}</span>
+      <span class="header__cart-count">
+        <span>{{ cartCount }}</span>
+      </span>
     </div>
 
     <!-- Desktop dropdown -->
@@ -191,16 +193,19 @@ export default Vue.extend({
   .header__cart {
     cursor: pointer;
     margin-left: auto;
+    position: relative;
 
     .header__cart-count {
-      position: absolute;
-      top: 25px;
-      right: 20px;
+      align-items: center;
+      display: flex;
       font-size: 10px;
-
-      @include screenSizes(tabletPortrait) {
-        top: 20px;
-      }
+      font-weight: bold;
+      height: 100%;
+      justify-content: center;
+      position: absolute;
+      top: 2px;
+      right: 0;
+      width: 100%;
     }
   }
 

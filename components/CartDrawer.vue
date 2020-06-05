@@ -319,7 +319,7 @@ export default Vue.extend({
       width: 100vw;
     }
 
-    .footer__text--discount, .footer__text--subtotal {
+    .footer__text--discount, .footer__text--total {
       font-size: 14px;
       display: flex;
       flex-direction: row;
