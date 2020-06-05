@@ -1,30 +1,7 @@
 <template>
   <div class="product__container">
-    <!-- Single product slideshow -->
-    <div v-if="isSingleProduct" class="product__slideshow" @click="showImages()">
-      <div v-html="productIllustration" v-if="!shouldShowImages && productIllustration"></div>
-      <div class="product__image-label" v-if="!shouldShowImages">
-        <span class="product__image-label--bold">
-          <span v-if="$store.state.carbonIntensity.intensity.index !== 'high'">Tap to see real photos</span>
-          <span v-else>Real photos unavailable</span>
-        </span>
-        <span>
-          <span v-if="$store.state.carbonIntensity.intensity.index !== 'high'">
-            (~{{ ($store.state.carbonIntensity.intensity.index === 'very low' ? highResCost : lowResCost).toFixed(2)}}g CO2)
-          </span>
-          <span v-else>
-            (Our server energy mix needs to be more green)
-          </span>
-        </span>
-      </div>
-      <div v-for="(image, index) in mainProduct.images.edges">
-        <img :src="shouldShowImages ? image.node.transformedSrc : ''" v-if="shouldShowImages">
-      </div>
-    </div>
-    <!-- Bundle slideshow -->
-    <div v-if="!isSingleProduct" class="bundle__slideshow">
+    <ProductSlideshow :isSingleProduct="isSingleProduct" :productIllustration="productIllustration" :shouldShowImages="shouldShowImages" @showImages="showImages()" :highResCost="highResCost" :lowResCost="lowResCost" :mainProduct="mainProduct"/>
 
-    </div>
     <!-- Sticky bar -->
     <div class="product__sticky">
       <div class="product__sticky-top">
@@ -71,6 +48,7 @@ import Vue from 'vue'
 import VueApollo from 'vue-apollo'
 import gql from 'graphql-tag'
 import ProductSelect from '~/components/ProductSelect.vue'
+import ProductSlideshow from '~/components/ProductSlideshow.vue'
 
 export default Vue.extend({
 
@@ -83,7 +61,8 @@ export default Vue.extend({
     }
   },
   components: {
-    ProductSelect
+    ProductSelect,
+    ProductSlideshow
   },
   async asyncData({app, params}) {
     try {
@@ -579,6 +558,10 @@ function prepProducts (products, bundleData) {
   color: map-get($colors, 'carbonHigh');
 }
 
+.locale-products-handle {
+  padding-top: 0;
+}
+
 .product__container {
   width:100%;
 
@@ -589,13 +572,11 @@ function prepProducts (products, bundleData) {
 
 
   .product__slideshow {
-    display: flex;
-    overflow-x: scroll;
-    position: relative;
-    width: 100vw;
+    height: 131vw;
 
     .product__image-label {
-      bottom: 25px;
+      top: 110vw;
+      height: fit-content;
       display: flex;
       flex-direction: column;
       position: absolute;
@@ -619,7 +600,7 @@ function prepProducts (products, bundleData) {
     }
 
     svg {
-      width: 100vw;
+      height: 131vw;
 
       *[stroke*="#"] {
         stroke: map-get($colors, 'black') !important;
