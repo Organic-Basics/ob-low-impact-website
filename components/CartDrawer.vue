@@ -146,7 +146,7 @@ export default Vue.extend({
           newUrl: 'us.organicbasics.com'
         }
       ]
-      
+
       if(!this.$store.state.cart.webUrl) {
         return '#'
       }
@@ -166,6 +166,7 @@ export default Vue.extend({
 
 <style lang="scss">
 @import "~assets/scss/variables.scss";
+@import "~assets/scss/mixins.scss";
 
 .cart-drawer {
   align-items: flex-start;
@@ -179,10 +180,22 @@ export default Vue.extend({
   left: 100%;
   padding: 15px;
   top: 0;
-  width: 100vw;
+  width: 400px;
+  right: 0;
+  border-left: 2px solid map-get($colors, 'black');
+
+  @include screenSizes(tabletPortrait) {
+    width: 100vw;
+    border: none;
+  }
 
   &.cart-drawer--true {
-    left: 0%;
+    left: calc(100% - 400px);
+
+    @include screenSizes(tabletPortrait) {
+      left: 0%;
+    }
+
   }
 
   .cart-drawer__header {
@@ -297,19 +310,27 @@ export default Vue.extend({
   }
 
   .cart-drawer__footer {
-    width: 100vw;
+    width: 400px;
     margin-left: -15px;
     border-top: 1px solid map-get($colors, 'black');
     padding-top: 15px;
 
-    .footer__text--discount, .footer__text--total {
+    @include screenSizes(tabletPortrait) {
+      width: 100vw;
+    }
+
+    .footer__text--discount, .footer__text--subtotal {
       font-size: 14px;
       display: flex;
       flex-direction: row;
       justify-content: space-between;
       margin: auto;
-      width: calc(100vw - 30px);
+      width: calc(400px - 30px);
       margin-bottom: 5px;
+
+      @include screenSizes(tabletPortrait) {
+        width: calc(100vw - 30px);
+      }
     }
 
     .footer__text--total {
@@ -327,11 +348,15 @@ export default Vue.extend({
       color: white;
       cursor: pointer;
       font-size: 14px;
-      width: calc(100vw - 30px);
+      width: calc(400px - 30px);
       border: none;
       border-radius: 0;
       font-family: 'Circular';
       margin-top: 15px;
+
+      @include screenSizes(tabletPortrait) {
+        width: calc(100vw - 30px);
+      }
     }
   }
 }

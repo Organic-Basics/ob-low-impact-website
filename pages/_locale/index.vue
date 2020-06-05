@@ -9,11 +9,11 @@
   </section>
 
   <section class="bg--green text--left">
-    <h4>The internet is dirty. Data transfer requires electricity, which creates carbon emissions — and this leads to climate change. The Low Impact website reduces data transfer by up to 96% in comparison to our regular website.</h4>
+    <h4 class="index__desc">The internet is dirty. Data transfer requires electricity, which creates carbon emissions — and this leads to climate change. The Low Impact website reduces data transfer by up to 96% in comparison to our regular website.</h4>
   </section>
 
   <section class="bg--yellow">
-    <h1>The low impact manifesto</h1>
+    <h1 class="manifesto__heading--dramatic">The low impact manifesto</h1>
 
     <h4 class="text--black">A Low Impact website:</h4>
     <Manifesto />
@@ -39,17 +39,43 @@ export default Vue.extend({
 
 <style lang="scss">
 @import "~assets/scss/variables.scss";
+@import "~assets/scss/mixins.scss";
 
-.index__intro {
-  padding-top: 100px;
+.index {
+  width: 100%;
 
-  .index__intro--links {
+  .index__intro {
+    padding-top: 100px;
+
+    .index__intro--links {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+
+      a {
+        text-decoration: none;
+      }
+    }
+  }
+
+  .index__desc {
+    width: 40vw;
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+    flex-direction: row;
+    margin-right: 7vw;
+    max-width: 435px;
 
-    a {
-      text-decoration: none;
+    @include screenSizes(tabletPortrait) {
+      margin: auto;
+      width: auto;
+    }
+  }
+
+  .manifesto__heading--dramatic {
+    margin-bottom: 90px;
+
+    @include screenSizes(phone) {
+      margin-bottom: 50px;
     }
   }
 }

@@ -38,6 +38,7 @@ export default Vue.extend({
 </script>
 
 <style lang="scss">
+@import "~assets/scss/mixins.scss";
 
 .spedometer__container {
   position: relative;
@@ -78,7 +79,12 @@ export default Vue.extend({
   }
 
   #speedometer {
-    width: 90%;
+    width: 40vw;
+    max-width: 600px;
+
+    @include screenSizes(phone) {
+      width: 90%;
+    }
 
     .container-carbon--very-low & #speedometer__needle {
       transform: rotate(45deg);

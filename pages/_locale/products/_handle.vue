@@ -573,6 +573,7 @@ function prepProducts (products, bundleData) {
 
 <style lang="scss">
 @import "~assets/scss/variables.scss";
+@import "~assets/scss/mixins.scss";
 
 .container-carbon--high .product__image-label {
   color: map-get($colors, 'carbonHigh');
@@ -645,6 +646,11 @@ function prepProducts (products, bundleData) {
     transition: transform .3s ease-in-out;
     transition: transform .3s ease-in-out,-webkit-transform .3s ease-in-out;
     width: 100vw;
+    display: none;
+
+    @include screenSizes(tabletPortrait) {
+      display: block;
+    }
 
     .product__sticky-top {
       display: flex;
@@ -791,28 +797,45 @@ function prepProducts (products, bundleData) {
 
   .product__content-block {
     background: rgb(167, 143, 122);
-    height: 500px;
-    padding: 5vw 20px;
+    height: 100%;
+    padding: 60px 30px;
     color: #fff;
     width: 100%;
 
+    @include screenSizes(tabletPortrait) {
+      height: 500px;
+      padding: 5vw 20px;
+    }
+
     .content-block__text {
-      justify-content: space-around;
+      justify-content: flex-start;
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
       height: 100%;
 
+      @include screenSizes(tabletPortrait) {
+        flex-direction: column;
+        justify-content: space-around;
+      }
+
       .content-block__title {
-        width: 95%;
+        width: 40%;
         color: #fff;
         font-size: 26px;
+
+        @include screenSizes(tabletPortrait) {
+          width: 95%;
+        }
       }
 
       .content-block__desc {
         font-size: 16px;
         max-width: 350px;
         color: #fff;
-        margin-top: 20px;
+
+        @include screenSizes(tabletPortrait) {
+          margin-top: 20px;
+        }
       }
     }
   }

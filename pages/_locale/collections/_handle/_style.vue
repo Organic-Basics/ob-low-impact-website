@@ -1,9 +1,17 @@
 <template>
   <div class="collection">
-    <h5 class="collection__heading">{{ collectionTitle }}</h5>
-    <div class="product-grid">
-      <gridProduct v-for="(product, index) in products" :key="index" :productData="product.node" />
+    <h3 class="collection__heading">{{ collectionTitle }}</h3>
+    <div class="collection__content">
+      <div class="collection__sidebar">
+        <nuxt-link v-for="(link, index) in menuLinks.womens" :key="index" :to="`/${$store.state.activeCurrency}${link.url}`">
+          <h6>{{link.name}}</h6>
+        </nuxt-link>
+      </div>
+      <div class="product-grid">
+        <gridProduct v-for="(product, index) in products" :key="index" :productData="product.node" />
+      </div>
     </div>
+
   </div>
 </template>
 
@@ -19,6 +27,148 @@ export default Vue.extend({
   },
   head() {
     // WIP: set meta tags for this page
+  },
+  data: () => {
+    return {
+      menuLinks: {
+        womens: [
+          {
+            'url' : '/collections/all-womens-products',
+            'name' : 'All Women\'s'
+          },
+          {
+            'url' : '/collections/all-womens-products/style-bras',
+            'name' : 'Bras'
+          },
+          {
+            'url' : '/collections/all-womens-products/style-bottoms',
+            'name' : 'Bottoms'
+          },
+          {
+            'url' : '/collections/all-womens-products/style-tops',
+            'name' : 'Tees & Tops'
+          },
+          {
+            'url' : '/collections/all-womens-products/style-socks',
+            'name' : 'Socks'
+          },
+          {
+            'url' : '/collections/all-womens-products/style-leggings',
+            'name' : 'Leggings'
+          },
+          {
+            'url' : '/collections/womens-accessories',
+            'name' : 'Accessories'
+          },
+          {
+            'url' : '/collections/womens-save-with-packs',
+            'name' : 'Save with packs'
+          },
+          {
+            'url' : '/products/e-gift-card',
+            'name' : 'Gift Cards'
+          },
+          {
+            'url' : '/collections/climate-credits',
+            'name' : 'Climate credits'
+          },
+          {
+            'url' : '/collections/womens-theme-basics',
+            'name' : 'Basics'
+          },
+          {
+            'url' : '/collections/womens-theme-activewear',
+            'name' : 'Activewear'
+          },
+          {
+            'url' : '/collections/womens-theme-invisible',
+            'name' : 'Invisible'
+          },
+          {
+            'url' : '/collections/womens-theme-recycled-materials',
+            'name' : 'Recycled materials'
+          },
+          {
+            'url' : '/collections/womens-theme-organic-cotton',
+            'name' : 'Organic cotton'
+          },
+          {
+            'url' : '/collections/womens-recycled-cashmere-winter-accessories',
+            'name' : 'Recycled cashmere'
+          },
+          {
+            'url' : '/collections/womens-theme-tencel',
+            'name' : 'TENCEL™'
+          },
+          {
+            'url' : '/collections/womens-theme-silvertech',
+            'name' : 'SilverTech™'
+          }
+        ],
+        mens: [
+          {
+            'url' : '/collections/all-mens-products',
+            'name' : 'All men\'s'
+          },
+          {
+            'url' : '/collections/all-mens-products/style-bottoms',
+            'name' : 'Underwear'
+          },
+          {
+            'url' : '/collections/all-mens-products/style-socks',
+            'name' : 'Socks'
+          },
+          {
+            'url' : '/collections/all-mens-products/style-tops',
+            'name' : 'Tees & Tops'
+          },
+          {
+            'url' : '/collections/mens-accessories',
+            'name' : 'Accessories'
+          },
+          {
+            'url' : '/collections/mens-save-with-packs',
+            'name' : 'Save with packs'
+          },
+          {
+            'url' : '/products/e-gift-card',
+            'name' : 'Gift cards'
+          },
+          {
+            'url' : '/collections/climate-credits',
+            'name' : 'Climate credits'
+          },
+          {
+            'url' : '/collections/mens-theme-basics',
+            'name' : 'Basics'
+          },
+          {
+            'url' : '/collections/mens-theme-activewear',
+            'name' : 'Activewear'
+          },
+          {
+            'url' : '/collections/mens-theme-recycled-materials',
+            'name' : 'Recycled materials'
+          },
+          {
+            'url' : '/collections/mens-theme-organic-cotton',
+            'name' : 'Organic cotton'
+          },
+          {
+            'url' : '/collections/mens-recycled-cashmere-winter-accessories',
+            'name' : 'Recycled cashmere'
+          },
+          {
+            'url' : '/collections/mens-theme-tencel',
+            'name' : 'TENCEL™'
+          },
+          {
+            'url' : '/collections/mens-theme-silvertech',
+            'name' : 'SilverTech™'
+          }
+        ]
+      }
+    }
   },
   // TODO: Fix async data and currency
   async asyncData(ctx) {
@@ -152,16 +302,60 @@ export default Vue.extend({
 </script>
 
 <style lang="scss">
+@import "~assets/scss/mixins.scss";
 
-.collection__heading {
-  margin: 30px auto 20px;
-}
+.collection {
+  padding-left: 30px;
+  padding-right: 30px;
 
-.product-grid {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  max-width: 90vw;
+  @include screenSizes(phone) {
+    padding: 0;
+  }
+
+  .collection__heading {
+    margin: 30px auto 20px;
+    text-align: left;
+    margin-left: calc(30px + 15%);
+
+    @include screenSizes(phone) {
+      text-align: center;
+      margin-left: auto;
+    }
+  }
+
+  .collection__content {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    @include screenSizes(phone) {
+      width: 100vw;
+    }
+
+    .collection__sidebar {
+      padding: 0 20px;
+
+      @include screenSizes(phone) {
+        display: none;
+      }
+    }
+  }
+
+  .product-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    flex-basis: 85%;
+
+    @include screenSizes(phone) {
+      justify-content: space-between;
+      max-width: 100vw;
+      padding-left: 20px;
+      padding-right: 10px;
+      flex-basis: 100%;
+    }
+  }
 }
 
 </style>

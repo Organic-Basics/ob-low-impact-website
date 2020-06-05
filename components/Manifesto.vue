@@ -1,8 +1,10 @@
-<template lang="html">
-  <div>
+<template>
+  <div class="manifesto__container">
     <div class="manifesto__group" v-for="(point, index) in manifestoPoints">
-      <h6 class="text--left"><span><b>{{ index + 1 }}. </b></span>{{ point.description }}</h6>
-      <img :src="point.imgSrc" :alt="point.imgAlt">
+      <div class="manifesto__inner">
+        <h6 class="manifesto__text text--left"><span><b>{{ index + 1 }}. </b></span>{{ point.description }}</h6>
+        <img :src="point.imgSrc" :alt="point.imgAlt">
+      </div>
     </div>
   </div>
 </template>
@@ -72,26 +74,72 @@ export default Vue.extend({
 </script>
 
 <style lang="scss">
+@import "~assets/scss/mixins.scss";
+
+.manifesto__container {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  width: 80vw;
+  max-width: 1200px;
+  margin: 90px auto;
+
+  @include screenSizes(tabletPortrait) {
+    margin: auto;
+  }
+
   .manifesto__group {
-    display: flex;
-    align-items: center;
-    flex-direction: row;
-    justify-content: center;
-    margin: 50px auto;
+    width: 100%;
+    display: inline-flex;
 
-    h6 {
-      max-width: 42%;
-      margin-right: 8%;
+    &:nth-child(3n) {
+      justify-content: flex-start;
+    }
+
+    &:nth-child(3n+2) {
+      justify-content: center;
+    }
+
+    &:nth-child(3n+3) {
+      justify-content: flex-end;
+    }
+
+    @include screenSizes(desktopSmall) {
+      margin: 20px auto;
+    }
+
+    @include screenSizes(phone) {
+      display: flex;
+      align-items: center;
+      flex-direction: row;
+      justify-content: center;
+    }
+
+    .manifesto__inner {
+      align-items: center;
+      display: flex;
+      flex-direction: row;
+
+      .manifesto__text {
+        max-width: 200px;
+        margin-right: 8%;
+      }
+
+      // not working
+      &:nth-child(2n) {
+        flex-direction: row-reverse;
+        background: red;
+
+        // @include screenSizes(tabletPortrait) {
+        //   .manifesto__text {
+        //     max-width: 42%;
+        //     margin-left: 8%;
+        //     margin-right: 0;
+        //   }
+        // }
+      }
     }
   }
+}
 
-  .manifesto__group:nth-of-type(2n) {
-    flex-direction: row-reverse;
-
-    h6 {
-      max-width: 42%;
-      margin-left: 8%;
-      margin-right: 0;
-    }
-  }
 </style>

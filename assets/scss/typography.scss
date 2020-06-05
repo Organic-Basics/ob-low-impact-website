@@ -30,6 +30,10 @@ h2 {
 h3 {
   font-size: 24px;
   font-weight: normal;
+
+  @include screenSizes(phone) {
+    font-size: 18px;
+  }
 }
 
 h4 {
@@ -44,7 +48,7 @@ h5 {
 }
 
 h6 {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: normal;
 }
 

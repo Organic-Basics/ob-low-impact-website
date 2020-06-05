@@ -40,17 +40,25 @@ export default Vue.extend({
 
 <style lang="scss">
 @import "~assets/scss/variables.scss";
+@import "~assets/scss/mixins.scss";
 
 .cookie-bar {
   background: map-get($colors, 'green');
-  bottom: 0px;
   color: map-get($colors, 'cookieText');
-  left: 0;
   padding: 16px map-get($mobile, 'sidePadding');
   position: fixed;
   text-align: left;
   transition: bottom 600ms ease-in-out;
-  width: 100vw;
+  max-width: 590px;
+  width: 100%;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+
+  @include screenSizes(tabletPortrait) {
+    width: 100vw;
+  }
 
   &.cookies-accepted {
     bottom: -120px;
