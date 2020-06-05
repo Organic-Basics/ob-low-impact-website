@@ -9,15 +9,14 @@
       <div v-if="isSingleProd" class="product__main--selection-container">
         <div class="product__main--selection">
           <div class="product__main--option-container">
-            <button @click="$emit('switched')" v-if="propsProduct.switchId != 0 && propsProduct.switchId !== undefined">Switch to {{propsProduct.switchProduct}}</button>
             <!-- Color -->
             <div class="product__main--option product__main--color">
-              <h6 class="product__main--option--title">Color</h6>
+              <h6 class="product__main--option--title">Color<span v-if="propsProduct.chosenColor">: <span class="product__color-choice">{{propsProduct.chosenColor}}</span></span></h6>
               <div class="product__main--option-picker">
                 <span v-for="(color, index) in cleanOptions.color.values" @click="chooseColor(color, propsIdx)"
                   :class="['variant__selector', color === propsProduct.chosenColor ? 'variant--chosen' : '']">
                   <span class="variant__selector--border"></span>
-                  <span :class="'variant__selector--center variant--' + [ color.toLowerCase().split(' ').join('') ]"></span>
+                  <span :class="'variant__selector--center variant--' + color.toLowerCase().split(' ').join('')"></span>
                 </span>
               </div>
             </div>
@@ -41,15 +40,15 @@
         <div class="product__main--selection">
           <div class="product__bundle--container">
             <div class="product__bundle--top">
-              <a href="#"
-                :class="{'product__bundle--title': true, 'product--open':isProdOpen}"
+              <div 
+                :class="{'product__bundle--title': true, 'product--open':propsProduct.isProdOpen}"
                 @click="toggleBundleProd()">
                 <!-- Title -->
                 <div class="product__bundle--left-desktop">
                   <div class="product__bundle--title-left">
                     <span class="product__bundle--title-left-main">
-                      <span class="product__bundle--circle">
-                        <span class="product__bundle--index">1</span>
+                      <span :class="'product__bundle--circle variant--' + (!propsProduct.chosenColor ? '' : propsProduct.chosenColor.toLowerCase().split(' ').join('') + ' product__circle--active')">
+                        <span class="product__bundle--index">{{propsProduct.listIndex + 1}}</span>
                       </span>
                       <span class="product__bundle--check"></span>
                       <span class="product__bundle--plus"></span>
@@ -57,13 +56,14 @@
                     <h5 class="product__bundle--title-txt-mobile">{{propsProduct.title}}</h5>
                   </div>
                 </div>
-              </a>
+              </div>
               <!-- Info | Summary -->
               <div @click="toggleBundleTabs()"
                 class="product__bundle--title-right product__choice--summary">
-                  <span class="product__bundle--choice-color"></span>
-                  <span class="product__bundle--choice-size"></span>
-                  <span class="product__mobile--more-info" :class="{'closed': !isProdOpen}">
+                  <span class="product__bundle--choice-color" v-if="!propsProduct.isProdOpen">{{propsProduct.chosenColor}}</span>
+                  <span v-if="propsProduct.chosenColor && propsProduct.chosenSize && !propsProduct.isProdOpen"> / </span>
+                  <span class="product__bundle--choice-size" v-if="!propsProduct.isProdOpen">{{propsProduct.chosenSize}}</span>
+                  <span class="product__mobile--more-info" :class="{'closed': !propsProduct.isProdOpen}">
                     <span class="product__mobile--more-info-txt">{{ !isTabOpen ? 'Info' : 'Close'}}</span>
                     <span class="product__mobile--circle">
                       <span v-if="!isTabOpen" class="product__mobile--plus">+</span>
@@ -74,10 +74,11 @@
             </div>
             <!-- Accordion option container -->
             <div class="product__main--option-container"
-              :class="(isProdOpen && !isTabOpen) ? 'open' : 'closed'">
+              :class="(propsProduct.isProdOpen && !isTabOpen) ? 'open' : 'closed'">
+              <span class="product__bundle-switch" @click="switchProduct" v-if="propsProduct.switchId != 0 && propsProduct.switchId !== undefined">Switch to {{propsProduct.switchProduct.title}}</span>
               <!-- Color -->
               <div class="product__main--option product__main--color">
-                <span class="product__main--option--title product__main--option--mobile">Color</span>
+                <span class="product__main--option--title product__main--option--mobile">Color<span v-if="propsProduct.chosenColor">: <span class="product__color-choice">{{propsProduct.chosenColor}}</span></span></span>
                 <div class="product__main--option-picker">
                   <span v-for="(color, index) in cleanOptions.color.values" @click="chooseColor(color, propsIdx)"
                     :class="['variant__selector', color === propsProduct.chosenColor ? 'variant--chosen' : '']">
@@ -100,7 +101,7 @@
             </div>
             <!-- Product tabs -->
             <div class="product__mobile--tabs" :class="isTabOpen ? 'open' : 'closed'">
-              <ProductTabs  :propsProduct="propsProduct" />
+              <ProductTabs :propsProduct="propsProduct" />
             </div>
 
           </div>
@@ -172,7 +173,6 @@ export default Vue.extend({
   },
   data () {
     return {
-      isProdOpen: false,
       isTabOpen: false
     }
   },
@@ -238,8 +238,15 @@ export default Vue.extend({
       if(currencyCode === 'DKK') price = price.replace('.00', '')
       return price
     },
+    switchProduct() {
+      this.$emit('switched')
+      this.propsProduct.switchProduct.isProdOpen = true
+    },
     toggleBundleProd() {
-      this.isProdOpen = !this.isProdOpen
+      console.log('toggggle')
+      this.$emit('productToggled', {
+        idx: this.propsIdx
+      })
     },
     toggleBundleTabs() {
       this.isTabOpen = !this.isTabOpen
@@ -290,6 +297,10 @@ export default Vue.extend({
           .product__main--option--title {
             border-bottom: 1px solid map-get($colors, 'brand');
             padding: 1rem 0 .5rem;
+          }
+
+          .product__color-choice {
+            color: map-get($colors, 'brand');
           }
 
           .product__main--option-picker {
@@ -369,6 +380,11 @@ export default Vue.extend({
           display: none !important;
         }
 
+        .product__bundle-switch {
+          color: map-get($colors, 'darkGrey');
+          margin-top: 10px;
+        }
+
         .product__bundle--top {
           display: flex;
           flex-direction: row;
@@ -407,6 +423,15 @@ export default Vue.extend({
           width: 26.5px;
           font-size: 17px;
 
+          &.product__circle--active {
+            border: none;
+            color: #fff;
+
+            &.variant--white {
+              color: map-get($colors, 'black');
+            }
+          }
+
           .product__bundle--index {
             display: inline;
             width: auto;
@@ -435,6 +460,10 @@ export default Vue.extend({
           .product__bundle--choice-color, .product__bundle--choice-size {
             font-size: 13px;
             padding-right: 2px;
+          }
+
+          .product__bundle--choice-color + span {
+            padding: 0 2px;
           }
 
           .product__mobile--more-info {

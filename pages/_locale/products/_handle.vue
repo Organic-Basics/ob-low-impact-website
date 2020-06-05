@@ -34,7 +34,7 @@
         </div>
         <div class="product__sticky-top-right" v-if="isSingleProduct">
           <div class="product__sticky-size">{{products[0].chosenSize}}</div>
-          <div :class="'product__sticky-color variant--' + [ products[0].chosenColor.toLowerCase().split(' ').join('') ]">
+          <div :class="'product__sticky-color variant--' + products[0].chosenColor.toLowerCase().split(' ').join('')">
             <span></span>
           </div>
 
@@ -43,9 +43,9 @@
       <div class="product__sticky-bottom">
         <div class="product__sticky--buttons">
           <div class="product__main--quantity">
-            <a class="product__main--decrement" href="">-</a>
-            <input class="product__main--quant-picker" type="number" name="quantity" v-model="quantity">
-            <a class="product__main--increment" href="">+</a>
+            <span class="product__main--decrement" @click="quantity = parseInt(quantity) > 1 ? parseInt(quantity) - 1 : parseInt(quantity)">-</span>
+            <input class="product__main--quant-picker" type="number" name="quantity" v-model="quantity" min="1">
+            <span class="product__main--increment" @click="quantity = parseInt(quantity) + 1">+</span>
           </div>
           <button class="product__main--add-to-cart" type="button" name="add-to-cart" v-model="addMessage"
           @click="addToCart()">Add to cart</button>
@@ -54,7 +54,7 @@
     </div>
     <productSelect v-for="(prod, index) in products" v-if="prod.switchId == 0 || prod.switchId == switchId || prod.switchId === undefined"
     :key="prod.key.toString()" :propsIdx="index" :propsProduct="prod" :propsUpSells="upSells" :isSingleProd="isSingleProduct"
-    @sizeClicked="onSizeChosen" @colorClicked="onColorChosen" @switched="switchId = switchId == 1 ? 2 : 1" @addToCartFromChild="addToCart()"/>
+    @sizeClicked="onSizeChosen" @colorClicked="onColorChosen" @switched="switchId = switchId == 1 ? 2 : 1" @addToCartFromChild="addToCart()" @productToggled="toggleProduct"/>
 
     <section class="product__content-block text--left">
       <div class="content-block__text">
@@ -464,12 +464,18 @@ export default Vue.extend({
             })
             return this.products[i].chosenColor === colorOpt.value && this.products[i].chosenSize === sizeOpt.value
           })
-          this.products = this.products.map((a, index) => {
-            if(index === idx) {
-              a.chosenId = chosenVariant.node.id
+          if(chosenVariant) {
+            this.products = this.products.map((a, index) => {
+              if(index === idx) {
+                a.chosenId = chosenVariant.node.id
+              }
+              return a
+            })
+            this.products[i].isProdOpen = false
+            if(this.products[i+1]) {
+              this.products[i+1].isProdOpen = true
             }
-            return a
-          })
+          }
         }
     	}
     },
@@ -492,15 +498,28 @@ export default Vue.extend({
     		return a
     	})
     	this.updateChosenId(data.idx)
+    },
+
+    toggleProduct(data) {
+      this.products = this.products.map((a, i) => {
+        if(i === data.idx) {
+          a.isProdOpen = !a.isProdOpen
+        }
+        else {
+          a.isProdOpen = false
+        }
+        return a
+      })
     }
   }
 })
 
 function prepProducts (products, bundleData) {
   let productTemplate = {
-    chosenColor : '...',
-    chosenSize : '...',
-    chosenId : '...',
+    chosenColor : '',
+    chosenSize : '',
+    chosenId : '',
+    isProdOpen : false,
     tabs : {
       desc : [],
       fitSize : [],
@@ -516,9 +535,10 @@ function prepProducts (products, bundleData) {
     else products[i] = {...productTemplate, ...products[i]}
 
     if(products[i].variants.edges.length > 1) {
-      products[i].chosenColor = products[i].variants.edges[0].node.selectedOptions.find((a) => a.name === 'Color').value
-      products[i].chosenSize = products[i].variants.edges[0].node.selectedOptions.find((a) => a.name === 'Size').value
-      products[i].chosenId = products[i].variants.edges[0].node.id
+      // Preselect the first color, if there's only one to choose from
+      if(products[i].options.find((a) => a.name === 'Color').values.length === 1) {
+        products[i].chosenColor = products[i].variants.edges[0].node.selectedOptions.find((a) => a.name === 'Color').value
+      }
     }
     if(products[i].description.split('|').length > 1) {
       let productText = products[i].description.split('|')
@@ -532,7 +552,7 @@ function prepProducts (products, bundleData) {
       let productBundleTag = products[i].tags.find((tag) => {
         return tag.includes(bundleData.tag)
       })
-      products[i].switchId = productBundleTag.split('-')[3]
+      products[i].switchId = parseInt(productBundleTag.split('-')[3])
 
       if(productBundleTag.includes('quant')) {
       	let quantCount = parseInt(productBundleTag.split('-')[4])
@@ -546,25 +566,47 @@ function prepProducts (products, bundleData) {
 
   products = products.concat(quantProducts)
 
-  // Add a unique key to the products
-  for(let i = 0; i < products.length; i++) {
-    products[i].key = i
-  }
-
 	if(bundleData) {
+    // Figure out which switch product corresponds to this one
 		products = products.map((a) => {
-			if(a.switchId == 1) {
+			if(a.switchId === 1) {
 				a.switchProduct = products.find((a) => {
-					return a.switchId == 2
-				}).title
+					return a.switchId === 2
+				})
 			}
-			else if(a.switchId == 2) {
+			else if(a.switchId === 2) {
 				a.switchProduct = products.find((a) => {
-					return a.switchId == 1
-				}).title
+					return a.switchId === 1
+				})
 			}
 			return a
 		})
+
+    // Sort products based on their switchId. Non-switchables go first, then switchId = 1, etc.
+    products.sort((a, b) => {
+      if(a.switchId < b.switchId) return -1
+      else return 1
+    })
+
+    // Add a unique key to the products
+    // Since switch products share the same number in the bundle list view, we need to set this here
+    let switchListIndex
+    for(let i = 0; i < products.length; i++) {
+      products[i].key = i
+
+      if(i === 0) {
+        products[i].isProdOpen = true
+      }
+
+      if(products[i].switchId < 1) {
+        products[i].listIndex = i
+      }
+      else {
+        // Set the switchListIndex to the first index found
+        if(!switchListIndex) switchListIndex = i
+        products[i].listIndex = switchListIndex
+      }
+    }
 	}
 
   return products
@@ -704,6 +746,18 @@ function prepProducts (products, bundleData) {
         justify-content: space-between;
 
         .product__main--quantity {
+          /* Chrome, Safari, Edge, Opera */
+          input::-webkit-outer-spin-button,
+          input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+          }
+
+          /* Firefox */
+          input[type=number] {
+            -moz-appearance: textfield;
+          }
+
           display: flex;
           justify-content: center;
           align-items: center;
@@ -713,16 +767,16 @@ function prepProducts (products, bundleData) {
           height: 3.6rem;
 
           .product__main--decrement, .product__main--increment {
+            align-items: center;
+            bottom: 0;
             color: map-get($colors, 'black');
-            width: 40px;
+            cursor: pointer;
+            display: inline-flex;
+            font-size: 19px;
+            justify-content: center;
             position: absolute;
             top: 0;
-            bottom: 0;
             width: 40px;
-            display: inline-flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 19px;
           }
 
           .product__main--increment {
