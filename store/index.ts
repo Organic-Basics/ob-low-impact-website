@@ -123,9 +123,14 @@ export const actions: ActionTree<RootState, RootState> = {
 	      },
 	      fetchPolicy: 'network-only'
 			})
+      let cartData = result.data.node
+      for(let i = 0; i < cartData.lineItems.edges.length; i++) {
+        let productSvg = await import('~/assets/svg/products/' + cartData.lineItems.edges[i].node.variant.product.handle + '.svg?raw')
+        cartData.lineItems.edges[i].node.illustration = productSvg.default
+      }
 
       // trigger a change with store.commit
-			store.commit('saveCart', result.data.node)
+			store.commit('saveCart', cartData)
     }
   },
 
