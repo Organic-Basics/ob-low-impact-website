@@ -2,7 +2,9 @@
   <section class="product__main">
     <div class="product__main--form">
       <div v-if="isSingleProd">
-        <h6 class="product__top--description">Clean-cut, seamless look and feel thongs made with recycled materials.</h6>
+        <h6 class="product__top--description">
+          Clean-cut, seamless look and feel thongs made with recycled materials.
+        </h6>
       </div>
 
       <!-- Single product selection -->
@@ -11,12 +13,33 @@
           <div class="product__main--option-container">
             <!-- Color -->
             <div class="product__main--option product__main--color">
-              <h6 class="product__main--option--title">Color<span v-if="propsProduct.chosenColor">: <span class="product__color-choice">{{propsProduct.chosenColor}}</span></span></h6>
+              <h6 class="product__main--option--title">
+                Color<span v-if="propsProduct.chosenColor"
+                  >:
+                  <span class="product__color-choice">{{
+                    propsProduct.chosenColor
+                  }}</span></span
+                >
+              </h6>
               <div class="product__main--option-picker">
-                <span v-for="(color, index) in cleanOptions.color.values" @click="chooseColor(color, propsIdx)"
-                  :class="['variant__selector', color === propsProduct.chosenColor ? 'variant--chosen' : '']">
+                <span
+                  v-for="(color, index) in cleanOptions.color.values"
+                  @click="chooseColor(color, propsIdx)"
+                  :class="[
+                    'variant__selector',
+                    color === propsProduct.chosenColor ? 'variant--chosen' : ''
+                  ]"
+                >
                   <span class="variant__selector--border"></span>
-                  <span :class="'variant__selector--center variant--' + color.toLowerCase().split(' ').join('')"></span>
+                  <span
+                    :class="
+                      'variant__selector--center variant--' +
+                        color
+                          .toLowerCase()
+                          .split(' ')
+                          .join('')
+                    "
+                  ></span>
                 </span>
               </div>
             </div>
@@ -24,10 +47,16 @@
             <div class="product__main--option product__main--size">
               <h6 class="product__main--option--title">Size</h6>
               <div class="product__main--option-picker">
-                <span v-for="(size, index) in cleanOptions.size.values"
-                :class="['variant__size', size === propsProduct.chosenSize ? 'variant--chosen' : '', oosSizes.includes(size) ? 'variant--oos' : '']"
-                @click="chooseSize(size, propsIdx)">
-                  {{size}}
+                <span
+                  v-for="(size, index) in cleanOptions.size.values"
+                  :class="[
+                    'variant__size',
+                    size === propsProduct.chosenSize ? 'variant--chosen' : '',
+                    oosSizes.includes(size) ? 'variant--oos' : ''
+                  ]"
+                  @click="chooseSize(size, propsIdx)"
+                >
+                  {{ size }}
                 </span>
               </div>
             </div>
@@ -36,54 +65,138 @@
       </div>
 
       <!-- Bundle selection -->
-      <div v-if="!isSingleProd" class="bundle__selection product__main--selection-container">
+      <div
+        v-if="!isSingleProd"
+        class="bundle__selection product__main--selection-container"
+      >
         <div class="product__main--selection">
           <div class="product__bundle--container">
             <div class="product__bundle--top">
-              <div 
-                :class="{'product__bundle--title': true, 'product--open':propsProduct.isProdOpen}"
-                @click="toggleBundleProd()">
+              <div
+                :class="{
+                  'product__bundle--title': true,
+                  'product--open': propsProduct.isProdOpen
+                }"
+                @click="toggleBundleProd()"
+              >
                 <!-- Title -->
                 <div class="product__bundle--left-desktop">
                   <div class="product__bundle--title-left">
                     <span class="product__bundle--title-left-main">
-                      <span :class="'product__bundle--circle variant--' + (!propsProduct.chosenColor ? '' : propsProduct.chosenColor.toLowerCase().split(' ').join('') + ' product__circle--active')">
-                        <span class="product__bundle--index">{{propsProduct.listIndex + 1}}</span>
+                      <span
+                        :class="
+                          'product__bundle--circle variant--' +
+                            (!propsProduct.chosenColor
+                              ? ''
+                              : propsProduct.chosenColor
+                                  .toLowerCase()
+                                  .split(' ')
+                                  .join('') + ' product__circle--active')
+                        "
+                      >
+                        <span class="product__bundle--index">{{
+                          propsProduct.listIndex + 1
+                        }}</span>
                       </span>
                       <span class="product__bundle--check"></span>
                       <span class="product__bundle--plus"></span>
                     </span>
-                    <h5 class="product__bundle--title-txt-mobile">{{propsProduct.title}}</h5>
+                    <h5 class="product__bundle--title-txt-mobile">
+                      {{ propsProduct.title }}
+                    </h5>
                   </div>
                 </div>
               </div>
               <!-- Info | Summary -->
-              <div @click="toggleBundleTabs()"
-                class="product__bundle--title-right product__choice--summary">
-                  <span class="product__bundle--choice-color" v-if="!propsProduct.isProdOpen">{{propsProduct.chosenColor}}</span>
-                  <span v-if="propsProduct.chosenColor && propsProduct.chosenSize && !propsProduct.isProdOpen"> / </span>
-                  <span class="product__bundle--choice-size" v-if="!propsProduct.isProdOpen">{{propsProduct.chosenSize}}</span>
-                  <span class="product__mobile--more-info" :class="{'closed': !propsProduct.isProdOpen}">
-                    <span class="product__mobile--more-info-txt">{{ !isTabOpen ? 'Info' : 'Close'}}</span>
-                    <span class="product__mobile--circle">
-                      <span v-if="!isTabOpen" class="product__mobile--plus">+</span>
-                      <span v-if="isTabOpen" class="product__mobile--close">+</span>
-                    </span>
+              <div
+                @click="toggleBundleTabs()"
+                class="product__bundle--title-right product__choice--summary"
+              >
+                <span
+                  class="product__bundle--choice-color"
+                  v-if="!propsProduct.isProdOpen"
+                  >{{ propsProduct.chosenColor }}</span
+                >
+                <span
+                  v-if="
+                    propsProduct.chosenColor &&
+                      propsProduct.chosenSize &&
+                      !propsProduct.isProdOpen
+                  "
+                >
+                  /
+                </span>
+                <span
+                  class="product__bundle--choice-size"
+                  v-if="!propsProduct.isProdOpen"
+                  >{{ propsProduct.chosenSize }}</span
+                >
+                <span
+                  class="product__mobile--more-info"
+                  :class="{ closed: !propsProduct.isProdOpen }"
+                >
+                  <span class="product__mobile--more-info-txt">{{
+                    !isTabOpen ? "Info" : "Close"
+                  }}</span>
+                  <span class="product__mobile--circle">
+                    <span v-if="!isTabOpen" class="product__mobile--plus"
+                      >+</span
+                    >
+                    <span v-if="isTabOpen" class="product__mobile--close"
+                      >+</span
+                    >
                   </span>
+                </span>
               </div>
             </div>
             <!-- Accordion option container -->
-            <div class="product__main--option-container"
-              :class="(propsProduct.isProdOpen && !isTabOpen) ? 'open' : 'closed'">
-              <span class="product__bundle-switch" @click="switchProduct" v-if="propsProduct.switchId != 0 && propsProduct.switchId !== undefined">Switch to {{propsProduct.switchProduct.title}}</span>
+            <div
+              class="product__main--option-container"
+              :class="propsProduct.isProdOpen && !isTabOpen ? 'open' : 'closed'"
+            >
+              <span
+                class="product__bundle-switch"
+                @click="switchProduct"
+                v-if="
+                  propsProduct.switchId != 0 &&
+                    propsProduct.switchId !== undefined
+                "
+                >Switch to {{ propsProduct.switchProduct.title }}</span
+              >
               <!-- Color -->
               <div class="product__main--option product__main--color">
-                <span class="product__main--option--title product__main--option--mobile">Color<span v-if="propsProduct.chosenColor">: <span class="product__color-choice">{{propsProduct.chosenColor}}</span></span></span>
+                <span
+                  class="product__main--option--title product__main--option--mobile"
+                  >Color<span v-if="propsProduct.chosenColor"
+                    >:
+                    <span class="product__color-choice">{{
+                      propsProduct.chosenColor
+                    }}</span></span
+                  ></span
+                >
                 <div class="product__main--option-picker">
-                  <span v-for="(color, index) in cleanOptions.color.values" @click="chooseColor(color, propsIdx)"
-                    :class="['variant__selector', color === propsProduct.chosenColor ? 'variant--chosen' : '']">
+                  <span
+                    v-for="(color, index) in cleanOptions.color.values"
+                    @click="chooseColor(color, propsIdx)"
+                    :class="[
+                      'variant__selector',
+                      color === propsProduct.chosenColor
+                        ? 'variant--chosen'
+                        : ''
+                    ]"
+                  >
                     <span class="variant__selector--border"></span>
-                    <span :class="'variant__selector--center variant--' + [ color.toLowerCase().split(' ').join('') ]"></span>
+                    <span
+                      :class="
+                        'variant__selector--center variant--' +
+                          [
+                            color
+                              .toLowerCase()
+                              .split(' ')
+                              .join('')
+                          ]
+                      "
+                    ></span>
                   </span>
                 </div>
               </div>
@@ -91,19 +204,27 @@
               <div class="product__main--option product__main--size">
                 <h6 class="product__main--option--title">Size</h6>
                 <div class="product__main--option-picker">
-                  <span v-for="(size, index) in cleanOptions.size.values"
-                  :class="['variant__size', size === propsProduct.chosenSize ? 'variant--chosen' : '', oosSizes.includes(size) ? 'variant--oos' : '']"
-                  @click="chooseSize(size, propsIdx)">
-                    {{size}}
+                  <span
+                    v-for="(size, index) in cleanOptions.size.values"
+                    :class="[
+                      'variant__size',
+                      size === propsProduct.chosenSize ? 'variant--chosen' : '',
+                      oosSizes.includes(size) ? 'variant--oos' : ''
+                    ]"
+                    @click="chooseSize(size, propsIdx)"
+                  >
+                    {{ size }}
                   </span>
                 </div>
               </div>
             </div>
             <!-- Product tabs -->
-            <div class="product__mobile--tabs" :class="isTabOpen ? 'open' : 'closed'">
+            <div
+              class="product__mobile--tabs"
+              :class="isTabOpen ? 'open' : 'closed'"
+            >
               <ProductTabs :propsProduct="propsProduct" />
             </div>
-
           </div>
         </div>
       </div>
@@ -111,7 +232,14 @@
       <!-- Button area -->
       <div v-if="isSingleProd" class="product__main--button-area">
         <div class="product__main--buttons">
-          <button class="product__main--add-to-cart" type="button" name="add-to-cart" @click="addToCartFromChild">Add to cart</button>
+          <button
+            class="product__main--add-to-cart"
+            type="button"
+            name="add-to-cart"
+            @click="addToCartFromChild"
+          >
+            Add to cart
+          </button>
         </div>
         <div class="product__main--extra">
           <span class="product__main--shipping">
@@ -131,50 +259,97 @@
     <!-- Upsells -->
     <div class="product__upsells text--left" v-if="propsUpSells.length > 0">
       <h4 class="product__upsells--title">Save with packs</h4>
-        <nuxt-link :to="`/${$store.state.activeCurrency}/products/${upSell.node.handle}`" v-for="(upSell, index) in propsUpSells" :key="index">
-          <div class="product__upsells--bundle">
-            <div class="product__upsells--left">
-              <img src="~/assets/svg/manifesto/manifesto_1.svg" alt="">
-            </div>
-            <div class="product__upsells--right">
-              <div class="product__upsells--right-left">
-                <h6 class="product__upsells--product-title">{{upSell.node.title}}</h6>
-                <div>
-                    <div class="product__upsells--prices">
-                      <span class="product__upsells--price">
-                        {{formatPrice(upSell.node.variants.edges[0].node.priceV2.amount, upSell.node.variants.edges[0].node.priceV2.currencyCode)}}
-                      </span>
-                      <span class="product__upsells--price-compare" v-if="upSell.node.variants.edges[0].node.compareAtPriceV2 !== null">
-                        {{formatPrice(upSell.node.variants.edges[0].node.compareAtPriceV2.amount, upSell.node.variants.edges[0].node.compareAtPriceV2.currencyCode)}}
-                      </span>
-                    </div>
-                    <span class="product__upsells--button">Upgrade</span>
+      <nuxt-link
+        :to="`/${$store.state.activeCurrency}/products/${upSell.node.handle}`"
+        v-for="(upSell, index) in propsUpSells"
+        :key="index"
+      >
+        <div class="product__upsells--bundle">
+          <div class="product__upsells--left">
+            <div
+          class="product__illustration"
+          v-for="illu in upSell.node.bundleIllustrations"
+          v-html="illu"
+        ></div>
+        <span
+          class="product__image-quant variant--black"
+          v-if="upSell.node.quantity"
+        >
+          <span class="product__bundle--quant">
+            x{{ upSell.node.quantity }}
+          </span>
+        </span>
+          </div>
+          <div class="product__upsells--right">
+            <div class="product__upsells--right-left">
+              <h6 class="product__upsells--product-title">
+                {{ upSell.node.title }}
+              </h6>
+              <div>
+                <div class="product__upsells--prices">
+                  <span class="product__upsells--price">
+                    {{
+                      formatPrice(
+                        upSell.node.variants.edges[0].node.priceV2.amount,
+                        upSell.node.variants.edges[0].node.priceV2.currencyCode
+                      )
+                    }}
+                  </span>
+                  <span
+                    class="product__upsells--price-compare"
+                    v-if="
+                      upSell.node.variants.edges[0].node.compareAtPriceV2 !==
+                        null
+                    "
+                  >
+                    {{
+                      formatPrice(
+                        upSell.node.variants.edges[0].node.compareAtPriceV2
+                          .amount,
+                        upSell.node.variants.edges[0].node.compareAtPriceV2
+                          .currencyCode
+                      )
+                    }}
+                  </span>
                 </div>
+                <span class="product__upsells--button">Upgrade</span>
               </div>
             </div>
           </div>
-        </nuxt-link>
-        <div class="product__upsells--gender">
-          <nuxt-link :to="`/${$store.state.activeCurrency}/collections/womens-save-with-packs`" v-if="$route.params.handle.includes('womens')">View all Women's packs</nuxt-link>
-          <nuxt-link :to="`/${$store.state.activeCurrency}/collections/mens-save-with-packs`" v-else>View all Men's packs</nuxt-link>
         </div>
+      </nuxt-link>
+      <div class="product__upsells--gender">
+        <nuxt-link
+          :to="
+            `/${$store.state.activeCurrency}/collections/womens-save-with-packs`
+          "
+          v-if="$route.params.handle.includes('womens')"
+          >View all Women's packs</nuxt-link
+        >
+        <nuxt-link
+          :to=
+            `/${$store.state.activeCurrency}/collections/mens-save-with-packs`
+          v-else
+          >View all Men's packs</nuxt-link
+        >
+      </div>
     </div>
   </section>
 </template>
 
 <script>
-import Vue from 'vue'
-import ProductTabs from '~/components/ProductTabs.vue'
+import Vue from "vue";
+import ProductTabs from "~/components/ProductTabs.vue";
 
 export default Vue.extend({
-  name: 'ProductSelect',
+  name: "ProductSelect",
   components: {
     ProductTabs
   },
-  data () {
+  data() {
     return {
       isTabOpen: false
-    }
+    };
   },
   props: {
     propsProduct: Object,
@@ -185,74 +360,78 @@ export default Vue.extend({
   },
   computed: {
     cleanOptions() {
-      let size = this.propsProduct.options.find((a) => a.name === 'Size')
-      let color = this.propsProduct.options.find((a) => a.name === 'Color')
+      let size = this.propsProduct.options.find(a => a.name === "Size");
+      let color = this.propsProduct.options.find(a => a.name === "Color");
 
       return {
         size: size,
         color: color
-      }
+      };
     },
     oosSizes() {
-      let oosVariants = this.propsProduct.variants.edges.filter((a) => {
-        let colorOpt = a.node.selectedOptions.find((b) => {
-          return b.name === 'Color'
-        })
-        return this.propsProduct.chosenColor === colorOpt.value && !a.node.availableForSale
-      })
-      return oosVariants.map((a) => {
-        let sizeOpt = a.node.selectedOptions.find((b) => {
-          return b.name === 'Size'
-        })
-        return sizeOpt.value
-      })
+      let oosVariants = this.propsProduct.variants.edges.filter(a => {
+        let colorOpt = a.node.selectedOptions.find(b => {
+          return b.name === "Color";
+        });
+        return (
+          this.propsProduct.chosenColor === colorOpt.value &&
+          !a.node.availableForSale
+        );
+      });
+      return oosVariants.map(a => {
+        let sizeOpt = a.node.selectedOptions.find(b => {
+          return b.name === "Size";
+        });
+        return sizeOpt.value;
+      });
     }
   },
   methods: {
     chooseColor(color) {
-      this.$emit('colorClicked', {
+      this.$emit("colorClicked", {
         color: color,
         idx: this.propsIdx
-      })
+      });
     },
     chooseSize(size) {
-      if(!this.oosSizes.includes(size)) {
-        this.$emit('sizeClicked', {
+      if (!this.oosSizes.includes(size)) {
+        this.$emit("sizeClicked", {
           size: size,
           idx: this.propsIdx
-        })
+        });
       }
     },
     addToCartFromChild() {
-      this.$emit('addToCartFromChild', {
+      this.$emit("addToCartFromChild", {
         idx: this.propsIdx
-      })
-      this.isAdding = true
+      });
+      this.isAdding = true;
     },
     formatPrice(amount, currencyCode) {
-      let price = new Intl.NumberFormat('en-US', {
-        style: 'currency',
+      let price = new Intl.NumberFormat("en-US", {
+        style: "currency",
         currency: currencyCode
-      }).format(amount)
+      }).format(amount);
 
-      if(currencyCode === 'DKK') price = price.replace('.00', '')
-      return price
+      if (currencyCode === "DKK") price = price.replace(".00", "");
+      return price;
     },
     switchProduct() {
-      this.$emit('switched')
-      this.propsProduct.switchProduct.isProdOpen = true
+      this.$emit("switched");
+      this.propsProduct.switchProduct.isProdOpen = true;
     },
     toggleBundleProd() {
-      console.log('toggggle')
-      this.$emit('productToggled', {
+      console.log("toggggle");
+      console.log(this.propsProduct);
+      this.$emit("productToggled", {
         idx: this.propsIdx
-      })
+      });
     },
     toggleBundleTabs() {
-      this.isTabOpen = !this.isTabOpen
+      this.isTabOpen = !this.isTabOpen;
     }
-  },
-})
+  }
+});
 </script>
 
 <style lang="scss">
@@ -271,7 +450,7 @@ export default Vue.extend({
 
     .product__top--description {
       text-align: center;
-      color: map-get($colors, 'darkGrey');
+      color: map-get($colors, "darkGrey");
     }
 
     .product__main--option {
@@ -295,12 +474,12 @@ export default Vue.extend({
           display: block;
 
           .product__main--option--title {
-            border-bottom: 1px solid map-get($colors, 'brand');
-            padding: 1rem 0 .5rem;
+            border-bottom: 1px solid map-get($colors, "brand");
+            padding: 1rem 0 0.5rem;
           }
 
           .product__color-choice {
-            color: map-get($colors, 'brand');
+            color: map-get($colors, "brand");
           }
 
           .product__main--option-picker {
@@ -334,11 +513,11 @@ export default Vue.extend({
 
             .variant--chosen {
               .variant__selector--border {
-                border: 2px solid map-get($colors, 'black');
+                border: 2px solid map-get($colors, "black");
               }
 
               .variant__selector--center {
-                transform: scale(.73333);
+                transform: scale(0.73333);
               }
             }
           }
@@ -356,11 +535,11 @@ export default Vue.extend({
           }
 
           .variant--chosen {
-            border-bottom: 2px solid map-get($colors, 'black');
+            border-bottom: 2px solid map-get($colors, "black");
           }
 
           .variant--oos {
-            color: map-get($colors, 'brand');
+            color: map-get($colors, "brand");
             cursor: not-allowed;
           }
         }
@@ -381,7 +560,7 @@ export default Vue.extend({
         }
 
         .product__bundle-switch {
-          color: map-get($colors, 'darkGrey');
+          color: map-get($colors, "darkGrey");
           margin-top: 10px;
         }
 
@@ -413,11 +592,12 @@ export default Vue.extend({
           }
         }
 
-        .product__bundle--circle, .product__mobile--circle {
+        .product__bundle--circle,
+        .product__mobile--circle {
           display: inline-flex;
           justify-content: center;
           align-items: center;
-          border: 1.5px solid map-get($colors, 'black');
+          border: 1.5px solid map-get($colors, "black");
           border-radius: 50%;
           height: 26.5px;
           width: 26.5px;
@@ -428,14 +608,14 @@ export default Vue.extend({
             color: #fff;
 
             &.variant--white {
-              color: map-get($colors, 'black');
+              color: map-get($colors, "black");
             }
           }
 
           .product__bundle--index {
             display: inline;
             width: auto;
-            font-size: .9rem;
+            font-size: 0.9rem;
           }
 
           .product__mobile--close {
@@ -457,7 +637,8 @@ export default Vue.extend({
           font-size: 12px;
           text-align: right;
 
-          .product__bundle--choice-color, .product__bundle--choice-size {
+          .product__bundle--choice-color,
+          .product__bundle--choice-size {
             font-size: 13px;
             padding-right: 2px;
           }
@@ -490,9 +671,9 @@ export default Vue.extend({
 
           .product__main--option--title {
             font-size: 13px;
-            border-bottom: 1px solid map-get($colors, 'brand');
+            border-bottom: 1px solid map-get($colors, "brand");
             display: block;
-            padding: 1rem 0 .5rem;
+            padding: 1rem 0 0.5rem;
           }
 
           .product__main--option-radio {
@@ -520,7 +701,8 @@ export default Vue.extend({
 
       .product__main--extra {
         margin-bottom: 2rem;
-        margin-top: 20px;display: flex;
+        margin-top: 20px;
+        display: flex;
         justify-content: space-between;
         flex-wrap: wrap;
         font-size: 13px;
@@ -528,8 +710,7 @@ export default Vue.extend({
         .product__main--shipping {
           flex-basis: 75%;
           padding-right: 5px;
-          color: map-get($colors, 'brand');
-
+          color: map-get($colors, "brand");
         }
       }
     }
@@ -553,6 +734,52 @@ export default Vue.extend({
       .product__upsells--left {
         flex-basis: auto;
         margin-right: 1rem;
+        flex:1;
+        position:relative;
+
+        .product__illustration {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: map-get($colors, "productGrey");
+    max-width: 50%;
+    min-width: 80px;
+    flex-grow: 1;
+
+    svg {
+      *[stroke*="#"] {
+        stroke: map-get($colors, "black") !important;
+      }
+
+      *[fill*="#"] {
+        fill: map-get($colors, "productGrey") !important;
+      }
+    }
+  }
+  .product__image-quant {
+    text-align: center;
+    bottom: 25%;
+    right: 20%;
+    position: absolute;
+    border: 1.5px solid map-get($colors, "black");
+    border-radius: 50%;
+    height: 26.5px;
+    width: 26.5px;
+    font-size: 17px;
+    .product__bundle--quant {
+      font-size: 0.8rem;
+      color: white;
+    }
+  }
+
+  &.triple {
+    flex-direction: row;
+    .product__illustration {
+      max-width: 50%;
+      min-width: 50%;
+    }
+  }
       }
 
       .product__upsells--right {
@@ -569,6 +796,8 @@ export default Vue.extend({
           justify-content: space-between;
           max-width: 320px;
 
+          
+
           .product__upsells--product-title {
             font-size: 14px;
             margin-right: 10px;
@@ -584,7 +813,7 @@ export default Vue.extend({
 
             .product__upsells--price-compare {
               text-decoration: line-through;
-              color: map-get($colors, 'brand');
+              color: map-get($colors, "brand");
             }
           }
         }
@@ -595,10 +824,10 @@ export default Vue.extend({
           width: 100%;
           padding: 3px;
           text-align: center;
-          transition: .3s;
+          transition: 0.3s;
           font-size: 15px;
           color: #fff;
-          background: map-get($colors, 'black');
+          background: map-get($colors, "black");
         }
       }
     }
@@ -608,7 +837,5 @@ export default Vue.extend({
       text-align: center;
     }
   }
-
 }
-
 </style>
