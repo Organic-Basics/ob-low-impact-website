@@ -274,10 +274,12 @@ export default Vue.extend({
   padding: 7vw 7vw 0;
   background: #fff;
   text-align: left;
+  margin-top: 62px;
 
   @include screenSizes(tabletPortrait) {
     width: 100vw;
     padding: 20px;
+    margin-top: 0;
   }
 
   .product__main--top {

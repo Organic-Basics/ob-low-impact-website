@@ -584,7 +584,8 @@ function prepProducts (products, bundleData) {
     .product__slideshow {
       display: flex;
       overflow-x: scroll;
-      position: relative;
+      position: sticky;
+      top: 62px;
       width: 50vw;
       height: calc(100vh - 62px);
       margin-top: 62px;
@@ -593,6 +594,8 @@ function prepProducts (products, bundleData) {
         width: 100vw;
         height: auto;
         margin-top: 0;
+        top: 0;
+        position: relative;
       }
 
       .product__image-label {

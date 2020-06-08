@@ -1,11 +1,9 @@
 <template>
   <main :class="'container container-carbon--' + carbonIntensity.index + ' ' + $route.name" ref="container">
     <button class="read-more" @click="isOverlayOpen = true" v-if="!$route.path.includes('offline')">Read more</button>
-    <Navigation :womenLinks="menuLinks.womens" :menLinks="menuLinks.mens"
-      @openCart="isCartOpen = true" @openSidebar="isSidebarOpen = true" v-if="!$route.path.includes('offline')" />
+    <Navigation @openCart="isCartOpen = true" @openSidebar="isSidebarOpen = true" v-if="!$route.path.includes('offline')" />
     <nuxt />
-    <sidebar :open="isSidebarOpen" :womenLinks="menuLinks.womens" :menLinks="menuLinks.mens"
-      @closed="isSidebarOpen = false" v-if="!$route.path.includes('offline')"/>
+    <sidebar :open="isSidebarOpen" @closed="isSidebarOpen = false" v-if="!$route.path.includes('offline')"/>
     <cartDrawer :open="isCartOpen" @closed="isCartOpen = false" v-if="!$route.path.includes('offline')"/>
     <overlay :open="isOverlayOpen" :carbonIntensity="carbonIntensity" :footerData="{currentBytes, currentPage}" @closed="isOverlayOpen = false" v-if="!$route.path.includes('offline')"/>
     <Footer :currentBytes="currentBytes" :currentPage="currentPage" v-if="!$route.path.includes('offline')"/>
@@ -76,145 +74,7 @@ export default Vue.extend({
         name: '',
         normalSize: 1
       },
-      currentBytes: 0,
-      menuLinks: {
-        womens: [
-          {
-            'url' : '/collections/all-womens-products',
-            'name' : 'All Women\'s'
-          },
-          {
-            'url' : '/collections/all-womens-products/style-bras',
-            'name' : 'Bras'
-          },
-          {
-            'url' : '/collections/all-womens-products/style-bottoms',
-            'name' : 'Bottoms'
-          },
-          {
-            'url' : '/collections/all-womens-products/style-tops',
-            'name' : 'Tees & Tops'
-          },
-          {
-            'url' : '/collections/all-womens-products/style-socks',
-            'name' : 'Socks'
-          },
-          {
-            'url' : '/collections/all-womens-products/style-leggings',
-            'name' : 'Leggings'
-          },
-          {
-            'url' : '/collections/womens-accessories',
-            'name' : 'Accessories'
-          },
-          {
-            'url' : '/collections/womens-save-with-packs',
-            'name' : 'Save with packs'
-          },
-          {
-            'url' : '/products/e-gift-card',
-            'name' : 'Gift Cards'
-          },
-          {
-            'url' : '/collections/climate-credits',
-            'name' : 'Climate credits'
-          },
-          {
-            'url' : '/collections/womens-theme-basics',
-            'name' : 'Basics'
-          },
-          {
-            'url' : '/collections/womens-theme-activewear',
-            'name' : 'Activewear'
-          },
-          {
-            'url' : '/collections/womens-theme-invisible',
-            'name' : 'Invisible'
-          },
-          {
-            'url' : '/collections/womens-theme-recycled-materials',
-            'name' : 'Recycled materials'
-          },
-          {
-            'url' : '/collections/womens-theme-organic-cotton',
-            'name' : 'Organic cotton'
-          },
-          {
-            'url' : '/collections/womens-recycled-cashmere-winter-accessories',
-            'name' : 'Recycled cashmere'
-          },
-          {
-            'url' : '/collections/womens-theme-tencel',
-            'name' : 'TENCEL™'
-          },
-          {
-            'url' : '/collections/womens-theme-silvertech',
-            'name' : 'SilverTech™'
-          }
-        ],
-        mens: [
-          {
-            'url' : '/collections/all-mens-products',
-            'name' : 'All men\'s'
-          },
-          {
-            'url' : '/collections/all-mens-products/style-bottoms',
-            'name' : 'Underwear'
-          },
-          {
-            'url' : '/collections/all-mens-products/style-socks',
-            'name' : 'Socks'
-          },
-          {
-            'url' : '/collections/all-mens-products/style-tops',
-            'name' : 'Tees & Tops'
-          },
-          {
-            'url' : '/collections/mens-accessories',
-            'name' : 'Accessories'
-          },
-          {
-            'url' : '/collections/mens-save-with-packs',
-            'name' : 'Save with packs'
-          },
-          {
-            'url' : '/products/e-gift-card',
-            'name' : 'Gift cards'
-          },
-          {
-            'url' : '/collections/climate-credits',
-            'name' : 'Climate credits'
-          },
-          {
-            'url' : '/collections/mens-theme-basics',
-            'name' : 'Basics'
-          },
-          {
-            'url' : '/collections/mens-theme-activewear',
-            'name' : 'Activewear'
-          },
-          {
-            'url' : '/collections/mens-theme-recycled-materials',
-            'name' : 'Recycled materials'
-          },
-          {
-            'url' : '/collections/mens-theme-organic-cotton',
-            'name' : 'Organic cotton'
-          },
-          {
-            'url' : '/collections/mens-recycled-cashmere-winter-accessories',
-            'name' : 'Recycled cashmere'
-          },
-          {
-            'url' : '/collections/mens-theme-tencel',
-            'name' : 'TENCEL™'
-          },
-          {
-            'url' : '/collections/mens-theme-silvertech',
-            'name' : 'SilverTech™'
-          }
-        ]
-      }
+      currentBytes: 0
     }
   },
   watch: {

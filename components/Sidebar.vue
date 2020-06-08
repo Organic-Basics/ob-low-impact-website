@@ -14,12 +14,12 @@
     <section class="sidebar__body text--left">
       <div class="sidebar__body--women">
         <nuxt-link :to="`/${$store.state.activeCurrency}/collections/all-womens-products`" @click.native="closeSidebar()"><h2>Shop Women</h2></nuxt-link>
-        <nuxt-link v-for="(link, index) in womenLinks" :key="index" :to="`/${$store.state.activeCurrency}${link.url}`" @click.native="closeSidebar()"><h3>{{link.name}}</h3></nuxt-link>
+        <nuxt-link v-for="(link, index) in menuLinks.menuLinks.womens" :key="index" :to="`/${$store.state.activeCurrency}${link.url}`" @click.native="closeSidebar()"><h3>{{link.name}}</h3></nuxt-link>
       </div>
 
       <div class="sidebar__body--men">
         <nuxt-link :to="`/${$store.state.activeCurrency}/collections/all-mens-products`" @click.native="closeSidebar()"><h2>Shop Men</h2></nuxt-link>
-        <nuxt-link v-for="(link, index) in menLinks" :key="index" :to="`/${$store.state.activeCurrency}${link.url}`" @click.native="closeSidebar()"><h3>{{link.name}}</h3></nuxt-link>
+        <nuxt-link v-for="(link, index) in menuLinks.menuLinks.mens" :key="index" :to="`/${$store.state.activeCurrency}${link.url}`" @click.native="closeSidebar()"><h3>{{link.name}}</h3></nuxt-link>
       </div>
     </section>
 
@@ -29,6 +29,7 @@
 <script>
 import Vue from 'vue'
 import Logo from '~/components/Logo.vue'
+import menuLinks from '~/assets/json/menuLinks.json'
 
 export default Vue.extend({
   name: 'Sidebar',
@@ -36,9 +37,12 @@ export default Vue.extend({
     Logo
   },
   props: {
-    open: Boolean,
-    womenLinks: Array,
-    menLinks: Array
+    open: Boolean
+  },
+  data: () => {
+    return {
+      menuLinks: menuLinks
+    }
   },
   methods: {
     closeSidebar: function () {

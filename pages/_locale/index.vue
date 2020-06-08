@@ -52,6 +52,10 @@ export default Vue.extend({
       flex-direction: column;
       align-items: flex-start;
 
+      @include screenSizes(tabletPortrait) {
+        padding-left: 20px;
+      }
+
       a {
         text-decoration: none;
       }
