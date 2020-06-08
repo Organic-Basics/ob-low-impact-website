@@ -61,7 +61,7 @@
           "
         ></div>
       </div>
-      <div class="bundle__illustrations" v-else>
+      <div v-else class="bundle__illustrations" >
         <div
           class="bundle__illustration--quant"
           v-html="productIllustration"
@@ -346,17 +346,21 @@ export default Vue.extend({
               // Handle unisex products not having separate illustrations
               if (upSell.node.description.split("|").length > 2) {
                 if (upSell.node.description.split("|")[1] === "triple") {
+          // TODO: tripleBundle is used for CSS styling, change it to complete bundle
                   upSell.node.tripleBundle = true;
                   upSell.node.quantity = null;
                 } else if (upSell.node.description.split("|")[1] === "null") {
+          // TODO: Special case where there was already a bundle with a description using "|" as separator
                   upSell.node.quantity = null;
                 } else {
+          // Case for quant bundles
                   upSell.node.quantity = upSell.node.description.split("|")[1];
                 }
               } else {
                 upSell.node.quantity = null;
               }
 
+          // Getting the svg filenames to load bundle illustrations
               let illuHandles = [];
               if (upSell.node.tripleBundle) {
                 illuHandles = upSell.node.description
@@ -379,6 +383,7 @@ export default Vue.extend({
                 }
               });
 
+// ---------------- LAZY LOADING PHASE FOR BUNDLES
               const functionWithPromise = handle => {
                 try {
                   return import("~/assets/svg/products/" + handle + ".svg?raw");
@@ -407,6 +412,7 @@ export default Vue.extend({
                 );
                 upSell.node.productIllustration =
                   upSell.node.bundleIllustrations[0];
+// ----------------- LAZY LOADING PHASE FOR BUNDLES
               });
             });
           } catch (err) {
@@ -510,6 +516,7 @@ export default Vue.extend({
               handle = handle.replace(/womens-/g, "").replace(/mens-/g, "");
             }
 
+// ----------------- LAZY LOADING PHASE FOR BUNDLES
             const functionWithPromise = handle => {
               try {
                 return import("~/assets/svg/products/" + handle + ".svg?raw");
@@ -527,6 +534,7 @@ export default Vue.extend({
             };
 
             getIllustration(handle);
+// ----------------- LAZY LOADING PHASE FOR BUNDLES
           });
         }
 

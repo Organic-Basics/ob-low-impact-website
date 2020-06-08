@@ -283,6 +283,8 @@ export default Vue.extend({
             }
             return false;
           });
+          // productIllustration for single and quantity products
+          // bundleIllustrations for Bundles 
           let productIllustration = "";
           let bundleIllustrations = "";
           a.node.isSingleProduct = isSingleProduct;
@@ -308,11 +310,12 @@ export default Vue.extend({
               a.node.productIllustration = "";
             }
           } else {
-            console.log("I will load illustrations for a bundle");
+            // Loading illustrations for Bundles
             try {
               // Handle unisex products not having separate illustrations
               if (a.node.description.split("|").length > 2) {
                 if (a.node.description.split("|")[1] === "triple") {
+                // In case of combo bundles with three or more products
                   a.node.tripleBundle = true;
                   a.node.quantity = null;
                 } else if (a.node.description.split("|")[1] === "null") {
@@ -321,6 +324,7 @@ export default Vue.extend({
                   a.node.quantity = a.node.description.split("|")[1];
                 }
               } else {
+                // In case of combo bundles
                 a.node.quantity = null;
               }
 
@@ -346,7 +350,6 @@ export default Vue.extend({
                 }
               });
 
-              let illuHandle = illuHandles[0];
 
               const functionWithPromise = handle => {
                 try {
@@ -370,8 +373,11 @@ export default Vue.extend({
                 );
               };
 
+          // This is where the lazy load of the illustrations is triggered
               await getIllustrations().then(data => {
+          // The illustrations for the bundle are added to a new property inside of the bundle
                 a.node.bundleIllustrations = data.map(illu => illu.default);
+          // We select the first illustration as the main bundle illustration in case of quantity bundles
                 a.node.productIllustration = a.node.bundleIllustrations[0];
               });
             } catch (err) {
