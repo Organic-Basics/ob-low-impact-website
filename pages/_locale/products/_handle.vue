@@ -1,5 +1,6 @@
 <template>
   <div class="product__container">
+    <SizeGuide/>
     <!-- Single product slideshow -->
     <div
       v-if="isSingleProduct"

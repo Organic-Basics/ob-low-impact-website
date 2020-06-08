@@ -1,12 +1,15 @@
 [
   {
-    "gender": "womens",
+    "gender": "Womens",
+    "isActive": true,
     "styles": [
       {
         "name": "Socks",
+        "isActive": false,
         "tabs": [
           {
             "name": "Foot size",
+            "isActive": true,
             "header": [],
             "rows": [
               [
@@ -33,9 +36,11 @@
       },
       {
         "name": "Bottoms",
+        "isActive": false,
         "tabs": [
           {
             "name": "Centimeters",
+            "isActive": true,
             "header": [
               "",
               "XS",
@@ -65,6 +70,7 @@
           },
           {
             "name": "Inches",
+            "isActive": false,
             "header": [
               "",
               "XS",
@@ -96,9 +102,11 @@
       },
       {
         "name": "Leggings",
+        "isActive": false,
         "tabs": [
           {
             "name": "Centimeters",
+            "isActive": true,
             "header": [
               "",
               "XS-S",
@@ -125,6 +133,7 @@
           },
           {
             "name": "Inches",
+            "isActive": false,
             "header": [
               "",
               "XS-S",
@@ -153,9 +162,11 @@
       },
       {
         "name": "Tops",
+        "isActive": false,
         "tabs": [
           {
             "name": "Centimeters",
+            "isActive": true,
             "header": [
               "",
               "XS",
@@ -209,6 +220,7 @@
           },
           {
             "name": "Inches",
+            "isActive": false,
             "header": [
               "",
               "XS",
@@ -264,9 +276,11 @@
       },
       {
         "name": "Bras",
+        "isActive": true,
         "tabs": [
           {
             "name": "Centimeters",
+            "isActive": true,
             "header": [
               "",
               "XS",
@@ -296,6 +310,7 @@
           },
           {
             "name": "Inches",
+            "isActive": false,
             "header": [
               "",
               "XS",
@@ -335,9 +350,11 @@
       },
       {
         "name": "Bottoms (SilverTech™ Active)",
+        "isActive": false,
         "tabs": [
           {
             "name": "Centimeters",
+            "isActive": true,
             "header": [
               "",
               "XS/S",
@@ -361,6 +378,7 @@
           },
           {
             "name": "Inches",
+            "isActive": false,
             "header": [
               "",
               "XS–S",
@@ -386,9 +404,11 @@
       },
       {
         "name": "Tops (SilverTech™ Active)",
+        "isActive": false,
         "tabs": [
           {
             "name": "Centimeters",
+            "isActive": true,
             "header": [
               "",
               "XS–S",
@@ -430,6 +450,7 @@
           },
           {
             "name": "Inches",
+            "isActive": false,
             "header": [
               "",
               "XS–S",
@@ -474,13 +495,16 @@
     ]
   },
   {
-    "gender": "mens",
+    "gender": "Mens",
+    "isActive": false,
     "styles": [
       {
         "name": "Socks",
+        "isActive": false,
         "tabs": [
           {
             "name": "Foot size",
+            "isActive": true,
             "header": [],
             "rows": [
               [
@@ -507,9 +531,11 @@
       },
       {
         "name": "Boxers (SilverTech™ Active)",
+        "isActive": false,
         "tabs": [
           {
             "name": "Centimeters",
+            "isActive": true,
             "header": [
               "",
               "XS",
@@ -539,6 +565,7 @@
           },
           {
             "name": "Inches",
+            "isActive": false,
             "header": [
               "",
               "XS",
@@ -570,9 +597,11 @@
       },
       {
         "name": "Tops",
+        "isActive": false,
         "tabs": [
           {
             "name": "Centimeters",
+            "isActive": true,
             "header": [
               "",
               "XS-S",
@@ -599,6 +628,7 @@
           },
           {
             "name": "Inches",
+            "isActive": false,
             "header": [
               "",
               "XS-S",
@@ -627,9 +657,11 @@
       },
       {
         "name": "Tops (SilverTech™ Active)",
+        "isActive": false,
         "tabs": [
           {
             "name": "Centimeters",
+            "isActive": true,
             "header": [
               "",
               "XS",
@@ -683,6 +715,7 @@
           },
           {
             "name": "Inches",
+            "isActive": false,
             "header": [
               "",
               "XS",
@@ -738,9 +771,11 @@
       },
       {
         "name": "Boxers",
+        "isActive": true,
         "tabs": [
           {
             "name": "Centimeters",
+            "isActive": true,
             "header": [
               "",
               "XS",
@@ -770,6 +805,7 @@
           },
           {
             "name": "Inches",
+            "isActive": false,
             "header": [
               "",
               "XS",

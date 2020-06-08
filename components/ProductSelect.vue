@@ -1,5 +1,6 @@
 <template>
   <section class="product__main">
+    
     <div class="product__main--form">
       <div v-if="isSingleProd">
         <h6 class="product__top--description">
