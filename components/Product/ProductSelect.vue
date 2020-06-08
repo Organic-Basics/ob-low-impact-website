@@ -176,7 +176,7 @@
 
 <script>
 import Vue from 'vue'
-import ProductTabs from '~/components/product/ProductTabs.vue'
+import ProductTabs from '~/components/Product/ProductTabs.vue'
 
 export default Vue.extend({
   name: 'ProductSelect',

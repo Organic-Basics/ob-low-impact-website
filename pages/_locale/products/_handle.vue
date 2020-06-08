@@ -49,8 +49,8 @@
 import Vue from 'vue'
 import VueApollo from 'vue-apollo'
 import gql from 'graphql-tag'
-import ProductSelect from '~/components/product/ProductSelect.vue'
-import ProductSlideshow from '~/components/product/ProductSlideshow.vue'
+import ProductSelect from '~/components/Product/ProductSelect.vue'
+import ProductSlideshow from '~/components/Product/ProductSlideshow.vue'
 
 export default Vue.extend({
 
@@ -586,9 +586,13 @@ function prepProducts (products, bundleData) {
       overflow-x: scroll;
       position: relative;
       width: 50vw;
+      height: calc(100vh - 62px);
+      margin-top: 62px;
 
       @include screenSizes(tabletPortrait) {
         width: 100vw;
+        height: auto;
+        margin-top: 0;
       }
 
       .product__image-label {
