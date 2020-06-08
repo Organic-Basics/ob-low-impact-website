@@ -1,37 +1,39 @@
 <template>
   <div class="product__container">
-    <ProductSlideshow :isSingleProduct="isSingleProduct" :productIllustration="productIllustration" :shouldShowImages="shouldShowImages" @showImages="showImages()" :highResCost="highResCost" :lowResCost="lowResCost" :mainProduct="mainProduct"/>
+    <div class="product__above">
+      <ProductSlideshow :isSingleProduct="isSingleProduct" :productIllustration="productIllustration" :shouldShowImages="shouldShowImages" @showImages="showImages()" :highResCost="highResCost" :lowResCost="lowResCost" :mainProduct="mainProduct"/>
 
-    <!-- Sticky bar -->
-    <div class="product__sticky">
-      <div class="product__sticky-top">
-        <div class="product__sticky-top-left">
-          <h6 class="product__sticky-title">{{mainProduct.title}}</h6>
-          <p class="product__sticky-price">{{parseInt(mainProduct.priceRange.minVariantPrice.amount)}} {{mainProduct.priceRange.minVariantPrice.currencyCode}}</p>
-        </div>
-        <div class="product__sticky-top-right" v-if="isSingleProduct">
-          <div class="product__sticky-size">{{products[0].chosenSize}}</div>
-          <div :class="'product__sticky-color variant--' + [ products[0].chosenColor.toLowerCase().split(' ').join('') ]">
-            <span></span>
+      <!-- Sticky bar -->
+      <div class="product__sticky">
+        <div class="product__sticky-top">
+          <div class="product__sticky-top-left">
+            <h6 class="product__sticky-title">{{mainProduct.title}}</h6>
+            <p class="product__sticky-price">{{parseInt(mainProduct.priceRange.minVariantPrice.amount)}} {{mainProduct.priceRange.minVariantPrice.currencyCode}}</p>
           </div>
+          <div class="product__sticky-top-right" v-if="isSingleProduct">
+            <div class="product__sticky-size">{{products[0].chosenSize}}</div>
+            <div :class="'product__sticky-color variant--' + [ products[0].chosenColor.toLowerCase().split(' ').join('') ]">
+              <span></span>
+            </div>
 
+          </div>
+        </div>
+        <div class="product__sticky-bottom">
+          <div class="product__sticky--buttons">
+            <div class="product__main--quantity">
+              <a class="product__main--decrement" href="">-</a>
+              <input class="product__main--quant-picker" type="number" name="quantity" v-model="quantity">
+              <a class="product__main--increment" href="">+</a>
+            </div>
+            <button class="product__main--add-to-cart" type="button" name="add-to-cart" v-model="addMessage"
+            @click="addToCart()">Add to cart</button>
+          </div>
         </div>
       </div>
-      <div class="product__sticky-bottom">
-        <div class="product__sticky--buttons">
-          <div class="product__main--quantity">
-            <a class="product__main--decrement" href="">-</a>
-            <input class="product__main--quant-picker" type="number" name="quantity" v-model="quantity">
-            <a class="product__main--increment" href="">+</a>
-          </div>
-          <button class="product__main--add-to-cart" type="button" name="add-to-cart" v-model="addMessage"
-          @click="addToCart()">Add to cart</button>
-        </div>
-      </div>
+      <productSelect v-for="(prod, index) in products" v-if="prod.switchId == 0 || prod.switchId == switchId || prod.switchId === undefined"
+      :key="prod.key.toString()" :propsIdx="index" :propsProduct="prod" :propsUpSells="upSells" :isSingleProd="isSingleProduct" :mainProduct="mainProduct"
+      @sizeClicked="onSizeChosen" @colorClicked="onColorChosen" @switched="switchId = switchId == 1 ? 2 : 1" @addToCartFromChild="addToCart()"/>
     </div>
-    <productSelect v-for="(prod, index) in products" v-if="prod.switchId == 0 || prod.switchId == switchId || prod.switchId === undefined"
-    :key="prod.key.toString()" :propsIdx="index" :propsProduct="prod" :propsUpSells="upSells" :isSingleProd="isSingleProduct"
-    @sizeClicked="onSizeChosen" @colorClicked="onColorChosen" @switched="switchId = switchId == 1 ? 2 : 1" @addToCartFromChild="addToCart()"/>
 
     <section class="product__content-block text--left">
       <div class="content-block__text">
@@ -47,8 +49,8 @@
 import Vue from 'vue'
 import VueApollo from 'vue-apollo'
 import gql from 'graphql-tag'
-import ProductSelect from '~/components/ProductSelect.vue'
-import ProductSlideshow from '~/components/ProductSlideshow.vue'
+import ProductSelect from '~/components/product/ProductSelect.vue'
+import ProductSlideshow from '~/components/product/ProductSlideshow.vue'
 
 export default Vue.extend({
 
@@ -105,7 +107,8 @@ export default Vue.extend({
                         value
                       },
                       id,
-                      availableForSale
+                      availableForSale,
+                      compareAtPrice
                     }
                   }
                 }
@@ -570,199 +573,190 @@ function prepProducts (products, bundleData) {
     height: 30vh;
   }
 
-
-  .product__slideshow {
-    height: 131vw;
-
-    .product__image-label {
-      top: 110vw;
-      height: fit-content;
-      display: flex;
-      flex-direction: column;
-      position: absolute;
-      width: 100vw;
-
-      .product__image-label--bold {
-        font-weight: bold;
-      }
-
-      > span {
-        display: block;
-        max-width: 75vw;
-      }
-    }
-
-    > div {
-      align-items: center;
-      background: map-get($colors, 'productGrey');
-      display: flex;
-      justify-content: center;
-    }
-
-    svg {
-      height: 131vw;
-
-      *[stroke*="#"] {
-        stroke: map-get($colors, 'black') !important;
-      }
-
-      *[fill*="#"] {
-        fill: map-get($colors, 'productGrey') !important;
-      }
-    }
-
-    img {
-      min-width: 100vw;
-      max-width: 100%;
-    }
-  }
-
-  .product__sticky {
-    color: map-get($colors, 'black');
-    background: #fff;
-    border-top: 1px solid #a1a4a9;
-    bottom: 0;
-    left: 0;
-    position: fixed;
-    transition: transform .3s ease-in-out;
-    transition: transform .3s ease-in-out,-webkit-transform .3s ease-in-out;
-    width: 100vw;
-    display: none;
+  .product__above {
+    display: flex;
+    flex-direction: row;
 
     @include screenSizes(tabletPortrait) {
-      display: block;
-    }
-
-    .product__sticky-top {
-      display: flex;
-      height: 4rem;
-      justify-content: space-between;
-      padding: 1rem;
-      align-items: center;
-
-      .product__sticky-top-left {
-        display: flex;
-
-        .product__sticky-title {
-          margin-right: 10px;
-        }
-
-        .product__sticky-price {
-          color: map-get($colors, 'brand');
-        }
-      }
-
-      .product__sticky-top-right {
-        align-items: center;
-        display: flex;
-
-        .product__sticky-size {
-          padding-right: .5rem;
-        }
-
-        .product__sticky-color {
-          height: 30px;
-          position: relative;
-          width: 30px;
-          border-radius: 50px;
-
-          span {
-            border-radius: 30px;
-            height: 30px;
-            left: 0;
-            position: absolute;
-            top: 0;
-            width: 30px;
-          }
-        }
-      }
-    }
-
-    .product__sticky-bottom {
-      .product__sticky--buttons {
-        margin-bottom: 0;
-        display: flex;
-        justify-content: space-between;
-
-        .product__main--quantity {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          position: relative;
-          flex-basis: 50%;
-          border-top: 1px solid map-get($colors, 'brand');
-          height: 3.6rem;
-
-          .product__main--decrement, .product__main--increment {
-            color: map-get($colors, 'black');
-            width: 40px;
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            width: 40px;
-            display: inline-flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 19px;
-          }
-
-          .product__main--increment {
-            right: 0;
-            left: auto;
-          }
-
-          .product__main--decrement {
-            left: 0;
-          }
-
-          .product__main--quant-picker {
-            border: none;
-            color: map-get($colors, 'black');
-            height: 100%;
-            text-align: center;
-            font-size: 13px;
-          }
-        }
-
-        .product__main--add-to-cart {
-          flex-basis: 50%;
-          border: 1px solid map-get($colors, 'black');
-        }
-      }
-    }
-  }
-
-  .product__main {
-    align-items: flex-start;
-    display: flex;
-    flex-direction: column;
-    max-width: 100vw;
-
-    .product__option {
-      align-items: flex-start;
-      display: flex;
       flex-direction: column;
-
-      &.product__option--size {
-        margin-bottom: 30px;
-      }
-
-      .variant--chosen {
-        text-decoration: underline;
-      }
     }
 
-    .product__text {
-      align-items: flex-start;
+    .product__slideshow {
       display: flex;
-      flex-direction: column;
-      margin-bottom: 5px;
+      overflow-x: scroll;
+      position: relative;
+      width: 50vw;
 
-      ul {
-        align-items: flex-start;
+      @include screenSizes(tabletPortrait) {
+        width: 100vw;
+      }
+
+      .product__image-label {
+        bottom: 25px;
         display: flex;
         flex-direction: column;
-        text-align: left;
+        position: absolute;
+        width: 50vw;
+
+        @include screenSizes(tabletPortrait) {
+          width: 100vw;
+        }
+
+        .product__image-label--bold {
+          font-weight: bold;
+        }
+
+        > span {
+          display: block;
+          max-width: 75vw;
+        }
+      }
+
+      > div {
+        align-items: center;
+        background: map-get($colors, 'productGrey');
+        display: flex;
+        justify-content: center;
+      }
+
+      svg {
+        width: 50vw;
+
+        @include screenSizes(tabletPortrait) {
+          width: 100vw;
+        }
+
+        *[stroke*="#"] {
+          stroke: map-get($colors, 'black') !important;
+        }
+
+        *[fill*="#"] {
+          fill: map-get($colors, 'productGrey') !important;
+        }
+      }
+
+      img {
+        min-width: 50vw;
+        max-width: 100%;
+
+        @include screenSizes(tabletPortrait) {
+          width: 100vw;
+        }
+      }
+    }
+
+    .product__sticky {
+      color: map-get($colors, 'black');
+      background: #fff;
+      border-top: 1px solid #a1a4a9;
+      bottom: 0;
+      left: 0;
+      position: fixed;
+      transition: transform .3s ease-in-out;
+      transition: transform .3s ease-in-out,-webkit-transform .3s ease-in-out;
+      width: 100vw;
+      display: none;
+
+      @include screenSizes(tabletPortrait) {
+        display: block;
+      }
+
+      .product__sticky-top {
+        display: flex;
+        height: 4rem;
+        justify-content: space-between;
+        padding: 1rem;
+        align-items: center;
+
+        .product__sticky-top-left {
+          display: flex;
+
+          .product__sticky-title {
+            margin-right: 10px;
+          }
+
+          .product__sticky-price {
+            color: map-get($colors, 'brand');
+          }
+        }
+
+        .product__sticky-top-right {
+          align-items: center;
+          display: flex;
+
+          .product__sticky-size {
+            padding-right: .5rem;
+          }
+
+          .product__sticky-color {
+            height: 30px;
+            position: relative;
+            width: 30px;
+            border-radius: 50px;
+
+            span {
+              border-radius: 30px;
+              height: 30px;
+              left: 0;
+              position: absolute;
+              top: 0;
+              width: 30px;
+            }
+          }
+        }
+      }
+
+      .product__sticky-bottom {
+        .product__sticky--buttons {
+          margin-bottom: 0;
+          display: flex;
+          justify-content: space-between;
+
+          .product__main--quantity {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            flex-basis: 50%;
+            border-top: 1px solid map-get($colors, 'brand');
+            height: 3.6rem;
+
+            .product__main--decrement, .product__main--increment {
+              color: map-get($colors, 'black');
+              width: 40px;
+              position: absolute;
+              top: 0;
+              bottom: 0;
+              width: 40px;
+              display: inline-flex;
+              justify-content: center;
+              align-items: center;
+              font-size: 19px;
+            }
+
+            .product__main--increment {
+              right: 0;
+              left: auto;
+            }
+
+            .product__main--decrement {
+              left: 0;
+            }
+
+            .product__main--quant-picker {
+              border: none;
+              color: map-get($colors, 'black');
+              height: 100%;
+              text-align: center;
+              font-size: 13px;
+            }
+          }
+
+          .product__main--add-to-cart {
+            flex-basis: 50%;
+            border: none;
+          }
+        }
       }
     }
   }
@@ -774,6 +768,7 @@ function prepProducts (products, bundleData) {
     color: white;
     cursor: pointer;
     font-size: 13px;
+    border: none;
   }
 
   .product__content-block {

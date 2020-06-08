@@ -1,8 +1,21 @@
 <template>
   <section class="product__main">
+    <div class="product__main--top">
+      <div class="">
+          <h4 class="product__title">{{mainProduct.title}}</h4>
+          <span class="product__description--desktop">Our best-selling organic cotton bra. No wires — yet plenty of support.</span>
+      </div>
+      <h3 class="product__main--price">{{parseInt(mainProduct.priceRange.minVariantPrice.amount)}} {{mainProduct.priceRange.minVariantPrice.currencyCode}}
+        <span class="product__main--compare-price" v-if="mainProduct.variants.edges[0].node.compareAtPrice !== null && mainProduct.variants.edges[0].node.compareAtPrice !== '0.00'">
+          {{ mainProduct.variants.edges[0].node.compareAtPrice }} {{mainProduct.priceRange.minVariantPrice.currencyCode}}
+        </span>
+      </h3>
+
+
+    </div>
     <div class="product__main--form">
       <div v-if="isSingleProd">
-        <h6 class="product__top--description">Clean-cut, seamless look and feel thongs made with recycled materials.</h6>
+        <h6 class="product__description--mobile">Clean-cut, seamless look and feel thongs made with recycled materials.</h6>
       </div>
 
       <!-- Single product selection -->
@@ -163,7 +176,7 @@
 
 <script>
 import Vue from 'vue'
-import ProductTabs from '~/components/ProductTabs.vue'
+import ProductTabs from '~/components/product/ProductTabs.vue'
 
 export default Vue.extend({
   name: 'ProductSelect',
@@ -181,7 +194,8 @@ export default Vue.extend({
     propsIdx: Number,
     productData: Object,
     propsUpSells: Array,
-    isSingleProd: Boolean
+    isSingleProd: Boolean,
+    mainProduct: Object
   },
   computed: {
     cleanOptions() {
@@ -250,21 +264,100 @@ export default Vue.extend({
 
 <style lang="scss">
 @import "~assets/scss/variables.scss";
+@import "~assets/scss/mixins.scss";
 
 .product__main {
   align-items: flex-start;
   display: flex;
   flex-direction: column;
-  padding: 20px;
+  width: 50vw;
+  padding: 7vw 7vw 0;
   background: #fff;
   text-align: left;
+
+  @include screenSizes(tabletPortrait) {
+    width: 100vw;
+    padding: 20px;
+  }
+
+  .product__main--top {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: baseline;
+    position: relative;
+
+    @include screenSizes(tabletPortrait) {
+      display: none;
+    }
+
+    .product__title {
+      text-align: left;
+      width: 100%;
+      margin-bottom: 0;
+    }
+
+    .product__description--desktop {
+      text-align: left;
+      color: map-get($colors, 'darkGrey');
+      max-width: 28vw;
+      font-size: 13px;
+      margin: 10px 0;
+      display: block;
+    }
+
+    .product__main--price {
+      font-size: 20px;
+      margin: 0 0 0 10px;
+      width: 110px;
+      text-align: right;
+    }
+
+    .product__main--compare-price {
+      text-decoration: line-through;
+      color: map-get($colors, 'darkGrey');
+      font-size: 18px;
+    }
+  }
+
+  .product__option {
+    align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+
+    &.product__option--size {
+      margin-bottom: 30px;
+    }
+
+    .variant--chosen {
+      text-decoration: underline;
+    }
+  }
+
+  .product__text {
+    align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 5px;
+
+    ul {
+      align-items: flex-start;
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+    }
+  }
 
   .product__main--form {
     width: 100%;
 
-    .product__top--description {
-      text-align: center;
-      color: map-get($colors, 'darkGrey');
+    .product__description--mobile {
+      display: none;
+
+      @include screenSizes(tabletPortrait) {
+        text-align: center;
+        color: map-get($colors, 'darkGrey');
+      }
     }
 
     .product__main--option {
@@ -273,7 +366,9 @@ export default Vue.extend({
       flex-direction: column;
 
       &.product__main--size {
-        margin-bottom: 30px;
+        @include screenSizes(tabletPortrait) {
+          margin-bottom: 30px;
+        }
       }
     }
 
@@ -282,14 +377,23 @@ export default Vue.extend({
 
       .product__main--option-container {
         margin-top: 0;
+        display: flex;
+        flex-direction: row;
+
+        @include screenSizes(tabletPortrait) {
+          display: block;
+        }
 
         .product__main--option {
           flex-basis: 100%;
           display: block;
 
           .product__main--option--title {
-            border-bottom: 1px solid map-get($colors, 'brand');
             padding: 1rem 0 .5rem;
+
+            @include screenSizes(tabletPortrait) {
+              border-bottom: 1px solid map-get($colors, 'brand');
+            }
           }
 
           .product__main--option-picker {
@@ -334,6 +438,14 @@ export default Vue.extend({
         }
 
         .product__main--size {
+          .product__main--option-picker {
+            margin-top: 1.5rem;
+
+            @include screenSizes(tabletPortrait) {
+              margin-top: 1rem;
+            }
+          }
+
           .variant__size:first-of-type {
             margin-left: 0;
           }
@@ -486,6 +598,7 @@ export default Vue.extend({
 
         .product__main--add-to-cart {
           flex-basis: 100%;
+          border: none;
         }
       }
 
@@ -579,7 +692,5 @@ export default Vue.extend({
       text-align: center;
     }
   }
-
 }
-
 </style>
