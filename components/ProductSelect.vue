@@ -309,8 +309,6 @@ export default Vue.extend({
       this.propsProduct.switchProduct.isProdOpen = true;
     },
     toggleBundleProd() {
-      console.log("toggggle");
-      console.log(this.propsProduct);
       this.$emit("productToggled", {
         idx: this.propsIdx
       });

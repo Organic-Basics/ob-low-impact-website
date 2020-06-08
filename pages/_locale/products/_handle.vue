@@ -170,7 +170,7 @@
     <productSelect
       v-for="(prod, index) in products"
       v-if="prod.switchId == 0 || prod.switchId == switchId || prod.switchId === undefined"
-      :key="prod.key.toString()"
+      :key="index"
       :propsIdx="index"
       :propsProduct="prod"
       :propsUpSells="upSells"
@@ -201,6 +201,7 @@ import Vue from "vue";
 import VueApollo from "vue-apollo";
 import gql from "graphql-tag";
 import ProductSelect from "~/components/ProductSelect.vue";
+import SizeGuide from "~/components/SizeGuide.vue";
 
 export default Vue.extend({
   data() {
@@ -213,7 +214,8 @@ export default Vue.extend({
     };
   },
   components: {
-    ProductSelect
+    ProductSelect,
+    SizeGuide
   },
   async asyncData({ app, params }) {
     try {
