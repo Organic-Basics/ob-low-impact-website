@@ -169,12 +169,8 @@
     </div>
     <productSelect
       v-for="(prod, index) in products"
-      v-if="
-        prod.switchId == 0 ||
-          prod.switchId == switchId ||
-          prod.switchId === undefined
-      "
-      :key="prod.id.toString()"
+      v-if="prod.switchId == 0 || prod.switchId == switchId || prod.switchId === undefined"
+      :key="prod.key.toString()"
       :propsIdx="index"
       :propsProduct="prod"
       :propsUpSells="upSells"

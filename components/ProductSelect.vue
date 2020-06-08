@@ -6,7 +6,6 @@
           Clean-cut, seamless look and feel thongs made with recycled materials.
         </h6>
       </div>
-
       <!-- Single product selection -->
       <div v-if="isSingleProd" class="product__main--selection-container">
         <div class="product__main--selection">
@@ -14,32 +13,18 @@
             <!-- Color -->
             <div class="product__main--option product__main--color">
               <h6 class="product__main--option--title">
-                Color<span v-if="propsProduct.chosenColor"
-                  >:
+                Color<span v-if="propsProduct.chosenColor">:
                   <span class="product__color-choice">{{
                     propsProduct.chosenColor
-                  }}</span></span
-                >
+                    }}</span></span>
               </h6>
               <div class="product__main--option-picker">
-                <span
-                  v-for="(color, index) in cleanOptions.color.values"
-                  @click="chooseColor(color, propsIdx)"
-                  :class="[
+                <span v-for="(color, index) in cleanOptions.color.values" @click="chooseColor(color, propsIdx)" :class="[
                     'variant__selector',
                     color === propsProduct.chosenColor ? 'variant--chosen' : ''
-                  ]"
-                >
+                  ]">
                   <span class="variant__selector--border"></span>
-                  <span
-                    :class="
-                      'variant__selector--center variant--' +
-                        color
-                          .toLowerCase()
-                          .split(' ')
-                          .join('')
-                    "
-                  ></span>
+                  <span :class="'variant__selector--center variant--' + color.toLowerCase().split(' ').join('')"></span>
                 </span>
               </div>
             </div>
@@ -47,15 +32,11 @@
             <div class="product__main--option product__main--size">
               <h6 class="product__main--option--title">Size</h6>
               <div class="product__main--option-picker">
-                <span
-                  v-for="(size, index) in cleanOptions.size.values"
-                  :class="[
+                <span v-for="(size, index) in cleanOptions.size.values" :class="[
                     'variant__size',
                     size === propsProduct.chosenSize ? 'variant--chosen' : '',
                     oosSizes.includes(size) ? 'variant--oos' : ''
-                  ]"
-                  @click="chooseSize(size, propsIdx)"
-                >
+                  ]" @click="chooseSize(size, propsIdx)">
                   {{ size }}
                 </span>
               </div>
@@ -63,40 +44,28 @@
           </div>
         </div>
       </div>
-
       <!-- Bundle selection -->
-      <div
-        v-if="!isSingleProd"
-        class="bundle__selection product__main--selection-container"
-      >
+      <div v-if="!isSingleProd" class="bundle__selection product__main--selection-container">
         <div class="product__main--selection">
           <div class="product__bundle--container">
             <div class="product__bundle--top">
-              <div
-                :class="{
+              <div :class="{
                   'product__bundle--title': true,
                   'product--open': propsProduct.isProdOpen
-                }"
-                @click="toggleBundleProd()"
-              >
+                }" @click="toggleBundleProd()">
                 <!-- Title -->
                 <div class="product__bundle--left-desktop">
                   <div class="product__bundle--title-left">
                     <span class="product__bundle--title-left-main">
-                      <span
-                        :class="
+                      <span :class="
                           'product__bundle--circle variant--' +
                             (!propsProduct.chosenColor
                               ? ''
-                              : propsProduct.chosenColor
-                                  .toLowerCase()
-                                  .split(' ')
-                                  .join('') + ' product__circle--active')
-                        "
-                      >
+                              : propsProduct.chosenColor.toLowerCase().split(' ').join('') + ' product__circle--active')
+                        ">
                         <span class="product__bundle--index">{{
                           propsProduct.listIndex + 1
-                        }}</span>
+                          }}</span>
                       </span>
                       <span class="product__bundle--check"></span>
                       <span class="product__bundle--plus"></span>
@@ -108,95 +77,50 @@
                 </div>
               </div>
               <!-- Info | Summary -->
-              <div
-                @click="toggleBundleTabs()"
-                class="product__bundle--title-right product__choice--summary"
-              >
-                <span
-                  class="product__bundle--choice-color"
-                  v-if="!propsProduct.isProdOpen"
-                  >{{ propsProduct.chosenColor }}</span
-                >
-                <span
-                  v-if="
+              <div @click="toggleBundleTabs()" class="product__bundle--title-right product__choice--summary">
+                <span class="product__bundle--choice-color" v-if="!propsProduct.isProdOpen">{{ propsProduct.chosenColor }}</span>
+                <span v-if="
                     propsProduct.chosenColor &&
                       propsProduct.chosenSize &&
                       !propsProduct.isProdOpen
-                  "
-                >
+                  ">
                   /
                 </span>
-                <span
-                  class="product__bundle--choice-size"
-                  v-if="!propsProduct.isProdOpen"
-                  >{{ propsProduct.chosenSize }}</span
-                >
-                <span
-                  class="product__mobile--more-info"
-                  :class="{ closed: !propsProduct.isProdOpen }"
-                >
+                <span class="product__bundle--choice-size" v-if="!propsProduct.isProdOpen">{{ propsProduct.chosenSize }}</span>
+                <span class="product__mobile--more-info" :class="{ closed: !propsProduct.isProdOpen }">
                   <span class="product__mobile--more-info-txt">{{
                     !isTabOpen ? "Info" : "Close"
-                  }}</span>
+                    }}</span>
                   <span class="product__mobile--circle">
-                    <span v-if="!isTabOpen" class="product__mobile--plus"
-                      >+</span
-                    >
-                    <span v-if="isTabOpen" class="product__mobile--close"
-                      >+</span
-                    >
+                    <span v-if="!isTabOpen" class="product__mobile--plus">+</span>
+                    <span v-if="isTabOpen" class="product__mobile--close">+</span>
                   </span>
                 </span>
               </div>
             </div>
             <!-- Accordion option container -->
-            <div
-              class="product__main--option-container"
-              :class="propsProduct.isProdOpen && !isTabOpen ? 'open' : 'closed'"
-            >
-              <span
-                class="product__bundle-switch"
-                @click="switchProduct"
-                v-if="
+            <div class="product__main--option-container" :class="propsProduct.isProdOpen && !isTabOpen ? 'open' : 'closed'">
+              <span class="product__bundle-switch" @click="switchProduct" v-if="
                   propsProduct.switchId != 0 &&
                     propsProduct.switchId !== undefined
-                "
-                >Switch to {{ propsProduct.switchProduct.title }}</span
-              >
+                ">Switch to {{ propsProduct.switchProduct.title }}</span>
               <!-- Color -->
               <div class="product__main--option product__main--color">
-                <span
-                  class="product__main--option--title product__main--option--mobile"
-                  >Color<span v-if="propsProduct.chosenColor"
-                    >:
+                <span class="product__main--option--title product__main--option--mobile">Color<span v-if="propsProduct.chosenColor">:
                     <span class="product__color-choice">{{
                       propsProduct.chosenColor
-                    }}</span></span
-                  ></span
-                >
+                      }}</span></span></span>
                 <div class="product__main--option-picker">
-                  <span
-                    v-for="(color, index) in cleanOptions.color.values"
-                    @click="chooseColor(color, propsIdx)"
-                    :class="[
+                  <span v-for="(color, index) in cleanOptions.color.values" @click="chooseColor(color, propsIdx)" :class="[
                       'variant__selector',
                       color === propsProduct.chosenColor
                         ? 'variant--chosen'
                         : ''
-                    ]"
-                  >
+                    ]">
                     <span class="variant__selector--border"></span>
-                    <span
-                      :class="
-                        'variant__selector--center variant--' +
-                          [
-                            color
-                              .toLowerCase()
-                              .split(' ')
-                              .join('')
-                          ]
-                      "
-                    ></span>
+                    <span :class="
+                        'variant__selector--center variant--' + color.toLowerCase().split(' ').join('')
+                      "></span>
                   </span>
                 </div>
               </div>
@@ -204,40 +128,27 @@
               <div class="product__main--option product__main--size">
                 <h6 class="product__main--option--title">Size</h6>
                 <div class="product__main--option-picker">
-                  <span
-                    v-for="(size, index) in cleanOptions.size.values"
-                    :class="[
+                  <span v-for="(size, index) in cleanOptions.size.values" :class="[
                       'variant__size',
                       size === propsProduct.chosenSize ? 'variant--chosen' : '',
                       oosSizes.includes(size) ? 'variant--oos' : ''
-                    ]"
-                    @click="chooseSize(size, propsIdx)"
-                  >
+                    ]" @click="chooseSize(size, propsIdx)">
                     {{ size }}
                   </span>
                 </div>
               </div>
             </div>
             <!-- Product tabs -->
-            <div
-              class="product__mobile--tabs"
-              :class="isTabOpen ? 'open' : 'closed'"
-            >
+            <div class="product__mobile--tabs" :class="isTabOpen ? 'open' : 'closed'">
               <ProductTabs :propsProduct="propsProduct" />
             </div>
           </div>
         </div>
       </div>
-
       <!-- Button area -->
       <div v-if="isSingleProd" class="product__main--button-area">
         <div class="product__main--buttons">
-          <button
-            class="product__main--add-to-cart"
-            type="button"
-            name="add-to-cart"
-            @click="addToCartFromChild"
-          >
+          <button class="product__main--add-to-cart" type="button" name="add-to-cart" @click="addToCartFromChild">
             Add to cart
           </button>
         </div>
@@ -247,7 +158,7 @@
           </span>
           <span class="product__main--sizeguide">
             <div class="size-guide-cta">
-              Size Guide
+              Size Guides
             </div>
           </span>
         </div>
@@ -255,30 +166,18 @@
       <!-- Tabs -->
       <ProductTabs v-if="isSingleProd" :propsProduct="propsProduct" />
     </div>
-
     <!-- Upsells -->
     <div class="product__upsells text--left" v-if="propsUpSells.length > 0">
       <h4 class="product__upsells--title">Save with packs</h4>
-      <nuxt-link
-        :to="`/${$store.state.activeCurrency}/products/${upSell.node.handle}`"
-        v-for="(upSell, index) in propsUpSells"
-        :key="index"
-      >
+      <nuxt-link :to="`/${$store.state.activeCurrency}/products/${upSell.node.handle}`" v-for="(upSell, index) in propsUpSells" :key="index">
         <div class="product__upsells--bundle">
           <div class="product__upsells--left">
-            <div
-          class="product__illustration"
-          v-for="illu in upSell.node.bundleIllustrations"
-          v-html="illu"
-        ></div>
-        <span
-          class="product__image-quant variant--black"
-          v-if="upSell.node.quantity"
-        >
-          <span class="product__bundle--quant">
-            x{{ upSell.node.quantity }}
-          </span>
-        </span>
+            <div class="product__illustration" v-for="illu in upSell.node.bundleIllustrations" v-html="illu"></div>
+            <span class="product__image-quant variant--black" v-if="upSell.node.quantity">
+              <span class="product__bundle--quant">
+                x{{ upSell.node.quantity }}
+              </span>
+            </span>
           </div>
           <div class="product__upsells--right">
             <div class="product__upsells--right-left">
@@ -289,26 +188,23 @@
                 <div class="product__upsells--prices">
                   <span class="product__upsells--price">
                     {{
-                      formatPrice(
-                        upSell.node.variants.edges[0].node.priceV2.amount,
-                        upSell.node.variants.edges[0].node.priceV2.currencyCode
-                      )
+                    formatPrice(
+                    upSell.node.variants.edges[0].node.priceV2.amount,
+                    upSell.node.variants.edges[0].node.priceV2.currencyCode
+                    )
                     }}
                   </span>
-                  <span
-                    class="product__upsells--price-compare"
-                    v-if="
+                  <span class="product__upsells--price-compare" v-if="
                       upSell.node.variants.edges[0].node.compareAtPriceV2 !==
                         null
-                    "
-                  >
+                    ">
                     {{
-                      formatPrice(
-                        upSell.node.variants.edges[0].node.compareAtPriceV2
-                          .amount,
-                        upSell.node.variants.edges[0].node.compareAtPriceV2
-                          .currencyCode
-                      )
+                    formatPrice(
+                    upSell.node.variants.edges[0].node.compareAtPriceV2
+                    .amount,
+                    upSell.node.variants.edges[0].node.compareAtPriceV2
+                    .currencyCode
+                    )
                     }}
                   </span>
                 </div>
@@ -319,24 +215,16 @@
         </div>
       </nuxt-link>
       <div class="product__upsells--gender">
-        <nuxt-link
-          :to="
-            `/${$store.state.activeCurrency}/collections/womens-save-with-packs`
-          "
-          v-if="$route.params.handle.includes('womens')"
-          >View all Women's packs</nuxt-link
-        >
-        <nuxt-link
-          :to=
-            `/${$store.state.activeCurrency}/collections/mens-save-with-packs`
-          v-else
-          >View all Men's packs</nuxt-link
-        >
+        <nuxt-link :to="`${$store.state.activeCurrency}/collections/womens-save-with-packs`" v-if="$route.params.handle.includes('womens')">
+          View all Women's packs
+        </nuxt-link>
+        <nuxt-link :to="`${$store.state.activeCurrency}/collections/mens-save-with-packs`" v-else>
+          View all Men's packs
+        </nuxt-link>
       </div>
     </div>
   </section>
 </template>
-
 <script>
 import Vue from "vue";
 import ProductTabs from "~/components/ProductTabs.vue";
@@ -432,8 +320,8 @@ export default Vue.extend({
     }
   }
 });
-</script>
 
+</script>
 <style lang="scss">
 @import "~assets/scss/variables.scss";
 
@@ -643,7 +531,7 @@ export default Vue.extend({
             padding-right: 2px;
           }
 
-          .product__bundle--choice-color + span {
+          .product__bundle--choice-color+span {
             padding: 0 2px;
           }
 
@@ -734,52 +622,55 @@ export default Vue.extend({
       .product__upsells--left {
         flex-basis: auto;
         margin-right: 1rem;
-        flex:1;
-        position:relative;
+        flex: 1;
+        position: relative;
 
         .product__illustration {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background: map-get($colors, "productGrey");
-    max-width: 50%;
-    min-width: 80px;
-    flex-grow: 1;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          background: map-get($colors, "productGrey");
+          max-width: 50%;
+          min-width: 80px;
+          flex-grow: 1;
 
-    svg {
-      *[stroke*="#"] {
-        stroke: map-get($colors, "black") !important;
-      }
+          svg {
+            *[stroke*="#"] {
+              stroke: map-get($colors, "black") !important;
+            }
 
-      *[fill*="#"] {
-        fill: map-get($colors, "productGrey") !important;
-      }
-    }
-  }
-  .product__image-quant {
-    text-align: center;
-    bottom: 25%;
-    right: 20%;
-    position: absolute;
-    border: 1.5px solid map-get($colors, "black");
-    border-radius: 50%;
-    height: 26.5px;
-    width: 26.5px;
-    font-size: 17px;
-    .product__bundle--quant {
-      font-size: 0.8rem;
-      color: white;
-    }
-  }
+            *[fill*="#"] {
+              fill: map-get($colors, "productGrey") !important;
+            }
+          }
+        }
 
-  &.triple {
-    flex-direction: row;
-    .product__illustration {
-      max-width: 50%;
-      min-width: 50%;
-    }
-  }
+        .product__image-quant {
+          text-align: center;
+          bottom: 25%;
+          right: 20%;
+          position: absolute;
+          border: 1.5px solid map-get($colors, "black");
+          border-radius: 50%;
+          height: 26.5px;
+          width: 26.5px;
+          font-size: 17px;
+
+          .product__bundle--quant {
+            font-size: 0.8rem;
+            color: white;
+          }
+        }
+
+        &.triple {
+          flex-direction: row;
+
+          .product__illustration {
+            max-width: 50%;
+            min-width: 50%;
+          }
+        }
       }
 
       .product__upsells--right {
@@ -796,7 +687,7 @@ export default Vue.extend({
           justify-content: space-between;
           max-width: 320px;
 
-          
+
 
           .product__upsells--product-title {
             font-size: 14px;
@@ -838,4 +729,5 @@ export default Vue.extend({
     }
   }
 }
+
 </style>
