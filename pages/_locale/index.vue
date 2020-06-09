@@ -2,6 +2,7 @@
 <div class="index">
   <section class="index__intro">
     <ImpactMeter />
+    <h1 class="manifesto__heading--dramatic">Low</br>impact</br>website</h1>
     <div class="index__intro--links">
       <nuxt-link :to="`${$store.state.activeCurrency}/collections/all-womens-products`"><h2>Shop women</h2></nuxt-link>
       <nuxt-link :to="`${$store.state.activeCurrency}/collections/all-mens-products`"><h2>Shop men</h2></nuxt-link>
@@ -13,7 +14,7 @@
   </section>
 
   <section class="bg--yellow" id="manifesto">
-    <h1 class="manifesto__heading--dramatic">The low impact manifesto</h1>
+    <h1 class="manifesto__heading--dramatic"><span>The</span> low impact <span>manifesto</span></h1>
     <h4 class="text--black">A Low Impact website:</h4>
     <Manifesto />
   </section>
@@ -46,6 +47,35 @@ export default Vue.extend({
   .index__intro {
     padding-top: 100px;
 
+    .manifesto__heading--dramatic {
+      -webkit-text-fill-color: map-get($colors, 'bgGrey');
+      max-width: 40vw;
+      margin: auto;
+      margin-top: -655px;
+      font-size: 7vw;
+
+      @include screenSizes(desktopSmall) {
+        margin-top: -640px;
+      }
+
+      @include screenSizes(tabletPortrait) {
+        margin-top: -620px;
+      }
+    }
+
+    .spedometer__container {
+      height: 600px;
+      span {
+        display: none;
+      }
+
+      // #spedometer {
+      //   @include screenSizes(tabletPortrait) {
+      //     width: 90%;
+      //   }
+      // }
+    }
+
     .index__intro--links {
       display: flex;
       flex-direction: column;
@@ -53,7 +83,13 @@ export default Vue.extend({
 
       @include screenSizes(tabletPortrait) {
         padding-left: 20px;
+        margin-top: 40px;
       }
+
+      @include screenSizes(phone) {
+        margin-top: 105px;
+      }
+
 
       a {
         text-decoration: none;
@@ -76,9 +112,20 @@ export default Vue.extend({
 
   .manifesto__heading--dramatic {
     margin-bottom: 90px;
+    margin-top: 90px;
+    -webkit-text-fill-color: map-get($colors, 'bgYellow');
+
+    span {
+      -webkit-text-fill-color: map-get($colors, 'green');;
+    }
 
     @include screenSizes(phone) {
       margin-bottom: 50px;
+      margin-top: 50px;
+    }
+
+    @include screenSizes(tabletPortrait) {
+      font-size: 47px;
     }
   }
 }

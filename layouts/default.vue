@@ -282,6 +282,7 @@ section {
 
   @include screenSizes(tabletPortrait) {
     left: 10vw;
+    top: 15vh;
   }
 }
 

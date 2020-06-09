@@ -280,7 +280,7 @@ export default Vue.extend({
   padding-left: 30px;
   padding-right: 30px;
 
-  @include screenSizes(phone) {
+  @include screenSizes(tabletPortrait) {
     padding: 0;
   }
 
@@ -309,7 +309,7 @@ export default Vue.extend({
       padding: 0 20px;
       position: fixed;
 
-      @include screenSizes(phone) {
+      @include screenSizes(tabletPortrait) {
         display: none;
       }
     }
@@ -322,7 +322,7 @@ export default Vue.extend({
     flex-basis: 85%;
     margin-left: 15%;
 
-    @include screenSizes(phone) {
+    @include screenSizes(tabletPortrait) {
       justify-content: space-between;
       max-width: 100vw;
       padding-left: 20px;

@@ -31,8 +31,6 @@
       </div>
 
       <nuxt-link to="" class="text--green"><h5> WIP LINK</h5></nuxt-link>
-
-      <h1 class="manifesto__heading--dramatic">The low impact manifesto</h1>
     </section>
 
     <Footer :currentBytes="footerData.currentBytes" :currentSavingsMultiplier="footerData.currentSavingsMultiplier" :currentPage="footerData.currentPage" :totalSavings="footerData.totalSavings"/>
@@ -221,10 +219,6 @@ export default Vue.extend({
     margin-right: 20px;
     min-width: 45px;
   }
-}
-
-.manifesto__heading--dramatic {
-  margin: 60px auto 40px;
 }
 
 </style>

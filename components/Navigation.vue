@@ -145,10 +145,6 @@ export default Vue.extend({
   padding-left: 20px;
   padding-right: 20px;
 
-  @include screenSizes(tabletPortrait) {
-    padding: 0;
-  }
-
   .menu--mobile {
     display: none;
 

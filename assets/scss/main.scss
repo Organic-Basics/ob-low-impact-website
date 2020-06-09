@@ -18,3 +18,9 @@
   background: white;
   text: map-get($colors, 'black');
 }
+
+.manifesto__heading--dramatic {
+  font-size: 74px;
+  font-weight: bold;
+  -webkit-text-stroke: 1px map-get($colors, 'green');
+}
