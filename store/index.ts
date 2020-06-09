@@ -142,11 +142,38 @@ export const actions: ActionTree<RootState, RootState> = {
 	    	client = this.app.apolloProvider.defaultClient
 	  }
 	  if(client) {
+      let shouldFetchNewCheckout = false
   		// Check if the ID exists
   		if(localStorage.getItem('OB_LOW_checkoutID_' + store.state.activeCurrency)) {
-  			store.commit('setCheckoutId', localStorage.getItem('OB_LOW_checkoutID_' + store.state.activeCurrency))
+        // Check if the checkout has an orderStatusUrl, i.e. has it been placed already?
+        let result = await client.query({
+          query: gql`
+            query ($checkoutId: ID!) {
+              node(id: $checkoutId) {
+                ... on Checkout {
+                  orderStatusUrl
+                }
+              }
+            }
+          `,
+          variables: {
+              // access state object
+            checkoutId: localStorage.getItem('OB_LOW_checkoutID_' + store.state.activeCurrency)
+          },
+          fetchPolicy: 'network-only'
+        })
+
+        // If the order has been placed, we need to make a new one
+        if(result.data.node.orderStatusUrl) {
+          shouldFetchNewCheckout = true
+        }
+        // Else continue where we left off
+        else {
+          store.commit('setCheckoutId', localStorage.getItem('OB_LOW_checkoutID_' + store.state.activeCurrency))
+        }
   		}
-  		else {
+
+  		if(shouldFetchNewCheckout) {
   			let result = await client.mutate({
   	      mutation: gql`
   	        mutation {
