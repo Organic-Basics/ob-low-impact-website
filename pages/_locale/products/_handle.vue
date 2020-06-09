@@ -44,34 +44,36 @@
         </div>
       </div>
     </div>
-    <productSelect v-for="(prod, index) in products" v-if="prod.switchId == 0 || prod.switchId == switchId || prod.switchId === undefined" :key="index" :propsIdx="index" :propsProduct="prod" :propsUpSells="upSells" :isSingleProd="isSingleProduct"
-      :mainProduct="mainProduct" @sizeClicked="onSizeChosen" @colorClicked="onColorChosen" @switched="switchId = switchId == 1 ? 2 : 1" @addToCartFromChild="addToCart()" @productToggled="toggleProduct" />
+    <div class="">
+      <productSelect v-for="(prod, index) in products" v-if="prod.switchId == 0 || prod.switchId == switchId || prod.switchId === undefined" :key="index" :propsIdx="index" :propsProduct="prod" :propsUpSells="upSells" :isSingleProd="isSingleProduct"
+        :mainProduct="mainProduct" @sizeClicked="onSizeChosen" @colorClicked="onColorChosen" @switched="switchId = switchId == 1 ? 2 : 1" @addToCartFromChild="addToCart()" @productToggled="toggleProduct" />
 
-    <div class="product__main--extra">
-      <span class="product__main--shipping">
-        Free CO2 neutral worldwide shipping available.
-      </span>
-      <span class="product__main--sizeguide" @click="isSizeGuideOpen = true">
-        <div class="size-guide-cta">
-          Size Guides
-        </div>
-      </span>
-    </div>
-
-    <SizeGuide :isOpen="isSizeGuideOpen" @closeSizeGuide="isSizeGuideOpen = false" />
-
-    <section class="product__content-block text--left">
-      <div class="content-block__text">
-        <h3 class="content-block__title">Lorem ipsum</h3>
-        <h6 class="content-block__desc">
-          Created in premium Italian recycled nylon which takes 80% less water
-          to make and creates 90% fewer CO2 emissions in comparison to the
-          virgin fabric. It’s a minimal visible pantyline with a minimal
-          environmental impact.
-        </h6>
+      <div class="product__main--extra">
+        <span class="product__main--shipping">
+          Free CO2 neutral worldwide shipping available.
+        </span>
+        <span class="product__main--sizeguide" @click="isSizeGuideOpen = true">
+          <div class="size-guide-cta">
+            Size Guides
+          </div>
+        </span>
       </div>
-    </section>
+
+      <SizeGuide :isOpen="isSizeGuideOpen" @closeSizeGuide="isSizeGuideOpen = false" />
+    </div>
   </div>
+
+  <section class="product__content-block text--left">
+    <div class="content-block__text">
+      <h3 class="content-block__title">Lorem ipsum</h3>
+      <h6 class="content-block__desc">
+        Created in premium Italian recycled nylon which takes 80% less water
+        to make and creates 90% fewer CO2 emissions in comparison to the
+        virgin fabric. It’s a minimal visible pantyline with a minimal
+        environmental impact.
+      </h6>
+    </div>
+  </section>
 </div>
 </template>
 
@@ -816,15 +818,55 @@ function prepProducts(products, bundleData) {
     padding-top: 0;
 }
 
+.product__above {
+    display: flex;
+    flex-direction: row;
+
+    @include screenSizes(tabletPortrait) {
+        flex-direction: column;
+    }
+}
+
 .product__container {
     width: 100%;
 
     .product__slideshow {
         display: flex;
         flex-direction: row;
+        width: 50vw;
+        height: calc(100vh - 62px);
+        position: sticky;
+        bottom: 0;
+        top: 62px;
+        overflow-x: scroll;
+        overflow-y: hidden;
 
         @include screenSizes(tabletPortrait) {
-            flex-direction: column;
+            width: 100vw;
+            height: 65vh;
+            top: 0;
+            position: unset;
+        }
+
+        .slideshow__illustration {
+          height: 100%;
+          width: 50vw;
+
+          @include screenSizes(tabletPortrait) {
+            width: 100vw;
+          }
+        }
+
+        .product__image-label {
+          position: absolute;
+          width: 50vw;
+          bottom: 10%;
+
+          @include screenSizes(tabletPortrait) {
+            bottom: unset;
+            top: 52vh;
+            width: 100vw;
+          }
         }
 
         > div {
@@ -847,8 +889,13 @@ function prepProducts(products, bundleData) {
         }
 
         img {
+          width: 50vw;
+
+          @include screenSizes(tabletPortrait) {
             min-width: 100vw;
             max-width: 100%;
+            width: auto;
+          }
         }
 
         &.bundle {
@@ -1182,9 +1229,5 @@ function prepProducts(products, bundleData) {
             }
         }
     }
-}
-
-.footer__container {
-    margin-bottom: 90px;
 }
 </style>
