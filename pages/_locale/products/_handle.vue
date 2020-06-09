@@ -1,6 +1,5 @@
 <template>
   <div class="product__container">
-    <SizeGuide/>
     <!-- Single product slideshow -->
     <div
       v-if="isSingleProduct"
@@ -183,6 +182,19 @@
       @productToggled="toggleProduct"
     />
 
+    <div class="product__main--extra">
+      <span class="product__main--shipping">
+        Free CO2 neutral worldwide shipping available.
+      </span>
+      <span class="product__main--sizeguide" @click="isSizeGuideOpen = true">
+        <div class="size-guide-cta">
+          Size Guides
+        </div>
+      </span>
+    </div>
+
+    <SizeGuide :isOpen="isSizeGuideOpen" @closeSizeGuide="isSizeGuideOpen = false"/>
+
     <section class="product__content-block text--left">
       <div class="content-block__text">
         <h3 class="content-block__title">Lorem ipsum</h3>
@@ -211,7 +223,8 @@ export default Vue.extend({
       isAdding: false,
       switchId: 1,
       shouldShowImages: false,
-      bundleIllustrations: 0
+      bundleIllustrations: 0,
+      isSizeGuideOpen: false
     };
   },
   components: {
@@ -1190,6 +1203,27 @@ function prepProducts(products, bundleData) {
     color: white;
     cursor: pointer;
     font-size: 13px;
+  }
+
+  .product__main--extra {
+    margin-bottom: 2rem;
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    font-size: 13px;
+    padding: 0 20px;
+    text-align: left;
+
+    .product__main--sizeguide {
+      cursor: pointer;
+    }
+
+    .product__main--shipping {
+      flex-basis: 75%;
+      padding-right: 5px;
+      color: map-get($colors, "brand");
+    }
   }
 
   .product__content-block {

@@ -153,16 +153,6 @@
             Add to cart
           </button>
         </div>
-        <div class="product__main--extra">
-          <span class="product__main--shipping">
-            Free CO2 neutral worldwide shipping available.
-          </span>
-          <span class="product__main--sizeguide">
-            <div class="size-guide-cta">
-              Size Guides
-            </div>
-          </span>
-        </div>
       </div>
       <!-- Tabs -->
       <ProductTabs v-if="isSingleProd" :propsProduct="propsProduct" />
@@ -583,21 +573,6 @@ export default Vue.extend({
 
         .product__main--add-to-cart {
           flex-basis: 100%;
-        }
-      }
-
-      .product__main--extra {
-        margin-bottom: 2rem;
-        margin-top: 20px;
-        display: flex;
-        justify-content: space-between;
-        flex-wrap: wrap;
-        font-size: 13px;
-
-        .product__main--shipping {
-          flex-basis: 75%;
-          padding-right: 5px;
-          color: map-get($colors, "brand");
         }
       }
     }
