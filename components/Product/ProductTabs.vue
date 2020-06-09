@@ -3,7 +3,7 @@
 
   <section class="product__tabs--mobile">
     <div class="product__text product__text--feat">
-      <div @click="toggleTab('featOpen')" :class="{'product__tabs--title': true, 'tab--open':featOpen}">
+      <div @click="toggleTabMobile('featOpen')" :class="{'product__tabs--title': true, 'tab--open':featOpen}">
         <h6>Features</h6>
         <h5 class="tab__plus">+</h5>
       </div>
@@ -27,7 +27,7 @@
       </ul>
     </div>
     <div class="product__text product__text--desc">
-      <div @click="toggleTab('descOpen')" :class="{'product__tabs--title': true, 'tab--open':descOpen}">
+      <div @click="toggleTabMobile('descOpen')" :class="{'product__tabs--title': true, 'tab--open':descOpen}">
         <h6>Description</h6>
         <h5 class="tab__plus">+</h5>
       </div>
@@ -36,7 +36,7 @@
       </ul>
     </div>
     <div class="product__text product__text--fit">
-      <div @click="toggleTab('fitOpen')" :class="{'product__tabs--title': true, 'tab--open':fitOpen}">
+      <div @click="toggleTabMobile('fitOpen')" :class="{'product__tabs--title': true, 'tab--open':fitOpen}">
         <h6>Fit & Sizing</h6>
         <h5 class="tab__plus">+</h5>
       </div>
@@ -45,7 +45,7 @@
       </ul>
     </div>
     <div class="product__text product__text--mat">
-      <div @click="toggleTab('careOpen')" :class="{'product__tabs--title': true, 'tab--open':careOpen}">
+      <div @click="toggleTabMobile('careOpen')" :class="{'product__tabs--title': true, 'tab--open':careOpen}">
         <h6>Material & Care</h6>
         <h5 class="tab__plus">+</h5>
       </div>
@@ -57,16 +57,16 @@
 
   <section class="product__tabs--desktop">
       <ul class="product__main--tab-titles">
-        <li class="product__main--title-feat" @click="toggleTab('featOpen')" :class="{'product__tabs--title': true, 'tab--open':featOpen}">
+        <li class="product__main--title-feat" @click="toggleTabDesktop('featOpen')" :class="{'product__tabs--title': true, 'tab--open':featOpen}">
           <span>Features</span>
         </li>
-        <li class="product__main--title-desc" @click="toggleTab('descOpen')" :class="{'product__tabs--title': true, 'tab--open':descOpen}">
+        <li class="product__main--title-desc" @click="toggleTabDesktop('descOpen')" :class="{'product__tabs--title': true, 'tab--open':descOpen}">
           <span>Description</span>
         </li>
-        <li class="product__main--title-fit" @click="toggleTab('fitOpen')" :class="{'product__tabs--title': true, 'tab--open':fitOpen}">
+        <li class="product__main--title-fit" @click="toggleTabDesktop('fitOpen')" :class="{'product__tabs--title': true, 'tab--open':fitOpen}">
           <span>Fit &amp; Sizing</span>
         </li>
-        <li class="product__main--title-mat" @click="toggleTab('careOpen')" :class="{'product__tabs--title': true, 'tab--open':careOpen}">
+        <li class="product__main--title-mat" @click="toggleTabDesktop('careOpen')" :class="{'product__tabs--title': true, 'tab--open':careOpen}">
           <span>Material &amp; Care</span>
         </li>
       </ul>
@@ -194,8 +194,16 @@ export default Vue.extend({
     }
   },
   methods: {
-    toggleTab(tabName) {
+    toggleTabMobile(tabName) {
       let newState = !this[tabName]
+      this.descOpen = false
+      this.fitOpen = false
+      this.careOpen = false
+      this.featOpen = false
+      this[tabName] = newState
+    },
+    toggleTabDesktop(tabName) {
+      let newState = true
       this.descOpen = false
       this.fitOpen = false
       this.careOpen = false
@@ -224,6 +232,14 @@ export default Vue.extend({
   }
 }
 
+.tab--open {
+  border-bottom: 1.5px solid map-get($colors, 'black');
+
+  .tab__plus {
+    transform: rotate(45deg);
+  }
+}
+
 .product__text {
   align-items: flex-start;
   display: flex;
@@ -240,14 +256,6 @@ export default Vue.extend({
 
     .tab__plus {
       transition: transform .25s ease-in-out;
-    }
-  }
-
-  .tab--open {
-    border-bottom: 1.5px solid map-get($colors, 'black');
-
-    .tab__plus {
-      transform: rotate(45deg);
     }
   }
 
@@ -278,6 +286,7 @@ export default Vue.extend({
     display: flex;
     flex-direction: row;
     margin-bottom: 5px;
+    color: map-get($colors, 'black');
 
     .tab__feat--left {
       display: flex;
@@ -312,12 +321,15 @@ export default Vue.extend({
 }
 
 .product__tabs--desktop {
-  margin: 1vw 0 3vw;
-  padding-left: 0;
-  padding-right: 0;
+  margin: 3vw 0;
+  padding: 0;
 
   @include screenSizes(tabletPortrait) {
     display: none;
+  }
+
+  .product__tabs--title {
+    padding-bottom: 5px;
   }
 
   .product__main--tab-titles {
@@ -326,9 +338,13 @@ export default Vue.extend({
     justify-content: space-between;
     margin-left: 0;
     margin-bottom: 20px;
-    padding-bottom: 2px;
+    padding-bottom: 0;
     list-style: none;
     padding-left: 0;
+
+    @include screenSizes(tabletPortrait) {
+      padding-bottom: 2px;
+    }
   }
 
   .product__main--info {

@@ -15,7 +15,6 @@
             <div :class="'product__sticky-color variant--' + [ products[0].chosenColor.toLowerCase().split(' ').join('') ]">
               <span></span>
             </div>
-
           </div>
         </div>
         <div class="product__sticky-bottom">
