@@ -12,12 +12,14 @@
           <div class="tab__feat--title">
             <div class="tab__feat--left" v-for="(feat) in features"
               v-if="f.toLowerCase().trim() == feat.name.toLowerCase().trim()"
-              @click="toggleFeat(feat)">
-              <img class="tab__feat--icon"
-                :src="feat.icon" :alt="feat.name" />
+              @click="toggleFeat(feat)" :class="feat.isOpen ? 'feat--open' : ''">
+              <div class="">
+                <img class="tab__feat--icon"
+                  :src="feat.icon" :alt="feat.name" />
                 {{f}}
+              </div>
+              <h5 class="tab__plus">+</h5>
             </div>
-            <h5 class="tab__plus">+</h5>
           </div>
           <div class="tab__feat--desc" v-for="(feat) in features"
             v-if="feat.isOpen && f.toLowerCase().trim() == feat.name.toLowerCase().trim()">
@@ -77,12 +79,14 @@
               <div class="tab__feat--title">
                 <div class="tab__feat--left" v-for="(feat) in features"
                   v-if="f.toLowerCase().trim() == feat.name.toLowerCase().trim()"
-                  @click="toggleFeat(feat)">
-                  <img class="tab__feat--icon"
-                    :src="feat.icon" :alt="feat.name" />
+                  @click="toggleFeat(feat)" :class="feat.isOpen ? 'feat--open' : ''">
+                  <div class="">
+                    <img class="tab__feat--icon"
+                      :src="feat.icon" :alt="feat.name" />
                     {{f}}
+                  </div>
+                  <h5 class="tab__plus">+</h5>
                 </div>
-                <h5 class="tab__plus">+</h5>
               </div>
               <div class="tab__feat--desc" v-for="(feat) in features"
                 v-if="feat.isOpen && f.toLowerCase().trim() == feat.name.toLowerCase().trim()">
@@ -240,6 +244,13 @@ export default Vue.extend({
   }
 }
 
+.feat--open {
+  .tab__plus {
+    transform: rotate(45deg);
+    transition: transform .25s ease-in-out;
+  }
+}
+
 .product__text {
   align-items: flex-start;
   display: flex;
@@ -292,6 +303,12 @@ export default Vue.extend({
       display: flex;
       align-items: center;
       width: 100%;
+      justify-content: space-between;
+
+      div {
+        display: flex;
+        align-items: center;
+      }
     }
 
     .tab__feat--icon {

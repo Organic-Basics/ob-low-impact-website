@@ -43,6 +43,7 @@
 import Vue from 'vue'
 import Footer from '~/components/Footer.vue'
 import ImpactMeter from '~/components/ImpactMeter.vue'
+import mainSiteMap from '~/assets/json/mainSiteMap.json'
 
 export default Vue.extend({
   name: 'Overlay',
@@ -98,24 +99,7 @@ export default Vue.extend({
           description: 'We have formulated a set of 10 guidelines to help radically limit the amount of data transfer required to run an online store or website. We call it “The Low Impact Manifesto”.'
         }
       ],
-      mainSiteMap: [
-        {
-          currency: 'dkk',
-          url: 'dk.organicbasics.com'
-        },
-        {
-          currency: 'gbp',
-          url: 'uk.organicbasics.com'
-        },
-        {
-          currency: 'usd',
-          url: 'us.organicbasics.com'
-        },
-        {
-          currency: 'eur',
-          url: 'organicbasics.com'
-        }
-      ]
+      mainSiteMap: mainSiteMap
     }
   },
   methods: {
@@ -132,7 +116,8 @@ export default Vue.extend({
       else return '...'
     },
     mainSiteLink () {
-      let mainSite = this.mainSiteMap.find((a) => {
+      let mainSiteData = this.mainSiteMap.mainSiteMap
+      let mainSite = mainSiteData.find((a) => {
         return a.currency == this.$store.state.activeCurrency
       })
       let mainSiteUrl = 'https://' + mainSite.url + this.$route.path.replace('/' + this.$store.state.activeCurrency, '')

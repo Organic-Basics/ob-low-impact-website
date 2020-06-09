@@ -3,7 +3,10 @@
     <h3 class="collection__heading">{{ collectionTitle }}</h3>
     <div class="collection__content">
       <div class="collection__sidebar">
-        <nuxt-link v-for="(link, index) in menuLinks.menuLinks.womens" :key="index" :to="`/${$store.state.activeCurrency}${link.url}`">
+        <nuxt-link v-if="collHandle.startsWith('all-womens') || collHandle.startsWith('womens')" v-for="(link, index) in menuLinks.menuLinks.womens" :key="index" :to="`/${$store.state.activeCurrency}${link.url}`">
+          <h6>{{link.name}}</h6>
+        </nuxt-link>
+        <nuxt-link v-if="collHandle.startsWith('all-mens') || collHandle.startsWith('mens')" v-for="(link, index) in menuLinks.menuLinks.mens" :key="index" :to="`/${$store.state.activeCurrency}${link.url}`">
           <h6>{{link.name}}</h6>
         </nuxt-link>
       </div>
@@ -78,6 +81,7 @@ export default Vue.extend({
         }`;
 
         let title = "";
+        let collHandle =""
         if (ctx.params.style) {
           let gender = ctx.params.handle.match(/[wo]*mens/g);
           let style = ctx.params.style.replace(/style-/, "");
@@ -100,6 +104,7 @@ export default Vue.extend({
               query {
                 collectionByHandle(handle: "${ctx.params.handle}") {
                   title,
+                  handle
                   products(first: 100) {
                     ${productsQuery}
                   }
@@ -108,6 +113,7 @@ export default Vue.extend({
             `
           });
           title = result.data.collectionByHandle.title;
+          collHandle = result.data.collectionByHandle.handle;
         }
 
         // let variantPrice = result.data.collectionByHandle.products.edges.node.variants.edges.node.price
@@ -249,14 +255,15 @@ export default Vue.extend({
         return {
           // nuxt el : query var
           products: products,
-          collectionTitle: title
+          collectionTitle: title,
+          collHandle: collHandle
         };
       } else {
-        return { products: [], collectionTitle: "" };
+        return { products: [], collectionTitle: "", collHandle: "" };
       }
     } catch (err) {
       console.error(err);
-      return { products: [], collectionTitle: "" };
+      return { products: [], collectionTitle: "", collHandle: "" };
     }
   }
 });
@@ -296,6 +303,7 @@ export default Vue.extend({
 
     .collection__sidebar {
       padding: 0 20px;
+      position: fixed;
 
       @include screenSizes(phone) {
         display: none;
@@ -308,6 +316,7 @@ export default Vue.extend({
     flex-wrap: wrap;
     justify-content: center;
     flex-basis: 85%;
+    margin-left: 15%;
 
     @include screenSizes(phone) {
       justify-content: space-between;
@@ -315,6 +324,7 @@ export default Vue.extend({
       padding-left: 20px;
       padding-right: 10px;
       flex-basis: 100%;
+      margin-left: 0;
     }
   }
 }

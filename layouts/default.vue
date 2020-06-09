@@ -1,6 +1,8 @@
 <template>
   <main :class="'container container-carbon--' + carbonIntensity.index + ' ' + $route.name" ref="container">
-    <button class="read-more" @click="isOverlayOpen = true" v-if="!$route.path.includes('offline')">Read more</button>
+    <button class="read-more" @click="isOverlayOpen = true" v-if="!$route.path.includes('offline')">
+      <img src="~/assets/svg/read-more.svg" alt="Read more">
+    </button>
     <Navigation @openCart="isCartOpen = true" @openSidebar="isSidebarOpen = true" v-if="!$route.path.includes('offline')" />
     <nuxt />
     <sidebar :open="isSidebarOpen" @closed="isSidebarOpen = false" v-if="!$route.path.includes('offline')"/>
@@ -244,11 +246,16 @@ section {
   border: 0;
   border-radius: 100%;
   cursor: pointer;
-  left: 10vw;
   min-height: 50px;
   position: fixed;
   top: 20vh;
   max-width: 50px;
+  background: none;
+  left: 15vw;
+
+  @include screenSizes(tabletPortrait) {
+    left: 10vw;
+  }
 }
 
 </style>

@@ -1,0 +1,20 @@
+{
+  "mainSiteMap": [
+    {
+      "currency": "dkk",
+      "url": "dk.organicbasics.com"
+    },
+    {
+      "currency": "gbp",
+      "url": "uk.organicbasics.com"
+    },
+    {
+      "currency": "usd",
+      "url": "us.organicbasics.com"
+    },
+    {
+      "currency": "eur",
+      "url": "organicbasics.com"
+    }
+  ]
+}

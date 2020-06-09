@@ -12,9 +12,8 @@
     <h4 class="index__desc">The internet is dirty. Data transfer requires electricity, which creates carbon emissions — and this leads to climate change. The Low Impact website reduces data transfer by up to 96% in comparison to our regular website.</h4>
   </section>
 
-  <section class="bg--yellow">
+  <section class="bg--yellow" id="manifesto">
     <h1 class="manifesto__heading--dramatic">The low impact manifesto</h1>
-
     <h4 class="text--black">A Low Impact website:</h4>
     <Manifesto />
   </section>

@@ -1,5 +1,5 @@
 <template>
-  <header class="header" ref="header">
+  <header ref="header" class="header" :class="hoverWomens ? 'header--grey' : hoverMens ? 'header--grey' : ''">
     <!-- Mobile links -->
     <div class="menu--mobile" @click="openSidebar()">
       <span></span>
@@ -20,8 +20,8 @@
         <Logo />
       </nuxt-link>
       <ul class="menu__links--desktop">
-        <li>Low Impact Website</li>
-        <li>Manifesto</li>
+        <li><a :href="mainSiteLink">Normal website</a></li>
+        <nuxt-link :to="'/' + $store.state.activeCurrency + '#manifesto'">Manifesto</nuxt-link>
       </ul>
     </div>
     <div class="header__cart" @click="openCart()">
@@ -34,13 +34,13 @@
     <!-- Desktop dropdown -->
     <div class="menu__dropdown--women" v-show="hoverWomens" @mouseover="hoverWomens=true" @mouseleave="hoverWomens=false">
         <nuxt-link :to="`/${$store.state.activeCurrency}/collections/all-womens-products`"><h2>Shop Women</h2></nuxt-link>
-        <nuxt-link v-for="(link, index) in menuLinks.menuLinks.womens" :key="index" :to="`/${$store.state.activeCurrency}${link.url}`">
+        <nuxt-link v-for="(link, index) in menuLinks.menuLinks.womens" v-if="index < 8" :key="index" :to="`/${$store.state.activeCurrency}${link.url}`">
           <h3 class="menu__link">{{link.name}}</h3>
         </nuxt-link>
     </div>
     <div class="menu__dropdown--men" v-show="hoverMens" @mouseover="hoverMens=true" @mouseleave="hoverMens=false">
       <nuxt-link :to="`/${$store.state.activeCurrency}/collections/all-mens-products`"><h2>Shop Men</h2></nuxt-link>
-      <nuxt-link v-for="(link, index) in menuLinks.menuLinks.mens" :key="index" :to="`/${$store.state.activeCurrency}${link.url}`">
+      <nuxt-link v-for="(link, index) in menuLinks.menuLinks.mens" v-if="index < 6" :key="index" :to="`/${$store.state.activeCurrency}${link.url}`">
         <h3 class="menu__link">{{link.name}}</h3>
       </nuxt-link>
     </div>
@@ -53,6 +53,7 @@ import Vue from 'vue'
 import Logo from '~/components/Logo.vue'
 import CartIcon from '~/components/CartIcon.vue'
 import menuLinks from '~/assets/json/menuLinks.json'
+import mainSiteMap from '~/assets/json/mainSiteMap.json'
 
 export default Vue.extend({
   name: 'Navigation',
@@ -68,7 +69,8 @@ export default Vue.extend({
     return {
       hoverWomens: false,
       hoverMens: false,
-      menuLinks: menuLinks
+      menuLinks: menuLinks,
+      mainSiteMap: mainSiteMap
     }
   },
   created() {
@@ -90,10 +92,10 @@ export default Vue.extend({
     },
     handleStickyHeader: function() {
       let header = this.$refs.header
-      let headerOffset = header.offsetTop
+      let pageOffset = window.pageYOffset
       let headerHeight = header.offsetHeight
 
-      if(headerOffset > headerHeight) {
+      if(pageOffset > headerHeight) {
         header.classList.add('header--sticky')
       } else {
         header.classList.remove('header--sticky')
@@ -112,6 +114,14 @@ export default Vue.extend({
         })
         return cartCount
       }
+    },
+    mainSiteLink () {
+      let mainSiteData = this.mainSiteMap.mainSiteMap
+      let mainSite = mainSiteData.find((a) => {
+        return a.currency == this.$store.state.activeCurrency
+      })
+      let mainSiteUrl = 'https://' + mainSite.url + this.$route.path.replace('/' + this.$store.state.activeCurrency, '')
+      return mainSiteUrl
     }
   }
 })
@@ -127,11 +137,17 @@ export default Vue.extend({
   display: flex;
   justify-content: space-between;
   margin: 0;
-  padding: 10px;
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
+  height: 80px;
+  padding-left: 20px;
+  padding-right: 20px;
+
+  @include screenSizes(tabletPortrait) {
+    padding: 0;
+  }
 
   .menu--mobile {
     display: none;
@@ -168,6 +184,7 @@ export default Vue.extend({
     flex-direction: row;
     align-items: center;
     margin-left: auto;
+    height: 100%;
 
     .menu__links--desktop {
       list-style: none;
@@ -188,7 +205,13 @@ export default Vue.extend({
       li {
         padding: 12px;
         margin: 0;
+        display: flex;
+        align-items: center;
       }
+    }
+
+    ul, li {
+      height: 100%;
     }
   }
 
@@ -217,11 +240,12 @@ export default Vue.extend({
 
   .menu__dropdown--men, .menu__dropdown--women {
     width: 100vw;
-    height: 70vh;
-    top: 54px;
+    // height: calc(100vh - 80px);
+    height: auto;
+    top: 85px;
     left: 0;
     overflow: scroll;
-    padding: 30px 10px;
+    padding: 60px 20px;
     margin: 0;
     margin-top: -5px;
     background: map-get($colors, 'bgGrey');
@@ -237,5 +261,9 @@ export default Vue.extend({
 .header--sticky {
   background: #fff;
   transition: .2s;
+}
+
+.header--grey {
+  background: map-get($colors, 'bgGrey');
 }
 </style>
