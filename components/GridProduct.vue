@@ -1,5 +1,5 @@
 <template>
-  <div class="product" v-if="productData.onlineStoreUrl">
+  <div class="product" v-if="productData.onlineStoreUrl || $route.params.locale === 'dev'">
     <nuxt-link
       :to="
         '/' + $store.state.activeCurrency + '/products/' + productData.handle
@@ -47,7 +47,7 @@
         <p>{{ productData.title }}</p>
         <div class="product__price">
           <p>
-            {{ productData.variants.edges[0].node.priceV2.amount }}
+            {{ parseInt(productData.variants.edges[0].node.priceV2.amount) }}
             {{ productData.variants.edges[0].node.priceV2.currencyCode }}
           </p>
           <p
@@ -57,7 +57,7 @@
                 productData.variants.edges[0].node.compareAtPrice !== '0.00'
             "
           >
-            {{ productData.variants.edges[0].node.compareAtPrice }}
+            {{ parseInt(productData.variants.edges[0].node.compareAtPrice) }}
             {{ productData.variants.edges[0].node.priceV2.currencyCode }}
           </p>
         </div>
@@ -153,7 +153,7 @@ export default Vue.extend({
   }
 }
 
-.bundle__illustrations {
+.product__illustration {
   justify-content: center;
   width: 100%;
   display: flex;
@@ -164,7 +164,31 @@ export default Vue.extend({
   height: 180px;
   position: relative;
 
+  svg {
+    *[stroke*="#"] {
+      stroke: map-get($colors, "black") !important;
+    }
+
+    *[fill*="#"] {
+      fill: map-get($colors, "productGrey") !important;
+    }
+  }
+}
+
+.bundle__illustrations {
+  justify-content: center;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  overflow: hidden;
+  background: map-get($colors, "productGrey");
+  align-items: center;
+  height: 180px;
+  position: relative;
+
   .product__illustration {
+    background: none;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -173,6 +197,7 @@ export default Vue.extend({
     min-width: 80px;
     flex-grow: 1;
     position: relative;
+
     &:first-child {
       top: 10%;
     }
@@ -218,17 +243,8 @@ export default Vue.extend({
         }
       }
     }
-
-    svg {
-      *[stroke*="#"] {
-        stroke: map-get($colors, "black") !important;
-      }
-
-      *[fill*="#"] {
-        fill: map-get($colors, "productGrey") !important;
-      }
-    }
   }
+
   .product__image-quant {
     bottom: 25%;
     right: 20%;

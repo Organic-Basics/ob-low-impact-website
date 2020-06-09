@@ -86,7 +86,7 @@ export default Vue.extend({
       threeQuestions: [
         {
           question: 'What?',
-          description: 'The Low Impact version of our website reduces the carbon emissions associated with online shopping by up to 96% in comparison to our regular site. This is done by getting rid of most of the data-heavy elements like images and videos.'
+          description: 'The Low Impact version of our website reduces the carbon emissions associated with online shopping by up to 66% in comparison to our regular site. This is done by getting rid of most of the data-heavy elements like images and videos.'
         },
         {
           question: 'Why?',

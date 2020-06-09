@@ -41,6 +41,7 @@ export default Vue.extend({
 @import "~assets/scss/mixins.scss";
 
 .spedometer__container {
+  pointer-events: none;
   position: relative;
 
   @mixin spedometer__label {

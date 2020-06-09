@@ -115,13 +115,18 @@ export default Vue.extend({
         return cartCount
       }
     },
-    mainSiteLink () {
+    mainSiteLink: function() {
       let mainSiteData = this.mainSiteMap.mainSiteMap
       let mainSite = mainSiteData.find((a) => {
         return a.currency == this.$store.state.activeCurrency
       })
-      let mainSiteUrl = 'https://' + mainSite.url + this.$route.path.replace('/' + this.$store.state.activeCurrency, '')
-      return mainSiteUrl
+      if(mainSite) {
+        let mainSiteUrl = 'https://' + mainSite.url + this.$route.path.replace('/' + this.$store.state.activeCurrency, '')
+        return mainSiteUrl
+      }
+      else {
+        return 
+      }
     }
   }
 })
