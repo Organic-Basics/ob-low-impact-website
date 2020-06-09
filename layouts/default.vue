@@ -91,7 +91,6 @@ export default Vue.extend({
   },
   methods: {
     openCart(){
-      console.log("opening the cart")
       this.isCartOpen = true;
     },
     saveEntries: function(isRouteChange) {
