@@ -92,6 +92,7 @@ export default Vue.extend({
     pointer-events: none;
     position: fixed;
     width: 100vw;
+    left: 0;
 
     &.size-guide--open {
         bottom: 0;
@@ -149,7 +150,7 @@ export default Vue.extend({
     cursor: pointer;
     margin-right: 10px;
     padding-top: 10px;
-    
+
     &.active {
         border-bottom: 2px solid map-get($colors, 'black');
         font-weight: bold;
@@ -206,5 +207,6 @@ export default Vue.extend({
     right: map-get($mobile, 'sidePadding');
     top: 20px;
     transform: rotate(45deg);
+    cursor: pointer;
 }
 </style>

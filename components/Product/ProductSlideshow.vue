@@ -1,8 +1,8 @@
 <template>
-  <div class="">
+  <div>
     <!-- Single product slideshow -->
     <div v-if="isSingleProduct" class="product__slideshow" @click="showImages()">
-      <div v-html="productIllustration" v-if="!shouldShowImages && productIllustration"></div>
+      <div v-html="productIllustration" v-if="!shouldShowImages && productIllustration" class="slideshow__illustration"></div>
       <div class="product__image-label" v-if="!shouldShowImages">
         <span class="product__image-label--bold">
           <span v-if="$store.state.carbonIntensity.intensity.index !== 'high'">Tap to see real photos</span>
@@ -17,7 +17,7 @@
           </span>
         </span>
       </div>
-      <div v-for="(image, index) in mainProduct.images.edges">
+      <div id="slideshow__image" class="slideshow__image" v-for="(image, index) in mainProduct.images.edges">
         <img :src="shouldShowImages ? image.node.transformedSrc : ''" v-if="shouldShowImages">
       </div>
     </div>

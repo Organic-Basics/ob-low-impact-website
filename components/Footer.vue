@@ -17,7 +17,7 @@
         <span>Illustration: @fra.ge_art</span>
       </div>
     </section>
-    <section>
+    <section class="footer__bottom">
       <footer class="text--left">
         <h2>
           <nuxt-link :to="`/${$store.state.activeCurrency}/collections/all-womens-products`">Shop Women</nuxt-link>
@@ -121,8 +121,12 @@ export default Vue.extend({
     }
   }
 
-  .footer__help--text {
-    margin-top: 50px;
+  .footer__bottom {
+    background: #fff;
+
+    .footer__help--text {
+      margin-top: 50px;
+    }
   }
 }
 </style>
