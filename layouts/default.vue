@@ -5,8 +5,8 @@
     <nuxt />
     <sidebar :open="isSidebarOpen" @closed="isSidebarOpen = false" v-if="!$route.path.includes('offline')"/>
     <cartDrawer :open="isCartOpen" @closed="isCartOpen = false" v-if="!$route.path.includes('offline')"/>
-    <overlay :open="isOverlayOpen" :carbonIntensity="carbonIntensity" :footerData="{currentBytes, currentPage}" @closed="isOverlayOpen = false" v-if="!$route.path.includes('offline')"/>
-    <Footer :currentBytes="currentBytes" :currentSavings="currentSavings" v-if="!$route.path.includes('offline')"/>
+    <overlay :open="isOverlayOpen" :carbonIntensity="carbonIntensity" @closed="isOverlayOpen = false" v-if="!$route.path.includes('offline')" :footerData="{currentBytes, currentSavingsMultiplier, currentPage, totalSavings}"/>
+    <Footer :currentBytes="currentBytes" :currentSavingsMultiplier="currentSavingsMultiplier" :currentPage="currentPage" :totalSavings="totalSavings" v-if="!$route.path.includes('offline')"/>
     <CookieBar/>
   </main>
 </template>
@@ -38,7 +38,7 @@ export default Vue.extend({
     let dispatch = await this.$store.dispatch('initStore')
   },
   async mounted() {
-    this.saveEntries()
+    this.saveEntries(true)
   },
   updated() {
     this.saveEntries()
@@ -49,57 +49,48 @@ export default Vue.extend({
       isOverlayOpen: false,
       isCartOpen: false,
       isSidebarOpen: false,
-      pageMap: {
-        lowImpact: [
-          {
-            key: 'locale',
-            name: 'front page',
-            normalSize: 838739
-          },
-          {
-            key: 'locale-collections-handle-style',
-            name: 'collection page',
-            normalSize: 1797668
-          },
-          {
-            key: 'locale-products-handle',
-            name: 'product page',
-            normalSize: 708284
-          }
-        ],
-        conventional: [
-          {
-            key: 'locale',
-            name: 'front page',
-            normalSize: 6338485
-          },
-          {
-            key: 'locale-collections-handle-style',
-            name: 'collection page',
-            normalSize: 5282659
-          },
-          {
-            key: 'locale-products-handle',
-            name: 'product page',
-            normalSize: 6550422
-          }
-        ]
-      },
+      pageMap: [
+        {
+          key: 'locale',
+          name: 'front page',
+          lowImpactSize: 838739,
+          normalSize: 6338485
+        },
+        {
+          key: 'locale-collections-handle-style',
+          name: 'collection page',
+          lowImpactSize: 1797668,
+          normalSize: 5282659
+        },
+        {
+          key: 'locale-products-handle',
+          name: 'product page',
+          lowImpactSize: 708284,
+          normalSize: 6550422
+        }
+      ],
       currentBytes: 0,
-      currentSavings: 0
+      currentSavingsMultiplier: 0,
+      currentPage: {
+        key: '',
+        name: '',
+        lowImpactSize: 0,
+        normalSize: 0
+      },
+      totalSavings: 0,
+      visitedPages: []
     }
   },
   watch: {
     '$route': {
       handler: function(val) {
-        
-        setTimeout(this.saveEntries, 500)
+        setTimeout(() => { this.saveEntries(true) }, 500)
       },
       deep: true
     },
   },
   methods: {
-    saveEntries: function() {
+    saveEntries: function(isRouteChange) {
       let entries = performance.getEntriesByType('resource')
       for(let ent of entries) {
         let entJson = ent.toJSON()
@@ -114,31 +105,45 @@ export default Vue.extend({
         }
       }
 
-      if(entries.length > 0) {
-        this.currentBytes = entries.reduce((acc, cur) => {
-          if(typeof acc !== 'number') {
-            acc = cur.transferSize
-          }
-          else {
-            acc += cur.transferSize
-          }
-          return acc
-        })
-        console.log('currentBytes: ' + this.currentBytes)
-      }
-      else {
-        this.currentBytes = 0
+      this.currentPage = this.pageMap.find((a) => {
+        return this.$route.name === a.key
+      })
+      this.currentBytes = this.currentPage.lowImpactSize
+      this.currentSavingsMultiplier = 1 / (this.currentPage.lowImpactSize / this.currentPage.normalSize)
+
+      let thisSaving = this.currentPage.lowImpactSize
+
+      if(isRouteChange) {
+        this.visitedPages.push(this.currentPage)
       }
 
-      let impactPage = this.pageMap.lowImpact.find((a) => {
-        return this.$route.name === a.key
-      })
-      let conventionalPage = this.pageMap.conventional.find((a) => {
-        return this.$route.name === a.key
-      })
-      console.log(impactPage)
-      console.log(conventionalPage)
-      console.log('transferredObjects: ' + this.transferredObjects.length)
+      if(this.visitedPages.length > 0) {
+        let usedBytes = 0
+        if(entries.length > 0) {
+          usedBytes = entries.reduce((acc, cur) => {
+            if(typeof acc !== 'number') {
+              acc = cur.transferSize
+            }
+            else {
+              acc += cur.transferSize
+            }
+            return acc
+          }, 0)
+        }
+
+        let conventionalBytes = 0
+        conventionalBytes = this.visitedPages.reduce((acc, cur) => {
+          if(typeof acc !== 'number') {
+            acc = cur.normalSize
+          }
+          else {
+            acc += cur.normalSize
+          }
+          return acc
+        }, 0)
+
+        this.totalSavings = emissions.perByte(Math.abs(conventionalBytes - usedBytes), true)
+      }
     }
   },
   computed: {
