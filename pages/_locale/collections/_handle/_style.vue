@@ -385,10 +385,8 @@ export default Vue.extend({
               console.log(err);
             }
           }
-          console.log(a)
           if (a.node.quantity){
               for (let i = 0; i < a.node.quantity-1; i++) {
-                console.log(i)
               a.node.bundleIllustrations.push(a.node.productIllustration)
             }
           }

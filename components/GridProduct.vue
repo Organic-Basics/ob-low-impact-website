@@ -25,7 +25,7 @@
           five: productData.quantity == 5 ? true : false,
           quantityBundle: productData.quantity == 2 ? false : productData.quantity ? true : productData.completeBundle
         }"
-        :key=illu
+        
           v-for="illu in productData.bundleIllustrations"
           v-html="illu"
         ></div>
