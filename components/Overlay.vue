@@ -35,7 +35,7 @@
       <h1 class="manifesto__heading--dramatic">The low impact manifesto</h1>
     </section>
 
-    <Footer :currentBytes="footerData.currentBytes" :currentPage="footerData.currentPage" />
+    <Footer :currentBytes="footerData.currentBytes" :currentSavingsMultiplier="footerData.currentSavingsMultiplier" :currentPage="footerData.currentPage" :totalSavings="footerData.totalSavings"/>
   </div>
 </template>
 
