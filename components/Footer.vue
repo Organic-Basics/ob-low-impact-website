@@ -39,17 +39,7 @@ export default Vue.extend({
   name: 'Footer',
   props: {
     currentBytes: Number,
-    currentPage: Object
-  },
-  computed: {
-    pageSavingsMultiplier: function() {
-      if(this.$props.currentPage && this.$props.currentPage.key) {
-        return (1 / (this.$props.currentBytes / this.$props.currentPage.normalSize)).toFixed(2)
-      }
-      else {
-        return 0
-      }
-    }
+    currentSavings: Number
   }
 })
 

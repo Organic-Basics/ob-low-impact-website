@@ -6,7 +6,7 @@
     <sidebar :open="isSidebarOpen" @closed="isSidebarOpen = false" v-if="!$route.path.includes('offline')"/>
     <cartDrawer :open="isCartOpen" @closed="isCartOpen = false" v-if="!$route.path.includes('offline')"/>
     <overlay :open="isOverlayOpen" :carbonIntensity="carbonIntensity" :footerData="{currentBytes, currentPage}" @closed="isOverlayOpen = false" v-if="!$route.path.includes('offline')"/>
-    <Footer :currentBytes="currentBytes" :currentPage="currentPage" v-if="!$route.path.includes('offline')"/>
+    <Footer :currentBytes="currentBytes" :currentSavings="currentSavings" v-if="!$route.path.includes('offline')"/>
     <CookieBar/>
   </main>
 </template>
@@ -38,9 +38,6 @@ export default Vue.extend({
     let dispatch = await this.$store.dispatch('initStore')
   },
   async mounted() {
-    this.currentPage = this.pageMap.find((a) => {
-      return this.$route.name === a.key
-    })
     this.saveEntries()
   },
   updated() {
@@ -52,37 +49,50 @@ export default Vue.extend({
       isOverlayOpen: false,
       isCartOpen: false,
       isSidebarOpen: false,
-      pageMap: [
-        {
-          key: 'index',
-          name: 'front page',
-          normalSize: 14240040
-        },
-        {
-          key: 'collections-handle',
-          name: 'collection page',
-          normalSize: 8908927
-        },
-        {
-          key: 'products-handle',
-          name: 'product page',
-          normalSize: 11323705
-        }
-      ],
-      currentPage: {
-        key: '',
-        name: '',
-        normalSize: 1
+      pageMap: {
+        lowImpact: [
+          {
+            key: 'locale',
+            name: 'front page',
+            normalSize: 838739
+          },
+          {
+            key: 'locale-collections-handle-style',
+            name: 'collection page',
+            normalSize: 1797668
+          },
+          {
+            key: 'locale-products-handle',
+            name: 'product page',
+            normalSize: 708284
+          }
+        ],
+        conventional: [
+          {
+            key: 'locale',
+            name: 'front page',
+            normalSize: 6338485
+          },
+          {
+            key: 'locale-collections-handle-style',
+            name: 'collection page',
+            normalSize: 5282659
+          },
+          {
+            key: 'locale-products-handle',
+            name: 'product page',
+            normalSize: 6550422
+          }
+        ]
       },
-      currentBytes: 0
+      currentBytes: 0,
+      currentSavings: 0
     }
   },
   watch: {
     '$route': {
       handler: function(val) {
-        this.currentPage = this.pageMap.find((a) => {
-          return val.name === a.key
-        })
+        
         setTimeout(this.saveEntries, 500)
       },
       deep: true
@@ -119,6 +129,15 @@ export default Vue.extend({
       else {
         this.currentBytes = 0
       }
+
+      let impactPage = this.pageMap.lowImpact.find((a) => {
+        return this.$route.name === a.key
+      })
+      let conventionalPage = this.pageMap.conventional.find((a) => {
+        return this.$route.name === a.key
+      })
+      console.log(impactPage)
+      console.log(conventionalPage)
       console.log('transferredObjects: ' + this.transferredObjects.length)
     }
   },
