@@ -43,21 +43,22 @@
           "
         ></div>
       </div>
-      <div v-else class="bundle__illustrations" >
+      <div v-else class="bundle__illustrations">
         <div
           class="bundle__illustration--quant"
-          v-html="productIllustration"
-          v-if="!shouldShowImages && productIllustration"
+          v-for="product in products"
+          v-html="product.illustration"
+          v-if="!shouldShowImages && product.illustration"
         ></div>
       </div>
-      <span
+      <!-- <span
         class=" product__image-quant variant--black"
         v-if="!shouldShowImages && bundleData.type === 'quant'"
       >
         <span class="product__bundle--quant">
           x {{ products.length }}
         </span></span
-      >
+      > -->
       <div class="product__image-label" v-if="!shouldShowImages">
         <span class="product__image-label--bold">
           <span v-if="$store.state.carbonIntensity.intensity.index !== 'high'"
@@ -100,7 +101,9 @@ export default Vue.extend({
     productIllustration: String,
     highResCost: Number,
     lowResCost: Number,
-    mainProduct: Object
+    mainProduct: Object,
+    bundleData: Object,
+    products: Array
   },
   methods: {
     showImages() {

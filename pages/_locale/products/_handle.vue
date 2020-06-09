@@ -1,8 +1,7 @@
 <template>
 <div class="product__container">
   <div class="product__above">
-    <ProductSlideshow :isSingleProduct="isSingleProduct" :productIllustration="productIllustration" :shouldShowImages="shouldShowImages" @showImages="showImages()" :highResCost="highResCost" :lowResCost="lowResCost" :mainProduct="mainProduct" />
-
+    <ProductSlideshow :isSingleProduct="isSingleProduct" :productIllustration="productIllustration" :shouldShowImages="shouldShowImages" @showImages="showImages()" :highResCost="highResCost" :lowResCost="lowResCost" :mainProduct="mainProduct" :bundleData="bundleData" :products="products" />
     <!-- Sticky bar -->
     <div class="product__sticky">
       <div class="product__sticky-top">
@@ -232,9 +231,9 @@ export default Vue.extend({
             newData.upSells.forEach(upSell => {
               // Handle unisex products not having separate illustrations
               if (upSell.node.description.split("|").length > 2) {
-                if (upSell.node.description.split("|")[1] === "triple") {
+                if (upSell.node.description.split("|")[1] === "complete") {
                   // TODO: tripleBundle is used for CSS styling, change it to complete bundle
-                  upSell.node.tripleBundle = true;
+                  upSell.node.completeBundle = true;
                   upSell.node.quantity = null;
                 } else if (upSell.node.description.split("|")[1] === "null") {
                   // TODO: Special case where there was already a bundle with a description using "|" as separator
@@ -249,7 +248,7 @@ export default Vue.extend({
 
               // Getting the svg filenames to load bundle illustrations
               let illuHandles = [];
-              if (upSell.node.tripleBundle) {
+              if (upSell.node.completeBundle) {
                 illuHandles = upSell.node.description
                   .split("|")[0]
                   .split("---")
@@ -511,9 +510,18 @@ export default Vue.extend({
     }
   },
   methods: {
+    openCart() {
+      console.log("open cart method in child triggered");
+      this.$emit("openCartFromHandle");
+    },
+
     async addToCart() {
+      console.log("adding to cart");
       this.isAdding = true;
       let cartIds = this.$store.getters.cartIds;
+
+      console.log("emitting openCartfromnuxt");
+      this.$parent.$emit("openCartFromNuxtChild");
 
       let customAttributes = [];
       if (this.bundleData && this.bundleData.tag && this.bundleData.name) {
@@ -833,27 +841,32 @@ function prepProducts(products, bundleData) {
     .product__slideshow {
         display: flex;
         flex-direction: row;
-        width: 50vw;
-        height: calc(100vh - 62px);
-        position: sticky;
-        bottom: 0;
-        top: 62px;
-        overflow-x: scroll;
-        overflow-y: hidden;
+        position: relative;
 
-        @include screenSizes(tabletPortrait) {
-            width: 100vw;
-            height: 65vh;
-            top: 0;
-            position: unset;
+        &.vertical {
+          flex-wrap: nowrap;
+          flex-direction: column;
         }
+        .bundle__illustration {
+          max-width: 40%;
+          min-width: 90px;
+          // flex-grow: 1;
 
-        .slideshow__illustration {
-          height: 100%;
-          width: 50vw;
+          &--quant {
+            position: absolute;
+            // top:50%;
+            // right: 50%;
+            width: 40%;
+            height: 50%;
 
-          @include screenSizes(tabletPortrait) {
-            width: 100vw;
+            &:first-child {
+              top: 0%;
+              left: 15%;
+            }
+            &:last-child {
+              bottom: 15%;
+              right: 15%;
+            }
           }
         }
 

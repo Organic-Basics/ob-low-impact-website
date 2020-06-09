@@ -13,23 +13,35 @@
       <div
         :class="{
           bundle__illustrations: true,
-          triple: productData.tripleBundle
+          complete: productData.completeBundle
         }"
         v-else
       >
         <div
-          class="product__illustration"
+          :class="{
+            product__illustration: true,
+            quantityBundle: productData.quantity
+              ? true
+              : productData.completeBundle,
+            five: productData.quantity == 5 ? true : false,
+            quantityBundle:
+              productData.quantity == 2
+                ? false
+                : productData.quantity
+                ? true
+                : productData.completeBundle
+          }"
           v-for="illu in productData.bundleIllustrations"
           v-html="illu"
         ></div>
-        <span
+        <!-- <span
           class="product__image-quant variant--black"
           v-if="productData.quantity"
         >
           <span class="product__bundle--quant">
             x{{ productData.quantity }}
           </span>
-        </span>
+        </span> -->
       </div>
       <div class="product__slate">
         <p>{{ productData.title }}</p>
@@ -157,10 +169,55 @@ export default Vue.extend({
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background: map-get($colors, "productGrey");
     max-width: 50%;
     min-width: 80px;
     flex-grow: 1;
+    position: relative;
+    &:first-child {
+      top: 10%;
+    }
+    &:last-child {
+      bottom: 10%;
+    }
+
+    &.quantityBundle {
+      max-width: 50%;
+      min-width: 50%;
+      position: absolute;
+      // top:50%;
+      // right: 50%;
+      width: 40%;
+      height: 50%;
+
+      &:first-child {
+        top: 10%;
+        left: 5%;
+      }
+      &:last-child {
+        bottom: 10%;
+        right: 5%;
+      }
+
+      &.five {
+        &:first-child {
+          top: 0%;
+          left: 0%;
+        }
+        &:nth-child(2) {
+          top: 12%;
+          left: 12%;
+        }
+
+        &:nth-child(4) {
+          bottom: 12%;
+          right: 12%;
+        }
+        &:last-child {
+          bottom: 0%;
+          right: 0%;
+        }
+      }
+    }
 
     svg {
       *[stroke*="#"] {
@@ -187,7 +244,7 @@ export default Vue.extend({
     }
   }
 
-  &.triple {
+  &.complete {
     flex-direction: row;
     .product__illustration {
       max-width: 50%;
