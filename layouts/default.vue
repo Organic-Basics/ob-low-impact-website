@@ -1,14 +1,12 @@
 <template>
   <main :class="'container container-carbon--' + carbonIntensity.index + ' ' + $route.name" ref="container">
     <button class="read-more" @click="isOverlayOpen = true" v-if="!$route.path.includes('offline')">Read more</button>
-    <Navigation :womenLinks="menuLinks.womens" :menLinks="menuLinks.mens"
-      @openCart="openCart()" @openSidebar="isSidebarOpen = true" v-if="!$route.path.includes('offline')" />
+    <Navigation @openCart="openCart()" @openSidebar="isSidebarOpen = true" v-if="!$route.path.includes('offline')" />
     <nuxt @openCartFromNuxtChild="openCart()"/>
-    <sidebar :open="isSidebarOpen" :womenLinks="menuLinks.womens" :menLinks="menuLinks.mens"
-      @closed="isSidebarOpen = false" v-if="!$route.path.includes('offline')"/>
+    <sidebar :open="isSidebarOpen" @closed="isSidebarOpen = false" v-if="!$route.path.includes('offline')"/>
     <cartDrawer :open="isCartOpen" @closed="isCartOpen = false" v-if="!$route.path.includes('offline')"/>
-    <overlay :open="isOverlayOpen" :carbonIntensity="carbonIntensity" :footerData="{currentBytes, currentPage}" @closed="isOverlayOpen = false" v-if="!$route.path.includes('offline')"/>
-    <Footer :currentBytes="currentBytes" :currentPage="currentPage" v-if="!$route.path.includes('offline')"/>
+    <overlay :open="isOverlayOpen" :carbonIntensity="carbonIntensity" @closed="isOverlayOpen = false" v-if="!$route.path.includes('offline')" :footerData="{currentBytes, currentSavingsMultiplier, currentPage, totalSavings}"/>
+    <Footer :currentBytes="currentBytes" :currentSavingsMultiplier="currentSavingsMultiplier" :currentPage="currentPage" :totalSavings="totalSavings" v-if="!$route.path.includes('offline')"/>
     <CookieBar/>
   </main>
 </template>
@@ -40,10 +38,7 @@ export default Vue.extend({
     let dispatch = await this.$store.dispatch('initStore')
   },
   async mounted() {
-    this.currentPage = this.pageMap.find((a) => {
-      return this.$route.name === a.key
-    })
-    this.saveEntries()
+    this.saveEntries(true)
   },
   updated() {
     this.saveEntries()
@@ -56,174 +51,40 @@ export default Vue.extend({
       isSidebarOpen: false,
       pageMap: [
         {
-          key: 'index',
+          key: 'locale',
           name: 'front page',
-          normalSize: 14240040
+          lowImpactSize: 838739,
+          normalSize: 6338485
         },
         {
-          key: 'collections-handle',
+          key: 'locale-collections-handle-style',
           name: 'collection page',
-          normalSize: 8908927
+          lowImpactSize: 1797668,
+          normalSize: 5282659
         },
         {
-          key: 'products-handle',
+          key: 'locale-products-handle',
           name: 'product page',
-          normalSize: 11323705
+          lowImpactSize: 708284,
+          normalSize: 6550422
         }
       ],
+      currentBytes: 0,
+      currentSavingsMultiplier: 0,
       currentPage: {
         key: '',
         name: '',
-        normalSize: 1
+        lowImpactSize: 0,
+        normalSize: 0
       },
-      currentBytes: 0,
-      menuLinks: {
-        womens: [
-          {
-            'url' : '/collections/all-womens-products',
-            'name' : 'All Women\'s'
-          },
-          {
-            'url' : '/collections/all-womens-products/style-bras',
-            'name' : 'Bras'
-          },
-          {
-            'url' : '/collections/all-womens-products/style-bottoms',
-            'name' : 'Bottoms'
-          },
-          {
-            'url' : '/collections/all-womens-products/style-tops',
-            'name' : 'Tees & Tops'
-          },
-          {
-            'url' : '/collections/all-womens-products/style-socks',
-            'name' : 'Socks'
-          },
-          {
-            'url' : '/collections/all-womens-products/style-leggings',
-            'name' : 'Leggings'
-          },
-          {
-            'url' : '/collections/womens-accessories',
-            'name' : 'Accessories'
-          },
-          {
-            'url' : '/collections/womens-save-with-packs',
-            'name' : 'Save with packs'
-          },
-          {
-            'url' : '/products/e-gift-card',
-            'name' : 'Gift Cards'
-          },
-          {
-            'url' : '/collections/climate-credits',
-            'name' : 'Climate credits'
-          },
-          {
-            'url' : '/collections/womens-theme-basics',
-            'name' : 'Basics'
-          },
-          {
-            'url' : '/collections/womens-theme-activewear',
-            'name' : 'Activewear'
-          },
-          {
-            'url' : '/collections/womens-theme-invisible',
-            'name' : 'Invisible'
-          },
-          {
-            'url' : '/collections/womens-theme-recycled-materials',
-            'name' : 'Recycled materials'
-          },
-          {
-            'url' : '/collections/womens-theme-organic-cotton',
-            'name' : 'Organic cotton'
-          },
-          {
-            'url' : '/collections/womens-recycled-cashmere-winter-accessories',
-            'name' : 'Recycled cashmere'
-          },
-          {
-            'url' : '/collections/womens-theme-tencel',
-            'name' : 'TENCEL™'
-          },
-          {
-            'url' : '/collections/womens-theme-silvertech',
-            'name' : 'SilverTech™'
-          }
-        ],
-        mens: [
-          {
-            'url' : '/collections/all-mens-products',
-            'name' : 'All men\'s'
-          },
-          {
-            'url' : '/collections/all-mens-products/style-bottoms',
-            'name' : 'Underwear'
-          },
-          {
-            'url' : '/collections/all-mens-products/style-socks',
-            'name' : 'Socks'
-          },
-          {
-            'url' : '/collections/all-mens-products/style-tops',
-            'name' : 'Tees & Tops'
-          },
-          {
-            'url' : '/collections/mens-accessories',
-            'name' : 'Accessories'
-          },
-          {
-            'url' : '/collections/mens-save-with-packs',
-            'name' : 'Save with packs'
-          },
-          {
-            'url' : '/products/e-gift-card',
-            'name' : 'Gift cards'
-          },
-          {
-            'url' : '/collections/climate-credits',
-            'name' : 'Climate credits'
-          },
-          {
-            'url' : '/collections/mens-theme-basics',
-            'name' : 'Basics'
-          },
-          {
-            'url' : '/collections/mens-theme-activewear',
-            'name' : 'Activewear'
-          },
-          {
-            'url' : '/collections/mens-theme-recycled-materials',
-            'name' : 'Recycled materials'
-          },
-          {
-            'url' : '/collections/mens-theme-organic-cotton',
-            'name' : 'Organic cotton'
-          },
-          {
-            'url' : '/collections/mens-recycled-cashmere-winter-accessories',
-            'name' : 'Recycled cashmere'
-          },
-          {
-            'url' : '/collections/mens-theme-tencel',
-            'name' : 'TENCEL™'
-          },
-          {
-            'url' : '/collections/mens-theme-silvertech',
-            'name' : 'SilverTech™'
-          }
-        ]
-      }
+      totalSavings: 0,
+      visitedPages: []
     }
   },
   watch: {
     '$route': {
       handler: function(val) {
-        this.currentPage = this.pageMap.find((a) => {
-          return val.name === a.key
-        })
-        setTimeout(this.saveEntries, 500)
+        setTimeout(() => { this.saveEntries(true) }, 500)
       },
       deep: true
     },
@@ -233,7 +94,7 @@ export default Vue.extend({
       console.log("opening the cart")
       this.isCartOpen = true;
     },
-    saveEntries: function() {
+    saveEntries: function(isRouteChange) {
       let entries = performance.getEntriesByType('resource')
       for(let ent of entries) {
         let entJson = ent.toJSON()
@@ -248,22 +109,45 @@ export default Vue.extend({
         }
       }
 
-      if(entries.length > 0) {
-        this.currentBytes = entries.reduce((acc, cur) => {
+      this.currentPage = this.pageMap.find((a) => {
+        return this.$route.name === a.key
+      })
+      this.currentBytes = this.currentPage.lowImpactSize
+      this.currentSavingsMultiplier = 1 / (this.currentPage.lowImpactSize / this.currentPage.normalSize)
+
+      let thisSaving = this.currentPage.lowImpactSize
+
+      if(isRouteChange) {
+        this.visitedPages.push(this.currentPage)
+      }
+
+      if(this.visitedPages.length > 0) {
+        let usedBytes = 0
+        if(entries.length > 0) {
+          usedBytes = entries.reduce((acc, cur) => {
+            if(typeof acc !== 'number') {
+              acc = cur.transferSize
+            }
+            else {
+              acc += cur.transferSize
+            }
+            return acc
+          }, 0)
+        }
+
+        let conventionalBytes = 0
+        conventionalBytes = this.visitedPages.reduce((acc, cur) => {
           if(typeof acc !== 'number') {
-            acc = cur.transferSize
+            acc = cur.normalSize
           }
           else {
-            acc += cur.transferSize
+            acc += cur.normalSize
           }
           return acc
-        })
-        console.log('currentBytes: ' + this.currentBytes)
+        }, 0)
+
+        this.totalSavings = emissions.perByte(Math.abs(conventionalBytes - usedBytes), true)
       }
-      else {
-        this.currentBytes = 0
-      }
-      console.log('transferredObjects: ' + this.transferredObjects.length)
     }
   },
   computed: {

@@ -9,7 +9,7 @@
   </section>
 
   <section class="bg--green text--left">
-    <h4 class="index__desc">The internet is dirty. Data transfer requires electricity, which creates carbon emissions — and this leads to climate change. The Low Impact website reduces data transfer by up to 96% in comparison to our regular website.</h4>
+    <h4 class="index__desc">The internet is dirty. Data transfer requires electricity, which creates carbon emissions — and this leads to climate change. The Low Impact website reduces data transfer by up to 66% in comparison to our regular website.</h4>
   </section>
 
   <section class="bg--yellow">
@@ -51,6 +51,10 @@ export default Vue.extend({
       display: flex;
       flex-direction: column;
       align-items: flex-start;
+
+      @include screenSizes(tabletPortrait) {
+        padding-left: 20px;
+      }
 
       a {
         text-decoration: none;

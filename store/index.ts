@@ -35,13 +35,15 @@ export type RootState = ReturnType<typeof state>
 export const getters: GetterTree<RootState, RootState> = {
 	cartIds: (state:any):any => {
     let cartIds:any[] = []
-    state.cart.lineItems.edges.forEach((a:any) => {
-      cartIds.push({
-        variantId: a.node.variant.id,
-        quantity: a.node.quantity,
-        customAttributes: a.node.customAttributes.map((attr:any) => ({key: attr.key, value: attr.value}))
+    if(state.cart.lineItems) {
+      state.cart.lineItems.edges.forEach((a:any) => {
+        cartIds.push({
+          variantId: a.node.variant.id,
+          quantity: a.node.quantity,
+          customAttributes: a.node.customAttributes.map((attr:any) => ({key: attr.key, value: attr.value}))
+        })
       })
-    })
+    }
     return cartIds
   }
 }

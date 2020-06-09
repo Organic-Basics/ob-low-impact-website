@@ -34,13 +34,13 @@
     <!-- Desktop dropdown -->
     <div class="menu__dropdown--women" v-show="hoverWomens" @mouseover="hoverWomens=true" @mouseleave="hoverWomens=false">
         <nuxt-link :to="`/${$store.state.activeCurrency}/collections/all-womens-products`"><h2>Shop Women</h2></nuxt-link>
-        <nuxt-link v-for="(link, index) in womenLinks" :key="index" :to="`/${$store.state.activeCurrency}${link.url}`">
+        <nuxt-link v-for="(link, index) in menuLinks.menuLinks.womens" :key="index" :to="`/${$store.state.activeCurrency}${link.url}`">
           <h3 class="menu__link">{{link.name}}</h3>
         </nuxt-link>
     </div>
     <div class="menu__dropdown--men" v-show="hoverMens" @mouseover="hoverMens=true" @mouseleave="hoverMens=false">
       <nuxt-link :to="`/${$store.state.activeCurrency}/collections/all-mens-products`"><h2>Shop Men</h2></nuxt-link>
-      <nuxt-link v-for="(link, index) in menLinks" :key="index" :to="`/${$store.state.activeCurrency}${link.url}`">
+      <nuxt-link v-for="(link, index) in menuLinks.menuLinks.mens" :key="index" :to="`/${$store.state.activeCurrency}${link.url}`">
         <h3 class="menu__link">{{link.name}}</h3>
       </nuxt-link>
     </div>
@@ -52,6 +52,7 @@ import Vue from 'vue'
 
 import Logo from '~/components/Logo.vue'
 import CartIcon from '~/components/CartIcon.vue'
+import menuLinks from '~/assets/json/menuLinks.json'
 
 export default Vue.extend({
   name: 'Navigation',
@@ -66,7 +67,8 @@ export default Vue.extend({
   data: () => {
     return {
       hoverWomens: false,
-      hoverMens: false
+      hoverMens: false,
+      menuLinks: menuLinks
     }
   },
   created() {

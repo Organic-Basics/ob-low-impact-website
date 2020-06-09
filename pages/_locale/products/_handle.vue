@@ -1,110 +1,7 @@
 <template>
-  <div class="product__container">
-    <!-- Single product slideshow -->
-    <div
-      v-if="isSingleProduct"
-      class="product__slideshow"
-      @click="showImages()"
-    >
-      <div
-        v-html="productIllustration"
-        v-if="!shouldShowImages && productIllustration"
-      ></div>
-      <div class="product__image-label" v-if="!shouldShowImages">
-        <span class="product__image-label--bold">
-          <span v-if="$store.state.carbonIntensity.intensity.index !== 'high'"
-            >Tap to see real photos</span
-          >
-          <span v-else>Real photos unavailable</span>
-        </span>
-        <span>
-          <span v-if="$store.state.carbonIntensity.intensity.index !== 'high'">
-            (~{{
-              ($store.state.carbonIntensity.intensity.index === "very low"
-                ? highResCost
-                : lowResCost
-              ).toFixed(2)
-            }}g CO2)
-          </span>
-          <span v-else>
-            (Our server energy mix needs to be more green)
-          </span>
-        </span>
-      </div>
-      <div v-for="(image, index) in mainProduct.images.edges">
-        <img
-          :src="shouldShowImages ? image.node.transformedSrc : ''"
-          v-if="shouldShowImages"
-        />
-      </div>
-    </div>
-
-    <!-- Bundle slideshow -->
-    <div v-else class="product__slideshow bundle" @click="showImages()">
-      <div
-        :class="{
-          bundle__illustrations: true,
-          vertical: bundleData.quantProducts < 3
-        }"
-        v-if="bundleData.type === 'combo'"
-      >
-        <div
-          class="bundle__illustration"
-          v-for="product in products"
-          v-html="product.illustration"
-          v-if="
-            !shouldShowImages &&
-              (product.switchId == 0 ||
-                product.switchId == switchId ||
-                product.switchId === undefined) &&
-              product.illustration
-          "
-        ></div>
-      </div>
-      <div v-else class="bundle__illustrations">
-        <div
-          class="bundle__illustration--quant"
-          v-for="product in products"
-          v-html="product.illustration"
-          v-if="!shouldShowImages && product.illustration"
-        ></div>
-      </div>
-      <!-- <span
-        class=" product__image-quant variant--black"
-        v-if="!shouldShowImages && bundleData.type === 'quant'"
-      >
-        <span class="product__bundle--quant">
-          x {{ products.length }}
-        </span></span
-      > -->
-      <div class="product__image-label" v-if="!shouldShowImages">
-        <span class="product__image-label--bold">
-          <span v-if="$store.state.carbonIntensity.intensity.index !== 'high'"
-            >Tap to see real photos</span
-          >
-          <span v-else>Real photos unavailable</span>
-        </span>
-        <span>
-          <span v-if="$store.state.carbonIntensity.intensity.index !== 'high'">
-            (~{{
-              ($store.state.carbonIntensity.intensity.index === "very low"
-                ? highResCost
-                : lowResCost
-              ).toFixed(2)
-            }}g CO2)
-          </span>
-          <span v-else>
-            (Our server energy mix needs to be more green)
-          </span>
-        </span>
-      </div>
-      <div v-for="(image, index) in mainProduct.images.edges">
-        <img
-          :src="shouldShowImages ? image.node.transformedSrc : ''"
-          v-if="shouldShowImages"
-        />
-      </div>
-    </div>
+<div class="product__container">
+  <div class="product__above">
+    <ProductSlideshow :isSingleProduct="isSingleProduct" :productIllustration="productIllustration" :shouldShowImages="shouldShowImages" @showImages="showImages()" :highResCost="highResCost" :lowResCost="lowResCost" :mainProduct="mainProduct" :bundleData="bundleData" :products="products" />
     <!-- Sticky bar -->
     <div class="product__sticky">
       <div class="product__sticky-top">
@@ -117,15 +14,13 @@
         </div>
         <div class="product__sticky-top-right" v-if="isSingleProduct">
           <div class="product__sticky-size">{{ products[0].chosenSize }}</div>
-          <div
-            :class="
+          <div :class="
               'product__sticky-color variant--' +
                 products[0].chosenColor
                   .toLowerCase()
                   .split(' ')
                   .join('')
-            "
-          >
+            ">
             <span></span>
           </div>
         </div>
@@ -133,79 +28,62 @@
       <div class="product__sticky-bottom">
         <div class="product__sticky--buttons">
           <div class="product__main--quantity">
-            <span
-              class="product__main--decrement"
-              @click="
+            <span class="product__main--decrement" @click="
                 quantity =
                   parseInt(quantity) > 1
                     ? parseInt(quantity) - 1
                     : parseInt(quantity)
-              "
-              >-</span
-            >
-            <input
-              class="product__main--quant-picker"
-              type="number"
-              name="quantity"
-              v-model="quantity"
-              min="1"
-            />
-            <span
-              class="product__main--increment"
-              @click="quantity = parseInt(quantity) + 1"
-              >+</span
-            >
+              ">-</span>
+            <input class="product__main--quant-picker" type="number" name="quantity" v-model="quantity" min="1" />
+            <span class="product__main--increment" @click="quantity = parseInt(quantity) + 1">+</span>
           </div>
-          <button
-            class="product__main--add-to-cart"
-            type="button"
-            name="add-to-cart"
-            v-model="addMessage"
-            @click="addToCart()"
-          >
+          <button class="product__main--add-to-cart" type="button" name="add-to-cart" v-model="addMessage" @click="addToCart()">
             Add to cart
           </button>
         </div>
       </div>
     </div>
-    <productSelect
-      v-for="(prod, index) in products"
-      v-if="
-        prod.switchId == 0 ||
-          prod.switchId == switchId ||
-          prod.switchId === undefined
-      "
-      :key="prod.id"
-      :propsIdx="index"
-      :propsProduct="prod"
-      :propsUpSells="upSells"
-      :isSingleProd="isSingleProduct"
-      @sizeClicked="onSizeChosen"
-      @colorClicked="onColorChosen"
-      @switched="switchId = switchId == 1 ? 2 : 1"
-      @addToCartFromChild="addToCart()"
-      @productToggled="toggleProduct"
-    />
+    <div class="">
+      <productSelect v-for="(prod, index) in products" v-if="prod.switchId == 0 || prod.switchId == switchId || prod.switchId === undefined" :key="index" :propsIdx="index" :propsProduct="prod" :propsUpSells="upSells" :isSingleProd="isSingleProduct"
+        :mainProduct="mainProduct" @sizeClicked="onSizeChosen" @colorClicked="onColorChosen" @switched="switchId = switchId == 1 ? 2 : 1" @addToCartFromChild="addToCart()" @productToggled="toggleProduct" />
 
-    <section class="product__content-block text--left">
-      <div class="content-block__text">
-        <h3 class="content-block__title">Lorem ipsum</h3>
-        <h6 class="content-block__desc">
-          Created in premium Italian recycled nylon which takes 80% less water
-          to make and creates 90% fewer CO2 emissions in comparison to the
-          virgin fabric. It’s a minimal visible pantyline with a minimal
-          environmental impact.
-        </h6>
+      <div class="product__main--extra">
+        <span class="product__main--shipping">
+          Free CO2 neutral worldwide shipping available.
+        </span>
+        <span class="product__main--sizeguide" @click="isSizeGuideOpen = true">
+          <div class="size-guide-cta">
+            Size Guides
+          </div>
+        </span>
       </div>
-    </section>
+
+      <SizeGuide :isOpen="isSizeGuideOpen" @closeSizeGuide="isSizeGuideOpen = false" />
+    </div>
   </div>
+
+  <section class="product__content-block text--left">
+    <div class="content-block__text">
+      <h3 class="content-block__title">Lorem ipsum</h3>
+      <h6 class="content-block__desc">
+        Created in premium Italian recycled nylon which takes 80% less water
+        to make and creates 90% fewer CO2 emissions in comparison to the
+        virgin fabric. It’s a minimal visible pantyline with a minimal
+        environmental impact.
+      </h6>
+    </div>
+  </section>
+</div>
 </template>
 
 <script>
-import Vue from "vue";
-import VueApollo from "vue-apollo";
-import gql from "graphql-tag";
-import ProductSelect from "~/components/ProductSelect.vue";
+import Vue from 'vue'
+import VueApollo from 'vue-apollo'
+import gql from 'graphql-tag'
+import ProductSelect from '~/components/Product/ProductSelect.vue'
+import ProductSlideshow from '~/components/Product/ProductSlideshow.vue'
+import SizeGuide from "~/components/SizeGuide.vue";
+
 
 export default Vue.extend({
   data() {
@@ -214,25 +92,31 @@ export default Vue.extend({
       isAdding: false,
       switchId: 1,
       shouldShowImages: false,
-      bundleIllustrations: 0
+      bundleIllustrations: 0,
+      isSizeGuideOpen: false
     };
   },
   components: {
-    ProductSelect
+    ProductSelect,
+    SizeGuide,
+    ProductSlideshow
   },
-  async asyncData({ app, params }) {
+  async asyncData({
+    app,
+    params
+  }) {
     try {
       if (app && app.apolloProvider) {
         await app.store.dispatch("fetchCarbonIntensity");
         // Use hi-res images on very low carbon intensity
         let imageScale =
-          app.store.state.carbonIntensity.intensity.index === "very low"
-            ? 2
-            : 1;
+          app.store.state.carbonIntensity.intensity.index === "very low" ?
+          2 :
+          1;
 
         let client = app.apolloProvider.clients[params.locale];
         let result = await client.query({
-          query: gql`
+          query: gql `
             query {
               productByHandle(handle: "${params.handle}") {
                 title,
@@ -265,7 +149,8 @@ export default Vue.extend({
                         value
                       },
                       id,
-                      availableForSale
+                      availableForSale,
+                      compareAtPrice
                     }
                   }
                 }
@@ -309,7 +194,7 @@ export default Vue.extend({
 
           let bundleTagsStr = bundleTags.join(" OR ");
           let upSellsResult = await client.query({
-            query: gql`{
+            query: gql `{
               products(query: "${bundleTagsStr} AND (NOT tag:'combo' OR NOT tag:'quant')", first: 15) {
                 edges {
                   node {
@@ -421,7 +306,7 @@ export default Vue.extend({
           }
         } else {
           let bundleResult = await client.query({
-            query: gql`
+            query: gql `
               query {
                 products(query: "tag:${bundleTag} AND (tag:'combo' OR tag:'quant')", first: 5) {
                   edges {
@@ -512,7 +397,9 @@ export default Vue.extend({
           }
         } else {
           await newData.products.forEach(product => {
-            let { handle } = product;
+            let {
+              handle
+            } = product;
             if (handle.includes("accessories") || handle.includes("socks")) {
               handle = handle.replace(/womens-/g, "").replace(/mens-/g, "");
             }
@@ -546,13 +433,11 @@ export default Vue.extend({
         return {
           mainProduct: {
             images: {
-              edges: [
-                {
-                  node: {
-                    transformedSrc: ""
-                  }
+              edges: [{
+                node: {
+                  transformedSrc: ""
                 }
-              ]
+              }]
             },
             title: "",
             productIllustration: "",
@@ -577,13 +462,11 @@ export default Vue.extend({
       return {
         mainProduct: {
           images: {
-            edges: [
-              {
-                node: {
-                  transformedSrc: ""
-                }
+            edges: [{
+              node: {
+                transformedSrc: ""
               }
-            ]
+            }]
           },
           title: "",
           productIllustration: "",
@@ -642,8 +525,7 @@ export default Vue.extend({
 
       let customAttributes = [];
       if (this.bundleData && this.bundleData.tag && this.bundleData.name) {
-        customAttributes = [
-          {
+        customAttributes = [{
             key: "_bundle_id",
             value: this.bundleData.tag
           },
@@ -668,7 +550,7 @@ export default Vue.extend({
           if (
             a.variantId === prod.chosenId &&
             JSON.stringify(a.customAttributes) ==
-              JSON.stringify(customAttributes)
+            JSON.stringify(customAttributes)
           ) {
             a.quantity += parseInt(this.quantity);
             return a;
@@ -683,7 +565,7 @@ export default Vue.extend({
             return (
               a.variantId === prod.chosenId &&
               JSON.stringify(a.customAttributes) ==
-                JSON.stringify(customAttributes)
+              JSON.stringify(customAttributes)
             );
           })
         ) {
@@ -699,7 +581,7 @@ export default Vue.extend({
       }
 
       let result = await this.$apollo.mutate({
-        mutation: gql`
+        mutation: gql `
           mutation(
             $checkoutId: ID!
             $lineItems: [CheckoutLineItemInput!]!
@@ -736,12 +618,10 @@ export default Vue.extend({
           checkoutId: this.$store.state.checkoutId,
           lineItems: cartIds,
           checkoutAttributes: {
-            customAttributes: [
-              {
-                key: "isLowImpactWebsite",
-                value: "true"
-              }
-            ]
+            customAttributes: [{
+              key: "isLowImpactWebsite",
+              value: "true"
+            }]
           }
         }
       });
@@ -752,9 +632,9 @@ export default Vue.extend({
     showImages() {
       // Only show images if intensity is lower than high
       this.shouldShowImages =
-        this.$store.state.carbonIntensity.intensity.index === "high"
-          ? false
-          : true;
+        this.$store.state.carbonIntensity.intensity.index === "high" ?
+        false :
+        true;
     },
 
     updateChosenId(idx) {
@@ -839,8 +719,12 @@ function prepProducts(products, bundleData) {
 
   for (let i = 0; i < products.length; i++) {
     if (products[i].node)
-      products[i] = { ...productTemplate, ...products[i].node };
-    else products[i] = { ...productTemplate, ...products[i] };
+      products[i] = { ...productTemplate,
+        ...products[i].node
+      };
+    else products[i] = { ...productTemplate,
+      ...products[i]
+    };
 
     if (products[i].variants.edges.length > 1) {
       // Preselect the first color, if there's only one to choose from
@@ -935,66 +819,27 @@ function prepProducts(products, bundleData) {
 @import "~assets/scss/mixins.scss";
 
 .container-carbon--high .product__image-label {
-  color: map-get($colors, "carbonHigh");
+    color: map-get($colors, "carbonHigh");
+}
+
+.locale-products-handle {
+    padding-top: 0;
+}
+
+.product__above {
+    display: flex;
+    flex-direction: row;
+
+    @include screenSizes(tabletPortrait) {
+        flex-direction: column;
+    }
 }
 
 .product__container {
-  width: 100%;
+    width: 100%;
 
-  .product__slideshow {
-    display: flex;
-    overflow-x: scroll;
-    position: relative;
-    width: 100vw;
-
-    .product__image-label {
-      bottom: 25px;
-      display: flex;
-      flex-direction: column;
-      position: absolute;
-      width: 100vw;
-
-      .product__image-label--bold {
-        font-weight: bold;
-      }
-
-      > span {
-        display: block;
-        max-width: 75vw;
-      }
-    }
-
-    > div {
-      align-items: center;
-      background: map-get($colors, "productGrey");
-      display: flex;
-      justify-content: center;
-    }
-
-    svg {
-      width: 100vw;
-
-      *[stroke*="#"] {
-        stroke: map-get($colors, "black") !important;
-      }
-
-      *[fill*="#"] {
-        fill: map-get($colors, "productGrey") !important;
-      }
-    }
-
-    img {
-      min-width: 100vw;
-      max-width: 100%;
-    }
-
-    &.bundle {
-      .bundle__illustrations {
-        padding-bottom: 40px;
-        width: 100%;
-        min-height: 50vh;
+    .product__slideshow {
         display: flex;
-        flex-wrap: wrap;
         flex-direction: row;
         position: relative;
 
@@ -1024,251 +869,378 @@ function prepProducts(products, bundleData) {
             }
           }
         }
-        .product__image-quant {
-          top: 25px;
+
+        .product__image-label {
           position: absolute;
-          width: 100vw;
-        }
-        svg {
-          width: 100%;
-        }
-      }
-      .product__image-quant {
-        bottom: 25%;
-        right: 20%;
-        position: absolute;
-        border: 1.5px solid map-get($colors, "black");
-        border-radius: 50%;
-        height: 26.5px;
-        width: 26.5px;
-        font-size: 17px;
-        .product__bundle--quant {
-          font-size: 0.9rem;
-          color: white;
-        }
-      }
-    }
-  }
+          width: 50vw;
+          bottom: 10%;
 
-  .product__sticky {
-    color: map-get($colors, "black");
-    background: #fff;
-    border-top: 1px solid #a1a4a9;
-    bottom: 0;
-    left: 0;
-    position: fixed;
-    transition: transform 0.3s ease-in-out;
-    transition: transform 0.3s ease-in-out, -webkit-transform 0.3s ease-in-out;
-    width: 100vw;
-    display: none;
-
-    @include screenSizes(tabletPortrait) {
-      display: block;
-    }
-
-    .product__sticky-top {
-      display: flex;
-      height: 4rem;
-      justify-content: space-between;
-      padding: 1rem;
-      align-items: center;
-
-      .product__sticky-top-left {
-        display: flex;
-
-        .product__sticky-title {
-          margin-right: 10px;
-        }
-
-        .product__sticky-price {
-          color: map-get($colors, "brand");
-        }
-      }
-
-      .product__sticky-top-right {
-        align-items: center;
-        display: flex;
-
-        .product__sticky-size {
-          padding-right: 0.5rem;
-        }
-
-        .product__sticky-color {
-          height: 30px;
-          position: relative;
-          width: 30px;
-          border-radius: 50px;
-
-          span {
-            border-radius: 30px;
-            height: 30px;
-            left: 0;
-            position: absolute;
-            top: 0;
-            width: 30px;
+          @include screenSizes(tabletPortrait) {
+            bottom: unset;
+            top: 52vh;
+            width: 100vw;
           }
         }
-      }
+
+        > div {
+            align-items: center;
+            background: map-get($colors, "productGrey");
+            display: flex;
+            justify-content: center;
+        }
+
+        svg {
+            width: 100vw;
+
+            *[stroke*="#"] {
+                stroke: map-get($colors, "black") !important;
+            }
+
+            *[fill*="#"] {
+                fill: map-get($colors, "productGrey") !important;
+            }
+        }
+
+        img {
+          width: 50vw;
+
+          @include screenSizes(tabletPortrait) {
+            min-width: 100vw;
+            max-width: 100%;
+            width: auto;
+          }
+        }
+
+        &.bundle {
+            .bundle__illustrations {
+                padding-bottom: 40px;
+                width: 100%;
+                min-height: 50vh;
+                display: flex;
+                flex-wrap: wrap;
+                flex-direction: row;
+
+                &.vertical {
+                    flex-direction: column;
+                }
+                .bundle__illustration {
+                    max-width: 45%;
+                    min-width: 90px;
+                    // flex-grow: 1;
+                }
+                .product__image-quant {
+                    top: 25px;
+                    position: absolute;
+                    width: 100vw;
+                }
+                svg {
+                    width: 100%;
+                }
+            }
+            .product__image-quant {
+                bottom: 25%;
+                right: 20%;
+                position: absolute;
+                border: 1.5px solid map-get($colors, "black");
+                border-radius: 50%;
+                height: 26.5px;
+                width: 26.5px;
+                font-size: 17px;
+                .product__bundle--quant {
+                    font-size: 0.9rem;
+                    color: white;
+                }
+            }
+        }
     }
 
-    .product__sticky-bottom {
-      .product__sticky--buttons {
-        margin-bottom: 0;
+    .product__sticky {
+        color: map-get($colors, "black");
+        background: #fff;
+        border-top: 1px solid #a1a4a9;
+        bottom: 0;
+        left: 0;
+        position: fixed;
+        transition: transform 0.3s ease-in-out;
+        transition: transform 0.3s ease-in-out, -webkit-transform 0.3s ease-in-out;
+        width: 100vw;
+        display: none;
+
+        @include screenSizes(tabletPortrait) {
+            display: block;
+        }
+
+        .product__sticky-top {
+            display: flex;
+            height: 4rem;
+            justify-content: space-between;
+            padding: 1rem;
+            align-items: center;
+
+            .product__image-label {
+                bottom: 25px;
+                display: flex;
+                flex-direction: column;
+                position: absolute;
+                width: 50vw;
+
+                @include screenSizes(tabletPortrait) {
+                    width: 100vw;
+                }
+
+                .product__image-label--bold {
+                    font-weight: bold;
+                }
+
+                .product__sticky-price {
+                    color: map-get($colors, "brand");
+                }
+            }
+
+            > div {
+                align-items: center;
+                background: map-get($colors, 'productGrey');
+                display: flex;
+                justify-content: center;
+            }
+
+            svg {
+                width: 50vw;
+
+                .product__sticky-size {
+                    padding-right: 0.5rem;
+                }
+
+                *[stroke*="#"] {
+                    stroke: map-get($colors, 'black') !important;
+                }
+
+                *[fill*="#"] {
+                    fill: map-get($colors, 'productGrey') !important;
+                }
+            }
+
+            img {
+                min-width: 50vw;
+                max-width: 100%;
+
+                @include screenSizes(tabletPortrait) {
+                    width: 100vw;
+                }
+            }
+        }
+
+        .product__sticky {
+            color: map-get($colors, 'black');
+            background: #fff;
+            border-top: 1px solid #a1a4a9;
+            bottom: 0;
+            left: 0;
+            position: fixed;
+            transition: transform 0.3s ease-in-out;
+            transition: transform 0.3s ease-in-out,-webkit-transform 0.3s ease-in-out;
+            width: 100vw;
+            display: none;
+
+            @include screenSizes(tabletPortrait) {
+                display: block;
+            }
+
+            .product__sticky-top {
+                display: flex;
+                height: 4rem;
+                justify-content: space-between;
+                padding: 1rem;
+                align-items: center;
+
+                .product__main--quantity {
+                    /* Chrome, Safari, Edge, Opera */
+                    input::-webkit-inner-spin-button,
+                    input::-webkit-outer-spin-button {
+                        -webkit-appearance: none;
+                        margin: 0;
+                    }
+
+                    /* Firefox */
+                    input[type="number"] {
+                        -moz-appearance: textfield;
+                    }
+
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    position: relative;
+                    flex-basis: 50%;
+                    border-top: 1px solid map-get($colors, "brand");
+                    height: 3.6rem;
+
+                    .product__main--decrement,
+                    .product__main--increment {
+                        align-items: center;
+                        bottom: 0;
+                        color: map-get($colors, "black");
+                        cursor: pointer;
+                        display: inline-flex;
+                        font-size: 19px;
+                        justify-content: center;
+                        position: absolute;
+                        top: 0;
+                        width: 40px;
+                    }
+
+                    .product__sticky-title {
+                        margin-right: 10px;
+                    }
+
+                    .product__sticky-price {
+                        color: map-get($colors, 'brand');
+                    }
+                }
+
+                .product__main--quant-picker {
+                    border: none;
+                    color: map-get($colors, "black");
+                    height: 100%;
+                    text-align: center;
+                    font-size: 13px;
+                }
+
+                .product__main--add-to-cart {
+                    flex-basis: 50%;
+                    border: 1px solid map-get($colors, "black");
+                }
+            }
+
+            .product__sticky-bottom {
+                .product__sticky--buttons {
+                    margin-bottom: 0;
+                    display: flex;
+                    justify-content: space-between;
+
+                    .product__main--quantity {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        position: relative;
+                        flex-basis: 50%;
+                        border-top: 1px solid map-get($colors, 'brand');
+                        height: 3.6rem;
+
+                        .product__main--decrement,
+                        .product__main--increment {
+                            color: map-get($colors, 'black');
+                            width: 40px;
+                            position: absolute;
+                            top: 0;
+                            bottom: 0;
+                            width: 40px;
+                            display: inline-flex;
+                            justify-content: center;
+                            align-items: center;
+                            font-size: 19px;
+                        }
+
+                        .product__main--increment {
+                            right: 0;
+                            left: auto;
+                        }
+
+                        .product__main--decrement {
+                            left: 0;
+                        }
+
+                        .product__main--quant-picker {
+                            border: none;
+                            color: map-get($colors, 'black');
+                            height: 100%;
+                            text-align: center;
+                            font-size: 13px;
+                        }
+                    }
+
+                    .product__main--add-to-cart {
+                        flex-basis: 50%;
+                        border: none;
+                    }
+                }
+            }
+        }
+    }
+
+    .product__main--add-to-cart {
+        height: 3.6rem;
+        text-align: center;
+        background: map-get($colors, "black");
+        color: white;
+        cursor: pointer;
+        font-size: 13px;
+        border: none;
+    }
+
+    .product__main--extra {
+        margin-bottom: 2rem;
+        margin-top: 20px;
         display: flex;
         justify-content: space-between;
-
-        .product__main--quantity {
-          /* Chrome, Safari, Edge, Opera */
-          input::-webkit-outer-spin-button,
-          input::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-          }
-
-          /* Firefox */
-          input[type="number"] {
-            -moz-appearance: textfield;
-          }
-
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          position: relative;
-          flex-basis: 50%;
-          border-top: 1px solid map-get($colors, "brand");
-          height: 3.6rem;
-
-          .product__main--decrement,
-          .product__main--increment {
-            align-items: center;
-            bottom: 0;
-            color: map-get($colors, "black");
-            cursor: pointer;
-            display: inline-flex;
-            font-size: 19px;
-            justify-content: center;
-            position: absolute;
-            top: 0;
-            width: 40px;
-          }
-
-          .product__main--increment {
-            right: 0;
-            left: auto;
-          }
-
-          .product__main--decrement {
-            left: 0;
-          }
-
-          .product__main--quant-picker {
-            border: none;
-            color: map-get($colors, "black");
-            height: 100%;
-            text-align: center;
-            font-size: 13px;
-          }
-        }
-
-        .product__main--add-to-cart {
-          flex-basis: 50%;
-          border: 1px solid map-get($colors, "black");
-        }
-      }
-    }
-  }
-
-  .product__main {
-    align-items: flex-start;
-    display: flex;
-    flex-direction: column;
-    max-width: 100vw;
-
-    .product__option {
-      align-items: flex-start;
-      display: flex;
-      flex-direction: column;
-
-      &.product__option--size {
-        margin-bottom: 30px;
-      }
-
-      .variant--chosen {
-        text-decoration: underline;
-      }
-    }
-
-    .product__text {
-      align-items: flex-start;
-      display: flex;
-      flex-direction: column;
-      margin-bottom: 5px;
-
-      ul {
-        align-items: flex-start;
-        display: flex;
-        flex-direction: column;
+        flex-wrap: wrap;
+        font-size: 13px;
+        padding: 0 20px;
         text-align: left;
-      }
-    }
-  }
 
-  .product__main--add-to-cart {
-    height: 3.6rem;
-    text-align: center;
-    background: map-get($colors, "black");
-    color: white;
-    cursor: pointer;
-    font-size: 13px;
-  }
+        .product__main--sizeguide {
+            cursor: pointer;
+        }
 
-  .product__content-block {
-    background: rgb(167, 143, 122);
-    height: 100%;
-    padding: 60px 30px;
-    color: #fff;
-    width: 100%;
-
-    @include screenSizes(tabletPortrait) {
-      height: 500px;
-      padding: 5vw 20px;
+        .product__main--shipping {
+            flex-basis: 75%;
+            padding-right: 5px;
+            color: map-get($colors, "brand");
+        }
     }
 
-    .content-block__text {
-      justify-content: flex-start;
-      display: flex;
-      flex-direction: row;
-      height: 100%;
-
-      @include screenSizes(tabletPortrait) {
-        flex-direction: column;
-        justify-content: space-around;
-      }
-
-      .content-block__title {
-        width: 40%;
+    .product__content-block {
+        background: rgb(167, 143, 122);
+        height: 100%;
+        padding: 60px 30px;
         color: #fff;
-        font-size: 26px;
+        width: 100%;
 
         @include screenSizes(tabletPortrait) {
-          width: 95%;
+            height: 500px;
+            padding: 5vw 20px;
         }
-      }
 
-      .content-block__desc {
-        font-size: 16px;
-        max-width: 350px;
-        color: #fff;
+        .content-block__text {
+            justify-content: flex-start;
+            display: flex;
+            flex-direction: row;
+            height: 100%;
 
-        @include screenSizes(tabletPortrait) {
-          margin-top: 20px;
+            @include screenSizes(tabletPortrait) {
+                flex-direction: column;
+                justify-content: space-around;
+            }
+
+            .content-block__title {
+                width: 40%;
+                color: #fff;
+                font-size: 26px;
+
+                @include screenSizes(tabletPortrait) {
+                    width: 95%;
+                }
+            }
+
+            .content-block__desc {
+                font-size: 16px;
+                max-width: 350px;
+                color: #fff;
+
+                @include screenSizes(tabletPortrait) {
+                    margin-top: 20px;
+                }
+            }
         }
-      }
     }
-  }
-}
-
-.footer__container {
-  margin-bottom: 90px;
 }
 </style>

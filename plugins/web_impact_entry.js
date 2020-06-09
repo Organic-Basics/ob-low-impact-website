@@ -32,6 +32,14 @@ class WebImpactPlugin {
       },
       {
         url: 'https://www.thereformation.com/categories/shop'
+      }
+      {
+        url: 'http://lowimpact.organicbasics.com/eur/products/womens-organic-cotton-triangle-bra',
+        isGreen: true
+      },
+      {
+        url: 'http://localhost:3000/eur/products/womens-organic-cotton-triangle-bra',
+        isGreen: true
       }*/
     ]
     let urlPromiseQueue = []

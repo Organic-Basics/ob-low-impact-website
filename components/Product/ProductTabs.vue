@@ -1,7 +1,9 @@
 <template>
-  <section class="product__tabs">
+  <div class="">
+
+  <section class="product__tabs--mobile">
     <div class="product__text product__text--feat">
-      <div @click="toggleTab('featOpen')" :class="{'product__tabs--title': true, 'tab--open':featOpen}">
+      <div @click="toggleTabMobile('featOpen')" :class="{'product__tabs--title': true, 'tab--open':featOpen}">
         <h6>Features</h6>
         <h5 class="tab__plus">+</h5>
       </div>
@@ -25,7 +27,7 @@
       </ul>
     </div>
     <div class="product__text product__text--desc">
-      <div @click="toggleTab('descOpen')" :class="{'product__tabs--title': true, 'tab--open':descOpen}">
+      <div @click="toggleTabMobile('descOpen')" :class="{'product__tabs--title': true, 'tab--open':descOpen}">
         <h6>Description</h6>
         <h5 class="tab__plus">+</h5>
       </div>
@@ -34,7 +36,7 @@
       </ul>
     </div>
     <div class="product__text product__text--fit">
-      <div @click="toggleTab('fitOpen')" :class="{'product__tabs--title': true, 'tab--open':fitOpen}">
+      <div @click="toggleTabMobile('fitOpen')" :class="{'product__tabs--title': true, 'tab--open':fitOpen}">
         <h6>Fit & Sizing</h6>
         <h5 class="tab__plus">+</h5>
       </div>
@@ -43,7 +45,7 @@
       </ul>
     </div>
     <div class="product__text product__text--mat">
-      <div @click="toggleTab('careOpen')" :class="{'product__tabs--title': true, 'tab--open':careOpen}">
+      <div @click="toggleTabMobile('careOpen')" :class="{'product__tabs--title': true, 'tab--open':careOpen}">
         <h6>Material & Care</h6>
         <h5 class="tab__plus">+</h5>
       </div>
@@ -52,6 +54,64 @@
       </ul>
     </div>
   </section>
+
+  <section class="product__tabs--desktop">
+      <ul class="product__main--tab-titles">
+        <li class="product__main--title-feat" @click="toggleTabDesktop('featOpen')" :class="{'product__tabs--title': true, 'tab--open':featOpen}">
+          <span>Features</span>
+        </li>
+        <li class="product__main--title-desc" @click="toggleTabDesktop('descOpen')" :class="{'product__tabs--title': true, 'tab--open':descOpen}">
+          <span>Description</span>
+        </li>
+        <li class="product__main--title-fit" @click="toggleTabDesktop('fitOpen')" :class="{'product__tabs--title': true, 'tab--open':fitOpen}">
+          <span>Fit &amp; Sizing</span>
+        </li>
+        <li class="product__main--title-mat" @click="toggleTabDesktop('careOpen')" :class="{'product__tabs--title': true, 'tab--open':careOpen}">
+          <span>Material &amp; Care</span>
+        </li>
+      </ul>
+      <div class="product__main--info">
+        <div v-if="featOpen" class="product__main--info-feat">
+          <ul v-if="featOpen" class="tab__feat">
+            <li v-for="(f, index) in propsProduct.tabs.features">
+              <div class="tab__feat--title">
+                <div class="tab__feat--left" v-for="(feat) in features"
+                  v-if="f.toLowerCase().trim() == feat.name.toLowerCase().trim()"
+                  @click="toggleFeat(feat)">
+                  <img class="tab__feat--icon"
+                    :src="feat.icon" :alt="feat.name" />
+                    {{f}}
+                </div>
+                <h5 class="tab__plus">+</h5>
+              </div>
+              <div class="tab__feat--desc" v-for="(feat) in features"
+                v-if="feat.isOpen && f.toLowerCase().trim() == feat.name.toLowerCase().trim()">
+                {{feat.desc}}
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="product__main--info-desc">
+          <ul v-if="descOpen">
+            <li v-for="(d, index) in propsProduct.tabs.desc">{{d}}</li>
+          </ul>
+        </div>
+
+        <div class="product__main--info-fit">
+          <ul v-if="fitOpen">
+            <li v-for="(fs, index) in propsProduct.tabs.fitSize">{{fs}}</li>
+          </ul>
+        </div>
+
+        <div class="product__main--info-mat">
+            <ul v-if="careOpen">
+              <li v-for="(mc, index) in propsProduct.tabs.materialCare">{{mc}}</li>
+            </ul>
+        </div>
+    </div>
+</section>
+</div>
 </template>
 
 <script>
@@ -134,8 +194,16 @@ export default Vue.extend({
     }
   },
   methods: {
-    toggleTab(tabName) {
+    toggleTabMobile(tabName) {
       let newState = !this[tabName]
+      this.descOpen = false
+      this.fitOpen = false
+      this.careOpen = false
+      this.featOpen = false
+      this[tabName] = newState
+    },
+    toggleTabDesktop(tabName) {
+      let newState = true
       this.descOpen = false
       this.fitOpen = false
       this.careOpen = false
@@ -153,95 +221,143 @@ export default Vue.extend({
 
 <style lang="scss">
 @import "~assets/scss/variables.scss";
+@import "~assets/scss/mixins.scss";
 
-.product__tabs {
+.product__tabs--mobile {
   padding: 0;
+  display: none;
 
-  .product__text {
+  @include screenSizes(tabletPortrait) {
+    display: block;
+  }
+}
+
+.tab--open {
+  border-bottom: 1.5px solid map-get($colors, 'black');
+
+  .tab__plus {
+    transform: rotate(45deg);
+  }
+}
+
+.product__text {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+
+  .product__tabs--title {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    border-bottom: 1px solid map-get($colors, 'brand');
+    padding-bottom: .5rem;
+
+    .tab__plus {
+      transition: transform .25s ease-in-out;
+    }
+  }
+
+  ul {
     align-items: flex-start;
     display: flex;
     flex-direction: column;
+    text-align: left;
+    padding-left: 20px;
     margin-top: 20px;
+    margin-bottom: 8px;
 
-    .product__tabs--title {
+    li {
+      list-style: disc;
+      color: map-get($colors, 'brand');
+      line-height: 20.8px;
+      font-size: 13px;
+    }
+  }
+}
+
+.tab__feat {
+  width: calc(100% + 20px);
+  margin-left: -20px;
+
+  .tab__feat--title {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 5px;
+    color: map-get($colors, 'black');
+
+    .tab__feat--left {
       display: flex;
-      flex-direction: row;
-      justify-content: space-between;
+      align-items: center;
       width: 100%;
-      border-bottom: 1px solid map-get($colors, 'brand');
-      padding-bottom: .5rem;
-
-      .tab__plus {
-        transition: transform .25s ease-in-out;
-      }
     }
 
-    .tab--open {
-      border-bottom: 1.5px solid map-get($colors, 'black');
-
-      .tab__plus {
-        transform: rotate(45deg);
-      }
+    .tab__feat--icon {
+      width: 30px;
+      margin-right: 20px;
     }
+  }
+
+  .tab__feat--desc {
+    margin-left: 50px;
+    margin-bottom: 8px;
+    color: map-get($colors, 'brand')
+  }
+
+  li {
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    color: map-get($colors, 'black');
+  }
+
+  li:nth-child(n+2) {
+    margin-top: 20px;
+  }
+}
+
+.product__tabs--desktop {
+  margin: 3vw 0;
+  padding: 0;
+
+  @include screenSizes(tabletPortrait) {
+    display: none;
+  }
+
+  .product__tabs--title {
+    padding-bottom: 5px;
+  }
+
+  .product__main--tab-titles {
+    border-bottom: 1px solid map-get($colors, 'brand');
+    display: flex;
+    justify-content: space-between;
+    margin-left: 0;
+    margin-bottom: 20px;
+    padding-bottom: 0;
+    list-style: none;
+    padding-left: 0;
+
+    @include screenSizes(tabletPortrait) {
+      padding-bottom: 2px;
+    }
+  }
+
+  .product__main--info {
+    font-size: 13px;
 
     ul {
-      align-items: flex-start;
-      display: flex;
-      flex-direction: column;
-      text-align: left;
       padding-left: 20px;
-      margin-top: 20px;
-      margin-bottom: 8px;
-
-      li {
-        list-style: disc;
-        color: map-get($colors, 'brand');
-        line-height: 20.8px;
-        font-size: 13px;
-      }
+      color: map-get($colors, 'darkGrey');
     }
+  }
 
-    .tab__feat {
-      width: calc(100% + 20px);
-      margin-left: -20px;
-
-      .tab__feat--title {
-        width: 100%;
-        display: flex;
-        flex-direction: row;
-        margin-bottom: 5px;
-
-        .tab__feat--left {
-          display: flex;
-          align-items: center;
-          width: 100%;
-        }
-
-        .tab__feat--icon {
-          width: 30px;
-          margin-right: 20px;
-        }
-      }
-
-      .tab__feat--desc {
-        margin-left: 50px;
-        margin-bottom: 8px;
-        color: map-get($colors, 'brand')
-      }
-
-      li {
-        list-style-type: none;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        width: 100%;
-        color: map-get($colors, 'black');
-      }
-
-      li:nth-child(n+2) {
-        margin-top: 20px;
-      }
-    }
+  .tab__feat {
+    margin-left: -20px;
   }
 }
 </style>
