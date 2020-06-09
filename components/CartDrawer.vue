@@ -6,7 +6,7 @@
     </header>
     <main class="cart-drawer__items">
       <div v-for="(item) in cleanCart" class="cart-drawer__item">
-        <div class="item__image"></div>
+        <div class="item__image" v-html="item.node.illustration"></div>
         <div class="item__text-container">
           <h6 class="item__heading">{{item.node.title}}</h6>
           <div class="item__details">
@@ -14,8 +14,8 @@
               <h6 class="quant--decrement" @click="updateLineItem(item, -1)">–</h6>
               <span>{{item.node.quantity}}</span>
               <h6 class="quant--increment" @click="updateLineItem(item, 1)">+</h6>
-              <h6>{{item.node.variant.title}}</h6>
             </div>
+            <h6 class="cart-drawer__title">{{item.node.variant.title}}</h6>
             <h6>{{ fetchComparePrice(item) !== 0 ? fetchComparePrice(item) : formatPrice(item.node.variant.priceV2, item.node.quantity) }}</h6>
           </div>
           <div class="item__discount">
@@ -232,8 +232,22 @@ export default Vue.extend({
     padding: 15px 0;
 
     .item__image {
-      width: 20%;
+      background: map-get($colors, 'productGrey');
+      display: flex;
+      min-height: 83px;
       margin-right: 20px;
+      min-width: 67px;
+      width: 20%;
+
+      svg {
+        *[stroke*="#"] {
+          stroke: map-get($colors, 'black') !important;
+        }
+
+        *[fill*="#"] {
+          fill: map-get($colors, 'productGrey') !important;
+        }
+      }
     }
 
     .item__text-container {
@@ -262,26 +276,23 @@ export default Vue.extend({
     justify-content: space-between;
 
     .cart-drawer__quantity {
+      align-items: center;
       display: flex;
       flex-direction: row;
-      align-items: center;
+      flex-grow: 1;
+      flex: 33%;
       font-size: 14px;
+      justify-content: space-between;
+      padding-right: 10px;
+      max-width: 51px;
 
       h6 {
         cursor: pointer;
       }
+    }
 
-      .quant--decrement, .quant--increment, span {
-        padding: 5px 10px;
-      }
-
-      .quant--decrement {
-        margin-left: -10px;
-      }
-
-      .quant--increment {
-        margin-right: 15px;
-      }
+    .cart-drawer__title {
+      flex: 33%;
     }
   }
 
@@ -291,6 +302,7 @@ export default Vue.extend({
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    margin-top: 10px;
 
     .item__price--compare {
       text-decoration: line-through;
@@ -307,7 +319,7 @@ export default Vue.extend({
       width: 100vw;
     }
 
-    .footer__text--discount, .footer__text--subtotal {
+    .footer__text--discount, .footer__text--total {
       font-size: 14px;
       display: flex;
       flex-direction: row;

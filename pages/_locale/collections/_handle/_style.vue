@@ -8,10 +8,13 @@
         </nuxt-link>
       </div>
       <div class="product-grid">
-        <gridProduct v-for="(product, index) in products" :key="index" :productData="product.node" />
+        <gridProduct
+          v-for="(product, index) in products"
+          :key="index"
+          :productData="product.node"
+        />
       </div>
     </div>
-
   </div>
 </template>
 
@@ -37,9 +40,9 @@ export default Vue.extend({
   // TODO: Fix async data and currency
   async asyncData(ctx) {
     try {
-      if(ctx.app && ctx.app.apolloProvider) {
-        let client = ctx.app.apolloProvider.clients[ctx.params.locale]
-        let result
+      if (ctx.app && ctx.app.apolloProvider) {
+        let client = ctx.app.apolloProvider.clients[ctx.params.locale];
+        let result;
 
         let productsQuery = `edges {
           node {
@@ -51,6 +54,7 @@ export default Vue.extend({
               name,
               values
             },
+            description,
             onlineStoreUrl,
             variants(first:50) {
               edges {
@@ -71,14 +75,14 @@ export default Vue.extend({
               }
             }
           }
-        }`
+        }`;
 
-        let title = ''
-        if(ctx.params.style) {
-          let gender = ctx.params.handle.match(/[wo]*mens/g)
-          let style = ctx.params.style.replace(/style-/, '')
-          title = style.charAt(0).toUpperCase() + style.slice(1)
-          let styleQuery = `${gender}, ${style}`
+        let title = "";
+        if (ctx.params.style) {
+          let gender = ctx.params.handle.match(/[wo]*mens/g);
+          let style = ctx.params.style.replace(/style-/, "");
+          title = style.charAt(0).toUpperCase() + style.slice(1);
+          let styleQuery = `${gender}, ${style}`;
           result = await client.query({
             // Apollo GraphQL query: fetch data
             query: gql`
@@ -88,9 +92,8 @@ export default Vue.extend({
                 }
               }
             `
-          })
-        }
-        else {
+          });
+        } else {
           result = await client.query({
             // Apollo GraphQL query: fetch data
             query: gql`
@@ -103,66 +106,160 @@ export default Vue.extend({
                 }
               }
             `
-          })
-          title = result.data.collectionByHandle.title
+          });
+          title = result.data.collectionByHandle.title;
         }
 
         // let variantPrice = result.data.collectionByHandle.products.edges.node.variants.edges.node.price
 
         // create new array that only contains the Color product options
-        let productsData = []
-        if(result.data.collectionByHandle) {
-          productsData = result.data.collectionByHandle.products.edges
+        let productsData = [];
+        if (result.data.collectionByHandle) {
+          productsData = result.data.collectionByHandle.products.edges;
+        } else {
+          productsData = result.data.products.edges;
         }
-        else {
-          productsData = result.data.products.edges
-        }
-        let products = []
-        for(let i = 0; i < productsData.length; i++) {
-          let a = productsData[i]
-          if(a.node.options) {
+        let products = [];
+        for (let i = 0; i < productsData.length; i++) {
+          let a = productsData[i];
+          if (a.node.options) {
             // find the Color product option
-            let colorOpt = a.node.options.find(b => b.name === 'Color')
-            if(colorOpt) a.node.colorValues = colorOpt.values
-            else a.node.colorValues = []
-
-          }
-          else {
-            a.node.colorValues = []
+            let colorOpt = a.node.options.find(b => b.name === "Color");
+            if (colorOpt) a.node.colorValues = colorOpt.values;
+            else a.node.colorValues = [];
+          } else {
+            a.node.colorValues = [];
           }
 
-          let productIllustration = ''
-          try {
-            // Handle unisex products not having separate illustrations
-            let illuHandle = a.node.handle
-            if(illuHandle.includes('accessories') || illuHandle.includes('socks')) {
-              illuHandle = illuHandle.replace(/womens-/g, '').replace(/mens-/g, '')
+          let isSingleProduct = a.node.tags.some(tag => {
+            let bundleTag = "";
+            let isBundleTag = tag.includes("combo") || tag.includes("quant");
+            if (isBundleTag) {
+              if (tag.split("-").length > 2) {
+                return true;
+              } else {
+                bundleTag = tag;
+              }
             }
-            let productSvg = await import('~/assets/svg/products/' + illuHandle + '.svg?raw')
-            if(productSvg.default) a.node.productIllustration = productSvg.default
-          } catch(err) {
-            a.node.productIllustration = ''
-          }
+            return false;
+          });
+          // productIllustration for single and quantity products
+          // bundleIllustrations for Bundles
+          let productIllustration = "";
+          let bundleIllustrations = "";
+          a.node.isSingleProduct = isSingleProduct;
+          if (isSingleProduct) {
+            try {
+              // Handle unisex products not having separate illustrations
+              let illuHandle = a.node.handle;
+              if (
+                illuHandle.includes("accessories") ||
+                illuHandle.includes("socks")
+              ) {
+                illuHandle = illuHandle
+                  .replace(/womens-/g, "")
+                  .replace(/mens-/g, "");
+              }
+              let productSvg = await import(
+                "~/assets/svg/products/" + illuHandle + ".svg?raw"
+              );
+              if (productSvg.default)
+                a.node.productIllustration = productSvg.default;
+            } catch (err) {
+              console.log(err);
+              a.node.productIllustration = "";
+            }
+          } else {
+            // Loading illustrations for Bundles
+            try {
+              // Handle unisex products not having separate illustrations
+              if (a.node.description.split("|").length > 2) {
+                if (a.node.description.split("|")[1] === "triple") {
+                // In case of combo bundles with three or more products
+                  a.node.tripleBundle = true;
+                  a.node.quantity = null;
+                } else if (a.node.description.split("|")[1] === "null") {
+                  a.node.quantity = null;
+                } else {
+                  a.node.quantity = a.node.description.split("|")[1];
+                }
+              } else {
+                // In case of combo bundles
+                a.node.quantity = null;
+              }
 
-          products.push(a)
+              let illuHandles = [];
+              if (a.node.tripleBundle) {
+                illuHandles = a.node.description
+                  .split("|")[0]
+                  .split("---")
+                  .slice(0, 3);
+              } else {
+                illuHandles = a.node.description
+                  .split("|")[0]
+                  .split("---")
+                  .slice(0, 2);
+              }
+
+              illuHandles.forEach(handle => {
+                if (
+                  handle.includes("accessories") ||
+                  handle.includes("socks")
+                ) {
+                  handle = handle.replace(/womens-/g, "").replace(/mens-/g, "");
+                }
+              });
+
+
+              const functionWithPromise = handle => {
+                try {
+                  return import("~/assets/svg/products/" + handle + ".svg?raw");
+                } catch (err) {
+                  console.log(err);
+                  return null;
+                }
+              };
+
+              const anAsyncFunction = async handle => {
+                const result = functionWithPromise(handle);
+                return result;
+              };
+
+              const getIllustrations = async () => {
+                return Promise.all(
+                  illuHandles.map(handle => {
+                    return anAsyncFunction(handle);
+                  })
+                );
+              };
+
+          // This is where the lazy load of the illustrations is triggered
+              await getIllustrations().then(data => {
+          // The illustrations for the bundle are added to a new property inside of the bundle
+                a.node.bundleIllustrations = data.map(illu => illu.default);
+          // We select the first illustration as the main bundle illustration in case of quantity bundles
+                a.node.productIllustration = a.node.bundleIllustrations[0];
+              });
+            } catch (err) {
+              console.log(err);
+            }
+          }
+          products.push(a);
         }
         return {
           // nuxt el : query var
-          products : products,
-          collectionTitle : title
-        }
+          products: products,
+          collectionTitle: title
+        };
+      } else {
+        return { products: [], collectionTitle: "" };
       }
-      else {
-        return { products : [], collectionTitle : '' }
-      }
-    } catch(err) {
-      console.error(err)
-      return { products : [], collectionTitle : '' }
+    } catch (err) {
+      console.error(err);
+      return { products: [], collectionTitle: "" };
     }
-
   }
-})
-
+});
 </script>
 
 <style lang="scss">
@@ -221,5 +318,4 @@ export default Vue.extend({
     }
   }
 }
-
 </style>
