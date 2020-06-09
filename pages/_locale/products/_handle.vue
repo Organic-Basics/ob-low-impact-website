@@ -61,7 +61,7 @@
           "
         ></div>
       </div>
-      <div v-else class="bundle__illustrations" >
+      <div v-else class="bundle__illustrations">
         <div
           class="bundle__illustration--quant"
           v-for="product in products"
@@ -170,7 +170,11 @@
     </div>
     <productSelect
       v-for="(prod, index) in products"
-      v-if="prod.switchId == 0 || prod.switchId == switchId || prod.switchId === undefined"
+      v-if="
+        prod.switchId == 0 ||
+          prod.switchId == switchId ||
+          prod.switchId === undefined
+      "
       :key="prod.id"
       :propsIdx="index"
       :propsProduct="prod"
@@ -343,21 +347,21 @@ export default Vue.extend({
               // Handle unisex products not having separate illustrations
               if (upSell.node.description.split("|").length > 2) {
                 if (upSell.node.description.split("|")[1] === "complete") {
-          // TODO: tripleBundle is used for CSS styling, change it to complete bundle
+                  // TODO: tripleBundle is used for CSS styling, change it to complete bundle
                   upSell.node.completeBundle = true;
                   upSell.node.quantity = null;
                 } else if (upSell.node.description.split("|")[1] === "null") {
-          // TODO: Special case where there was already a bundle with a description using "|" as separator
+                  // TODO: Special case where there was already a bundle with a description using "|" as separator
                   upSell.node.quantity = null;
                 } else {
-          // Case for quant bundles
+                  // Case for quant bundles
                   upSell.node.quantity = upSell.node.description.split("|")[1];
                 }
               } else {
                 upSell.node.quantity = null;
               }
 
-          // Getting the svg filenames to load bundle illustrations
+              // Getting the svg filenames to load bundle illustrations
               let illuHandles = [];
               if (upSell.node.completeBundle) {
                 illuHandles = upSell.node.description
@@ -380,7 +384,7 @@ export default Vue.extend({
                 }
               });
 
-// ---------------- LAZY LOADING PHASE FOR BUNDLES
+              // ---------------- LAZY LOADING PHASE FOR BUNDLES
               const functionWithPromise = handle => {
                 try {
                   return import("~/assets/svg/products/" + handle + ".svg?raw");
@@ -409,7 +413,7 @@ export default Vue.extend({
                 );
                 upSell.node.productIllustration =
                   upSell.node.bundleIllustrations[0];
-// ----------------- LAZY LOADING PHASE FOR BUNDLES
+                // ----------------- LAZY LOADING PHASE FOR BUNDLES
               });
             });
           } catch (err) {
@@ -513,7 +517,7 @@ export default Vue.extend({
               handle = handle.replace(/womens-/g, "").replace(/mens-/g, "");
             }
 
-// ----------------- LAZY LOADING PHASE FOR BUNDLES
+            // ----------------- LAZY LOADING PHASE FOR BUNDLES
             const functionWithPromise = handle => {
               try {
                 return import("~/assets/svg/products/" + handle + ".svg?raw");
@@ -531,7 +535,7 @@ export default Vue.extend({
             };
 
             getIllustration(handle);
-// ----------------- LAZY LOADING PHASE FOR BUNDLES
+            // ----------------- LAZY LOADING PHASE FOR BUNDLES
           });
         }
 
@@ -623,18 +627,18 @@ export default Vue.extend({
     }
   },
   methods: {
-    openCart(){
+    openCart() {
       console.log("open cart method in child triggered");
-      this.$emit('openCartFromHandle');
+      this.$emit("openCartFromHandle");
     },
 
     async addToCart() {
-      console.log("adding to cart")
+      console.log("adding to cart");
       this.isAdding = true;
       let cartIds = this.$store.getters.cartIds;
 
-      console.log("emitting openCartfromnuxt")
-      this.$parent.$emit('openCartFromNuxtChild')
+      console.log("emitting openCartfromnuxt");
+      this.$parent.$emit("openCartFromNuxtChild");
 
       let customAttributes = [];
       if (this.bundleData && this.bundleData.tag && this.bundleData.name) {
@@ -992,18 +996,18 @@ function prepProducts(products, bundleData) {
         display: flex;
         flex-wrap: wrap;
         flex-direction: row;
-        position:relative;
+        position: relative;
 
         &.vertical {
-        flex-wrap: nowrap;
-        flex-direction: column;
+          flex-wrap: nowrap;
+          flex-direction: column;
         }
         .bundle__illustration {
           max-width: 40%;
           min-width: 90px;
           // flex-grow: 1;
 
-          &--quant{
+          &--quant {
             position: absolute;
             // top:50%;
             // right: 50%;
@@ -1011,13 +1015,13 @@ function prepProducts(products, bundleData) {
             height: 50%;
 
             &:first-child {
-  top:0%;
-  left: 15%;
-}
-&:last-child {
-  bottom:15%;
-  right: 15%;
-}
+              top: 0%;
+              left: 15%;
+            }
+            &:last-child {
+              bottom: 15%;
+              right: 15%;
+            }
           }
         }
         .product__image-quant {

@@ -17,15 +17,20 @@
         }"
         v-else
       >
-      
         <div
-        :class="{
-          product__illustration: true,
-          quantityBundle: productData.quantity ? true : productData.completeBundle,
-          five: productData.quantity == 5 ? true : false,
-          quantityBundle: productData.quantity == 2 ? false : productData.quantity ? true : productData.completeBundle
-        }"
-        
+          :class="{
+            product__illustration: true,
+            quantityBundle: productData.quantity
+              ? true
+              : productData.completeBundle,
+            five: productData.quantity == 5 ? true : false,
+            quantityBundle:
+              productData.quantity == 2
+                ? false
+                : productData.quantity
+                ? true
+                : productData.completeBundle
+          }"
           v-for="illu in productData.bundleIllustrations"
           v-html="illu"
         ></div>
@@ -169,50 +174,50 @@ export default Vue.extend({
     flex-grow: 1;
     position: relative;
     &:first-child {
-  top:10%;
-}
-&:last-child {
-  bottom:10%;
-}
-    
+      top: 10%;
+    }
+    &:last-child {
+      bottom: 10%;
+    }
 
-&.quantityBundle{
-  max-width: 50%;
+    &.quantityBundle {
+      max-width: 50%;
       min-width: 50%;
-            position: absolute;
-            // top:50%;
-            // right: 50%;
-            width: 40%;
-            height: 50%;
+      position: absolute;
+      // top:50%;
+      // right: 50%;
+      width: 40%;
+      height: 50%;
 
-            &:first-child {
-  top:10%;
-  left: 5%;
-}
-&:last-child {
-  bottom:10%;
-  right: 5%;
-}
+      &:first-child {
+        top: 10%;
+        left: 5%;
+      }
+      &:last-child {
+        bottom: 10%;
+        right: 5%;
+      }
 
-&.five{
- &:first-child {
-  top:0%;
-  left: 0%;
-}
-&:nth-child(2) {
-    top:12%;
-  left: 12%;
-}
+      &.five {
+        &:first-child {
+          top: 0%;
+          left: 0%;
+        }
+        &:nth-child(2) {
+          top: 12%;
+          left: 12%;
+        }
 
-&:nth-child(4) {
- bottom:12%;
-  right: 12%;
-}
-&:last-child {
-  bottom:0%;
-  right: 0%;
-}}
-          }
+        &:nth-child(4) {
+          bottom: 12%;
+          right: 12%;
+        }
+        &:last-child {
+          bottom: 0%;
+          right: 0%;
+        }
+      }
+    }
 
     svg {
       *[stroke*="#"] {
