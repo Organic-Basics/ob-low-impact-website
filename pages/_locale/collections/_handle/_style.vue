@@ -314,9 +314,9 @@ export default Vue.extend({
             try {
               // Handle unisex products not having separate illustrations
               if (a.node.description.split("|").length > 2) {
-                if (a.node.description.split("|")[1] === "triple") {
+                if (a.node.description.split("|")[1] === "complete") {
                 // In case of combo bundles with three or more products
-                  a.node.tripleBundle = true;
+                  a.node.completeBundle = true;
                   a.node.quantity = null;
                 } else if (a.node.description.split("|")[1] === "null") {
                   a.node.quantity = null;
@@ -329,7 +329,7 @@ export default Vue.extend({
               }
 
               let illuHandles = [];
-              if (a.node.tripleBundle) {
+              if (a.node.completeBundle) {
                 illuHandles = a.node.description
                   .split("|")[0]
                   .split("---")
@@ -373,15 +373,23 @@ export default Vue.extend({
                 );
               };
 
-          // This is where the lazy load of the illustrations is triggered
+           // This is where the lazy load of the illustrations is triggered
               await getIllustrations().then(data => {
-          // The illustrations for the bundle are added to a new property inside of the bundle
+           // The illustrations for the bundle are added to a new property inside of the bundle
                 a.node.bundleIllustrations = data.map(illu => illu.default);
-          // We select the first illustration as the main bundle illustration in case of quantity bundles
+           // We select the first illustration as the main bundle illustration in case of quantity bundles
                 a.node.productIllustration = a.node.bundleIllustrations[0];
+                
               });
             } catch (err) {
               console.log(err);
+            }
+          }
+          console.log(a)
+          if (a.node.quantity){
+              for (let i = 0; i < a.node.quantity-1; i++) {
+                console.log(i)
+              a.node.bundleIllustrations.push(a.node.productIllustration)
             }
           }
           products.push(a);

@@ -64,18 +64,19 @@
       <div v-else class="bundle__illustrations" >
         <div
           class="bundle__illustration--quant"
-          v-html="productIllustration"
-          v-if="!shouldShowImages && productIllustration"
+          v-for="product in products"
+          v-html="product.illustration"
+          v-if="!shouldShowImages && product.illustration"
         ></div>
       </div>
-      <span
+      <!-- <span
         class=" product__image-quant variant--black"
         v-if="!shouldShowImages && bundleData.type === 'quant'"
       >
         <span class="product__bundle--quant">
           x {{ products.length }}
         </span></span
-      >
+      > -->
       <div class="product__image-label" v-if="!shouldShowImages">
         <span class="product__image-label--bold">
           <span v-if="$store.state.carbonIntensity.intensity.index !== 'high'"
@@ -345,9 +346,9 @@ export default Vue.extend({
             newData.upSells.forEach(upSell => {
               // Handle unisex products not having separate illustrations
               if (upSell.node.description.split("|").length > 2) {
-                if (upSell.node.description.split("|")[1] === "triple") {
+                if (upSell.node.description.split("|")[1] === "complete") {
           // TODO: tripleBundle is used for CSS styling, change it to complete bundle
-                  upSell.node.tripleBundle = true;
+                  upSell.node.completeBundle = true;
                   upSell.node.quantity = null;
                 } else if (upSell.node.description.split("|")[1] === "null") {
           // TODO: Special case where there was already a bundle with a description using "|" as separator
@@ -362,7 +363,7 @@ export default Vue.extend({
 
           // Getting the svg filenames to load bundle illustrations
               let illuHandles = [];
-              if (upSell.node.tripleBundle) {
+              if (upSell.node.completeBundle) {
                 illuHandles = upSell.node.description
                   .split("|")[0]
                   .split("---")
@@ -626,9 +627,18 @@ export default Vue.extend({
     }
   },
   methods: {
+    openCart(){
+      console.log("open cart method in child triggered");
+      this.$emit('openCartFromHandle');
+    },
+
     async addToCart() {
+      console.log("adding to cart")
       this.isAdding = true;
       let cartIds = this.$store.getters.cartIds;
+
+      console.log("emitting openCartfromnuxt")
+      this.$parent.$emit('openCartFromNuxtChild')
 
       let customAttributes = [];
       if (this.bundleData && this.bundleData.tag && this.bundleData.name) {
@@ -986,14 +996,33 @@ function prepProducts(products, bundleData) {
         display: flex;
         flex-wrap: wrap;
         flex-direction: row;
+        position:relative;
 
         &.vertical {
-          flex-direction: column;
+        flex-wrap: nowrap;
+        flex-direction: column;
         }
         .bundle__illustration {
-          max-width: 45%;
+          max-width: 40%;
           min-width: 90px;
           // flex-grow: 1;
+
+          &--quant{
+            position: absolute;
+            // top:50%;
+            // right: 50%;
+            width: 40%;
+            height: 50%;
+
+            &:first-child {
+  top:0%;
+  left: 15%;
+}
+&:last-child {
+  bottom:15%;
+  right: 15%;
+}
+          }
         }
         .product__image-quant {
           top: 25px;

@@ -2,8 +2,8 @@
   <main :class="'container container-carbon--' + carbonIntensity.index + ' ' + $route.name" ref="container">
     <button class="read-more" @click="isOverlayOpen = true" v-if="!$route.path.includes('offline')">Read more</button>
     <Navigation :womenLinks="menuLinks.womens" :menLinks="menuLinks.mens"
-      @openCart="isCartOpen = true" @openSidebar="isSidebarOpen = true" v-if="!$route.path.includes('offline')" />
-    <nuxt />
+      @openCart="openCart()" @openSidebar="isSidebarOpen = true" v-if="!$route.path.includes('offline')" />
+    <nuxt @openCartFromNuxtChild="openCart()"/>
     <sidebar :open="isSidebarOpen" :womenLinks="menuLinks.womens" :menLinks="menuLinks.mens"
       @closed="isSidebarOpen = false" v-if="!$route.path.includes('offline')"/>
     <cartDrawer :open="isCartOpen" @closed="isCartOpen = false" v-if="!$route.path.includes('offline')"/>
@@ -229,6 +229,10 @@ export default Vue.extend({
     },
   },
   methods: {
+    openCart(){
+      console.log("opening the cart")
+      this.isCartOpen = true;
+    },
     saveEntries: function() {
       let entries = performance.getEntriesByType('resource')
       for(let ent of entries) {

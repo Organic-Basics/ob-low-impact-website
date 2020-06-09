@@ -773,7 +773,7 @@ export default Vue.extend({
     }
   }
 
-  &.triple {
+  &.complete {
     flex-direction: row;
     .product__illustration {
       max-width: 50%;
