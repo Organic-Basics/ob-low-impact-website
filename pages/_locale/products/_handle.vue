@@ -915,6 +915,11 @@ function prepProducts(products, bundleData) {
             *[fill*="#"] {
                 fill: map-get($colors, "productGrey") !important;
             }
+            
+            // Tennis socks fix
+            *[fill*="#999"] {
+                fill: map-get($colors, "black") !important;
+            }
         }
 
         img {

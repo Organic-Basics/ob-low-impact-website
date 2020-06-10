@@ -817,12 +817,14 @@ export default Vue.extend({
         display: flex;
         flex-basis: auto;
         margin-right: 1rem;
+        min-height: 180px;
         overflow: hidden;
         flex: 1;
         position: relative;
-        min-width: 33%;
+        min-width: 150px;
 
         .product__illustration {
+          background: none;
           display: flex;
           flex-direction: column;
           justify-content: center;
@@ -838,6 +840,11 @@ export default Vue.extend({
 
             *[fill*="#"] {
               fill: map-get($colors, "productGrey") !important;
+            }
+            
+            // Tennis Socks fix
+            *[fill*="#999"] {
+                fill: map-get($colors, "black") !important;
             }
           }
 
@@ -860,6 +867,10 @@ export default Vue.extend({
             &:first-child {
               top: 10%;
               left: 5%;
+            }
+            &:nth-child(2) {
+              top: 25%;
+              left: 25%;
             }
             &:last-child {
               bottom: 10%;
