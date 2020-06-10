@@ -307,6 +307,7 @@ section {
 }
 
 .cart__click-overlay {
+  background: rgba(0, 0, 0, 0.25);
   height: 100vh;
   left: 0;
   position: fixed;
