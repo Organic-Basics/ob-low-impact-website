@@ -143,6 +143,18 @@
       </div>
       <!-- Tabs -->
       <ProductTabs v-if="isSingleProd" :propsProduct="propsProduct" />
+
+      <div class="product__main--extra" v-if="propsProduct.isLastProduct">
+        <span class="product__main--shipping">
+          Free CO2 neutral worldwide shipping available.
+        </span>
+        <span class="product__main--sizeguide" @click="$emit('sizeGuideOpened')">
+          <div class="size-guide-cta">
+            Size Guides
+          </div>
+        </span>
+      </div>
+
     </div>
     <!-- Upsells -->
     <div class="product__upsells text--left" v-if="propsUpSells.length > 0">
