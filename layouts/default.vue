@@ -282,7 +282,6 @@ section {
   min-height: 50px;
   position: fixed;
   top: 20vh;
-  max-width: 50px;
   background: none;
   left: 15vw;
 
