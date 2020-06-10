@@ -49,7 +49,10 @@
       </div>
       <div v-else class="bundle__illustrations">
         <div
-          class="bundle__illustration--quant"
+          :class="{
+            'bundle__illustration--quant': true,
+            five: bundleData.quantProducts > 3
+          }"
           v-for="product in products"
           v-html="product.illustration"
           v-if="!shouldShowImages && product.illustration"

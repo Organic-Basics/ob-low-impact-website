@@ -184,6 +184,10 @@ export default Vue.extend({
   right: 0;
   border-left: 2px solid map-get($colors, 'black');
 
+  h6 {
+    font-size: 14px;
+  }
+
   @include screenSizes(tabletPortrait) {
     width: 100vw;
     border: none;
