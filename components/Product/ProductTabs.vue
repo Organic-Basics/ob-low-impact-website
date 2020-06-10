@@ -337,6 +337,10 @@ export default Vue.extend({
   }
 }
 
+.bundle__selection .product__tabs--desktop {
+  margin-top: 20px;
+}
+
 .product__tabs--desktop {
   margin: 3vw 0;
   padding: 0;

@@ -127,7 +127,7 @@
             <!-- Product tabs -->
             <div
               class="product__mobile--tabs"
-              :class="isTabOpen ? 'open' : 'closed'"
+              :class="propsProduct.isProdOpen && isTabOpen ? 'open' : 'closed'"
             >
               <ProductTabs :propsProduct="propsProduct" />
             </div>
@@ -702,10 +702,6 @@ export default Vue.extend({
 
         .product__main--option-radio {
           display: none;
-        }
-
-        .product__tabs--desktop {
-          margin-top: 20px;
         }
       }
     }
