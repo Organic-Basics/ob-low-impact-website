@@ -244,6 +244,8 @@ export default Vue.extend({
       width: 20%;
 
       svg {
+        width: 100%;
+
         *[stroke*="#"] {
           stroke: map-get($colors, 'black') !important;
         }
