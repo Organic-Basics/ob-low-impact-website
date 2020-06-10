@@ -93,9 +93,8 @@
               <span class="product__bundle-switch" @click="switchProduct" v-if="propsProduct.switchId != 0 && propsProduct.switchId !== undefined">Switch to {{ propsProduct.switchProduct.title }}</span>
               <!-- Color -->
               <div class="product__main--option product__main--color">
-                <span
-                  class="product__main--option--title product__main--option--mobile">Color<span v-if="propsProduct.chosenColor">:
-                    <span class="product__color-choice">{{propsProduct.chosenColor}}</span></span></span>
+                <h6 class="product__main--option--title product__main--option--mobile">Color<span v-if="propsProduct.chosenColor">:
+                    <span class="product__color-choice">{{propsProduct.chosenColor}}</span></span></h6>
                 <div class="product__main--option-picker">
                   <span
                     v-for="(color, index) in cleanOptions.color.values"
@@ -592,6 +591,10 @@ export default Vue.extend({
         border-top: 1px solid map-get($colors, 'brand');
         margin-top: 0;
         padding: 1.5rem 0;
+
+        @include screenSizes(tabletPortrait) {
+          border-top: none;
+        }
       }
 
       .product__bundle--title {
@@ -619,6 +622,7 @@ export default Vue.extend({
       .product__mobile--circle {
         display: inline-flex;
         justify-content: center;
+        font-weight: bold;
         align-items: center;
         border: 1.5px solid map-get($colors, "black");
         border-radius: 50%;
