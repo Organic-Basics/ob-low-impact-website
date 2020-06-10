@@ -46,25 +46,32 @@ export default Vue.extend({
 
   .index__intro {
     padding-top: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
 
     .manifesto__heading--dramatic {
       -webkit-text-fill-color: map-get($colors, 'bgGrey');
       max-width: 40vw;
       margin: auto;
-      margin-top: -655px;
+      margin-top: -80px;
       font-size: 7vw;
-
-      @include screenSizes(desktopSmall) {
-        margin-top: -640px;
-      }
+      position: absolute;
 
       @include screenSizes(tabletPortrait) {
-        margin-top: -620px;
+        margin-top: -70px;
+      }
+
+      @include screenSizes(phone) {
+        margin-top: -100px;
+        font-size: 15vw;
+        max-width: 90vw;
       }
     }
 
     .spedometer__container {
-      height: 600px;
+      height: auto;
       span {
         display: none;
       }
@@ -80,6 +87,10 @@ export default Vue.extend({
       display: flex;
       flex-direction: column;
       align-items: flex-start;
+      width: 100vw;
+      padding-left: 30px;
+      padding-right: 30px;
+      margin-top: 35px;
 
       @include screenSizes(tabletPortrait) {
         padding-left: 20px;

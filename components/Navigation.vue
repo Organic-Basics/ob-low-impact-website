@@ -145,7 +145,7 @@ export default Vue.extend({
         return mainSiteUrl
       }
       else {
-        return 
+        return
       }
     }
   }
@@ -206,6 +206,10 @@ export default Vue.extend({
     top: 30px;
     display: flex;
     flex-direction: row;
+
+    @include screenSizes(tabletPortrait) {
+      display: none;
+    }
   }
 
   .menu--desktop {
@@ -294,7 +298,7 @@ export default Vue.extend({
       justify-content: center;
       position: absolute;
       top: 2px;
-      right: -20px;
+      right: -21px;
       width: 100%;
     }
   }
