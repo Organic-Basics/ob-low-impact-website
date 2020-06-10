@@ -32,38 +32,6 @@
     {
       "url" : "/collections/womens-save-with-packs",
       "name" : "Save with packs"
-    },
-    {
-      "url" : "/collections/womens-theme-basics",
-      "name" : "Basics"
-    },
-    {
-      "url" : "/collections/womens-theme-activewear",
-      "name" : "Activewear"
-    },
-    {
-      "url" : "/collections/womens-theme-invisible",
-      "name" : "Invisible"
-    },
-    {
-      "url" : "/collections/womens-theme-recycled-materials",
-      "name" : "Recycled materials"
-    },
-    {
-      "url" : "/collections/womens-theme-organic-cotton",
-      "name" : "Organic cotton"
-    },
-    {
-      "url" : "/collections/womens-recycled-cashmere-winter-accessories",
-      "name" : "Recycled cashmere"
-    },
-    {
-      "url" : "/collections/womens-theme-tencel",
-      "name" : "TENCEL™"
-    },
-    {
-      "url" : "/collections/womens-theme-silvertech",
-      "name" : "SilverTech™"
     }
   ],
   "mens": [
@@ -90,34 +58,6 @@
     {
       "url" : "/collections/mens-save-with-packs",
       "name" : "Save with packs"
-    },
-    {
-      "url" : "/collections/mens-theme-basics",
-      "name" : "Basics"
-    },
-    {
-      "url" : "/collections/mens-theme-activewear",
-      "name" : "Activewear"
-    },
-    {
-      "url" : "/collections/mens-theme-recycled-materials",
-      "name" : "Recycled materials"
-    },
-    {
-      "url" : "/collections/mens-theme-organic-cotton",
-      "name" : "Organic cotton"
-    },
-    {
-      "url" : "/collections/mens-recycled-cashmere-winter-accessories",
-      "name" : "Recycled cashmere"
-    },
-    {
-      "url" : "/collections/mens-theme-tencel",
-      "name" : "TENCEL™"
-    },
-    {
-      "url" : "/collections/mens-theme-silvertech",
-      "name" : "SilverTech™"
     }
   ]
 }

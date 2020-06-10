@@ -143,6 +143,8 @@ export default Vue.extend({
     h3 {
       margin-left: 25px;
       margin-top: 8px;
+      font-size: 26px;
+      line-height: 26px;
     }
 
     .sidebar__body--women, .sidebar__body--men {
