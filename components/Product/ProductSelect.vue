@@ -91,35 +91,37 @@
               class="product__main--option-container"
               :class="propsProduct.isProdOpen && !isTabOpen ? 'open' : 'closed'">
               <span class="product__bundle-switch" @click="switchProduct" v-if="propsProduct.switchId != 0 && propsProduct.switchId !== undefined">Switch to {{ propsProduct.switchProduct.title }}</span>
-              <!-- Color -->
-              <div class="product__main--option product__main--color">
-                <h6 class="product__main--option--title product__main--option--mobile">Color<span v-if="propsProduct.chosenColor">:
-                    <span class="product__color-choice">{{propsProduct.chosenColor}}</span></span></h6>
-                <div class="product__main--option-picker">
-                  <span
-                    v-for="(color, index) in cleanOptions.color.values"
-                    @click="chooseColor(color, propsIdx)"
-                    :class="['variant__selector', color === propsProduct.chosenColor ? 'variant--chosen' : '']">
-                    <span class="variant__selector--border"></span>
-                    <span :class="'variant__selector--center variant--' + color.toLowerCase().split(' ').join('')"></span>
-                  </span>
+              <div class="product__main--options">
+                <!-- Color -->
+                <div class="product__main--option product__main--color">
+                  <h6 class="product__main--option--title product__main--option--mobile">Color<span v-if="propsProduct.chosenColor">:
+                      <span class="product__color-choice">{{propsProduct.chosenColor}}</span></span></h6>
+                  <div class="product__main--option-picker">
+                    <span
+                      v-for="(color, index) in cleanOptions.color.values"
+                      @click="chooseColor(color, propsIdx)"
+                      :class="['variant__selector', color === propsProduct.chosenColor ? 'variant--chosen' : '']">
+                      <span class="variant__selector--border"></span>
+                      <span :class="'variant__selector--center variant--' + color.toLowerCase().split(' ').join('')"></span>
+                    </span>
+                  </div>
                 </div>
-              </div>
-              <!-- Size -->
-              <div class="product__main--option product__main--size">
-                <h6 class="product__main--option--title">Size</h6>
-                <div class="product__main--option-picker">
-                  <span
-                    v-for="(size, index) in cleanOptions.size.values"
-                    :class="[
-                      'variant__size',
-                      size === propsProduct.chosenSize ? 'variant--chosen' : '',
-                      oosSizes.includes(size) ? 'variant--oos' : ''
-                    ]"
-                    @click="chooseSize(size, propsIdx)"
-                  >
-                    {{ size }}
-                  </span>
+                <!-- Size -->
+                <div class="product__main--option product__main--size">
+                  <h6 class="product__main--option--title">Size</h6>
+                  <div class="product__main--option-picker">
+                    <span
+                      v-for="(size, index) in cleanOptions.size.values"
+                      :class="[
+                        'variant__size',
+                        size === propsProduct.chosenSize ? 'variant--chosen' : '',
+                        oosSizes.includes(size) ? 'variant--oos' : ''
+                      ]"
+                      @click="chooseSize(size, propsIdx)"
+                    >
+                      {{ size }}
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -450,6 +452,10 @@ export default Vue.extend({
         display: flex;
         flex-direction: row;
 
+        .product__main--options {
+          display: inherit;
+        }
+
         @include screenSizes(tabletPortrait) {
           display: block;
         }
@@ -581,6 +587,7 @@ export default Vue.extend({
       .product__bundle-switch {
         color: map-get($colors, "darkGrey");
         margin-top: 10px;
+        margin-bottom: 20px;
       }
 
       .product__bundle--top {
