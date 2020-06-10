@@ -874,6 +874,30 @@ function prepProducts(products, bundleData) {
               top: 30%;
               right: 15%;
             }
+
+            &.five {
+              &:first-child {
+                top: 0%;
+                left: 0%;
+              }
+              &:nth-child(2) {
+                top: 12%;
+                left: 12%;
+              }
+              &:nth-child(3) {
+                top: 25%;
+                left: 25%;
+              }
+
+              &:nth-child(4) {
+                top: 37%;
+                left: 37%;
+              }
+              &:last-child {
+                top: 50%;
+                left: 50%;
+              }
+            }
           }
         }
 
@@ -1164,6 +1188,25 @@ function prepProducts(products, bundleData) {
             flex-basis: 75%;
             padding-right: 5px;
             color: map-get($colors, "brand");
+        }
+
+        .size-guide-cta {
+          display: inline-block;
+          position: relative;
+
+          &::after {
+            background: map-get($colors, 'black');
+            bottom: 0;
+            content: '';
+            height: 1px;
+            left: 0;
+            position: absolute;
+            width: 100%;
+          }
+          &:hover::after {
+            bottom: -1px;
+            height: 2px;
+          }
         }
     }
 
