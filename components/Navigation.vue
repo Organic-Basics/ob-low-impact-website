@@ -21,14 +21,25 @@
       </nuxt-link>
       <ul class="menu__links--desktop">
         <li><a :href="mainSiteLink">Normal website</a></li>
-        <nuxt-link :to="'/' + $store.state.activeCurrency + '#manifesto'">Manifesto</nuxt-link>
+        <li><nuxt-link :to="'/' + $store.state.activeCurrency + '#manifesto'">Manifesto</nuxt-link></li>
       </ul>
     </div>
-    <div class="header__cart" @click="openCart()">
-      <CartIcon />
-      <span class="header__cart-count">
-        <span>{{ cartCount }}</span>
-      </span>
+    <div class="header__icons">
+      <div class="header__currency">
+        <span  @click="toggleDropdown">{{$store.state.activeCurrency}}</span>
+      </div>
+      <div :class="{'header__currency--dropdown': true,'dropdown--open': isOpen}">
+        <span @click="changeCurrency('eur')" :class="$store.state.activeCurrency === 'eur' ? 'header__currency--active' : ''">EUR</span>
+        <span @click="changeCurrency('dkk')" :class="$store.state.activeCurrency === 'dkk' ? 'header__currency--active' : ''">DKK</span>
+        <span @click="changeCurrency('gbp')" :class="$store.state.activeCurrency === 'gbp' ? 'header__currency--active' : ''">GBP</span>
+        <span @click="changeCurrency('usd')" :class="$store.state.activeCurrency === 'usd' ? 'header__currency--active' : ''">USD</span>
+      </div>
+      <div class="header__cart" @click="openCart()">
+        <CartIcon />
+        <span class="header__cart-count">
+          <span>{{ cartCount }}</span>
+        </span>
+      </div>
     </div>
 
     <!-- Desktop dropdown -->
@@ -70,7 +81,8 @@ export default Vue.extend({
       hoverWomens: false,
       hoverMens: false,
       menuLinks: menuLinks,
-      mainSiteMap: mainSiteMap
+      mainSiteMap: mainSiteMap,
+      isOpen: false
     }
   },
   created() {
@@ -86,6 +98,7 @@ export default Vue.extend({
   methods: {
     openCart: function () {
       this.$emit('openCart')
+      this.isOpen = false
     },
     openSidebar: function() {
       this.$emit('openSidebar')
@@ -100,6 +113,13 @@ export default Vue.extend({
       } else {
         header.classList.remove('header--sticky')
       }
+    },
+    changeCurrency: function (currency) {
+      this.$store.dispatch('changeCurrency', currency)
+      this.$emit('closed', true)
+    },
+    toggleDropdown() {
+      this.isOpen = !this.isOpen
     }
   },
   computed: {
@@ -175,12 +195,24 @@ export default Vue.extend({
     }
   }
 
+  .header__icons {
+    position: absolute;
+    right: 20px;
+    top: 30px;
+    display: flex;
+    flex-direction: row;
+  }
+
   .menu--desktop {
     display: flex;
     flex-direction: row;
     align-items: center;
-    margin-left: auto;
+    margin: auto;
     height: 100%;
+
+    .header__logo {
+      padding: 12px;
+    }
 
     .menu__links--desktop {
       list-style: none;
@@ -211,10 +243,42 @@ export default Vue.extend({
     }
   }
 
+  .header__currency--dropdown {
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    display: none;
+    position: absolute;
+    top: 35px;
+    left: 0;
+    flex-direction: column;
+
+    > span {
+      position: relative;
+      top: 0;
+      margin-right: 10px;
+    }
+
+    .header__currency--active {
+      font-weight: bold;
+    }
+  }
+
+  .header__currency {
+    text-transform: uppercase;
+    font-weight: bold;
+    cursor: pointer;
+    margin-right: 15px;
+    padding-top: 5px;
+  }
+
+  .dropdown--open {
+    display: flex;
+  }
+
   .header__cart {
     cursor: pointer;
-    margin-left: auto;
-    position: relative;
 
     .header__cart-count {
       align-items: center;
@@ -225,7 +289,7 @@ export default Vue.extend({
       justify-content: center;
       position: absolute;
       top: 2px;
-      right: 0;
+      right: -20px;
       width: 100%;
     }
   }
