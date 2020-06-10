@@ -76,6 +76,12 @@ export default Vue.extend({
           name: 'offline page',
           lowImpactSize: 0,
           normalSize: 0
+        },
+        {
+          key: 'index',
+          name: 'index page',
+          lowImpactSize: 0,
+          normalSize: 0
         }
       ],
       currentBytes: 0,

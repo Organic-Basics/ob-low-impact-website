@@ -1,7 +1,7 @@
 <template>
 <div class="product__container">
   <div class="product__above">
-    <ProductSlideshow :isSingleProduct="isSingleProduct" :productIllustration="productIllustration" :shouldShowImages="shouldShowImages" @showImages="showImages()" :highResCost="highResCost" :lowResCost="lowResCost" :mainProduct="mainProduct" :bundleData="bundleData" :products="products"/>
+    <ProductSlideshow :isSingleProduct="isSingleProduct" :productIllustration="productIllustration" :shouldShowImages="shouldShowImages" @showImages="showImages()" :highResCost="highResCost" :lowResCost="lowResCost" :mainProduct="mainProduct" :bundleData="bundleData" :products="products" :switchId="switchId"/>
     <!-- Sticky bar -->
     <div class="product__sticky">
       <div class="product__sticky-top">
