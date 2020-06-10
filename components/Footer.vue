@@ -4,12 +4,12 @@
       <div class="footer__metrics bg--green">
         <div class="footer__metrics--item">
           <img src="~/assets/svg/data_icon.svg" alt="Data usage of this web page">
-          <h6>This page is using ~ <b>{{ (currentBytes / 1024).toFixed(0) }}kb</b> of data</br>(That is <b>{{this.currentSavingsMultiplier.toFixed(2)}} x</b> smaller than the regular <b>{{this.currentPage.name}}</b>)</h6>
+          <h6>This page is using ~<b>{{ (currentBytes / 1024).toFixed(0) }}kb</b> of data</br>(<b>{{this.currentSavingsMultiplier.toFixed(2)}}x</b> smaller than the regular <b>{{this.currentPage.name}}</b>)</h6>
         </div>
 
         <div class="footer__metrics--item">
           <img src="~/assets/svg/energy_icon.svg" alt="Saved energy while browsing on this website">
-          <h6>You’ve saved ~ <b>{{ totalSavings.toFixed(2) }} g</b> of CO<sub>2</sub> so far this session<br/>(compared to browsing our regular website)</h6>
+          <h6>You’ve saved ~<b>{{ totalSavings.toFixed(2) }} g</b> of CO<sub>2</sub> <br class="small-break"/>so far this session<br/>(compared to browsing<br class="small-break"/> our regular website)</h6>
         </div>
       </div>
       <div class="footer__image">
@@ -54,6 +54,14 @@ export default Vue.extend({
 .footer__container {
   width: 100vw;
 
+  h6 {
+    font-size: 14px;
+  }
+
+  h2 {
+    font-size: 26px;
+  }
+
   .footer__top {
     display: flex;
     flex-direction: row;
@@ -94,12 +102,13 @@ export default Vue.extend({
 
     .footer__image {
       flex-basis: 50%;
-      background: #d8d8d8;
+      background: map-get($colors, 'brand');
       position: relative;
       overflow: hidden;
 
       img {
         position: relative;
+        height: 150%;
         width: 75%;
 
         @include screenSizes(tabletPortrait) {
@@ -116,10 +125,18 @@ export default Vue.extend({
   }
 
   .footer__bottom {
-    background: #fff;
+    background: #D9D9D9;
 
     .footer__help--text {
       margin-top: 50px;
+    }
+  }
+
+  .small-break {
+    display: none;
+
+    @include screenSizes(phoneSmall) {
+      display: block;
     }
   }
 }
