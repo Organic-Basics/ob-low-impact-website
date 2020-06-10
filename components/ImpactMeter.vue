@@ -52,31 +52,80 @@ export default Vue.extend({
   .label--medium {
     @include spedometer__label;
     left: 0;
-    top: -5px;
+    top: 10px;
+
+    @include screenSizes(tabletPortrait) {
+      top: -5px;
+    }
   }
 
   .label--low {
     @include spedometer__label;
-    left: -14%;
-    top: 15px;
+    left: -9vw;
+    top: 4vw;
+
+    @include screenSizes(tabletPortrait) {
+      left: -14%;
+      top: 15px;
+    }
   }
 
   .label--lowest {
     @include spedometer__label;
-    left: -26%;
-    top: 85px;
+    left: -16vw;
+    top: 12vw;
+
+    // @include screenSizes(desktopSmall) {
+    //   left: -13vw;
+    // }
+
+    @include screenSizes(tabletPortrait) {
+      top: 110px;
+      left: -30%;
+    }
+
+    @include screenSizes(phone) {
+      left: -26%;
+      top: 85px;
+    }
+
+    @include screenSizes(phoneSmall) {
+      top: 60px;
+      left: -20%;
+    }
   }
 
   .label--high {
     @include spedometer__label;
-    left: 14%;
-    top: 13px;
+    left: 10vw;
+    top: 2vw;
+
+    @include screenSizes(tabletPortrait) {
+      left: 14%;
+      top: 13px;
+    }
   }
 
   .label--highest {
     @include spedometer__label;
-    left: 26%;
-    top: 85px;
+
+    left: 16vw;
+    top: 8vw;
+
+    @include screenSizes(tabletPortrait) {
+      top: 110px;
+      left: 30%;
+    }
+
+    @include screenSizes(phone) {
+      left: 26%;
+      top: 85px;
+    }
+
+    @include screenSizes(phoneSmall) {
+      top: 60px;
+    left: 20%;
+    }
   }
 
   #speedometer {

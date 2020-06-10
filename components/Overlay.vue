@@ -5,16 +5,18 @@
       <h5 @click="closeOverlay()">Close</h5>
     </header>
 
-    <section>
+    <section class="overlay__body">
       <ImpactMeter />
       <h5 class="overlay__carbon">Carbon intensity: {{carbonIntensity.forecast}}g CO2/kWh</h5>
-      <h6 class="overlay__carbon--desc">Our server’s carbon intensity is currently <span class="overlay__carbon-lvl">{{ carbonIndexName }}</span>. This site will continuously adapt to reflect the amount of renewable energy it’s running on.</h6>
-      <ul class="overlay__carbon-indices">
-        <li v-for="carbonIndex in carbonIndices" :class="(carbonIndex.key === carbonIntensity.index ? 'active' : '')">
-          <h6>{{carbonIndex.name}}</h6>
-          <h6>{{carbonIndex.description}}</h6>
-        </li>
-      </ul>
+      <div class="overlay__text--container">
+        <h6 class="overlay__carbon--desc">Our server’s carbon intensity is currently <span class="overlay__carbon-lvl">{{ carbonIndexName }}</span>. This site will continuously adapt to reflect the amount of renewable energy it’s running on.</h6>
+        <ul class="overlay__carbon-indices">
+          <li v-for="carbonIndex in carbonIndices" :class="(carbonIndex.key === carbonIntensity.index ? 'active' : '')">
+            <h6>{{carbonIndex.name}}</h6>
+            <h6>{{carbonIndex.description}}</h6>
+          </li>
+        </ul>
+      </div>
       <div class="overlay__questions">
         <h5 class="text--green">What, why, how?</h5>
         <img class="overlay__arrow-down" src="~/assets/svg/arrow_down.svg" alt="Arrow pointing down">
@@ -127,6 +129,7 @@ export default Vue.extend({
 
 <style lang="scss">
 @import "~assets/scss/variables.scss";
+@import "~assets/scss/mixins.scss";
 
 .overlay {
   background: map-get($colors, 'bgGrey');
@@ -153,6 +156,99 @@ export default Vue.extend({
   }
 }
 
+.overlay__body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  .overlay__text--container {
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    width: 95vw;
+    padding: 30px;
+    justify-content: space-between;
+    margin: auto;
+    align-items: center;
+
+    @include screenSizes(desktopSmall) {
+      position: unset;
+      flex-direction: column;
+    }
+
+    @include screenSizes(tabletPortrait) {
+      padding: 0;
+      width: 100%;
+    }
+
+    .overlay__carbon--desc {
+      max-width: 25vw;
+      text-align: left;
+      padding-top: 20px;
+      padding-bottom: 20px;
+
+      @include screenSizes(desktopSmall) {
+        max-width: 40vw;
+        text-align: center;
+      }
+
+      @include screenSizes(tabletPortrait) {
+        max-width: 100%;
+      }
+    }
+
+    .overlay__carbon-indices {
+      list-style: none;
+      padding: 0;
+      text-align: left;
+      margin-top: 20px;
+      width: 27vw;
+
+      @include screenSizes(desktopSmall) {
+        width: 60vw;
+      }
+
+      @include screenSizes(tabletPortrait) {
+        width: 100%;
+      }
+
+
+      li:not(.active) {
+        opacity: 0.25;
+      }
+
+      li {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 7px 0;
+      }
+    }
+  }
+
+  .spedometer__container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: auto;
+    width: 30vw;
+
+    @include screenSizes(tabletPortrait) {
+      display: block;
+      width: unset;
+    }
+
+    #speedometer {
+      width: 30vw;
+
+      @include screenSizes(tabletPortrait) {
+        width: 90%;
+      }
+    }
+  }
+}
+
 .overlay__carbon {
   .container-carbon--very-low & {
     color: map-get($colors, 'green');;
@@ -170,29 +266,6 @@ export default Vue.extend({
 
 .overlay__carbon-lvl {
   font-weight: bold;
-}
-
-.overlay__carbon-indices {
-  list-style: none;
-  padding: 0;
-  text-align: left;
-  margin-top: 20px;
-
-  li:not(.active) {
-    opacity: 0.25;
-  }
-
-  li {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    padding: 7px 0;
-  }
-}
-
-.overlay__carbon--desc {
-  padding-top: 20px;
-  padding-bottom: 20px;
 }
 
 .overlay__questions {
