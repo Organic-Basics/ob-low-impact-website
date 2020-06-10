@@ -49,6 +49,7 @@ export default Vue.extend({
 
 <style lang="scss">
 @import "~assets/scss/mixins.scss";
+@import "~assets/scss/variables.scss";
 
 .footer__container {
   width: 100vw;
@@ -78,6 +79,7 @@ export default Vue.extend({
       }
 
       .footer__metrics--item {
+        color: map-get($colors, 'cookieTextWhite');
         margin: 20px auto;
 
         @include screenSizes(tabletPortrait) {

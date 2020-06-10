@@ -1,6 +1,6 @@
 <template>
 <div>
-  <span>Loading currency...</span>
+  <span></span>
 </div>
 </template>
 

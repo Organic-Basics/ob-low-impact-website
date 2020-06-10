@@ -40,7 +40,6 @@ export default Vue.extend({
       menuLinks: menuLinks
     }
   },
-  // TODO: Fix async data and currency
   async asyncData(ctx) {
     try {
       if (ctx.app && ctx.app.apolloProvider) {
@@ -256,6 +255,7 @@ export default Vue.extend({
           }
           products.push(a);
         }
+
         return {
           // nuxt el : query var
           products: products,

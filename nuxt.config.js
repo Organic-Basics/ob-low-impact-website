@@ -91,7 +91,15 @@ module.exports = {
             'X-Shopify-Storefront-Access-Token': process.env.VUE_APP_GRAPHQL_SECRET_US
           }
         }
-      }
+      },
+      dev: {
+        httpEndpoint: process.env.VUE_APP_GRAPHQL_URI_DEV,
+        httpLinkOptions: {
+          headers: {
+            'X-Shopify-Storefront-Access-Token': process.env.VUE_APP_GRAPHQL_SECRET_DEV
+          }
+        }
+      },
     }
   },
   pwa: {},

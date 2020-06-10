@@ -15,6 +15,10 @@
     {
       "currency": "eur",
       "url": "organicbasics.com"
+    },
+    {
+      "currency": "dev",
+      "url": "tarteletter.organicbasics.com"
     }
   ]
 }
