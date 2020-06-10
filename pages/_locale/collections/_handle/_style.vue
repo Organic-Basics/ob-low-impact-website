@@ -3,10 +3,12 @@
     <h3 class="collection__heading">{{ collectionTitle }}</h3>
     <div class="collection__content">
       <div class="collection__sidebar">
-        <nuxt-link v-if="collHandle.startsWith('all-womens') || collHandle.startsWith('womens')" v-for="(link, index) in menuLinks.menuLinks.womens" :key="index" :to="`/${$store.state.activeCurrency}${link.url}`">
+        <h6 v-if="$route.params.handle.includes('all-womens') || $route.params.handle.includes('womens')">Shop Women</h6>
+        <h6 v-else>Shop Men</h6>
+        <nuxt-link v-if="$route.params.handle.includes('all-womens') || $route.params.handle.includes('womens')" v-for="(link, index) in menuLinks.menuLinks.womens" :key="index" :to="`/${$store.state.activeCurrency}${link.url}`">
           <h6>{{link.name}}</h6>
         </nuxt-link>
-        <nuxt-link v-if="collHandle.startsWith('all-mens') || collHandle.startsWith('mens')" v-for="(link, index) in menuLinks.menuLinks.mens" :key="index" :to="`/${$store.state.activeCurrency}${link.url}`">
+        <nuxt-link v-if="!$route.params.handle.includes('all-womens') && !$route.params.handle.includes('womens')" v-for="(link, index) in menuLinks.menuLinks.mens" :key="index" :to="`/${$store.state.activeCurrency}${link.url}`">
           <h6>{{link.name}}</h6>
         </nuxt-link>
       </div>
@@ -286,8 +288,7 @@ export default Vue.extend({
 
   .collection__heading {
     margin: 30px auto 20px;
-    text-align: left;
-    margin-left: calc(30px + 15%);
+    text-align: center;
 
     @include screenSizes(phone) {
       text-align: center;
@@ -306,8 +307,19 @@ export default Vue.extend({
     }
 
     .collection__sidebar {
+      display: flex;
+      flex-direction: column;
       padding: 0 20px;
       position: fixed;
+
+      > h6 {
+        font-weight: bold;
+        padding-bottom: 5px;
+      }
+
+      a {
+        padding-bottom: 5px;
+      }
 
       @include screenSizes(tabletPortrait) {
         display: none;
@@ -319,8 +331,8 @@ export default Vue.extend({
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    flex-basis: 85%;
-    margin-left: 15%;
+    flex-basis: 60%;
+    margin: 0 20%;
 
     @include screenSizes(tabletPortrait) {
       justify-content: space-between;
@@ -328,7 +340,7 @@ export default Vue.extend({
       padding-left: 20px;
       padding-right: 10px;
       flex-basis: 100%;
-      margin-left: 0;
+      margin: 0;
     }
   }
 }

@@ -107,8 +107,8 @@ export default Vue.extend({
         width: 100vw;
 
         @include screenSizesMin('tabletPortrait') {
-            height: 85vh;
-            width: 85vw;
+            height: 70vh;
+            width: 70vw;
         }
     }
 
@@ -135,6 +135,10 @@ export default Vue.extend({
     .size-guide__label {
         padding-top: 0;
     }
+}
+
+.size-guide__tabs--style {
+    margin: map-get($mobile, 'sidePadding') 0 map-get($mobile, 'sidePadding');
 }
 
 .size-guide__tabs-container {
@@ -197,6 +201,19 @@ export default Vue.extend({
             min-width: 15%;
             max-width: 15%;
         }
+    }
+
+    .size-guide__row {
+        margin: 5px 0 10px;
+
+        span {
+            padding-bottom: 10px;
+
+            &:not(:first-child) {
+                border-bottom: 1px solid map-get($colors, 'brand');
+            }
+        }
+
     }
 }
 
