@@ -112,9 +112,6 @@ export default Vue.extend({
     bundleData: Object,
     products: Array
   },
-  mounted() {
-    console.log(this.$props.productIllustration)
-  },
   methods: {
     showImages() {
       this.$emit('showImages')
