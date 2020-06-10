@@ -12,6 +12,8 @@
 			<p>The website is currently unavailable as the server it is hosted on is running on too little renewable energy.</p>
 	  	<br>
 	  	<p>It looks like the carbon intensity will get better in <strong>{{minutesTillNext}} minutes</strong>.</p>
+
+			<h5><a :href="mainSiteLink">Regular store</a></h5>
 		</div>
   </div>
 </div>
@@ -21,11 +23,17 @@
 import Vue from 'vue'
 import Logo from '~/components/Logo.vue'
 import ImpactMeter from '~/components/ImpactMeter.vue'
+import mainSiteMap from '~/assets/json/mainSiteMap.json'
 
 export default Vue.extend({
   components: {
   	Logo,
   	ImpactMeter
+  },
+	data: () => {
+    return {
+      mainSiteMap: mainSiteMap
+    }
   },
   computed: {
     carbonIntensity: function() {
@@ -59,6 +67,19 @@ export default Vue.extend({
     	  }
     	  return timeTo
     	}
+    },
+		mainSiteLink: function() {
+      let mainSiteData = this.mainSiteMap.mainSiteMap
+      let mainSite = mainSiteData.find((a) => {
+        return a.currency == this.$store.state.activeCurrency
+      })
+      if(mainSite) {
+        let mainSiteUrl = 'https://' + mainSite.url
+        return mainSiteUrl
+      }
+      else {
+        return
+      }
     }
   }
 })
@@ -102,17 +123,14 @@ export default Vue.extend({
 
 		.offline__text--dramatic {
 			-webkit-text-stroke: 1px map-get($colors, 'carbonHigh');
+			-webkit-text-fill-color: transparent;
 	    margin: auto;
 	    position: absolute;
-			margin-top: -70px;
+			margin-top: -120px;
     	font-size: 15vw;
 
-			@include screenSizes(tabletPortrait) {
-        margin-top: -60px;
-      }
-
       @include screenSizes(phone) {
-        margin-top: -70px;
+        margin-top: -140px;
         font-size: 25vw;
         max-width: 90vw;
       }
@@ -133,6 +151,18 @@ export default Vue.extend({
 
 		.offline__desc {
 			max-width: 45vw;
+			max-width: 500px;
+
+			h5 {
+				font-weight: bold;
+				border-bottom: 2px solid black;
+				width: fit-content;
+				margin: 40px auto;
+			}
+
+			p {
+				font-size: 18px;
+			}
 
 			@include screenSizes(tabletPortrait) {
 				max-width: 80vw;
