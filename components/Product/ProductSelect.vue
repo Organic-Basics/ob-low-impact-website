@@ -1,7 +1,7 @@
 <template>
-  <section class="product__main">
-    <div class="product__main--top">
-      <div class="">
+  <div class="product__selection">
+    <div class="product__main--top" v-if="isSingleProd || propsProduct.key == 0">
+      <div>
           <h4 class="product__title">{{mainProduct.title}}</h4>
           <span class="product__description--desktop">Our best-selling organic cotton bra. No wires — yet plenty of support.</span>
       </div>
@@ -10,8 +10,6 @@
           {{ mainProduct.variants.edges[0].node.compareAtPrice }} {{mainProduct.priceRange.minVariantPrice.currencyCode}}
         </span>
       </h3>
-
-
     </div>
     <div class="product__main--form">
       <div v-if="isSingleProd">
@@ -23,33 +21,13 @@
           <div class="product__main--option-container">
             <!-- Color -->
             <div class="product__main--option product__main--color">
-              <h6 class="product__main--option--title">
-                Color<span v-if="propsProduct.chosenColor"
-                  >:
-                  <span class="product__color-choice">{{
-                    propsProduct.chosenColor
-                  }}</span></span
-                >
+              <h6 class="product__main--option--title">Color<span v-if="propsProduct.chosenColor">: <span class="product__color-choice">{{propsProduct.chosenColor}}</span></span>
               </h6>
               <div class="product__main--option-picker">
-                <span
-                  v-for="(color, index) in cleanOptions.color.values"
-                  @click="chooseColor(color, propsIdx)"
-                  :class="[
-                    'variant__selector',
-                    color === propsProduct.chosenColor ? 'variant--chosen' : ''
-                  ]"
-                >
+                <span v-for="(color, index) in cleanOptions.color.values" @click="chooseColor(color, propsIdx)"
+                  :class="['variant__selector', color === propsProduct.chosenColor ? 'variant--chosen' : '']">
                   <span class="variant__selector--border"></span>
-                  <span
-                    :class="
-                      'variant__selector--center variant--' +
-                        color
-                          .toLowerCase()
-                          .split(' ')
-                          .join('')
-                    "
-                  ></span>
+                  <span :class="'variant__selector--center variant--' + color.toLowerCase().split(' ').join('')"></span>
                 </span>
               </div>
             </div>
@@ -57,37 +35,19 @@
             <div class="product__main--option product__main--size">
               <h6 class="product__main--option--title">Size</h6>
               <div class="product__main--option-picker">
-                <span
-                  v-for="(size, index) in cleanOptions.size.values"
-                  :class="[
-                    'variant__size',
-                    size === propsProduct.chosenSize ? 'variant--chosen' : '',
-                    oosSizes.includes(size) ? 'variant--oos' : ''
-                  ]"
-                  @click="chooseSize(size, propsIdx)"
-                >
-                  {{ size }}
-                </span>
+                <span v-for="(size, index) in cleanOptions.size.values" :class="['variant__size', size === propsProduct.chosenSize ? 'variant--chosen' : '', oosSizes.includes(size) ? 'variant--oos' : '']" @click="chooseSize(size, propsIdx)">{{ size }}</span>
               </div>
             </div>
           </div>
         </div>
       </div>
       <!-- Bundle selection -->
-      <div
-        v-if="!isSingleProd"
-        class="bundle__selection product__main--selection-container"
-      >
+      <div v-if="!isSingleProd" class="bundle__selection product__main--selection-container">
         <div class="product__main--selection">
           <div class="product__bundle--container">
             <div class="product__bundle--top">
-              <div
-                :class="{
-                  'product__bundle--title': true,
-                  'product--open': propsProduct.isProdOpen
-                }"
-                @click="toggleBundleProd()"
-              >
+              <div :class="{'product__bundle--title': true, 'product--open': propsProduct.isProdOpen}"
+                @click="toggleBundleProd()">
                 <!-- Title -->
                 <div class="product__bundle--left-desktop">
                   <div class="product__bundle--title-left">
@@ -95,65 +55,33 @@
                       <span
                         :class="
                           'product__bundle--circle variant--' +
-                            (!propsProduct.chosenColor
-                              ? ''
-                              : propsProduct.chosenColor
-                                  .toLowerCase()
-                                  .split(' ')
-                                  .join('') + ' product__circle--active')
-                        "
-                      >
-                        <span class="product__bundle--index">{{
-                          propsProduct.listIndex + 1
-                        }}</span>
+                            (!propsProduct.chosenColor ? '' : propsProduct.chosenColor.toLowerCase().split(' ').join('') + 'product__circle--active')">
+                        <span class="product__bundle--index">{{propsProduct.listIndex + 1}}</span>
                       </span>
                       <span class="product__bundle--check"></span>
                       <span class="product__bundle--plus"></span>
                     </span>
-                    <h5 class="product__bundle--title-txt-mobile">
-                      {{ propsProduct.title }}
-                    </h5>
+                    <h5 class="product__bundle--title-txt-mobile">{{ propsProduct.title }}</h5>
                   </div>
                 </div>
               </div>
               <!-- Info | Summary -->
-              <div
-                @click="toggleBundleTabs()"
-                class="product__bundle--title-right product__choice--summary"
-              >
+              <div @click="toggleBundleTabs()" class="product__bundle--title-right product__choice--summary">
                 <span
                   class="product__bundle--choice-color"
-                  v-if="!propsProduct.isProdOpen"
-                  >{{ propsProduct.chosenColor }}</span
-                >
+                  v-if="!propsProduct.isProdOpen">{{ propsProduct.chosenColor }}</span>
                 <span
-                  v-if="
-                    propsProduct.chosenColor &&
-                      propsProduct.chosenSize &&
-                      !propsProduct.isProdOpen
-                  "
-                >
+                  v-if="propsProduct.chosenColor && propsProduct.chosenSize && !propsProduct.isProdOpen">
                   /
                 </span>
                 <span
                   class="product__bundle--choice-size"
-                  v-if="!propsProduct.isProdOpen"
-                  >{{ propsProduct.chosenSize }}</span
-                >
-                <span
-                  class="product__mobile--more-info"
-                  :class="{ closed: !propsProduct.isProdOpen }"
-                >
-                  <span class="product__mobile--more-info-txt">{{
-                    !isTabOpen ? "Info" : "Close"
-                  }}</span>
+                  v-if="!propsProduct.isProdOpen">{{ propsProduct.chosenSize }}</span>
+                <span class="product__mobile--more-info" :class="{ closed: !propsProduct.isProdOpen }">
+                  <span class="product__mobile--more-info-txt">{{!isTabOpen ? "Info" : "Close"}}</span>
                   <span class="product__mobile--circle">
-                    <span v-if="!isTabOpen" class="product__mobile--plus"
-                      >+</span
-                    >
-                    <span v-if="isTabOpen" class="product__mobile--close"
-                      >+</span
-                    >
+                    <span v-if="!isTabOpen" class="product__mobile--plus">+</span>
+                    <span v-if="isTabOpen" class="product__mobile--close">+</span>
                   </span>
                 </span>
               </div>
@@ -161,49 +89,20 @@
             <!-- Accordion option container -->
             <div
               class="product__main--option-container"
-              :class="propsProduct.isProdOpen && !isTabOpen ? 'open' : 'closed'"
-            >
-              <span
-                class="product__bundle-switch"
-                @click="switchProduct"
-                v-if="
-                  propsProduct.switchId != 0 &&
-                    propsProduct.switchId !== undefined
-                "
-                >Switch to {{ propsProduct.switchProduct.title }}</span
-              >
+              :class="propsProduct.isProdOpen && !isTabOpen ? 'open' : 'closed'">
+              <span class="product__bundle-switch" @click="switchProduct" v-if="propsProduct.switchId != 0 && propsProduct.switchId !== undefined">Switch to {{ propsProduct.switchProduct.title }}</span>
               <!-- Color -->
               <div class="product__main--option product__main--color">
                 <span
-                  class="product__main--option--title product__main--option--mobile"
-                  >Color<span v-if="propsProduct.chosenColor"
-                    >:
-                    <span class="product__color-choice">{{
-                      propsProduct.chosenColor
-                    }}</span></span
-                  ></span
-                >
+                  class="product__main--option--title product__main--option--mobile">Color<span v-if="propsProduct.chosenColor">:
+                    <span class="product__color-choice">{{propsProduct.chosenColor}}</span></span></span>
                 <div class="product__main--option-picker">
                   <span
                     v-for="(color, index) in cleanOptions.color.values"
                     @click="chooseColor(color, propsIdx)"
-                    :class="[
-                      'variant__selector',
-                      color === propsProduct.chosenColor
-                        ? 'variant--chosen'
-                        : ''
-                    ]"
-                  >
+                    :class="['variant__selector', color === propsProduct.chosenColor ? 'variant--chosen' : '']">
                     <span class="variant__selector--border"></span>
-                    <span
-                      :class="
-                        'variant__selector--center variant--' +
-                          color
-                            .toLowerCase()
-                            .split(' ')
-                            .join('')
-                      "
-                    ></span>
+                    <span :class="'variant__selector--center variant--' + color.toLowerCase().split(' ').join('')"></span>
                   </span>
                 </div>
               </div>
@@ -236,16 +135,9 @@
         </div>
       </div>
       <!-- Button area -->
-      <div v-if="isSingleProd" class="product__main--button-area">
+      <div v-if="isSingleProd || propsProduct.isLastProduct" class="product__main--button-area">
         <div class="product__main--buttons">
-          <button
-            class="product__main--add-to-cart"
-            type="button"
-            name="add-to-cart"
-            @click="addToCartFromChild"
-          >
-            Add to cart
-          </button>
+          <button class="product__main--add-to-cart" type="button" name="add-to-cart" @click="addToCartFromChild">Add to cart</button>
         </div>
       </div>
       <!-- Tabs -->
@@ -336,7 +228,7 @@
         </nuxt-link>
       </div>
     </div>
-  </section>
+  </div>
 </template>
 <script>
 import Vue from 'vue'
@@ -453,12 +345,17 @@ export default Vue.extend({
     margin-top: 0;
   }
 
+  .product__selection {
+    width: 100%;
+  }
+
   .product__main--top {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: baseline;
     position: relative;
+    margin-bottom: 50px;
 
     @include screenSizes(tabletPortrait) {
       display: none;
@@ -573,6 +470,7 @@ export default Vue.extend({
             margin-top: 1rem;
             display: flex;
             flex-direction: row;
+            margin-right: 15px;
 
             .variant__selector {
               width: 40px;
@@ -641,143 +539,6 @@ export default Vue.extend({
       }
     }
 
-    /* Bundles */
-    .bundle__selection {
-      margin-top: 0;
-
-      .product__main--selection {
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-
-        .closed {
-          display: none !important;
-        }
-
-        .product__bundle-switch {
-          color: map-get($colors, "darkGrey");
-          margin-top: 10px;
-        }
-
-        .product__bundle--top {
-          display: flex;
-          flex-direction: row;
-          align-items: flex-start;
-          justify-content: space-between;
-        }
-
-        .product__bundle--title {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-
-          .product__bundle--title-left {
-            align-items: flex-start;
-            display: flex;
-
-            .product__bundle--title-txt-mobile {
-              margin-left: 10px;
-            }
-
-            .product__bundle--title-left-main {
-              display: flex;
-              font-size: 1.25rem;
-              cursor: pointer;
-            }
-          }
-        }
-
-        .product__bundle--circle,
-        .product__mobile--circle {
-          display: inline-flex;
-          justify-content: center;
-          align-items: center;
-          border: 1.5px solid map-get($colors, "black");
-          border-radius: 50%;
-          height: 26.5px;
-          width: 26.5px;
-          font-size: 17px;
-
-          &.product__circle--active {
-            border: none;
-            color: #fff;
-
-            &.variant--white {
-              color: map-get($colors, "black");
-            }
-          }
-
-          .product__bundle--index {
-            display: inline;
-            width: auto;
-            font-size: 0.9rem;
-          }
-
-          .product__mobile--close {
-            transform: rotate(45deg);
-          }
-        }
-
-        .product__main--size {
-          margin-bottom: 0;
-        }
-
-        .product__choice--summary {
-          display: flex;
-          flex-basis: 28%;
-          align-items: flex-end;
-          flex-direction: row;
-          justify-content: flex-end;
-          flex-wrap: wrap;
-          font-size: 12px;
-          text-align: right;
-
-          .product__bundle--choice-color,
-          .product__bundle--choice-size {
-            font-size: 13px;
-            padding-right: 2px;
-          }
-
-          .product__bundle--choice-color + span {
-            padding: 0 2px;
-          }
-
-          .product__mobile--more-info {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-
-            .product__mobile--more-info-txt {
-              font-size: 13px;
-              margin-right: 7px;
-            }
-          }
-        }
-
-        .product__main--option-container {
-          display: flex;
-          width: 100%;
-          margin-bottom: 1vw;
-          flex-wrap: wrap;
-
-          .product__main--option {
-            flex-basis: 100%;
-          }
-
-          .product__main--option--title {
-            font-size: 13px;
-            border-bottom: 1px solid map-get($colors, "brand");
-            display: block;
-            padding: 1rem 0 0.5rem;
-          }
-
-          .product__main--option-radio {
-            display: none;
-          }
-        }
-      }
-    }
-
     .product__main--button-area {
       margin: 1vw 0 2vw;
       display: block;
@@ -792,6 +553,159 @@ export default Vue.extend({
         .product__main--add-to-cart {
           flex-basis: 100%;
           border: none;
+        }
+      }
+    }
+  }
+
+  /* Bundles */
+
+  .bundle__selection {
+    margin-top: 0 !important;
+
+    .product__main--form {
+      border-top: 1px solid map-get($colors, 'brand');
+      margin-top: 0;
+      padding: 1.5rem 0;
+    }
+
+    .product__main--selection {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+
+      .closed {
+        display: none !important;
+      }
+
+      .product__bundle-switch {
+        color: map-get($colors, "darkGrey");
+        margin-top: 10px;
+      }
+
+      .product__bundle--top {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: space-between;
+        border-top: 1px solid map-get($colors, 'brand');
+        margin-top: 0;
+        padding: 1.5rem 0;
+      }
+
+      .product__bundle--title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .product__bundle--title-left {
+          align-items: flex-start;
+          display: flex;
+
+          .product__bundle--title-txt-mobile {
+            margin-left: 10px;
+          }
+
+          .product__bundle--title-left-main {
+            display: flex;
+            font-size: 1.25rem;
+            cursor: pointer;
+          }
+        }
+      }
+
+      .product__bundle--circle,
+      .product__mobile--circle {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        border: 1.5px solid map-get($colors, "black");
+        border-radius: 50%;
+        height: 26.5px;
+        width: 26.5px;
+        font-size: 17px;
+
+        &.product__circle--active {
+          border: none;
+          color: #fff;
+
+          &.variant--white {
+            color: map-get($colors, "black");
+          }
+        }
+
+        .product__bundle--index {
+          display: inline;
+          width: auto;
+          font-size: 0.9rem;
+        }
+
+        .product__mobile--close {
+          transform: rotate(45deg);
+        }
+      }
+
+      .product__main--size {
+        margin-bottom: 0;
+      }
+
+      .product__choice--summary {
+        display: flex;
+        flex-basis: 28%;
+        align-items: flex-end;
+        flex-direction: row;
+        justify-content: flex-end;
+        flex-wrap: wrap;
+        font-size: 12px;
+        text-align: right;
+
+        .product__bundle--choice-color,
+        .product__bundle--choice-size {
+          font-size: 13px;
+          padding-right: 2px;
+        }
+
+        .product__bundle--choice-color + span {
+          padding: 0 2px;
+        }
+
+        .product__mobile--more-info {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+
+          .product__mobile--more-info-txt {
+            font-size: 13px;
+            margin-right: 7px;
+          }
+        }
+      }
+
+      .product__main--option-container {
+        display: flex;
+        width: 100%;
+        margin-bottom: 1vw;
+        flex-wrap: wrap;
+        align-items: baseline;
+
+        .product__main--option {
+          flex-basis: auto;
+
+          @include screenSizes(tabletPortrait) {
+            flex-basis: 100%;
+          }
+        }
+
+        .product__main--option--title {
+          font-size: 13px;
+        }
+
+        .product__main--option-radio {
+          display: none;
+        }
+
+        .product__tabs--desktop {
+          margin-top: 20px;
         }
       }
     }
@@ -841,7 +755,7 @@ export default Vue.extend({
             *[fill*="#"] {
               fill: map-get($colors, "productGrey") !important;
             }
-            
+
             // Tennis Socks fix
             *[fill*="#999"] {
                 fill: map-get($colors, "black") !important;

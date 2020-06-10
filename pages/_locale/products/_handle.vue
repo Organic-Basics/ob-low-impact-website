@@ -44,9 +44,10 @@
       </div>
     </div>
     <div class="">
-      <productSelect v-for="(prod, index) in products" v-if="prod.switchId == 0 || prod.switchId == switchId || prod.switchId === undefined" :key="index" :propsIdx="index" :propsProduct="prod" :propsUpSells="upSells" :isSingleProd="isSingleProduct"
+      <section class="product__main">
+        <productSelect v-for="(prod, index) in products" v-if="prod.switchId == 0 || prod.switchId == switchId || prod.switchId === undefined" :key="index" :propsIdx="index" :propsProduct="prod" :propsUpSells="upSells" :isSingleProd="isSingleProduct"
         :mainProduct="mainProduct" @sizeClicked="onSizeChosen" @colorClicked="onColorChosen" @switched="switchId = switchId == 1 ? 2 : 1" @addToCartFromChild="addToCart()" @productToggled="toggleProduct" />
-
+      </section>
       <div class="product__main--extra">
         <span class="product__main--shipping">
           Free CO2 neutral worldwide shipping available.
@@ -791,6 +792,8 @@ function prepProducts(products, bundleData) {
       if (i === 0) {
         products[i].isProdOpen = true;
       }
+      if(i === products.length - 1) products[i].isLastProduct = true
+      else products[i].isLastProduct = false
 
       if (products[i].switchId < 1) {
         products[i].listIndex = i;
@@ -841,6 +844,7 @@ function prepProducts(products, bundleData) {
         overflow-x: scroll;
         position: sticky;
         top: 80px;
+        margin-top: 80px;
         width: 50vw;
         height: calc(100vh - 80px);
 
@@ -960,14 +964,14 @@ function prepProducts(products, bundleData) {
                 display: flex;
                 flex-wrap: wrap;
                 flex-direction: row;
+                height: calc(100vh - 80px);
+                width: 50vw;
 
                 @include screenSizes(tabletPortrait) {
                   min-height: 50vh;
                   max-height: 100%;
                   width: 100%;
                 }
-                height: 100vh;
-                width: 50vw;
 
                 &.vertical {
                     flex-direction: column;
