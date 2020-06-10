@@ -43,97 +43,83 @@ export default Vue.extend({
 .spedometer__container {
   pointer-events: none;
   position: relative;
+  width: 28vw;
+
+  @include screenSizes(desktopSmall) {
+    width: 30vw;
+  }
+
+  @include screenSizes(tabletPortrait) {
+    width: 60vw;
+  }
+
+  @include screenSizes(phone) {
+    width: 80vw;
+  }
 
   @mixin spedometer__label {
     font-size: 12px;
-    position: relative;
+    position: absolute;
   }
 
   .label--medium {
     @include spedometer__label;
-    left: 0;
-    top: 10px;
-
-    @include screenSizes(tabletPortrait) {
-      top: -5px;
-    }
+    left: 43%;
+    top: -18%;
   }
 
   .label--low {
     @include spedometer__label;
-    left: -9vw;
-    top: 4vw;
-
-    @include screenSizes(tabletPortrait) {
-      left: -14%;
-      top: 15px;
-    }
+    left: 27%;
+    top: -10%;
   }
 
   .label--lowest {
     @include spedometer__label;
-    left: -16vw;
-    top: 12vw;
+    left: -3%;
+    bottom: 52%;
 
-    // @include screenSizes(desktopSmall) {
-    //   left: -13vw;
-    // }
-
-    @include screenSizes(tabletPortrait) {
-      top: 110px;
-      left: -30%;
-    }
-
-    @include screenSizes(phone) {
-      left: -26%;
-      top: 85px;
-    }
-
-    @include screenSizes(phoneSmall) {
-      top: 60px;
-      left: -20%;
+    @include screenSizes(desktopSmall) {
+      left: 0;
     }
   }
 
   .label--high {
     @include spedometer__label;
-    left: 10vw;
-    top: 2vw;
-
-    @include screenSizes(tabletPortrait) {
-      left: 14%;
-      top: 13px;
-    }
+    right: 23%;
+    top: -10%;
   }
 
   .label--highest {
     @include spedometer__label;
 
-    left: 16vw;
-    top: 8vw;
+    right: -3%;
+    bottom: 52%;
 
-    @include screenSizes(tabletPortrait) {
-      top: 110px;
-      left: 30%;
-    }
-
-    @include screenSizes(phone) {
-      left: 26%;
-      top: 85px;
-    }
-
-    @include screenSizes(phoneSmall) {
-      top: 60px;
-    left: 20%;
+    @include screenSizes(desktopSmall) {
+      right: -3%;
     }
   }
 
   #speedometer {
-    width: 40vw;
+    width: 25vw;
     max-width: 600px;
 
+    @include screenSizes(desktopSmall) {
+      width: 23vw;
+    }
+
+    @include screenSizes(tabletPortrait) {
+      width: 48vw;
+    }
+
     @include screenSizes(phone) {
-      width: 90%;
+      width: 60vw;
+    }
+
+    @mixin spedometer__label {
+      font-size: 12px;
+      position: absolute;
     }
 
     path, line, g, polyline, polygon {

@@ -201,19 +201,17 @@ export default Vue.extend({
     display: flex;
     flex-direction: row;
     width: 95vw;
-    padding: 30px;
+    padding: 30px 0;
     justify-content: space-between;
     margin: auto;
     align-items: center;
 
-    @include screenSizes(desktopSmall) {
-      position: unset;
-      flex-direction: column;
-    }
 
-    @include screenSizes(tabletPortrait) {
+    @media screen and (max-width: 960px) {
       padding: 0;
       width: 100%;
+      position: unset;
+      flex-direction: column;
     }
 
     .overlay__carbon--desc {
@@ -222,13 +220,11 @@ export default Vue.extend({
       padding-top: 20px;
       padding-bottom: 20px;
 
-      @include screenSizes(desktopSmall) {
-        max-width: 40vw;
-        text-align: center;
-      }
 
-      @include screenSizes(tabletPortrait) {
-        max-width: 100%;
+      @media screen and (max-width: 960px) {
+        width: 100%;
+        max-width: 400px;
+        text-align: center;
       }
     }
 
@@ -237,16 +233,16 @@ export default Vue.extend({
       padding: 0;
       text-align: left;
       margin-top: 20px;
-      width: 27vw;
+      width: 25vw;
 
       @include screenSizes(desktopSmall) {
-        width: 60vw;
+        width: auto;
+        max-width: 400px;
       }
 
-      @include screenSizes(tabletPortrait) {
+      @media screen and (max-width: 960px) {
         width: 100%;
       }
-
 
       li:not(.active) {
         opacity: 0.25;
@@ -257,6 +253,10 @@ export default Vue.extend({
         flex-direction: row;
         justify-content: space-between;
         padding: 7px 0;
+
+        h6:first-child {
+          margin-right: 25px;
+        }
       }
     }
   }
@@ -266,20 +266,42 @@ export default Vue.extend({
     flex-direction: column;
     align-items: center;
     margin: auto;
-    width: 30vw;
+    // width: 28vw;
+    //
+    // @include screenSizes(desktopSmall) {
+    //   width: 30vw;
+    // }
 
-    @include screenSizes(tabletPortrait) {
-      display: block;
-      width: unset;
+    // @include screenSizes(tabletPortrait) {
+    //   display: block;
+    //   width: unset;
+    // }
+
+    // #speedometer {
+    //   width: 23vw;
+    //
+    //   @include screenSizes(tabletPortrait) {
+    //     width: 90%;
+    //   }
+    // }
+
+    /*.label--highest {
+      left: 12.5vw;
+      top: 6vw;
     }
 
-    #speedometer {
-      width: 30vw;
-
-      @include screenSizes(tabletPortrait) {
-        width: 90%;
-      }
+    .label--lowest {
+      left: -12.5vw;
+      top: 10vw;
     }
+
+    .label--low {
+      left: -7vw;
+    }
+
+    .label--high {
+      left: 7vw;
+    }*/
   }
 }
 

@@ -111,6 +111,10 @@ export default Vue.extend({
 		}
 	}
 
+	.spedometer__container {
+		margin-top: 40px;
+	}
+
 	.offline__main {
 		align-items: center;
     justify-content: center;
@@ -126,27 +130,27 @@ export default Vue.extend({
 			-webkit-text-fill-color: transparent;
 	    margin: auto;
 	    position: absolute;
-			margin-top: -120px;
-    	font-size: 15vw;
+			margin-top: -140px;
+    	font-size: 8vw;
+
+			@include screenSizes(tabletPortrait) {
+				font-size: 17vw;
+			}
 
       @include screenSizes(phone) {
         margin-top: -140px;
         font-size: 25vw;
         max-width: 90vw;
       }
+
+			@include screenSizes(phoneSmall) {
+          margin-top: -175px;
+      }
 		}
 
 		.offline__carbon {
 			color: map-get($colors, 'carbonHigh');
 			margin-bottom: 35px;
-		}
-
-		.spedometer__container {
-			height: auto;
-
-			span {
-				display: none;
-			}
 		}
 
 		.offline__desc {

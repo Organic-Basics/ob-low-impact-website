@@ -454,6 +454,12 @@ export default Vue.extend({
 
         .product__main--options {
           display: inherit;
+          margin-bottom: 10px;
+
+          @include screenSizes(tabletPortrait) {
+            flex-direction: column;
+            width: 100%;
+          }
         }
 
         @include screenSizes(tabletPortrait) {

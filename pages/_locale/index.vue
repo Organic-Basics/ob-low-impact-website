@@ -71,21 +71,33 @@ export default Vue.extend({
       position: absolute;
 
       @include screenSizes(tabletPortrait) {
-        margin-top: -70px;
+        margin-top: -95px;
+        font-size: 11vw;
+        line-height: 19vw;
       }
 
       @include screenSizes(phone) {
-        font-size: 15vw;
         max-width: 90vw;
-        line-height: 25vw;
+        font-size: 14vw;
+        line-height: 28vw;
         margin-top: -85px;
       }
     }
 
     .spedometer__container {
-      height: auto;
+      width: auto;
+
       span {
         display: none;
+      }
+
+      #speedometer {
+        width: 30vw;
+        max-width: 100%;
+
+        @include screenSizes(tabletPortrait) {
+          width: 70vw;
+        }
       }
     }
 
@@ -100,7 +112,7 @@ export default Vue.extend({
 
       @include screenSizes(tabletPortrait) {
         padding-left: 20px;
-        margin-top: 40px;
+        margin-top: 60px;
       }
 
       @include screenSizes(phone) {
