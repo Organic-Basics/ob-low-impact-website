@@ -32,7 +32,7 @@
           bundle__illustrations: true,
           vertical: bundleData.quantProducts < 3
         }"
-        v-if="bundleData.type === 'combo'"
+        v-if="bundleData.type === 'combo' && !shouldShowImages"
       >
         <div
           class="bundle__illustration"
@@ -47,7 +47,7 @@
           "
         ></div>
       </div>
-      <div v-else class="bundle__illustrations">
+      <div v-else-if="!shouldShowImages" class="bundle__illustrations">
         <div
           :class="{
             'bundle__illustration--quant': true,
