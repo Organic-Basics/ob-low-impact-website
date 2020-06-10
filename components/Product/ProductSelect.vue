@@ -265,6 +265,13 @@
               :class="{product__illustration: true, quantityBundle: upSell.node.quantity}"
               v-for="illu in upSell.node.bundleIllustrations"
               v-html="illu"
+              v-if="!upSell.node.quantity"
+            ></div>
+            <div
+              :class="{product__illustration: true, quantityBundle: upSell.node.quantity, five: upSell.node.quantity === 5}"
+              v-for="n in upSell.node.quantity"
+              v-html="upSell.node.bundleIllustrations[0]"
+              v-if="upSell.node.quantity"
             ></div>
             <!-- <span class="product__image-quant variant--black" v-if="upSell.node.quantity">
               <span class="product__bundle--quant">
@@ -813,7 +820,7 @@ export default Vue.extend({
         overflow: hidden;
         flex: 1;
         position: relative;
-        min-width: 50%;
+        min-width: 33%;
 
         .product__illustration {
           display: flex;
@@ -867,6 +874,10 @@ export default Vue.extend({
               &:nth-child(2) {
                 top: 12%;
                 left: 12%;
+              }
+              &:nth-child(3) {
+                top: 25%;
+                left: 25%;
               }
 
               &:nth-child(4) {

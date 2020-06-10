@@ -1,7 +1,7 @@
 <template>
 <div class="product__container">
   <div class="product__above">
-    <ProductSlideshow :isSingleProduct="isSingleProduct" :productIllustration="productIllustration" :shouldShowImages="shouldShowImages" @showImages="showImages()" :highResCost="highResCost" :lowResCost="lowResCost" :mainProduct="mainProduct" :bundleData="bundleData" :products="products" :bundleIllustrations="bundleIllustrations"/>
+    <ProductSlideshow :isSingleProduct="isSingleProduct" :productIllustration="productIllustration" :shouldShowImages="shouldShowImages" @showImages="showImages()" :highResCost="highResCost" :lowResCost="lowResCost" :mainProduct="mainProduct" :bundleData="bundleData" :products="products"/>
     <!-- Sticky bar -->
     <div class="product__sticky">
       <div class="product__sticky-top">
@@ -240,7 +240,7 @@ export default Vue.extend({
                   upSell.node.quantity = null;
                 } else {
                   // Case for quant bundles
-                  upSell.node.quantity = upSell.node.description.split("|")[1];
+                  upSell.node.quantity = parseInt(upSell.node.description.split("|")[1]);
                 }
               } else {
                 upSell.node.quantity = null;
@@ -511,16 +511,13 @@ export default Vue.extend({
   },
   methods: {
     openCart() {
-      console.log("open cart method in child triggered");
       this.$emit("openCartFromHandle");
     },
 
     async addToCart() {
-      console.log("adding to cart");
       this.isAdding = true;
       let cartIds = this.$store.getters.cartIds;
 
-      console.log("emitting openCartfromnuxt");
       this.$parent.$emit("openCartFromNuxtChild");
 
       let customAttributes = [];
@@ -939,6 +936,7 @@ function prepProducts(products, bundleData) {
 
                 @include screenSizes(tabletPortrait) {
                   min-height: 50vh;
+                  max-height: 100%;
                   width: 100%;
                 }
                 height: 100vh;

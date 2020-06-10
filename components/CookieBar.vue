@@ -1,7 +1,7 @@
 <template lang="html">
   <div :class="'cookie-bar ' + (cookiesAccepted ? 'cookies-accepted' : '')">
     <div class="cookie-bar__container">
-      <p>We use <strong>cookies</strong> to save energy, reduce data transfer and gather statistics.</p>
+      <p>We use <a href="https://organicbasics.com/pages/terms" target="_blank">cookies</a> to save energy, reduce data transfer and gather statistics.</p>
       <button @click="acceptCookies()">Accept</button>
     </div>
   </div>
@@ -82,6 +82,11 @@ export default Vue.extend({
     font-size: 19px;
     font-weight: bold;
     padding: 0 0 4px;
+  }
+
+  a {
+    color: map-get($colors, 'cookieTextWhite');
+    font-weight: bold;
   }
 }
 

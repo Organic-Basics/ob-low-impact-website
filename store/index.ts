@@ -272,14 +272,15 @@ export const actions: ActionTree<RootState, RootState> = {
   },
 
   async fetchActiveCurrency (store:any) {
+    let currencies = ['dkk', 'eur', 'usd', 'dev', 'gbp']
     try {
-      // console.log(this.app.context.route.params.locale)
-      if(localStorage.getItem('OB_LOW_currency') && localStorage.getItem('OB_LOW_currency') !== this.app.context.route.params.locale) {
+      if(localStorage.getItem('OB_LOW_currency') && localStorage.getItem('OB_LOW_currency') === this.app.context.route.params.locale) {
         store.commit('setActiveCurrency', localStorage.getItem('OB_LOW_currency'))
       }
       else {
-        if(this.app.context.route.params.locale) {
+        if(this.app.context.route.params.locale && currencies.includes(this.app.context.route.params.locale)) {
           localStorage.setItem('OB_LOW_currency', this.app.context.route.params.locale)
+          store.commit('setActiveCurrency', this.app.context.route.params.locale)
         }
         else {
           localStorage.setItem('OB_LOW_currency', store.state.activeCurrency)
@@ -288,7 +289,6 @@ export const actions: ActionTree<RootState, RootState> = {
       if(this && this.app && this.app.apolloProvider) {
         this.app.apolloProvider.defaultClient = this.app.apolloProvider.clients[store.state.activeCurrency]
       }
-      // console.log(localStorage.getItem('OB_LOW_currency'))
     } catch(err) {
       console.error(err)
     }

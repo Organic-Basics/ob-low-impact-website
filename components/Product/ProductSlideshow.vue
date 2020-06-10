@@ -99,7 +99,6 @@ export default Vue.extend({
     isSingleProduct: Boolean,
     shouldShowImages: Boolean,
     productIllustration: String,
-    bundleillustrations: Number,
     highResCost: Number,
     lowResCost: Number,
     mainProduct: Object,
