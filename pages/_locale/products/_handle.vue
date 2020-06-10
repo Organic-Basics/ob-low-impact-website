@@ -840,8 +840,9 @@ function prepProducts(products, bundleData) {
         flex-direction: row;
         overflow-x: scroll;
         position: sticky;
-        top: 72px;
+        top: 80px;
         width: 50vw;
+        height: calc(100vh - 80px);
 
         @include screenSizes(tabletPortrait) {
           width: 100vw;
@@ -889,10 +890,31 @@ function prepProducts(products, bundleData) {
             top: 58vh;
             width: 100vw;
           }
+
+          .label__tap {
+            display: none;
+
+            @include screenSizes(tabletPortrait) {
+              display: inline-block;
+            }
+          }
+
+          .label__click {
+            display: inline-block;
+
+            @include screenSizes(tabletPortrait) {
+              display: none;
+            }
+          }
         }
 
         .product__image-label--bold {
             font-weight: bold;
+
+            .label__container {
+              display: flex;
+              flex-direction: column;
+            }
         }
 
         > div {
@@ -915,7 +937,7 @@ function prepProducts(products, bundleData) {
             *[fill*="#"] {
                 fill: map-get($colors, "productGrey") !important;
             }
-            
+
             // Tennis socks fix
             *[fill*="#999"] {
                 fill: map-get($colors, "black") !important;
