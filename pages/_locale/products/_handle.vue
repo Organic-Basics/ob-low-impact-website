@@ -89,6 +89,7 @@
           :propsUpSells="upSells"
           :isSingleProd="isSingleProduct"
           :mainProduct="mainProduct"
+          :contentfulData="contentfulData"
           @sizeClicked="onSizeChosen"
           @colorClicked="onColorChosen"
           @switched="switchId = switchId == 1 ? 2 : 1"
@@ -120,10 +121,16 @@
     <section
       class="product__content-block text--left"
       :class="{ hidden: contentfulData.hidden }"
+      :style="{ backgroundColor: contentfulData.bgColor }"
     >
       <div class="content-block__text">
         <h3 class="content-block__title">{{ contentfulData.title }}</h3>
         <h6 class="content-block__desc">{{ contentfulData.desc }}</h6>
+      </div>
+      <div
+        class="content-block__image"
+      >
+      <img :src=contentfulData.image></img>
       </div>
     </section>
   </div>
@@ -164,7 +171,8 @@ export default Vue.extend({
       oneLiner: null,
       desc: "",
       bgColor: "",
-      textColor: "white"
+      textColor: "white",
+      image: ""
     };
     Promise.all([
       contentfulClient.getEntries({
@@ -189,6 +197,8 @@ export default Vue.extend({
             contentfulData.desc =
               entry.fields.contentBlockText.fields.paragraph;
             contentfulData.bgColor = entry.fields.contentBlockBgColor;
+            contentfulData.image =
+              entry.fields.contentBlockImage.fields.file.url;
             // add text color if specified, else - white text
             if (entry.fields.contentBlockTextColor) {
               contentfulData.textColor = entry.fields.contentBlockTextColor;
@@ -1302,26 +1312,33 @@ function prepProducts(products, bundleData) {
   .product__content-block {
     background: rgb(167, 143, 122);
     height: 100%;
-    padding: 60px 30px;
+    // padding: 60px 30px;
+    padding:0px; 
     color: #fff;
     width: 100%;
+    display: flex;
 
     &.hidden {
       display: none;
     }
 
     @include screenSizes(tabletPortrait) {
-      height: 500px;
-      padding: 5vw 20px;
+      // height: 500px;
+      padding: 0px;
+      flex-direction: column;
     }
 
     .content-block__text {
+      width: 50%;
+      padding: 5vw 20px;
+      height: 500px;
       justify-content: flex-start;
       display: flex;
       flex-direction: row;
-      height: 100%;
+      // height: 100%;
 
       @include screenSizes(tabletPortrait) {
+        width: 100%;
         flex-direction: column;
         justify-content: space-around;
       }
@@ -1345,6 +1362,21 @@ function prepProducts(products, bundleData) {
           margin-top: 20px;
         }
       }
+    }
+    .content-block__image {
+      width: 50%;
+
+      @include screenSizes(tabletPortrait) {
+        width: 100%;
+      }
+
+      img {
+        width: 100%;
+        @include screenSizes(tabletPortrait) {
+          width: 100%;
+        }
+      }
+
     }
   }
 }

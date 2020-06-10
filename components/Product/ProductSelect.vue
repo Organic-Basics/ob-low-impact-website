@@ -2,20 +2,31 @@
   <section class="product__main">
     <div class="product__main--top">
       <div class="">
-          <h4 class="product__title">{{mainProduct.title}}</h4>
-          <span class="product__description--desktop">Our best-selling organic cotton bra. No wires — yet plenty of support.</span>
+        <h4 class="product__title">{{ mainProduct.title }}</h4>
+        <span class="product__description--desktop">{{
+          contentfulData.oneLiner
+        }}</span>
       </div>
-      <h3 class="product__main--price">{{parseInt(mainProduct.priceRange.minVariantPrice.amount)}} {{mainProduct.priceRange.minVariantPrice.currencyCode}}
-        <span class="product__main--compare-price" v-if="mainProduct.variants.edges[0].node.compareAtPrice !== null && mainProduct.variants.edges[0].node.compareAtPrice !== '0.00'">
-          {{ mainProduct.variants.edges[0].node.compareAtPrice }} {{mainProduct.priceRange.minVariantPrice.currencyCode}}
+      <h3 class="product__main--price">
+        {{ parseInt(mainProduct.priceRange.minVariantPrice.amount) }}
+        {{ mainProduct.priceRange.minVariantPrice.currencyCode }}
+        <span
+          class="product__main--compare-price"
+          v-if="
+            mainProduct.variants.edges[0].node.compareAtPrice !== null &&
+              mainProduct.variants.edges[0].node.compareAtPrice !== '0.00'
+          "
+        >
+          {{ mainProduct.variants.edges[0].node.compareAtPrice }}
+          {{ mainProduct.priceRange.minVariantPrice.currencyCode }}
         </span>
       </h3>
-
-
     </div>
     <div class="product__main--form">
       <div v-if="isSingleProd">
-        <h6 class="product__description--mobile">Clean-cut, seamless look and feel thongs made with recycled materials.</h6>
+        <h6 class="product__description--mobile">
+          {{ contentfulData.oneLiner }}
+        </h6>
       </div>
       <!-- Single product selection -->
       <div v-if="isSingleProd" class="product__main--selection-container">
@@ -332,8 +343,8 @@
   </section>
 </template>
 <script>
-import Vue from 'vue'
-import ProductTabs from '~/components/Product/ProductTabs.vue'
+import Vue from "vue";
+import ProductTabs from "~/components/Product/ProductTabs.vue";
 
 export default Vue.extend({
   name: "ProductSelect",
@@ -351,7 +362,8 @@ export default Vue.extend({
     productData: Object,
     propsUpSells: Array,
     isSingleProd: Boolean,
-    mainProduct: Object
+    mainProduct: Object,
+    contentfulData: Object
   },
   computed: {
     cleanOptions() {
@@ -465,7 +477,7 @@ export default Vue.extend({
 
     .product__description--desktop {
       text-align: left;
-      color: map-get($colors, 'darkGrey');
+      color: map-get($colors, "darkGrey");
       max-width: 28vw;
       font-size: 13px;
       margin: 10px 0;
@@ -481,7 +493,7 @@ export default Vue.extend({
 
     .product__main--compare-price {
       text-decoration: line-through;
-      color: map-get($colors, 'darkGrey');
+      color: map-get($colors, "darkGrey");
       font-size: 18px;
     }
   }
@@ -522,7 +534,7 @@ export default Vue.extend({
 
       @include screenSizes(tabletPortrait) {
         text-align: center;
-        color: map-get($colors, 'darkGrey');
+        color: map-get($colors, "darkGrey");
       }
     }
 
@@ -555,10 +567,10 @@ export default Vue.extend({
           display: block;
 
           .product__main--option--title {
-            padding: 1rem 0 .5rem;
+            padding: 1rem 0 0.5rem;
 
             @include screenSizes(tabletPortrait) {
-              border-bottom: 1px solid map-get($colors, 'brand');
+              border-bottom: 1px solid map-get($colors, "brand");
             }
           }
 
