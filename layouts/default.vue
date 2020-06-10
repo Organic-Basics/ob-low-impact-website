@@ -69,6 +69,12 @@ export default Vue.extend({
           name: 'product page',
           lowImpactSize: 708284,
           normalSize: 6550422
+        },
+        {
+          key: 'offline',
+          name: 'offline page',
+          lowImpactSize: 0,
+          normalSize: 0
         }
       ],
       currentBytes: 0,

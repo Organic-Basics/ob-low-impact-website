@@ -75,12 +75,6 @@ export default Vue.extend({
       span {
         display: none;
       }
-
-      // #spedometer {
-      //   @include screenSizes(tabletPortrait) {
-      //     width: 90%;
-      //   }
-      // }
     }
 
     .index__intro--links {
