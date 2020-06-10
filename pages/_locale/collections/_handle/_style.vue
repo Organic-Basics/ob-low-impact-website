@@ -3,8 +3,12 @@
     <h3 class="collection__heading">{{ collectionTitle }}</h3>
     <div class="collection__content">
       <div class="collection__sidebar">
-        <nuxt-link v-for="(link, index) in menuLinks.menuLinks.womens" :key="index" :to="`/${$store.state.activeCurrency}${link.url}`">
-          <h6>{{link.name}}</h6>
+        <nuxt-link
+          v-for="(link, index) in menuLinks.menuLinks.womens"
+          :key="index"
+          :to="`/${$store.state.activeCurrency}${link.url}`"
+        >
+          <h6>{{ link.name }}</h6>
         </nuxt-link>
       </div>
       <div class="product-grid">
@@ -19,11 +23,11 @@
 </template>
 
 <script>
-import Vue from 'vue'
-import VueApollo from 'vue-apollo'
-import gql from 'graphql-tag'
-import GridProduct from '~/components/GridProduct.vue'
-import menuLinks from '~/assets/json/menuLinks.json'
+import Vue from "vue";
+import VueApollo from "vue-apollo";
+import gql from "graphql-tag";
+import GridProduct from "~/components/GridProduct.vue";
+import menuLinks from "~/assets/json/menuLinks.json";
 
 export default Vue.extend({
   components: {
@@ -35,7 +39,7 @@ export default Vue.extend({
   data: () => {
     return {
       menuLinks: menuLinks
-    }
+    };
   },
   // TODO: Fix async data and currency
   async asyncData(ctx) {
@@ -258,6 +262,8 @@ export default Vue.extend({
       } else {
         return { products: [], collectionTitle: "" };
       }
+
+      console.log("i GOT HERE");
     } catch (err) {
       console.error(err);
       return { products: [], collectionTitle: "" };

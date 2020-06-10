@@ -1,3 +1,4 @@
+const config = require('./.contentful.json')
 let WebImpactPlugin
 if(process.env.NODE_ENV === 'development') {
   WebImpactPlugin = require('./plugins/web_impact_entry');
@@ -93,6 +94,11 @@ module.exports = {
         }
       }
     }
+  },
+  env: {
+    CTF_SPACE_ID: config.CTF_SPACE_ID,
+    CTF_CDA_ACCESS_TOKEN: config.CTF_CDA_ACCESS_TOKEN,
+    CTF_PRODUCT_TYPE_ID: config.CTF_PRODUCT_TYPE_ID
   },
   pwa: {},
   /*
