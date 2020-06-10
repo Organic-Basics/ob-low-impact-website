@@ -37,15 +37,13 @@
             <input class="product__main--quant-picker" type="number" name="quantity" v-model="quantity" min="1" />
             <span class="product__main--increment" @click="quantity = parseInt(quantity) + 1">+</span>
           </div>
-          <button class="product__main--add-to-cart" type="button" name="add-to-cart" v-model="addMessage" @click="addToCart()">
-            Add to cart
-          </button>
+          <button class="product__main--add-to-cart" name="add-to-cart" @click="addToCart()">{{addMessage}}</button>
         </div>
       </div>
     </div>
     <div class="">
       <section class="product__main">
-        <productSelect v-for="(prod, index) in products" v-if="prod.switchId == 0 || prod.switchId == switchId || prod.switchId === undefined" :key="index" :propsIdx="index" :propsProduct="prod" :propsUpSells="upSells" :isSingleProd="isSingleProduct"
+        <productSelect v-for="(prod, index) in products" v-if="prod.switchId == 0 || prod.switchId == switchId || prod.switchId === undefined" :key="index" :propsIdx="index" :propsProduct="prod" :propsUpSells="upSells" :isSingleProd="isSingleProduct" :addMessage="addMessage"
         :mainProduct="mainProduct" @sizeClicked="onSizeChosen" @colorClicked="onColorChosen" @switched="switchId = switchId == 1 ? 2 : 1" @addToCartFromChild="addToCart()" @productToggled="toggleProduct" />
       </section>
       <div class="product__main--extra">
@@ -91,6 +89,7 @@ export default Vue.extend({
     return {
       quantity: 1,
       isAdding: false,
+      incomplete: false,
       switchId: 1,
       shouldShowImages: false,
       bundleIllustrations: 0,
@@ -138,7 +137,7 @@ export default Vue.extend({
                 images(first: 10) {
                   edges {
                     node {
-                      transformedSrc(maxWidth: 300, maxHeight: 390, crop: CENTER, scale: ${imageScale})
+                      transformedSrc(maxWidth: 390, maxHeight: 390, crop: CENTER, scale: ${imageScale})
                     }
                   }
                 },
@@ -534,97 +533,102 @@ export default Vue.extend({
         ];
       }
 
-      for (let prod of this.products) {
-        // If the product has a switchId, and it's not the active one, skip loop
-        if (
-          prod.switchId != 0 &&
-          prod.switchId != this.switchId &&
-          prod.switchId !== undefined
-        )
-          continue;
-
-        // If this id is already in the cart, increase the quantity of it before sending to Shopify
-        cartIds = cartIds.map(a => {
+      if(this.incomplete) {
+        this.isAdding = false
+      }
+      else {
+        for (let prod of this.products) {
+          // If the product has a switchId, and it's not the active one, skip loop
           if (
-            a.variantId === prod.chosenId &&
-            JSON.stringify(a.customAttributes) ==
-            JSON.stringify(customAttributes)
-          ) {
-            a.quantity += parseInt(this.quantity);
-            return a;
-          } else {
-            return a;
-          }
-        });
+            prod.switchId != 0 &&
+            prod.switchId != this.switchId &&
+            prod.switchId !== undefined
+          )
+            continue;
 
-        // If this id is not in the cart, add it to the cartIds that are sent to Shopify
-        if (
-          !cartIds.some(a => {
-            return (
+          // If this id is already in the cart, increase the quantity of it before sending to Shopify
+          cartIds = cartIds.map(a => {
+            if (
               a.variantId === prod.chosenId &&
               JSON.stringify(a.customAttributes) ==
               JSON.stringify(customAttributes)
-            );
-          })
-        ) {
-          let newCartId = {
-            variantId: prod.chosenId,
-            quantity: parseInt(this.quantity)
-          };
-          if (this.bundleData && this.bundleData.tag && this.bundleData.name) {
-            newCartId.customAttributes = customAttributes;
-          }
-          cartIds = [...cartIds, ...[newCartId]];
-        }
-      }
+            ) {
+              a.quantity += parseInt(this.quantity);
+              return a;
+            } else {
+              return a;
+            }
+          });
 
-      let result = await this.$apollo.mutate({
-        mutation: gql `
-          mutation(
-            $checkoutId: ID!
-            $lineItems: [CheckoutLineItemInput!]!
-            $checkoutAttributes: CheckoutAttributesUpdateV2Input!
+          // If this id is not in the cart, add it to the cartIds that are sent to Shopify
+          if (
+            !cartIds.some(a => {
+              return (
+                a.variantId === prod.chosenId &&
+                JSON.stringify(a.customAttributes) ==
+                JSON.stringify(customAttributes)
+              );
+            })
           ) {
-            checkoutLineItemsReplace(
-              checkoutId: $checkoutId
-              lineItems: $lineItems
-            ) {
-              userErrors {
-                message
-                field
-              }
-              checkout {
-                id
-              }
+            let newCartId = {
+              variantId: prod.chosenId,
+              quantity: parseInt(this.quantity)
+            };
+            if (this.bundleData && this.bundleData.tag && this.bundleData.name) {
+              newCartId.customAttributes = customAttributes;
             }
-
-            checkoutAttributesUpdateV2(
-              checkoutId: $checkoutId
-              input: $checkoutAttributes
-            ) {
-              checkoutUserErrors {
-                message
-                field
-              }
-              checkout {
-                id
-              }
-            }
-          }
-        `,
-        variables: {
-          checkoutId: this.$store.state.checkoutId,
-          lineItems: cartIds,
-          checkoutAttributes: {
-            customAttributes: [{
-              key: "isLowImpactWebsite",
-              value: "true"
-            }]
+            cartIds = [...cartIds, ...[newCartId]];
           }
         }
-      });
-      this.isAdding = false;
-      this.$store.dispatch("fetchCart");
+
+        let result = await this.$apollo.mutate({
+          mutation: gql `
+            mutation(
+              $checkoutId: ID!
+              $lineItems: [CheckoutLineItemInput!]!
+              $checkoutAttributes: CheckoutAttributesUpdateV2Input!
+            ) {
+              checkoutLineItemsReplace(
+                checkoutId: $checkoutId
+                lineItems: $lineItems
+              ) {
+                userErrors {
+                  message
+                  field
+                }
+                checkout {
+                  id
+                }
+              }
+
+              checkoutAttributesUpdateV2(
+                checkoutId: $checkoutId
+                input: $checkoutAttributes
+              ) {
+                checkoutUserErrors {
+                  message
+                  field
+                }
+                checkout {
+                  id
+                }
+              }
+            }
+          `,
+          variables: {
+            checkoutId: this.$store.state.checkoutId,
+            lineItems: cartIds,
+            checkoutAttributes: {
+              customAttributes: [{
+                key: "isLowImpactWebsite",
+                value: "true"
+              }]
+            }
+          }
+        });
+        this.isAdding = false;
+        this.$store.dispatch("fetchCart");
+      }
     },
 
     showImages() {
@@ -664,6 +668,11 @@ export default Vue.extend({
           }
         }
       }
+
+      this.incomplete = !this.products.some((a) => {
+        if(a.chosenId) return true
+        else return false
+      })
     },
 
     onSizeChosen(data) {
@@ -849,6 +858,10 @@ function prepProducts(products, bundleData) {
         width: 50vw;
         height: calc(100vh - 80px);
 
+        &.illustrations--active {
+          overflow-x: hidden;
+        }
+
         @include screenSizes(tabletPortrait) {
           width: 100vw;
           height: 70vh;
@@ -908,6 +921,7 @@ function prepProducts(products, bundleData) {
         }
 
         .product__image-label {
+          background: none;
           position: absolute;
           width: 50vw;
           bottom: 10%;
@@ -915,8 +929,8 @@ function prepProducts(products, bundleData) {
           flex-direction: column;
 
           @include screenSizes(tabletPortrait) {
-            bottom: unset;
-            top: 58vh;
+            bottom: 25%;
+            // top: 58vh;
             width: 100vw;
           }
 
@@ -951,6 +965,13 @@ function prepProducts(products, bundleData) {
             background: map-get($colors, "productGrey");
             display: flex;
             justify-content: center;
+            overflow: hidden;
+            min-width: 50vw;
+
+            @include screenSizes(tabletPortrait) {
+              min-width: 100vw;
+              max-width: 100vw;
+            }
         }
 
         svg {
@@ -977,9 +998,8 @@ function prepProducts(products, bundleData) {
           width: 50vw;
 
           @include screenSizes(tabletPortrait) {
-            min-width: 100vw;
-            max-width: 100%;
             width: auto;
+            min-height: 100%;
           }
         }
 

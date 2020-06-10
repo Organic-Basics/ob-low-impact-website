@@ -136,7 +136,7 @@
       <!-- Button area -->
       <div v-if="isSingleProd || propsProduct.isLastProduct" class="product__main--button-area">
         <div class="product__main--buttons">
-          <button class="product__main--add-to-cart" type="button" name="add-to-cart" @click="addToCartFromChild">Add to cart</button>
+          <button class="product__main--add-to-cart" name="add-to-cart" @click="addToCartFromChild">{{addMessage}}</button>
         </div>
       </div>
       <!-- Tabs -->
@@ -249,7 +249,8 @@ export default Vue.extend({
     productData: Object,
     propsUpSells: Array,
     isSingleProd: Boolean,
-    mainProduct: Object
+    mainProduct: Object,
+    addMessage: String
   },
   computed: {
     cleanOptions() {
