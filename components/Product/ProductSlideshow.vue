@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Single product slideshow -->
-    <div v-if="isSingleProduct" class="product__slideshow" @click="showImages()">
+    <div v-if="isSingleProduct" :class="{product__slideshow: true, 'illustrations--active' : !shouldShowImages}" @click="showImages()">
       <div v-html="productIllustration" v-if="!shouldShowImages && productIllustration" class="slideshow__illustration"></div>
       <div class="product__image-label" v-if="!shouldShowImages">
         <span class="product__image-label--bold">
@@ -21,12 +21,12 @@
           </span>
         </span>
       </div>
-      <div id="slideshow__image" class="slideshow__image" v-for="(image, index) in mainProduct.images.edges">
+      <div v-for="(image, index) in mainProduct.images.edges">
         <img :src="shouldShowImages ? image.node.transformedSrc : ''" v-if="shouldShowImages">
       </div>
     </div>
     <!-- Bundle slideshow -->
-    <div v-else class="product__slideshow bundle" @click="showImages()">
+    <div v-else :class="{product__slideshow: true, 'illustrations--active' : !shouldShowImages, bundle: true}" @click="showImages()">
       <div
         :class="{
           bundle__illustrations: true,

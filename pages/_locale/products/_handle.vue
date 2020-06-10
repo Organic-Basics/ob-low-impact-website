@@ -137,7 +137,7 @@ export default Vue.extend({
                 images(first: 10) {
                   edges {
                     node {
-                      transformedSrc(maxWidth: 300, maxHeight: 390, crop: CENTER, scale: ${imageScale})
+                      transformedSrc(maxWidth: 390, maxHeight: 390, crop: CENTER, scale: ${imageScale})
                     }
                   }
                 },
@@ -489,7 +489,6 @@ export default Vue.extend({
   },
   computed: {
     addMessage() {
-      console.log(this.isAdding + '/' + this.incomplete)
       if (this.isAdding) return "Adding...";
       else if (this.incomplete) return "Select color and size";
       else return "Add to cart";
@@ -534,7 +533,6 @@ export default Vue.extend({
         ];
       }
 
-      console.log('incomplete:' + this.incomplete)
       if(this.incomplete) {
         this.isAdding = false
       }
@@ -860,6 +858,10 @@ function prepProducts(products, bundleData) {
         width: 50vw;
         height: calc(100vh - 80px);
 
+        &.illustrations--active {
+          overflow-x: hidden;
+        }
+
         @include screenSizes(tabletPortrait) {
           width: 100vw;
           height: 70vh;
@@ -919,6 +921,7 @@ function prepProducts(products, bundleData) {
         }
 
         .product__image-label {
+          background: none;
           position: absolute;
           width: 50vw;
           bottom: 10%;
@@ -926,8 +929,8 @@ function prepProducts(products, bundleData) {
           flex-direction: column;
 
           @include screenSizes(tabletPortrait) {
-            bottom: unset;
-            top: 58vh;
+            bottom: 25%;
+            // top: 58vh;
             width: 100vw;
           }
 
@@ -962,6 +965,13 @@ function prepProducts(products, bundleData) {
             background: map-get($colors, "productGrey");
             display: flex;
             justify-content: center;
+            overflow: hidden;
+            min-width: 50vw;
+
+            @include screenSizes(tabletPortrait) {
+              min-width: 100vw;
+              max-width: 100vw;
+            }
         }
 
         svg {
@@ -988,9 +998,8 @@ function prepProducts(products, bundleData) {
           width: 50vw;
 
           @include screenSizes(tabletPortrait) {
-            min-width: 100vw;
-            max-width: 100%;
             width: auto;
+            min-height: 100%;
           }
         }
 
