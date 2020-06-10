@@ -1,7 +1,6 @@
 <template>
   <div :class="'bg--grey overlay overlay--' + open">
     <header class="overlay__header">
-      <a :href="mainSiteLink">Switch to normal website</a>
       <h5 @click="closeOverlay()">Close</h5>
     </header>
 
@@ -24,15 +23,20 @@
     </section>
 
     <section class="bg--white">
-      <h3 class="text--left">The internet uses electricity.</br>Quite a bit.</h3>
+      <h2 class="text--left">The internet uses electricity.</br>Quite a bit.</h2>
       <img class="image--data-center" src="~/assets/svg/data_center.svg" alt="Internet energy consumption illustration">
 
-      <div class="overlay__questions--description text--left" v-for="item in threeQuestions">
-        <span>{{ item.question }}</span>
-        <h6>{{ item.description }}</h6>
+      <div class="overlay__questions--container">
+        <div class="overlay__questions--description text--left" v-for="item in threeQuestions">
+          <span>{{ item.question }}</span>
+          <h6>{{ item.description }}</h6>
+        </div>
       </div>
 
-      <nuxt-link to="" class="text--green"><h5> WIP LINK</h5></nuxt-link>
+      <nuxt-link :to="'/' + $store.state.activeCurrency + '#manifesto'">
+        <h1 @click="closeOverlay()" class="manifesto__heading--dramatic"><span>The</span> low impact <span>manifesto</span></h1>
+      </nuxt-link>
+
     </section>
 
     <Footer :currentBytes="footerData.currentBytes" :currentSavingsMultiplier="footerData.currentSavingsMultiplier" :currentPage="footerData.currentPage" :totalSavings="footerData.totalSavings"/>
@@ -88,7 +92,7 @@ export default Vue.extend({
       threeQuestions: [
         {
           question: 'What?',
-          description: 'The Low Impact version of our website reduces the carbon emissions associated with online shopping by up to 66% in comparison to our regular site. This is done by getting rid of most of the data-heavy elements like images and videos.'
+          description: 'The Low Impact version of our website reduces the carbon emissions associated with online shopping by up to 70% in comparison to our regular site. This is done by getting rid of most of the data-heavy elements like images and videos.'
         },
         {
           question: 'Why?',
@@ -143,12 +147,42 @@ export default Vue.extend({
   &.overlay--true {
     top: 80px;
   }
+
+  .manifesto__heading--dramatic {
+    margin-bottom: 90px;
+    margin-top: 90px;
+
+    span {
+      -webkit-text-fill-color: map-get($colors, 'green');;
+    }
+
+    @include screenSizes(phone) {
+      margin-bottom: 50px;
+      margin-top: 50px;
+    }
+
+    @include screenSizes(tabletPortrait) {
+      flex-direction: column;
+      display: flex;
+      text-align: left;
+      width: 75vw;
+      margin: 30px auto 70px;
+      font-size: 47px;
+
+      span:nth-child(1) {
+        text-align: center;
+      }
+      span:nth-child(2) {
+        text-align: right;
+      }
+    }
+  }
 }
 
 .overlay__header {
   align-items: center;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   margin: 20px;
 
   h5 {
@@ -270,6 +304,7 @@ export default Vue.extend({
 
 .overlay__questions {
   margin: 40px auto;
+  font-weight: bold;
 
   .overlay__arrow-down {
     width: 20px;
@@ -282,15 +317,29 @@ export default Vue.extend({
   max-width: calc(100vw - 80px);
 }
 
-.overlay__questions--description {
+.overlay__questions--container {
   display: flex;
   flex-direction: row;
-  align-items: flex-start;
-  margin-bottom: 30px;
+  justify-content: space-around;
+  margin: 60px auto;
 
-  span {
-    margin-right: 20px;
-    min-width: 45px;
+  @include screenSizes(tabletPortrait) {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .overlay__questions--description {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    margin-bottom: 30px;
+    max-width: 360px;
+
+    span {
+      margin-right: 20px;
+      min-width: 45px;
+      max-width: auto;
+    }
   }
 }
 

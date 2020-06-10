@@ -869,7 +869,13 @@ export default Vue.extend({
 
     .product__upsells--gender {
       margin-top: 20px;
-      text-align: center;
+      text-align: left;
+      border-bottom: 1px solid black;
+      width: fit-content;
+
+      @include screenSizes(tabletPortrait) {
+        text-align: center;
+      }
     }
   }
 }
