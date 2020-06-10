@@ -171,22 +171,19 @@ export default Vue.extend({
       oneLiner: null,
       desc: "",
       bgColor: "",
-      textColor: "white",
+      textColor: "#FFFFFF",
       image: ""
     };
-    Promise.all([
-      contentfulClient.getEntries({
-        content_type: env.CTF_PRODUCT_TYPE_ID,
-        "fields.url": params.handle
-      })
-    ])
-      .then(entries => {
-        console.dir(entries);
-        console.dir(entries[0]);
-        if (entries[0].items.length > 0) {
-          let entry = entries[0].items.shift();
+      async function fetchContentfulData(handle) {
+        try {
+          let entryData = await contentfulClient.getEntries({
+          content_type: env.CTF_PRODUCT_TYPE_ID,
+          "fields.url": handle
+          })
+          console.log(entryData)
+      if (entryData.items.length > 0) {
+          let entry = entryData.items.shift();
           // if a required field is missing, hide content block section
-          console.log(entry);
           if (
             entry.fields.contentBlockImage ||
             entry.fields.contentBlockBgColor ||
@@ -210,8 +207,15 @@ export default Vue.extend({
           }
           console.log(contentfulData);
         }
-      })
-      .catch(err => console.log(err));
+        } catch (err){
+          console.log(err)
+        }
+
+      
+      }
+
+      fetchContentfulData(params.handle)
+     
     //------------------ Contentful fetching
 
     try {
