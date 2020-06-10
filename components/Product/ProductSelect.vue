@@ -810,6 +810,7 @@ export default Vue.extend({
         display: flex;
         flex-basis: auto;
         margin-right: 1rem;
+        overflow: hidden;
         flex: 1;
         position: relative;
         min-width: 50%;

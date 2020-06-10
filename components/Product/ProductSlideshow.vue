@@ -99,11 +99,15 @@ export default Vue.extend({
     isSingleProduct: Boolean,
     shouldShowImages: Boolean,
     productIllustration: String,
+    bundleillustrations: Number,
     highResCost: Number,
     lowResCost: Number,
     mainProduct: Object,
     bundleData: Object,
     products: Array
+  },
+  mounted() {
+    console.log(this.$props.productIllustration)
   },
   methods: {
     showImages() {
