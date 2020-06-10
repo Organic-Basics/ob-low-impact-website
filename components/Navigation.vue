@@ -20,7 +20,7 @@
         <Logo />
       </nuxt-link>
       <ul class="menu__links--desktop">
-        <li><a :href="mainSiteLink">Normal website</a></li>
+        <li><a :href="mainSiteLink">Regular store</a></li>
         <li><nuxt-link :to="'/' + $store.state.activeCurrency + '#manifesto'">Manifesto</nuxt-link></li>
       </ul>
     </div>

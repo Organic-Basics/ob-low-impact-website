@@ -9,7 +9,7 @@
 
         <div class="footer__metrics--item">
           <img src="~/assets/svg/energy_icon.svg" alt="Saved energy while browsing on this website">
-          <h6>You’ve saved ~<b>{{ totalSavings.toFixed(2) }} g</b> of CO<sub>2</sub> <br class="small-break"/>so far this session<br/>(compared to browsing<br class="small-break"/> our regular website)</h6>
+          <h6>You’ve saved ~<b>{{ totalSavings.toFixed(2) }}g</b> of CO<sub>2</sub> <br class="small-break"/>so far this session<br/>(compared to browsing<br class="small-break"/> our regular website)</h6>
         </div>
       </div>
       <div class="footer__image">
