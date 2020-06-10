@@ -842,6 +842,7 @@ function prepProducts(products, bundleData) {
         display: flex;
         flex-direction: row;
         overflow-x: scroll;
+        overflow-y: hidden;
         position: sticky;
         top: 80px;
         margin-top: 80px;
