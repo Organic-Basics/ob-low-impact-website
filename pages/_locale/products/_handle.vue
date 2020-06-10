@@ -50,8 +50,9 @@
       <SizeGuide :isOpen="isSizeGuideOpen" @closeSizeGuide="isSizeGuideOpen = false" />
     </div>
   </div>
-
-  <section class="product__content-block text--left">
+  
+  <!-- Disabled for now until we can merge the fix -->
+  <section class="product__content-block text--left" v-if="false">
     <div class="content-block__text">
       <h3 class="content-block__title">Lorem ipsum</h3>
       <h6 class="content-block__desc">
@@ -827,6 +828,18 @@ function prepProducts(products, bundleData) {
     padding-top: 0;
 }
 
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-inner-spin-button,
+input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
 .product__above {
     display: flex;
     flex-direction: row;
@@ -1087,17 +1100,6 @@ function prepProducts(products, bundleData) {
             }
 
             .product__main--quantity {
-                /* Chrome, Safari, Edge, Opera */
-                input::-webkit-inner-spin-button,
-                input::-webkit-outer-spin-button {
-                    -webkit-appearance: none;
-                    margin: 0;
-                }
-
-                /* Firefox */
-                input[type="number"] {
-                    -moz-appearance: textfield;
-                }
 
                 display: flex;
                 justify-content: center;
