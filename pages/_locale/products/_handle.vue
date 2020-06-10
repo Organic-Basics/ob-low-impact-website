@@ -841,8 +841,10 @@ function prepProducts(products, bundleData) {
     .product__slideshow {
         display: flex;
         flex-direction: row;
+        overflow-x: scroll;
         position: sticky;
         top: 72px;
+        width: 50vw;
 
         @include screenSizes(tabletPortrait) {
           width: 100vw;
@@ -904,6 +906,7 @@ function prepProducts(products, bundleData) {
         }
 
         svg {
+            width: 50vw;
             @include screenSizes(tabletPortrait) {
               width: 100vw;
             }
@@ -930,11 +933,16 @@ function prepProducts(products, bundleData) {
         &.bundle {
             .bundle__illustrations {
                 padding-bottom: 40px;
-                width: 100%;
-                min-height: 50vh;
                 display: flex;
                 flex-wrap: wrap;
                 flex-direction: row;
+
+                @include screenSizes(tabletPortrait) {
+                  min-height: 50vh;
+                  width: 100%;
+                }
+                height: 100vh;
+                width: 50vw;
 
                 &.vertical {
                     flex-direction: column;
