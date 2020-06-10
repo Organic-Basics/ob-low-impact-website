@@ -130,7 +130,7 @@ export default Vue.extend({
 
 .overlay {
   background: map-get($colors, 'bgGrey');
-  height: 100vh;
+  height: calc(100vh - 80px);
   overflow-y: scroll;
   position: fixed;
   transition: top 600ms ease-in-out;
@@ -138,7 +138,7 @@ export default Vue.extend({
   width: 100vw;
 
   &.overlay--true {
-    top: 0%;
+    top: 80px;
   }
 }
 
