@@ -203,12 +203,12 @@ export default Vue.extend({
   .header__icons {
     position: absolute;
     right: 20px;
-    top: 30px;
+    top: 28px;
     display: flex;
     flex-direction: row;
 
-    @include screenSizes(tabletPortrait) {
-      display: none;
+    @include screenSizes(phone) {
+      top: 26px;
     }
   }
 
@@ -263,6 +263,10 @@ export default Vue.extend({
     left: 0;
     flex-direction: column;
 
+    @include screenSizes(tabletPortrait) {
+      display: none;
+    }
+
     > span {
       position: relative;
       top: 0;
@@ -276,10 +280,13 @@ export default Vue.extend({
 
   .header__currency {
     text-transform: uppercase;
-    font-weight: bold;
     cursor: pointer;
     margin-right: 15px;
     padding-top: 5px;
+
+    @include screenSizes(tabletPortrait) {
+      display: none;
+    }
   }
 
   .dropdown--open {
@@ -300,6 +307,11 @@ export default Vue.extend({
       top: 2px;
       right: -21px;
       width: 100%;
+
+      @include screenSizes(tabletPortrait) {
+        right: 0px;
+        top: 1px;
+      }
     }
   }
 
@@ -309,12 +321,12 @@ export default Vue.extend({
 
   .menu__dropdown--men, .menu__dropdown--women {
     width: 100vw;
-    // height: calc(100vh - 80px);
+    border-bottom: 1px solid map-get($colors, 'green');
     height: auto;
     top: 85px;
     left: 0;
     overflow: scroll;
-    padding: 60px 20px;
+    padding: 60px 20px 100px;
     margin: 0;
     margin-top: -5px;
     background: map-get($colors, 'bgGrey');

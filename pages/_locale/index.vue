@@ -75,10 +75,10 @@ export default Vue.extend({
       }
 
       @include screenSizes(phone) {
-        margin-top: -110px;
         font-size: 15vw;
         max-width: 90vw;
-        line-height: 30vw;
+        line-height: 25vw;
+        margin-top: -85px;
       }
     }
 
