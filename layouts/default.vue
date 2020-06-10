@@ -4,8 +4,9 @@
       <img src="~/assets/svg/read-more.svg" alt="Read more">
     </button>
     <Navigation @openCart="isCartOpen = true" @openSidebar="isSidebarOpen = true" v-if="!$route.path.includes('offline')" />
-    <nuxt @click="isCartOpen = false"/>
+    <nuxt/>
     <sidebar :open="isSidebarOpen" @closed="isSidebarOpen = false" v-if="!$route.path.includes('offline')"/>
+    <div class="cart__click-overlay" v-if="isCartOpen" @click="isCartOpen = false"></div>
     <cartDrawer :open="isCartOpen" @closed="isCartOpen = false" v-if="!$route.path.includes('offline')"/>
     <overlay :open="isOverlayOpen" :carbonIntensity="carbonIntensity" @closed="isOverlayOpen = false" v-if="!$route.path.includes('offline')" :footerData="{currentBytes, currentSavingsMultiplier, currentPage, totalSavings}"/>
     <Footer :currentBytes="currentBytes" :currentSavingsMultiplier="currentSavingsMultiplier" :currentPage="currentPage" :totalSavings="totalSavings" v-if="!$route.path.includes('offline')"/>
@@ -303,6 +304,14 @@ section {
       width: 60px;
     }
   }
+}
+
+.cart__click-overlay {
+  height: 100vh;
+  left: 0;
+  position: fixed;
+  width: 100vw;
+  top: 0;
 }
 
 </style>
