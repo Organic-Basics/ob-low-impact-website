@@ -3,9 +3,14 @@
   <section class="index__intro">
     <ImpactMeter />
     <h1 class="manifesto__heading--dramatic">Low</br>impact</br>website</h1>
-    <div class="index__intro--links">
-      <nuxt-link :to="`${$store.state.activeCurrency}/collections/all-womens-products`"><h2>Shop women</h2></nuxt-link>
-      <nuxt-link :to="`${$store.state.activeCurrency}/collections/all-mens-products`"><h2>Shop men</h2></nuxt-link>
+    <div class="index__intro--container">
+      <div class="index__intro--links">
+        <nuxt-link :to="`${$store.state.activeCurrency}/collections/all-womens-products`"><h2>Shop women</h2></nuxt-link>
+        <nuxt-link :to="`${$store.state.activeCurrency}/collections/all-mens-products`"><h2>Shop men</h2></nuxt-link>
+      </div>
+      <li><nuxt-link :to="'/' + $store.state.activeCurrency + '#manifesto'">
+        <img src="~/assets/svg/scroll.svg" alt="Scroll down arrow">
+      </nuxt-link></li>
     </div>
   </section>
 
@@ -51,12 +56,18 @@ export default Vue.extend({
     justify-content: center;
     flex-direction: column;
 
+    @include screenSizes(phone) {
+      height: 100vh;
+      justify-content: flex-start;
+      padding-top: 18vh;
+    }
+
     .manifesto__heading--dramatic {
-      -webkit-text-fill-color: map-get($colors, 'bgGrey');
       max-width: 40vw;
       margin: auto;
-      margin-top: -80px;
-      font-size: 7vw;
+      margin-top: -90px;
+      font-size: 8vw;
+      line-height: 10.5vw;
       position: absolute;
 
       @include screenSizes(tabletPortrait) {
@@ -64,9 +75,10 @@ export default Vue.extend({
       }
 
       @include screenSizes(phone) {
-        margin-top: -100px;
+        margin-top: -110px;
         font-size: 15vw;
         max-width: 90vw;
+        line-height: 30vw;
       }
     }
 
@@ -77,14 +89,14 @@ export default Vue.extend({
       }
     }
 
-    .index__intro--links {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
+    .index__intro--container {
       width: 100vw;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
       padding-left: 30px;
       padding-right: 30px;
-      margin-top: 35px;
+      margin-top: 50px;
 
       @include screenSizes(tabletPortrait) {
         padding-left: 20px;
@@ -92,12 +104,32 @@ export default Vue.extend({
       }
 
       @include screenSizes(phone) {
-        margin-top: 105px;
+        margin-top: 12vh;
       }
 
+      li {
+        list-style-type: none;
+        margin-right: 15vw;
+        margin-top: -100px;
 
-      a {
-        text-decoration: none;
+        @include screenSizes(tabletPortrait) {
+          margin-right: 10vw;
+        }
+
+        @include screenSizes(phone) {
+          margin-right: 0;
+          margin-top: 0;
+        }
+      }
+
+      .index__intro--links {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+
+        a {
+          text-decoration: none;
+        }
       }
     }
   }
@@ -115,10 +147,26 @@ export default Vue.extend({
     }
   }
 
+  #manifesto .manifesto__heading--dramatic {
+    @include screenSizes(tabletPortrait) {
+      flex-direction: column;
+      display: flex;
+      text-align: left;
+      width: 75vw;
+      margin: 30px auto 70px;
+
+      span:nth-child(1) {
+        text-align: center;
+      }
+      span:nth-child(2) {
+        text-align: right;
+      }
+    }
+  }
+
   .manifesto__heading--dramatic {
     margin-bottom: 90px;
     margin-top: 90px;
-    -webkit-text-fill-color: map-get($colors, 'bgYellow');
 
     span {
       -webkit-text-fill-color: map-get($colors, 'green');;

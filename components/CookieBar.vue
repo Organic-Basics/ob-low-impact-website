@@ -43,7 +43,7 @@ export default Vue.extend({
 @import "~assets/scss/mixins.scss";
 
 .cookie-bar {
-  background: map-get($colors, 'green');
+  background: map-get($colors, 'black');
   color: map-get($colors, 'cookieText');
   padding: 16px map-get($mobile, 'sidePadding');
   position: fixed;

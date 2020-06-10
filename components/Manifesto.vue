@@ -84,7 +84,8 @@ export default Vue.extend({
     margin: 90px auto;
 
     @include screenSizes(tabletPortrait) {
-        margin: auto;
+        margin: auto 0;
+        width: 100%;
     }
 
     .manifesto__group {
@@ -132,14 +133,18 @@ export default Vue.extend({
         }
 
         .manifesto__inner {
-            align-items: center;
-            display: flex;
-            flex-direction: row;
+          align-items: center;
+          display: flex;
+          flex-direction: row;
 
-            .manifesto__text {
-                max-width: 194px;
-                margin-right: 8%;
-            }
+          @include screenSizes(tabletPortrait) {
+            justify-content: space-between;
+          }
+
+          .manifesto__text {
+            max-width: 194px;
+            margin-right: 8%;
+          }
         }
     }
 }

@@ -290,6 +290,19 @@ section {
     left: 10vw;
     top: 15vh;
   }
+
+  @include screenSizes(phone) {
+    left: 20px;
+    padding: 0;
+  }
+
+  img {
+    width: 75px;
+
+    @include screenSizes(phone) {
+      width: 60px;
+    }
+  }
 }
 
 </style>

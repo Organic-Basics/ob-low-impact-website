@@ -136,6 +136,10 @@ export default Vue.extend({
       width: 90%;
     }
 
+    path, line, g, polyline, polygon {
+      stroke-width: 1px;
+    }
+
     .container-carbon--very-low & #speedometer__needle {
       transform: rotate(45deg);
       transform-origin: 2% 84%;

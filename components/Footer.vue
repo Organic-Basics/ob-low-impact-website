@@ -4,12 +4,12 @@
       <div class="footer__metrics bg--green">
         <div class="footer__metrics--item">
           <img src="~/assets/svg/data_icon.svg" alt="Data usage of this web page">
-          <h6>This page is using approximately <b>{{ (currentBytes / 1024).toFixed(0) }}kb</b> of data</br>(That is <b>{{this.currentSavingsMultiplier.toFixed(2)}} x</b> smaller than the regular <b>{{this.currentPage.name}}</b>)</h6>
+          <h6>This page is using ~ <b>{{ (currentBytes / 1024).toFixed(0) }}kb</b> of data</br>(That is <b>{{this.currentSavingsMultiplier.toFixed(2)}} x</b> smaller than the regular <b>{{this.currentPage.name}}</b>)</h6>
         </div>
 
         <div class="footer__metrics--item">
           <img src="~/assets/svg/energy_icon.svg" alt="Saved energy while browsing on this website">
-          <h6>You’ve saved approximately <b>{{ totalSavings.toFixed(2) }} g</b> of CO<sub>2</sub> so far this session<br/>(compared to browsing our regular website)</h6>
+          <h6>You’ve saved ~ <b>{{ totalSavings.toFixed(2) }} g</b> of CO<sub>2</sub> so far this session<br/>(compared to browsing our regular website)</h6>
         </div>
       </div>
       <div class="footer__image">
@@ -26,7 +26,7 @@
           <nuxt-link :to="`/${$store.state.activeCurrency}/collections/all-mens-products`">Shop Men</nuxt-link>
         </h2>
         <p class="footer__help--text">Need help?<p/>
-        <h6><b><a href = "mailto:support@organicbasics.com?subject=Low Impact Website inquiry">support@organicbasics.com</a></b>(~4g of CO<sub>2</sub>)</h6>
+        <h6><b><a href = "mailto:hello@organicbasics.com?subject=Low Impact Website inquiry">hello@organicbasics.com</a></b>(~4g of CO<sub>2</sub>)</h6>
       </footer>
     </section>
   </div>
@@ -58,11 +58,11 @@ export default Vue.extend({
     display: flex;
     flex-direction: row;
     padding: 0;
-    max-height: 43vh;
+    height: 370px;
 
     @include screenSizes(tabletPortrait) {
       flex-direction: column;
-      max-height: none;
+      height: auto;
     }
 
     .footer__metrics {
@@ -75,7 +75,7 @@ export default Vue.extend({
       padding: 30px;
 
       @include screenSizes(tabletPortrait) {
-        padding: 0;
+        padding: 20px;
       }
 
       .footer__metrics--item {

@@ -101,7 +101,6 @@ export default Vue.extend({
 		}
 
 		.offline__text--dramatic {
-			-webkit-text-fill-color: map-get($colors, 'bgGrey');
 			-webkit-text-stroke: 1px map-get($colors, 'carbonHigh');
 	    margin: auto;
 	    position: absolute;
