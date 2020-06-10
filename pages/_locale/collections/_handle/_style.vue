@@ -300,7 +300,7 @@ export default Vue.extend({
     display: flex;
     flex-direction: row;
     align-items: flex-start;
-    justify-content: space-between;
+    // justify-content: space-between;
 
     @include screenSizes(phone) {
       width: 100vw;
@@ -310,7 +310,9 @@ export default Vue.extend({
       display: flex;
       flex-direction: column;
       padding: 0 20px;
-      position: fixed;
+      position: sticky;
+      top: 160.5px;
+      width: 20%;
 
       > h6 {
         font-weight: bold;
@@ -332,7 +334,7 @@ export default Vue.extend({
     flex-wrap: wrap;
     justify-content: center;
     flex-basis: 60%;
-    margin: 0 20%;
+    margin: 0 0 20% 0;
 
     @include screenSizes(tabletPortrait) {
       justify-content: space-between;

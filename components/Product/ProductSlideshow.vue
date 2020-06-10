@@ -32,7 +32,7 @@
           bundle__illustrations: true,
           vertical: bundleData.quantProducts < 3
         }"
-        v-if="bundleData.type === 'combo'"
+        v-if="bundleData.type === 'combo' && !shouldShowImages"
       >
         <div
           class="bundle__illustration"
@@ -47,7 +47,7 @@
           "
         ></div>
       </div>
-      <div v-else class="bundle__illustrations">
+      <div v-else-if="!shouldShowImages" class="bundle__illustrations">
         <div
           :class="{
             'bundle__illustration--quant': true,
@@ -58,14 +58,6 @@
           v-if="!shouldShowImages && product.illustration"
         ></div>
       </div>
-      <!-- <span
-        class=" product__image-quant variant--black"
-        v-if="!shouldShowImages && bundleData.type === 'quant'"
-      >
-        <span class="product__bundle--quant">
-          x {{ products.length }}
-        </span></span
-      > -->
       <div class="product__image-label" v-if="!shouldShowImages">
         <span class="product__image-label--bold">
           <span v-if="$store.state.carbonIntensity.intensity.index !== 'high'"
@@ -110,12 +102,16 @@ export default Vue.extend({
     lowResCost: Number,
     mainProduct: Object,
     bundleData: Object,
-    products: Array
+    products: Array,
+    switchId: Number
   },
   methods: {
     showImages() {
       this.$emit('showImages')
     }
+  },
+  mounted() {
+    console.log(this.products)
   }
 })
 

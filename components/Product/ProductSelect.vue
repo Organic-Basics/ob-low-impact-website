@@ -3,7 +3,8 @@
     <div class="product__main--top" v-if="isSingleProd || propsProduct.key == 0">
       <div>
           <h4 class="product__title">{{mainProduct.title}}</h4>
-          <span class="product__description--desktop">Our best-selling organic cotton bra. No wires — yet plenty of support.</span>
+          <!-- Disabled for now until we can merge the fix -->
+          <span class="product__one-liner product__description--desktop" v-if="false">Our best-selling organic cotton bra. No wires — yet plenty of support.</span>
       </div>
       <h3 class="product__main--price">{{parseInt(mainProduct.priceRange.minVariantPrice.amount)}} {{mainProduct.priceRange.minVariantPrice.currencyCode}}
         <span class="product__main--compare-price" v-if="mainProduct.variants.edges[0].node.compareAtPrice !== null && mainProduct.variants.edges[0].node.compareAtPrice !== '0.00'">
@@ -12,8 +13,9 @@
       </h3>
     </div>
     <div class="product__main--form">
-      <div v-if="isSingleProd">
-        <h6 class="product__description--mobile">Clean-cut, seamless look and feel thongs made with recycled materials.</h6>
+      <!-- Disabled for now until we can merge the fix -->
+      <div v-if="isSingleProd && false">
+        <h6 class="product__one-liner product__description--mobile">Clean-cut, seamless look and feel thongs made with recycled materials.</h6>
       </div>
       <!-- Single product selection -->
       <div v-if="isSingleProd" class="product__main--selection-container">
@@ -143,6 +145,18 @@
       </div>
       <!-- Tabs -->
       <ProductTabs v-if="isSingleProd" :propsProduct="propsProduct" />
+
+      <div class="product__main--extra" v-if="propsProduct.isLastProduct">
+        <span class="product__main--shipping">
+          Free CO2 neutral worldwide shipping available.
+        </span>
+        <span class="product__main--sizeguide" @click="$emit('sizeGuideOpened')">
+          <div class="size-guide-cta">
+            Size Guides
+          </div>
+        </span>
+      </div>
+
     </div>
     <!-- Upsells -->
     <div class="product__upsells text--left" v-if="propsUpSells.length > 0">
@@ -369,6 +383,11 @@ export default Vue.extend({
       margin-bottom: 0;
     }
 
+    // Disabled for now until we can merge the fix on Github
+    .product__one-liner {
+      height: 0;
+    }
+
     .product__description--desktop {
       text-align: left;
       color: map-get($colors, 'darkGrey');
@@ -446,6 +465,10 @@ export default Vue.extend({
 
     .product__main--selection-container {
       margin-top: 30px;
+
+      @include screenSizes(tabletPortrait) {
+        margin-top: 0;
+      }
 
       .product__main--option-container {
         margin-top: 0;

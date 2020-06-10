@@ -1,7 +1,7 @@
 <template>
 <div class="product__container">
   <div class="product__above">
-    <ProductSlideshow :isSingleProduct="isSingleProduct" :productIllustration="productIllustration" :shouldShowImages="shouldShowImages" @showImages="showImages()" :highResCost="highResCost" :lowResCost="lowResCost" :mainProduct="mainProduct" :bundleData="bundleData" :products="products"/>
+    <ProductSlideshow :isSingleProduct="isSingleProduct" :productIllustration="productIllustration" :shouldShowImages="shouldShowImages" @showImages="showImages()" :highResCost="highResCost" :lowResCost="lowResCost" :mainProduct="mainProduct" :bundleData="bundleData" :products="products" :switchId="switchId"/>
     <!-- Sticky bar -->
     <div class="product__sticky">
       <div class="product__sticky-top">
@@ -44,24 +44,15 @@
     <div class="">
       <section class="product__main">
         <productSelect v-for="(prod, index) in products" v-if="prod.switchId == 0 || prod.switchId == switchId || prod.switchId === undefined" :key="index" :propsIdx="index" :propsProduct="prod" :propsUpSells="upSells" :isSingleProd="isSingleProduct" :addMessage="addMessage"
-        :mainProduct="mainProduct" @sizeClicked="onSizeChosen" @colorClicked="onColorChosen" @switched="switchId = switchId == 1 ? 2 : 1" @addToCartFromChild="addToCart()" @productToggled="toggleProduct" />
+        :mainProduct="mainProduct" @sizeClicked="onSizeChosen" @colorClicked="onColorChosen" @switched="switchId = switchId == 1 ? 2 : 1" @addToCartFromChild="addToCart()" @productToggled="toggleProduct" @sizeGuideOpened="isSizeGuideOpen = true"/>
       </section>
-      <div class="product__main--extra">
-        <span class="product__main--shipping">
-          Free CO2 neutral worldwide shipping available.
-        </span>
-        <span class="product__main--sizeguide" @click="isSizeGuideOpen = true">
-          <div class="size-guide-cta">
-            Size Guides
-          </div>
-        </span>
-      </div>
 
       <SizeGuide :isOpen="isSizeGuideOpen" @closeSizeGuide="isSizeGuideOpen = false" />
     </div>
   </div>
-
-  <section class="product__content-block text--left">
+  
+  <!-- Disabled for now until we can merge the fix -->
+  <section class="product__content-block text--left" v-if="false">
     <div class="content-block__text">
       <h3 class="content-block__title">Lorem ipsum</h3>
       <h6 class="content-block__desc">
@@ -810,6 +801,8 @@ function prepProducts(products, bundleData) {
         // Set the switchListIndex to the first index found
         if (!switchListIndex) switchListIndex = i;
         products[i].listIndex = switchListIndex;
+
+        products[i].isLastProduct = true
       }
     }
   }
@@ -833,6 +826,18 @@ function prepProducts(products, bundleData) {
 
 .locale-products-handle {
     padding-top: 0;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-inner-spin-button,
+input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+    -moz-appearance: textfield;
 }
 
 .product__above {
@@ -1095,17 +1100,6 @@ function prepProducts(products, bundleData) {
             }
 
             .product__main--quantity {
-                /* Chrome, Safari, Edge, Opera */
-                input::-webkit-inner-spin-button,
-                input::-webkit-outer-spin-button {
-                    -webkit-appearance: none;
-                    margin: 0;
-                }
-
-                /* Firefox */
-                input[type="number"] {
-                    -moz-appearance: textfield;
-                }
 
                 display: flex;
                 justify-content: center;
@@ -1224,7 +1218,6 @@ function prepProducts(products, bundleData) {
         justify-content: space-between;
         flex-wrap: wrap;
         font-size: 13px;
-        padding: 0 20px;
         text-align: left;
 
         .product__main--sizeguide {
