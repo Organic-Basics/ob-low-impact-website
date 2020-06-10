@@ -12,7 +12,7 @@ let isAllowed = true
 
 async function start () {
   fastify.addHook('onRequest', (request, reply, done) => {
-    if(request.ip !== process.env.COMPANY_IP && request.ip !== process.env.JEPSTER_IP && !config.dev) {
+    if(request.ip !== process.env.COMPANY_IP && request.ip !== process.env.JEPSTER_IP && !config.dev && request.ip !== process.env.RUP_IP) {
       isAllowed = false
       reply.send('Not allowed.')
     }
