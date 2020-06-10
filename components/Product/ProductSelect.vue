@@ -262,7 +262,7 @@
         <div class="product__upsells--bundle">
           <div class="product__upsells--left">
             <div
-              class="product__illustration"
+              :class="{product__illustration: true, quantityBundle: upSell.node.quantity}"
               v-for="illu in upSell.node.bundleIllustrations"
               v-html="illu"
             ></div>
@@ -806,20 +806,22 @@ export default Vue.extend({
       margin-bottom: 2rem;
 
       .product__upsells--left {
+        background: map-get($colors, "productGrey");
+        display: flex;
         flex-basis: auto;
         margin-right: 1rem;
         flex: 1;
         position: relative;
+        min-width: 50%;
 
         .product__illustration {
           display: flex;
           flex-direction: column;
           justify-content: center;
           align-items: center;
-          background: map-get($colors, "productGrey");
-          max-width: 50%;
-          min-width: 80px;
+          width: 50%;
           flex-grow: 1;
+          position: relative;
 
           svg {
             *[stroke*="#"] {
@@ -830,13 +832,51 @@ export default Vue.extend({
               fill: map-get($colors, "productGrey") !important;
             }
           }
-        }
 
-        &.complete {
-          flex-direction: row;
-          .product__illustration {
+          &:first-child {
+            top: 10%;
+          }
+          &:last-child {
+            bottom: 10%;
+          }
+
+          &.quantityBundle {
             max-width: 50%;
             min-width: 50%;
+            position: absolute;
+            // top:50%;
+            // right: 50%;
+            width: 40%;
+            height: 50%;
+
+            &:first-child {
+              top: 10%;
+              left: 5%;
+            }
+            &:last-child {
+              bottom: 10%;
+              right: 5%;
+            }
+
+            &.five {
+              &:first-child {
+                top: 0%;
+                left: 0%;
+              }
+              &:nth-child(2) {
+                top: 12%;
+                left: 12%;
+              }
+
+              &:nth-child(4) {
+                bottom: 12%;
+                right: 12%;
+              }
+              &:last-child {
+                bottom: 0%;
+                right: 0%;
+              }
+            }
           }
         }
       }

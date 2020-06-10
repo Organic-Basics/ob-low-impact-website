@@ -1,7 +1,7 @@
 <template>
 <div class="product__container">
   <div class="product__above">
-    <ProductSlideshow :isSingleProduct="isSingleProduct" :productIllustration="productIllustration" :shouldShowImages="shouldShowImages" @showImages="showImages()" :highResCost="highResCost" :lowResCost="lowResCost" :mainProduct="mainProduct" :bundleData="bundleData" :products="products" />
+    <ProductSlideshow :isSingleProduct="isSingleProduct" :productIllustration="productIllustration" :shouldShowImages="shouldShowImages" @showImages="showImages()" :highResCost="highResCost" :lowResCost="lowResCost" :mainProduct="mainProduct" :bundleData="bundleData" :products="products" :bundleIllustrations="bundleIllustrations"/>
     <!-- Sticky bar -->
     <div class="product__sticky">
       <div class="product__sticky-top">
@@ -841,7 +841,8 @@ function prepProducts(products, bundleData) {
     .product__slideshow {
         display: flex;
         flex-direction: row;
-        position: relative;
+        position: sticky;
+        top: 72px;
 
         @include screenSizes(tabletPortrait) {
           width: 100vw;
@@ -903,7 +904,9 @@ function prepProducts(products, bundleData) {
         }
 
         svg {
-            width: 100vw;
+            @include screenSizes(tabletPortrait) {
+              width: 100vw;
+            }
 
             *[stroke*="#"] {
                 stroke: map-get($colors, "black") !important;
