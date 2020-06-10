@@ -101,7 +101,7 @@ export default Vue.extend({
   display: flex;
   flex-direction: column;
   margin: 0 10px 15px 0;
-  padding-bottom: 15px;
+  padding-bottom: 30px;
   width: 23%;
 
   @include screenSizes(tabletPortrait) {
@@ -164,6 +164,10 @@ export default Vue.extend({
   height: 180px;
   position: relative;
 
+  @include screenSizes(tabletPortrait) {
+    height: 150px;
+  }
+
   svg {
     *[stroke*="#"] {
       stroke: map-get($colors, "black") !important;
@@ -191,6 +195,10 @@ export default Vue.extend({
   align-items: center;
   height: 180px;
   position: relative;
+
+  @include screenSizes(tabletPortrait) {
+    height: 150px;
+  }
 
   .product__illustration {
     background: none;

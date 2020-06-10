@@ -868,11 +868,11 @@ function prepProducts(products, bundleData) {
             height: 50%;
 
             &:first-child {
-              top: 0%;
+              top: 15%;
               left: 15%;
             }
             &:last-child {
-              bottom: 15%;
+              top: 30%;
               right: 15%;
             }
           }
