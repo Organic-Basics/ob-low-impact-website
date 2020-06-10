@@ -5,12 +5,16 @@
       <div v-html="productIllustration" v-if="!shouldShowImages && productIllustration" class="slideshow__illustration"></div>
       <div class="product__image-label" v-if="!shouldShowImages">
         <span class="product__image-label--bold">
-          <span v-if="$store.state.carbonIntensity.intensity.index !== 'high'">Tap to see real photos</span>
-          <span v-else>Real photos unavailable</span>
+          <span v-if="$store.state.carbonIntensity.intensity.index === 'lowest' || $store.state.carbonIntensity.intensity.index === 'low'"><span class="label__tap">Tap</span><span class="label__click">Click</span> to see real images</span>
+          <span v-else-if="$store.state.carbonIntensity.intensity.index === 'moderate'"><span class="label__tap">Tap</span><span class="label__click">Click</span> to see low quality images (~{{ (lowResCost).toFixed(2)}}g CO2)</span>
+          <span v-else>Real images unavailable</span>
         </span>
         <span>
-          <span v-if="$store.state.carbonIntensity.intensity.index !== 'high'">
+          <span v-if="$store.state.carbonIntensity.intensity.index !== 'high' && $store.state.carbonIntensity.intensity.index !== 'moderate'">
             (~{{ ($store.state.carbonIntensity.intensity.index === 'very low' ? highResCost : lowResCost).toFixed(2)}}g CO2)
+          </span>
+          <span v-else-if="$store.state.carbonIntensity.intensity.index === 'moderate'">
+            (Our server energy mix needs to be more green for high quality images)
           </span>
           <span v-else>
             (Our server energy mix needs to be more green)
