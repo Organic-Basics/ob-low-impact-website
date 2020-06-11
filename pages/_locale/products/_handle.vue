@@ -99,8 +99,7 @@ export default Vue.extend({
     env
   }) {
      //------------------ Contentful fetching
-    const contentfulClient = createClient();
-
+    // const contentfulClient = createClient();
     let contentfulData = {
       hidden: true,
       title: "",
@@ -150,7 +149,7 @@ export default Vue.extend({
       
       }
 
-      fetchContentfulData(params.handle)
+      // fetchContentfulData(params.handle)
      
     //------------------ Contentful fetching
     try {
@@ -222,7 +221,8 @@ export default Vue.extend({
         let newData = {
           mainProduct: product,
           products: [],
-          isSingleProduct: isSingleProduct
+          isSingleProduct: isSingleProduct,
+          bundleData:{}
         };
 
         if (isSingleProduct) {
