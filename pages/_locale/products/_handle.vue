@@ -926,7 +926,6 @@ input[type="number"] {
         }
 
         .product__image-label {
-          background: none;
           position: absolute;
           width: 50vw;
           bottom: 10%;
