@@ -1,6 +1,7 @@
 <template>
   <div :class="'bg--grey overlay overlay--' + open">
     <header class="overlay__header">
+      <a :href="mainSiteLink">Switch to regular store</a>
       <h5 @click="closeOverlay()">Close</h5>
     </header>
 
@@ -182,8 +183,14 @@ export default Vue.extend({
 .overlay__header {
   align-items: center;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   margin: 20px;
+
+  a {
+    @include screenSizesMin(tabletPortrait) {
+      display: none;
+    }
+  }
 
   h5 {
     cursor: pointer;
