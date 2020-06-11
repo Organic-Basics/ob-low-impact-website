@@ -14,7 +14,8 @@ module.exports = {
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: 'An online store that prevents 70% of the carbon emissions. Underwear, activewear and essentials made ethically in Europe with organic cotton, TENCEL™ and recycled materials.' }
+      { hid: 'description', name: 'description', content: 'An online store that prevents 70% of the carbon emissions. Underwear, activewear and essentials made ethically in Europe with organic cotton, TENCEL™ and recycled materials.' },
+      { hid: 'og:image', property: 'og:image', content: '/share-image.jpg' }
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.svg' }
