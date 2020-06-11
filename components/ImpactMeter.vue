@@ -123,7 +123,7 @@ export default Vue.extend({
     }
 
     path, line, g, polyline, polygon {
-      stroke-width: 1px;
+      stroke-width: 2px;
     }
 
     .container-carbon--very-low & #speedometer__needle {

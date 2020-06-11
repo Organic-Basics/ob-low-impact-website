@@ -50,7 +50,7 @@
       <SizeGuide :isOpen="isSizeGuideOpen" @closeSizeGuide="isSizeGuideOpen = false" />
     </div>
   </div>
-  
+
   <!-- Disabled for now until we can merge the fix -->
   <section class="product__content-block text--left" v-if="false">
     <div class="content-block__text">
@@ -931,11 +931,17 @@ input[type="number"] {
           bottom: 10%;
           display: flex;
           flex-direction: column;
+          padding-left: 10px;
+          padding-right: 10px;
 
           @include screenSizes(tabletPortrait) {
             bottom: 25%;
             // top: 58vh;
             width: 100vw;
+          }
+
+          @include screenSizes(phoneSmall) {
+            bottom: 20%;
           }
 
           .label__tap {
@@ -1099,32 +1105,32 @@ input[type="number"] {
             }
 
             .product__main--quantity {
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              position: relative;
+              flex-basis: 50%;
+              border-top: 1px solid map-get($colors, "brand");
+              height: 3.6rem;
 
-                display: flex;
-                justify-content: center;
+              .product__main--decrement,
+              .product__main--increment {
                 align-items: center;
-                position: relative;
-                flex-basis: 50%;
-                border-top: 1px solid map-get($colors, "brand");
-                height: 3.6rem;
-
-                .product__main--decrement,
-                .product__main--increment {
-                    align-items: center;
-                    bottom: 0;
-                    color: map-get($colors, "black");
-                    cursor: pointer;
-                    display: inline-flex;
-                    font-size: 19px;
-                    justify-content: center;
-                    position: absolute;
-                    top: 0;
-                    width: 40px;
-                }
+                bottom: 0;
+                color: map-get($colors, "black");
+                cursor: pointer;
+                display: inline-flex;
+                font-size: 19px;
+                justify-content: center;
+                position: absolute;
+                top: 0;
+                width: 40px;
+              }
             }
 
             .product__sticky-title {
-                margin-right: 10px;
+              margin-right: 10px;
+              text-align: left;
             }
 
             .product__sticky-price {

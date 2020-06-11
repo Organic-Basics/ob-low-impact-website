@@ -147,8 +147,12 @@ export default Vue.extend({
       line-height: 26px;
     }
 
-    .sidebar__body--women, .sidebar__body--men {
+    .sidebar__body--women {
       margin-bottom: 40px;
+    }
+
+    .sidebar__body--men {
+      margin-bottom: 70px;
     }
   }
 }
