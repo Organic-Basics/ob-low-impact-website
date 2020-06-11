@@ -275,24 +275,18 @@ export const actions: ActionTree<RootState, RootState> = {
     let currencies = ['dkk', 'eur', 'usd', 'dev', 'gbp']
     try {
       if(localStorage.getItem('OB_LOW_currency') && localStorage.getItem('OB_LOW_currency') === this.app.context.route.params.locale) {
-        console.log('if1')
         store.commit('setActiveCurrency', localStorage.getItem('OB_LOW_currency'))
       }
       else {
-        console.log('else1')
         if(this.app.context.route.params.locale && currencies.includes(this.app.context.route.params.locale)) {
-          console.log('if2')
           localStorage.setItem('OB_LOW_currency', this.app.context.route.params.locale)
-          console.log(this.app.context.route.params.locale)
           store.commit('setActiveCurrency', this.app.context.route.params.locale)
         }
         else {
-          console.log('else2')
           localStorage.setItem('OB_LOW_currency', store.state.activeCurrency)
         }
       }
       if(this && this.app && this.app.apolloProvider) {
-        console.log(store.state.activeCurrency)
         this.app.apolloProvider.defaultClient = this.app.apolloProvider.clients[store.state.activeCurrency]
       }
     } catch(err) {
@@ -320,7 +314,7 @@ export const actions: ActionTree<RootState, RootState> = {
   },
 
   async initStore (store:any, manualCurrencyChange:boolean) {
-    // Don't call this when changing the currency
+    // Don't call this when changing the currency manually or via URL
     if(!manualCurrencyChange) store.dispatch('fetchActiveCurrency')
 
   	store.dispatch('fetchCarbonIntensity')

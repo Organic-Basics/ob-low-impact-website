@@ -147,8 +147,8 @@ export default Vue.extend({
         this.visitedPages.push(this.currentPage)
       }
 
+      let usedBytes = 0
       if(this.visitedPages.length > 0) {
-        let usedBytes = 0
         if(entries.length > 0) {
           usedBytes = entries.reduce((acc, cur) => {
             if(typeof acc !== 'number') {
@@ -156,6 +156,19 @@ export default Vue.extend({
             }
             else {
               acc += cur.transferSize
+            }
+            return acc
+          }, 0)
+        }
+
+        // Fix for Safari, which doesn't have transferSize
+        if(Number.isNaN(usedBytes)) {
+          usedBytes = this.visitedPages.reduce((acc, cur) => {
+            if(typeof acc !== 'number') {
+              acc = cur.lowImpactSize
+            }
+            else {
+              acc += cur.lowImpactSize
             }
             return acc
           }, 0)

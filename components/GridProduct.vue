@@ -179,7 +179,7 @@ export default Vue.extend({
     
     // Tennis Socks fix
     *[fill*="#999"] {
-        fill: map-get($colors, "black") !important;
+      fill: map-get($colors, "black") !important;
     }
   }
 }
