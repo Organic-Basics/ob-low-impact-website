@@ -50,7 +50,7 @@
       <SizeGuide :isOpen="isSizeGuideOpen" @closeSizeGuide="isSizeGuideOpen = false" />
     </div>
   </div>
-  
+
   <!-- Disabled for now until we can merge the fix -->
   <section class="product__content-block text--left" v-if="false">
     <div class="content-block__text">
@@ -932,11 +932,17 @@ input[type="number"] {
           bottom: 10%;
           display: flex;
           flex-direction: column;
+          padding-left: 10px;
+          padding-right: 10px;
 
           @include screenSizes(tabletPortrait) {
             bottom: 25%;
             // top: 58vh;
             width: 100vw;
+          }
+
+          @include screenSizes(phoneSmall) {
+            bottom: 20%;
           }
 
           .label__tap {
