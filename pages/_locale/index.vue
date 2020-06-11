@@ -192,6 +192,10 @@ export default Vue.extend({
     @include screenSizes(tabletPortrait) {
       font-size: 47px;
     }
+
+    @include screenSizes(phoneSmall) {
+      font-size: 39px;
+    }
   }
 }
 

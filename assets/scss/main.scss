@@ -24,4 +24,8 @@
   font-weight: bold;
   -webkit-text-stroke: 1px map-get($colors, 'green');
   -webkit-text-fill-color: transparent;
+
+  @include screenSizes(phoneSmall) {
+    font-size: 39px;
+  }
 }

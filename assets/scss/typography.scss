@@ -27,7 +27,7 @@ h2 {
   font-weight: normal;
 
   @include screenSizes(phoneSmall) {
-    font-size: 30px;
+    font-size: 27px;
   }
 }
 
