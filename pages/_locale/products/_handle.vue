@@ -80,7 +80,7 @@ export default Vue.extend({
     return {
       quantity: 1,
       isAdding: false,
-      incomplete: false,
+      incomplete: true,
       switchId: 1,
       shouldShowImages: false,
       bundleIllustrations: 0,
