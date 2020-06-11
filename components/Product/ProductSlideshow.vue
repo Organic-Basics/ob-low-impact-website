@@ -109,9 +109,6 @@ export default Vue.extend({
     showImages() {
       this.$emit('showImages')
     }
-  },
-  mounted() {
-    console.log(this.products)
   }
 })
 

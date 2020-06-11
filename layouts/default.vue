@@ -1,9 +1,9 @@
 <template>
   <main :class="'container container-carbon--' + carbonIntensity.index + ' ' + $route.name" ref="container">
-    <button class="read-more" @click="isOverlayOpen = true" v-if="!$route.path.includes('offline')">
+    <button class="read-more" @click="openOverlay" v-if="!$route.path.includes('offline')">
       <img src="~/assets/svg/read-more.svg" alt="Read more">
     </button>
-    <Navigation @openCart="isCartOpen = true" @openSidebar="isSidebarOpen = true" v-if="!$route.path.includes('offline')" />
+    <Navigation @openCart="openCart" @openSidebar="openSidebar" v-if="!$route.path.includes('offline')" />
     <nuxt/>
     <sidebar :open="isSidebarOpen" @closed="isSidebarOpen = false" v-if="!$route.path.includes('offline')"/>
     <div class="cart__click-overlay" v-if="isCartOpen" @click="isCartOpen = false"></div>
@@ -107,6 +107,18 @@ export default Vue.extend({
   methods: {
     openCart(){
       this.isCartOpen = true;
+      this.isOverlayOpen = false;
+      this.isSidebarOpen = false;
+    },
+    openSidebar(){
+      this.isCartOpen = false;
+      this.isOverlayOpen = false;
+      this.isSidebarOpen = true;
+    },
+    openOverlay(){
+      this.isCartOpen = false;
+      this.isOverlayOpen = true;
+      this.isSidebarOpen = false;
     },
     saveEntries: function(isRouteChange) {
       let entries = performance.getEntriesByType('resource')

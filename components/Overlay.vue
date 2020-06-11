@@ -137,7 +137,7 @@ export default Vue.extend({
 
 .overlay {
   background: map-get($colors, 'bgGrey');
-  height: calc(100vh - 80px);
+  height: 100vh;
   overflow-y: scroll;
   position: fixed;
   transition: top 600ms ease-in-out;
@@ -145,7 +145,7 @@ export default Vue.extend({
   width: 100vw;
 
   &.overlay--true {
-    top: 80px;
+    top: 0px;
   }
 
   .manifesto__heading--dramatic {

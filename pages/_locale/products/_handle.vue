@@ -926,7 +926,6 @@ input[type="number"] {
         }
 
         .product__image-label {
-          background: none;
           position: absolute;
           width: 50vw;
           bottom: 10%;
@@ -1106,32 +1105,32 @@ input[type="number"] {
             }
 
             .product__main--quantity {
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              position: relative;
+              flex-basis: 50%;
+              border-top: 1px solid map-get($colors, "brand");
+              height: 3.6rem;
 
-                display: flex;
-                justify-content: center;
+              .product__main--decrement,
+              .product__main--increment {
                 align-items: center;
-                position: relative;
-                flex-basis: 50%;
-                border-top: 1px solid map-get($colors, "brand");
-                height: 3.6rem;
-
-                .product__main--decrement,
-                .product__main--increment {
-                    align-items: center;
-                    bottom: 0;
-                    color: map-get($colors, "black");
-                    cursor: pointer;
-                    display: inline-flex;
-                    font-size: 19px;
-                    justify-content: center;
-                    position: absolute;
-                    top: 0;
-                    width: 40px;
-                }
+                bottom: 0;
+                color: map-get($colors, "black");
+                cursor: pointer;
+                display: inline-flex;
+                font-size: 19px;
+                justify-content: center;
+                position: absolute;
+                top: 0;
+                width: 40px;
+              }
             }
 
             .product__sticky-title {
-                margin-right: 10px;
+              margin-right: 10px;
+              text-align: left;
             }
 
             .product__sticky-price {
