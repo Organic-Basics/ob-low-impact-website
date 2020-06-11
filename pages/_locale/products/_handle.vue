@@ -52,10 +52,10 @@
   </div>
   
   <!-- Disabled for now until we can merge the fix -->
-  <section class="product__content-block text--left" :class="{ hidden: contentfulData.hidden }" :style="{ backgroundColor: contentfulData.bgColor }" v-if="false">
+  <section class="product__content-block text--left" :class="{ hidden: contentfulData.hidden }" :style="{ backgroundColor: contentfulData.bgColor }">
     <div class="content-block__text">
-        <h3 class="content-block__title">{{ contentfulData.title }}</h3>
-        <h6 class="content-block__desc">{{ contentfulData.desc }}</h6>
+        <h3 class="content-block__title"><span v-html="contentfulData.title"></span></h3>
+        <h6 class="content-block__desc"><span v-html="contentfulData.desc"></span></h6>
       </div>
       <div
         class="content-block__image"
@@ -99,7 +99,7 @@ export default Vue.extend({
     env
   }) {
      //------------------ Contentful fetching
-    // const contentfulClient = createClient();
+    const contentfulClient = createClient();
     let contentfulData = {
       hidden: true,
       title: "",
@@ -149,7 +149,7 @@ export default Vue.extend({
       
       }
 
-      // fetchContentfulData(params.handle)
+      fetchContentfulData(params.handle)
      
     //------------------ Contentful fetching
     try {
@@ -1329,23 +1329,27 @@ input[type="number"] {
 
         .content-block__text {
           width: 50%;
-          padding: 5vw 20px;
+          padding: 5vw 30px;
           height: 500px;
-          justify-content: flex-start;
+          // justify-content: flex-start;
+          justify-content: space-between;
           display: flex;
-          flex-direction: row;
+          // flex-direction: row;
+          flex-direction: column;
           // height: 100%;
 
           @include screenSizes(tabletPortrait) {
             width: 100%;
             flex-direction: column;
             justify-content: space-around;
+            height: auto;
           }
 
         .content-block__title {
-          width: 40%;
+          width: 80%;
           color: #fff;
           font-size: 26px;
+          margin:20px 0px;
 
           @include screenSizes(tabletPortrait) {
             width: 95%;
