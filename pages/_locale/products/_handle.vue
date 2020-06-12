@@ -57,11 +57,6 @@
         <h3 class="content-block__title"><span v-html="contentfulData.title"></span></h3>
         <h6 class="content-block__desc"><span v-html="contentfulData.desc"></span></h6>
       </div>
-      <div
-        class="content-block__image"
-      >
-      <img :src=contentfulData.image>
-      </div>
   </section>
 </div>
 </template>
@@ -115,7 +110,6 @@ export default Vue.extend({
           content_type: env.CTF_PRODUCT_TYPE_ID,
           "fields.url": handle
           })
-          console.log(entryData)
       if (entryData.items.length > 0) {
           let entry = entryData.items.shift();
           // if a required field is missing, hide content block section
@@ -140,10 +134,9 @@ export default Vue.extend({
           if (entry.fields.oneLinerDescription) {
             contentfulData.oneLiner = entry.fields.oneLinerDescription;
           }
-          console.log(contentfulData);
         }
         } catch (err){
-          console.log(err)
+          console.error(err)
         }
 
       
@@ -322,7 +315,7 @@ export default Vue.extend({
                 try {
                   return import("~/assets/svg/products/" + handle + ".svg?raw");
                 } catch (err) {
-                  console.log(err);
+                  console.error(err);
                   return null;
                 }
               };
@@ -350,7 +343,7 @@ export default Vue.extend({
               });
             });
           } catch (err) {
-            console.log(err);
+            console.error(err);
           }
         } else {
           let bundleResult = await client.query({
@@ -440,7 +433,7 @@ export default Vue.extend({
               newData.productIllustration = productSvg.default;
             } else newData.productIllustration = "";
           } catch (err) {
-            console.log(err);
+            console.error(err);
             newData.productIllustration = "";
           }
         } else {
@@ -457,7 +450,7 @@ export default Vue.extend({
               try {
                 return import("~/assets/svg/products/" + handle + ".svg?raw");
               } catch (err) {
-                console.log(err);
+                console.error(err);
                 return null;
               }
             };
@@ -507,7 +500,7 @@ export default Vue.extend({
         };
       }
     } catch (err) {
-      console.log(err);
+      console.error(err);
       return {
         mainProduct: {
           images: {
@@ -1311,7 +1304,6 @@ input[type="number"] {
     .product__content-block {
         background: rgb(167, 143, 122);
         height: 100%;
-        // padding: 60px 30px;
         padding:0px; 
         color: #fff;
         width: 100%;
@@ -1321,22 +1313,14 @@ input[type="number"] {
         }
 
         @include screenSizes(tabletPortrait) {
-            // height: 500px;
-            // padding: 5vw 20px;
             padding: 0px;
             flex-direction: column;
         }
 
         .content-block__text {
-          width: 50%;
-          padding: 5vw 30px;
-          height: 500px;
-          // justify-content: flex-start;
-          justify-content: space-between;
+          padding: 10vw 30px;
           display: flex;
-          // flex-direction: row;
-          flex-direction: column;
-          // height: 100%;
+          flex:1;
 
           @include screenSizes(tabletPortrait) {
             width: 100%;
@@ -1346,7 +1330,7 @@ input[type="number"] {
           }
 
         .content-block__title {
-          width: 80%;
+          width: 50%;
           color: #fff;
           font-size: 26px;
           margin:20px 0px;
