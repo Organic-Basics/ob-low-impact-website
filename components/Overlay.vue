@@ -136,7 +136,7 @@ export default Vue.extend({
   overflow-y: scroll;
   position: fixed;
   transition: top 600ms ease-in-out;
-  top: 100%;
+  top: 110%;
   width: 100vw;
 
   &.overlay--true {
