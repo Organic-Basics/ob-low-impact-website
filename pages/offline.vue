@@ -9,9 +9,9 @@
 		<h1 class="offline__text--dramatic">Offline</h1>
   	<h5 class="offline__carbon">Carbon intensity: {{carbonIntensity.forecast}}g CO2/kWh</h5>
 		<div class="offline__desc">
-			<p>The website is currently unavailable as the server it is hosted on is running on too little renewable energy.</p>
+			<h6>The website is currently unavailable as the server it is hosted on is running on too little renewable energy.</h6>
 	  	<br>
-	  	<p>It looks like the carbon intensity will get better in <strong>{{minutesTillNext}} minutes</strong>.</p>
+	  	<h6>It looks like the carbon intensity will get better in <strong>{{minutesTillNext}} minutes</strong>.</h6>
 
 			<h5><a :href="mainSiteLink">Regular store</a></h5>
 		</div>
@@ -108,11 +108,29 @@ export default Vue.extend({
 		.offline-header__title {
 			margin: 5vh auto;
 			color: map-get($colors, 'carbonHigh');
+			font-size: 26px;
 		}
 	}
 
 	.spedometer__container {
 		margin-top: 40px;
+
+		#speedometer {
+			width: 30vw;
+			max-width: 100%;
+
+			@include screenSizes(phone) {
+				width: 75vw;
+			}
+		}
+
+		span {
+			display: none;
+
+			@include screenSizes(phone) {
+				display: unset;
+			}
+		}
 	}
 
 	.offline__main {
@@ -130,7 +148,7 @@ export default Vue.extend({
 			-webkit-text-fill-color: transparent;
 	    margin: auto;
 	    position: absolute;
-			margin-top: -140px;
+			margin-top: -110px;
     	font-size: 8vw;
 
 			@include screenSizes(tabletPortrait) {
@@ -138,14 +156,15 @@ export default Vue.extend({
 			}
 
       @include screenSizes(phone) {
-        margin-top: -140px;
-        font-size: 25vw;
-        max-width: 90vw;
+        // margin-top: -140px;
+        // font-size: 25vw;
+        // max-width: 90vw;
+				display: none;
       }
 
-			@include screenSizes(phoneSmall) {
-          margin-top: -175px;
-      }
+			// @include screenSizes(phoneSmall) {
+      //     margin-top: -175px;
+      // }
 		}
 
 		.offline__carbon {
@@ -164,12 +183,9 @@ export default Vue.extend({
 				margin: 40px auto;
 			}
 
-			p {
-				font-size: 18px;
-			}
-
 			@include screenSizes(tabletPortrait) {
 				max-width: 80vw;
+				padding: 0 20px;
 			}
 
 			@include screenSizes(phone) {

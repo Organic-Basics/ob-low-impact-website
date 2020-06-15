@@ -272,6 +272,10 @@ html {
 
 section {
   padding: map-get($mobile, "sectionPadding");
+
+  @include screenSizes(phoneSmall) {
+    padding: 40px 20px;
+  }
 }
 
 .container {

@@ -1,7 +1,9 @@
 <template>
   <div :class="'bg--grey overlay overlay--' + open">
     <header class="overlay__header">
-      <a :href="mainSiteLink">Switch to regular store</a>
+      <a :href="mainSiteLink" class="overlay__header--switch">
+        <span><img src="~/assets/svg/switch_icon.svg" alt="Switch to regular store"></span>Switch to regular store
+      </a>
       <h5 @click="closeOverlay()">Close</h5>
     </header>
 
@@ -178,7 +180,15 @@ export default Vue.extend({
   justify-content: space-between;
   margin: 20px;
 
-  a {
+  .overlay__header--switch {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+
+    img {
+      margin-right: 7px;
+    }
+
     @include screenSizesMin(tabletPortrait) {
       display: none;
     }
@@ -233,6 +243,9 @@ export default Vue.extend({
       text-align: left;
       margin-top: 20px;
       width: 25vw;
+      display: flex;
+      flex-direction: column;
+      min-width: 307px;
 
       @include screenSizes(desktopSmall) {
         width: auto;
@@ -251,10 +264,19 @@ export default Vue.extend({
         display: flex;
         flex-direction: row;
         justify-content: space-between;
-        padding: 7px 0;
+        padding: 5px 0;
 
         h6:first-child {
           margin-right: 25px;
+          flex-basis: 25%;
+
+          @include screenSizes(phoneSmall) {
+            margin-right: 15px;
+          }
+        }
+
+        h6:nth-child(2) {
+          flex-basis: 75%;
         }
       }
     }

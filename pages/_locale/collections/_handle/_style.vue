@@ -281,6 +281,7 @@ export default Vue.extend({
 .collection {
   padding-left: 30px;
   padding-right: 30px;
+  width: 100%;
 
   @include screenSizes(tabletPortrait) {
     padding: 0;
