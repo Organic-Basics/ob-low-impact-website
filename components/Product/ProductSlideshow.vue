@@ -5,8 +5,8 @@
       <div v-html="productIllustration" v-if="!shouldShowImages && productIllustration" class="slideshow__illustration"></div>
       <div class="product__image-label" v-if="!shouldShowImages">
         <span class="product__image-label--bold">
-          <span v-if="$store.state.carbonIntensity.intensity.index === 'lowest' || $store.state.carbonIntensity.intensity.index === 'low'"><span class="label__tap">Tap</span><span class="label__click">Click</span> to see real images</span>
-          <span v-else-if="$store.state.carbonIntensity.intensity.index === 'moderate'"><span class="label__tap">Tap</span><span class="label__click">Click</span> to see low quality images (~{{ (lowResCost).toFixed(2)}}g CO2)</span>
+          <span v-if="$store.state.carbonIntensity.intensity.index === 'lowest'"><span class="label__tap">Tap</span><span class="label__click">Click</span> to see real images</span>
+          <span v-else-if="$store.state.carbonIntensity.intensity.index === 'moderate' || $store.state.carbonIntensity.intensity.index === 'low'"><span class="label__tap">Tap</span><span class="label__click">Click</span> to see low quality images (~{{ (lowResCost).toFixed(2)}}g CO2)</span>
           <span v-else>Real images unavailable</span>
         </span>
         <span>

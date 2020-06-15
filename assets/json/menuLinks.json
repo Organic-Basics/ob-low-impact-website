@@ -3,7 +3,7 @@
   "womens": [
     {
       "url" : "/collections/all-womens-products",
-      "name" : "All Women's"
+      "name" : "Women's All"
     },
     {
       "url" : "/collections/all-womens-products/style-bras",
@@ -37,7 +37,7 @@
   "mens": [
     {
       "url" : "/collections/all-mens-products",
-      "name" : "All men's"
+      "name" : "Men's All"
     },
     {
       "url" : "/collections/all-mens-products/style-bottoms",
