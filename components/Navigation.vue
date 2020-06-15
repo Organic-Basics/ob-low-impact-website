@@ -20,7 +20,7 @@
         <Logo />
       </nuxt-link>
       <ul class="menu__links--desktop">
-        <li><a :href="mainSiteLink">Regular store</a></li>
+        <li><a :href="this.mainSiteLink">Regular store</a></li>
         <li><nuxt-link :to="'/' + $store.state.activeCurrency + '#manifesto'">Manifesto</nuxt-link></li>
       </ul>
     </div>
@@ -64,7 +64,6 @@ import Vue from 'vue'
 import Logo from '~/components/Logo.vue'
 import CartIcon from '~/components/CartIcon.vue'
 import menuLinks from '~/assets/json/menuLinks.json'
-import mainSiteMap from '~/assets/json/mainSiteMap.json'
 
 export default Vue.extend({
   name: 'Navigation',
@@ -74,14 +73,14 @@ export default Vue.extend({
   },
   props: {
     womenLinks: Array,
-    menLinks: Array
+    menLinks: Array,
+    mainSiteLink: String
   },
   data: () => {
     return {
       hoverWomens: false,
       hoverMens: false,
       menuLinks: menuLinks,
-      mainSiteMap: mainSiteMap,
       isOpen: false
     }
   },
@@ -133,19 +132,6 @@ export default Vue.extend({
           cartCount += a.node.quantity
         })
         return cartCount
-      }
-    },
-    mainSiteLink: function() {
-      let mainSiteData = this.mainSiteMap.mainSiteMap
-      let mainSite = mainSiteData.find((a) => {
-        return a.currency == this.$store.state.activeCurrency
-      })
-      if(mainSite) {
-        let mainSiteUrl = 'https://' + mainSite.url + this.$route.path.replace('/' + this.$store.state.activeCurrency, '')
-        return mainSiteUrl
-      }
-      else {
-        return
       }
     }
   }

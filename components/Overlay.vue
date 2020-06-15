@@ -24,7 +24,7 @@
     </section>
 
     <section class="bg--white">
-      <h2 class="text--left">The internet uses electricity.</br>Quite a bit.</h2>
+      <h2 class="text--left text__internet">The internet uses electricity.</br>Quite a bit.</h2>
       <img class="image--data-center" src="~/assets/svg/data_center.svg" alt="Internet energy consumption illustration">
 
       <div class="overlay__questions--container">
@@ -55,7 +55,8 @@ export default Vue.extend({
   props: {
     open: Boolean,
     carbonIntensity: Object,
-    footerData: Object
+    footerData: Object,
+    mainSiteLink: String
   },
   components: {
     Footer,
@@ -103,8 +104,7 @@ export default Vue.extend({
           question: 'How?',
           description: 'We have formulated a set of 10 guidelines to help radically limit the amount of data transfer required to run an online store or website. We call it “The Low Impact Manifesto”.'
         }
-      ],
-      mainSiteMap: mainSiteMap
+      ]
     }
   },
   methods: {
@@ -119,14 +119,6 @@ export default Vue.extend({
       })
       if(carbonName) return carbonName.name.toLowerCase()
       else return '...'
-    },
-    mainSiteLink () {
-      let mainSiteData = this.mainSiteMap.mainSiteMap
-      let mainSite = mainSiteData.find((a) => {
-        return a.currency == this.$store.state.activeCurrency
-      })
-      let mainSiteUrl = 'https://' + mainSite.url + this.$route.path.replace('/' + this.$store.state.activeCurrency, '')
-      return mainSiteUrl
     }
   }
 })
@@ -273,42 +265,12 @@ export default Vue.extend({
     flex-direction: column;
     align-items: center;
     margin: auto;
-    // width: 28vw;
-    //
-    // @include screenSizes(desktopSmall) {
-    //   width: 30vw;
-    // }
+  }
+}
 
-    // @include screenSizes(tabletPortrait) {
-    //   display: block;
-    //   width: unset;
-    // }
-
-    // #speedometer {
-    //   width: 23vw;
-    //
-    //   @include screenSizes(tabletPortrait) {
-    //     width: 90%;
-    //   }
-    // }
-
-    /*.label--highest {
-      left: 12.5vw;
-      top: 6vw;
-    }
-
-    .label--lowest {
-      left: -12.5vw;
-      top: 10vw;
-    }
-
-    .label--low {
-      left: -7vw;
-    }
-
-    .label--high {
-      left: 7vw;
-    }*/
+.text__internet {
+  @include screenSizes(phone) {
+    font-size: 25px;
   }
 }
 

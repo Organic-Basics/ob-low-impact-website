@@ -4,7 +4,7 @@
       <div>
           <h4 class="product__title">{{mainProduct.title}}</h4>
           <!-- Disabled for now until we can merge the fix -->
-          <span class="product__one-liner product__description--desktop" v-if="false">Our best-selling organic cotton bra. No wires — yet plenty of support.</span>
+          <span v-html="contentfulData.oneLiner" class="product__one-liner product__description--desktop"></span>
       </div>
       <h3 class="product__main--price">{{parseInt(mainProduct.priceRange.minVariantPrice.amount)}} {{mainProduct.priceRange.minVariantPrice.currencyCode}}
         <span class="product__main--compare-price" v-if="mainProduct.variants.edges[0].node.compareAtPrice !== null && mainProduct.variants.edges[0].node.compareAtPrice !== '0.00'">
@@ -14,9 +14,7 @@
     </div>
     <div class="product__main--form">
       <!-- Disabled for now until we can merge the fix -->
-      <div v-if="isSingleProd && false">
-        <h6 class="product__one-liner product__description--mobile">Clean-cut, seamless look and feel thongs made with recycled materials.</h6>
-      </div>
+      <h6 v-html="contentfulData.oneLiner" class="product__one-liner product__description--mobile"></h6>
       <!-- Single product selection -->
       <div v-if="isSingleProd" class="product__main--selection-container">
         <div class="product__main--selection">
@@ -266,6 +264,7 @@ export default Vue.extend({
     propsUpSells: Array,
     isSingleProd: Boolean,
     mainProduct: Object,
+    contentfulData: Object,
     addMessage: String
   },
   computed: {
@@ -363,6 +362,12 @@ export default Vue.extend({
 
   .product__selection {
     width: 100%;
+
+    &:first-child {
+      .product__description--mobile {
+        display: block;
+      }
+    }
   }
 
   .product__main--top {
@@ -448,6 +453,7 @@ export default Vue.extend({
       @include screenSizes(tabletPortrait) {
         text-align: center;
         color: map-get($colors, 'darkGrey');
+        margin: 20px auto;
       }
     }
 

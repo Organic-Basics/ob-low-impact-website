@@ -19,12 +19,8 @@
     </section>
     <section class="footer__bottom">
       <footer class="text--left">
-        <h2>
-          <nuxt-link :to="`/${$store.state.activeCurrency}/collections/all-womens-products`">Shop Women</nuxt-link>
-        </h2>
-        <h2>
-          <nuxt-link :to="`/${$store.state.activeCurrency}/collections/all-mens-products`">Shop Men</nuxt-link>
-        </h2>
+        <nuxt-link :to="`/${$store.state.activeCurrency}/collections/all-womens-products`"><h2>Shop women</h2></nuxt-link>
+        <nuxt-link :to="`/${$store.state.activeCurrency}/collections/all-mens-products`"><h2>Shop men</h2></nuxt-link>
         <p class="footer__help--text">Need help?<p/>
         <h6><b><a href = "mailto:hello@organicbasics.com?subject=Low Impact Website inquiry">hello@organicbasics.com</a></b>(~4g of CO<sub>2</sub>)</h6>
       </footer>
