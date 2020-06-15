@@ -21,7 +21,7 @@
           </span>
         </span>
       </div>
-      <div v-for="(image, index) in mainProduct.images.edges" :ref="'image' + index" class="image-container">
+      <div v-for="(image, index) in mainProduct.images.edges" class="image-container">
         <img :src="shouldShowImages ? image.node.transformedSrc : ''" v-if="shouldShowImages">
         <div class="image__click image__click--left" @click="scrollToImage(-1, $event)"></div>
         <div class="image__click image__click--right" @click="scrollToImage(1, $event)"></div>
