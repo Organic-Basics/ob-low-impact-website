@@ -127,7 +127,16 @@ export const actions: ActionTree<RootState, RootState> = {
 			})
       let cartData = result.data.node
       for(let i = 0; i < cartData.lineItems.edges.length; i++) {
-        let productSvg = await import('~/assets/svg/products/' + cartData.lineItems.edges[i].node.variant.product.handle + '.svg?raw')
+        let illuHandle = cartData.lineItems.edges[i].node.variant.product.handle;
+        if (
+          illuHandle.includes("accessories") ||
+          illuHandle.includes("socks")
+        ) {
+          illuHandle = illuHandle
+            .replace(/womens-/g, "")
+            .replace(/mens-/g, "");
+        }
+        let productSvg = await import('~/assets/svg/products/' + illuHandle + '.svg?raw')
         cartData.lineItems.edges[i].node.illustration = productSvg.default
       }
 
