@@ -137,6 +137,7 @@ export default Vue.extend({
     .product__compare-price {
       margin-left: 8px;
       text-decoration: line-through;
+      color: map-get($colors, 'darkGrey');
     }
   }
 

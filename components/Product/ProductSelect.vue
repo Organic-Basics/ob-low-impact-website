@@ -8,7 +8,7 @@
       </div>
       <h3 class="product__main--price">{{parseInt(mainProduct.priceRange.minVariantPrice.amount)}} {{mainProduct.priceRange.minVariantPrice.currencyCode}}
         <span class="product__main--compare-price" v-if="mainProduct.variants.edges[0].node.compareAtPrice !== null && mainProduct.variants.edges[0].node.compareAtPrice !== '0.00'">
-          {{ mainProduct.variants.edges[0].node.compareAtPrice }} {{mainProduct.priceRange.minVariantPrice.currencyCode}}
+          {{Math.floor(mainProduct.variants.edges[0].node.compareAtPrice)}} {{mainProduct.priceRange.minVariantPrice.currencyCode}}
         </span>
       </h3>
     </div>
@@ -411,6 +411,8 @@ export default Vue.extend({
       margin: 0 0 0 10px;
       width: 110px;
       text-align: right;
+      display: flex;
+      flex-direction: column;
     }
 
     .product__main--compare-price {
