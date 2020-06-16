@@ -36,7 +36,7 @@
         <span>Subtotal</span>
         <span>{{formatPrice($store.state.cart.totalPriceV2)}}</span>
       </h6>
-      <a :href="cleanCheckoutURL"><button class="cart-drawer__checkout">Checkout</button></a>
+      <a :href="cleanCheckoutURL" @click="trackGA()"><button class="cart-drawer__checkout">Checkout</button></a>
     </footer>
   </div>
 </template>
@@ -116,6 +116,9 @@ export default Vue.extend({
       else {
         return ''
       }
+    },
+    trackGA() {
+      ga('send', 'event', 'LIW: Checkout from cart drawer', 'Click', 'Clicked on checkout from drawer')
     }
   },
   computed: {
