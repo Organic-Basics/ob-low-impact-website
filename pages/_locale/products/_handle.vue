@@ -345,6 +345,10 @@ export default Vue.extend({
           } catch (err) {
             console.error(err);
           }
+          // Get rid of single products that may creep in via bad GraphQL search query
+          newData.upSells = newData.upSells.filter((a) => {
+            return !a.node.description.includes('///')
+          })
         } else {
           let bundleResult = await client.query({
             query: gql `

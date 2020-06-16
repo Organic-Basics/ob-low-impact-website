@@ -17,7 +17,13 @@ module.exports = {
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { hid: 'description', name: 'description', content: 'An online store that prevents 70% of the carbon emissions. Underwear, activewear and essentials made ethically in Europe with organic cotton, TENCEL™ and recycled materials.' },
-      { hid: 'og:image', property: 'og:image', content: '/share-image.jpg' }
+      { hid: 'og:url', property: 'og:url', content: 'https://lowimpact.organicbasics.com' },
+      { hid: 'og:image', property: 'og:image', content: 'https://lowimpact.organicbasics.com/share-image.jpg' },
+      { hid: 'og:image:secure_url', property: 'og:image:secure_url', content: 'https://lowimpact.organicbasics.com/share-image.jpg' },
+      { hid: 'og:title', property: 'og:title', content: 'The Low Impact Website | Organic Basics' },
+      { hid: 'og:description', property: 'og:description', content: 'An online store that prevents 70% of the carbon emissions. Underwear, activewear and essentials made ethically in Europe with organic cotton, TENCEL™ and recycled materials.' },
+      { hid: 'og:site_name', property: 'og:site_name', content: 'Organic Basics' },
+      { hid: 'og:type', property: 'og:type', content: 'website' }
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.svg' }
