@@ -1031,6 +1031,7 @@ input[type="number"] {
             display: flex;
             justify-content: center;
             overflow: hidden;
+            position: relative;
             min-width: 50vw;
 
             @include screenSizes(tabletPortrait) {
