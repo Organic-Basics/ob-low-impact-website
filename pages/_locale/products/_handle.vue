@@ -139,11 +139,11 @@ export default Vue.extend({
           console.error(err)
         }
 
-      
+
       }
 
       fetchContentfulData(params.handle)
-     
+
     //------------------ Contentful fetching
     try {
       if (app && app.apolloProvider) {
@@ -1043,6 +1043,7 @@ input[type="number"] {
 
             *[stroke*="#"] {
                 stroke: map-get($colors, "black") !important;
+                stroke-width: .3;
             }
 
             *[fill*="#"] {
@@ -1309,7 +1310,7 @@ input[type="number"] {
     .product__content-block {
         background: rgb(167, 143, 122);
         height: 100%;
-        padding:0px; 
+        padding:0px;
         color: #fff;
         width: 100%;
         display: flex;

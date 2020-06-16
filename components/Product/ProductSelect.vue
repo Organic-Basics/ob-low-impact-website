@@ -365,7 +365,11 @@ export default Vue.extend({
 
     &:first-child {
       .product__description--mobile {
-        display: block;
+        display: none;
+
+        @include screenSizes(tabletPortrait) {
+          display: block;
+        }
       }
     }
   }
