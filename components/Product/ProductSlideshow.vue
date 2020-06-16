@@ -128,7 +128,15 @@ export default Vue.extend({
 </script>
 
 <style lang="scss">
+@import "~assets/scss/mixins.scss";
+
 $arrowSize: 15px;
+
+.slideshow__illustration, .bundle__illustration:first-child {
+  @include screenSizes(phone) {
+    margin-top: -50px;
+  }
+}
 
 .image-container {
   &:last-child .image__click--right {
