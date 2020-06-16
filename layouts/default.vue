@@ -232,7 +232,7 @@ export default Vue.extend({
         return a.currency == this.$store.state.activeCurrency
       })
       if(mainSite) {
-        console.log(this.$route)
+        // console.log(this.$route)
         let mainSiteUrl = 'https://' + mainSite.url + this.$route.path.replace('/' + this.$store.state.activeCurrency, '')
         return mainSiteUrl
       }

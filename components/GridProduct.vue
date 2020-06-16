@@ -177,9 +177,19 @@ export default Vue.extend({
       fill: map-get($colors, "productGrey") !important;
     }
 
+    *[fill*="grey"] {
+      fill: map-get($colors, "productGrey") !important;
+    }
+
     // Tennis Socks fix
     *[fill*="#999"] {
       fill: map-get($colors, "black") !important;
+    }
+
+    // quickfix: hide shadows on prod grid
+    g[opacity="0.15"] {
+      display: none !important;
+      opacity: 0 !important;
     }
   }
 }

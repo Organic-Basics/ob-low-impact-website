@@ -21,8 +21,10 @@
           </span>
         </span>
       </div>
-      <div v-for="(image, index) in mainProduct.images.edges">
+      <div v-for="(image, index) in mainProduct.images.edges" class="image-container">
         <img :src="shouldShowImages ? image.node.transformedSrc : ''" v-if="shouldShowImages">
+        <div class="image__click image__click--left" @click="scrollToImage(-1, $event)"></div>
+        <div class="image__click image__click--right" @click="scrollToImage(1, $event)"></div>
       </div>
     </div>
     <!-- Bundle slideshow -->
@@ -108,6 +110,17 @@ export default Vue.extend({
   methods: {
     showImages() {
       this.$emit('showImages')
+    },
+    scrollToImage(direction, evt) {
+      let imgContainer = evt.target.parentElement
+      let nextImage
+      if(direction < 0) nextImage = imgContainer.previousElementSibling
+      else nextImage = imgContainer.nextElementSibling
+      if(nextImage !== null) {
+        let nextImagePos = nextImage.offsetLeft
+        let slideshowElem = imgContainer.offsetParent
+        slideshowElem.scrollLeft = nextImagePos
+      }
     }
   }
 })
@@ -115,4 +128,54 @@ export default Vue.extend({
 </script>
 
 <style lang="scss">
+$arrowSize: 15px;
+
+.image-container {
+  &:last-child .image__click--right {
+    display: none;
+  }
+  &:first-child .image__click--left {
+    display: none;
+  }
+
+  .image__click {
+    align-items: center;
+    display: flex;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    width: 25%;
+
+    &.image__click--right {
+      justify-content: flex-end;
+      right: 0;
+
+      &::after {
+        border-left: $arrowSize solid black;
+        padding-left: $arrowSize;
+      }
+    }
+    &.image__click--left {
+      justify-content: flex-start;
+      left: 0;
+
+      &:first-child {
+        display: none;
+      }
+
+      &::after {
+        border-right: $arrowSize solid black;
+        padding-right: $arrowSize;
+      }
+    }
+
+    &::after {
+      border-bottom: $arrowSize solid transparent;
+      border-top: $arrowSize solid transparent;
+      content: '';
+      height: 0;
+      width: 0;
+    }
+  }
+}
 </style>

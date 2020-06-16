@@ -1031,6 +1031,7 @@ input[type="number"] {
             display: flex;
             justify-content: center;
             overflow: hidden;
+            position: relative;
             min-width: 50vw;
 
             @include screenSizes(tabletPortrait) {
@@ -1048,6 +1049,10 @@ input[type="number"] {
             *[stroke*="#"] {
                 stroke: map-get($colors, "black") !important;
                 stroke-width: .3;
+            }
+
+            *[fill="grey"] {
+              fill: map-get($colors, "productGrey") !important;
             }
 
             *[fill*="#"] {
