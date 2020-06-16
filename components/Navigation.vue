@@ -20,7 +20,7 @@
         <Logo />
       </nuxt-link>
       <ul class="menu__links--desktop">
-        <li><a :href="this.mainSiteLink">Regular store</a></li>
+        <li><a :href="this.mainSiteLink" @click="trackGA()">Regular store</a></li>
         <li><nuxt-link :to="'/' + $store.state.activeCurrency + '#manifesto'">Manifesto</nuxt-link></li>
       </ul>
     </div>
@@ -119,6 +119,9 @@ export default Vue.extend({
     },
     toggleDropdown() {
       this.isOpen = !this.isOpen
+    },
+    trackGA() {
+      ga('send', 'event', 'LIW: Switched to Regular store', 'Click', 'Clicked on navigation link')
     }
   },
   computed: {

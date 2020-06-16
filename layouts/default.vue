@@ -121,6 +121,8 @@ export default Vue.extend({
       this.isCartOpen = false;
       this.isOverlayOpen = true;
       this.isSidebarOpen = false;
+      ga('send', 'event', 'LIW: Opened "Learn More" overlay', 'Click', 'Clicked on Learn More button')
+      console.log('Overlay clicked')
     },
     saveEntries: function(isRouteChange) {
       let entries = performance.getEntriesByType('resource')

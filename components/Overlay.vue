@@ -1,7 +1,7 @@
 <template>
   <div :class="'bg--grey overlay overlay--' + open">
     <header class="overlay__header">
-      <a :href="mainSiteLink" class="overlay__header--switch">
+      <a :href="mainSiteLink" @click="trackGA()" class="overlay__header--switch">
         <span><img src="~/assets/svg/switch_icon.svg" alt="Switch to regular store"></span>Switch to regular store
       </a>
       <h5 @click="closeOverlay()">Close</h5>
@@ -112,6 +112,9 @@ export default Vue.extend({
   methods: {
     closeOverlay: function () {
       this.$emit('closed', true)
+    },
+    trackGA() {
+      ga('send', 'event', 'LIW: Switched to Regular store', 'Click', 'Clicked on overlay link')
     }
   },
   computed: {
