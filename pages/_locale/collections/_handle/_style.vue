@@ -63,6 +63,7 @@ export default Vue.extend({
             variants(first:50) {
               edges {
                 node {
+                  id,
                   priceV2 {
                     amount,
                     currencyCode
