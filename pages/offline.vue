@@ -156,15 +156,8 @@ export default Vue.extend({
 			}
 
       @include screenSizes(phone) {
-        // margin-top: -140px;
-        // font-size: 25vw;
-        // max-width: 90vw;
 				display: none;
       }
-
-			// @include screenSizes(phoneSmall) {
-      //     margin-top: -175px;
-      // }
 		}
 
 		.offline__carbon {

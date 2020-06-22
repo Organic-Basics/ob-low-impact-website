@@ -1,9 +1,9 @@
 <template>
   <div class="footer__container">
-    <section class="footer__top">
+    <section class="footer__top" v-if="!$route.path.includes('unavailable')">
       <div class="footer__metrics bg--green">
         <div class="footer__metrics--item">
-          <img src="~/assets/svg/data_icon.svg" alt="Data usage of this web page">
+          <img src="~/assets/svg/data_icon1.svg" alt="Data usage of this web page">
           <h6>This page is using ~<b>{{ (currentBytes / 1024).toFixed(0) }}kb</b> of data</br>(<b>{{this.currentSavingsMultiplier.toFixed(2)}}x</b> smaller than the regular <b>{{this.currentPage.name}}</b>)</h6>
         </div>
 
@@ -17,12 +17,22 @@
         <span>Illustration: @fra.ge_art</span>
       </div>
     </section>
-    <section class="footer__bottom">
+    <section class="footer__bottom" v-if="!$route.path.includes('unavailable')">
       <footer class="text--left">
         <nuxt-link :to="`/${$store.state.activeCurrency}/collections/all-womens-products`"><h2>Shop women</h2></nuxt-link>
         <nuxt-link :to="`/${$store.state.activeCurrency}/collections/all-mens-products`"><h2>Shop men</h2></nuxt-link>
         <p class="footer__help--text">Need help?<p/>
         <h6><b><a href = "mailto:hello@organicbasics.com?subject=Low Impact Website inquiry">hello@organicbasics.com</a></b>(~4g of CO<sub>2</sub>)</h6>
+      </footer>
+    </section>
+
+    <section v-if="$route.path.includes('unavailable')">
+      <footer class="text--left">
+        <p class="footer__help--text">Call us<p/>
+        <h6><b>+45 78 73 72 70</b></h6>
+        <br />
+        <p class="footer__help--text">Email<p/>
+        <h6><b><a href = "mailto:hello@organicbasics.com?subject=Low Impact Website inquiry">hello@organicbasics.com</a></b></h6>
       </footer>
     </section>
   </div>

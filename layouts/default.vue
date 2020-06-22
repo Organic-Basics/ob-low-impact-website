@@ -1,14 +1,14 @@
 <template>
   <main :class="'container container-carbon--' + carbonIntensity.index + ' ' + $route.name" ref="container">
-    <button class="read-more" @click="openOverlay" v-if="!$route.path.includes('offline')">
+    <button class="read-more" @click="openOverlay" v-if="!$route.path.includes('offline') && !$route.path.includes('unavailable')">
       <img src="~/assets/svg/read-more.svg" alt="Read more">
     </button>
-    <Navigation @openCart="openCart" @openSidebar="openSidebar" :mainSiteLink="mainSiteLink" v-if="!$route.path.includes('offline')" />
+    <Navigation @openCart="openCart" @openSidebar="openSidebar" :mainSiteLink="mainSiteLink" v-if="!$route.path.includes('offline') && !$route.path.includes('unavailable')" />
     <nuxt/>
-    <sidebar :open="isSidebarOpen" @closed="isSidebarOpen = false" v-if="!$route.path.includes('offline')"/>
+    <sidebar :open="isSidebarOpen" @closed="isSidebarOpen = false" v-if="!$route.path.includes('offline') && !$route.path.includes('unavailable')" />
     <div class="cart__click-overlay" v-if="isCartOpen" @click="isCartOpen = false"></div>
-    <cartDrawer :open="isCartOpen" @closed="isCartOpen = false" v-if="!$route.path.includes('offline')"/>
-    <overlay :open="isOverlayOpen" :carbonIntensity="carbonIntensity" :mainSiteLink="mainSiteLink" @closed="isOverlayOpen = false" v-if="!$route.path.includes('offline')" :footerData="{currentBytes, currentSavingsMultiplier, currentPage, totalSavings}"/>
+    <cartDrawer :open="isCartOpen" @closed="isCartOpen = false" v-if="!$route.path.includes('offline') && !$route.path.includes('unavailable')" />
+    <overlay :open="isOverlayOpen" :carbonIntensity="carbonIntensity" :mainSiteLink="mainSiteLink" @closed="isOverlayOpen = false" v-if="!$route.path.includes('offline') && !$route.path.includes('unavailable')" :footerData="{currentBytes, currentSavingsMultiplier, currentPage, totalSavings}"/>
     <Footer :currentBytes="currentBytes" :currentSavingsMultiplier="currentSavingsMultiplier" :currentPage="currentPage" :totalSavings="totalSavings" v-if="!$route.path.includes('offline')"/>
     <CookieBar/>
   </main>
@@ -76,6 +76,12 @@ export default Vue.extend({
         {
           key: 'offline',
           name: 'offline page',
+          lowImpactSize: 0,
+          normalSize: 0
+        },
+        {
+          key: 'unavailable',
+          name: 'unavailable page',
           lowImpactSize: 0,
           normalSize: 0
         },
