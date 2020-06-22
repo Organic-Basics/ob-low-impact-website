@@ -2,7 +2,7 @@
   <div class="spedometer__container">
     <span class="label--lowest">Lowest</span>
     <span class="label--low">Low</span>
-    <span class="label--medium">Medium</span>
+    <span class="label--moderate">Medium</span>
     <span class="label--high">High</span>
     <span class="label--highest">Highest</span>
     <svg id="speedometer" viewBox="0 0 240 133" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -46,6 +46,10 @@ export default Vue.extend({
   width: 28vw;
   max-width: 620px;
 
+  span {
+    opacity: .25;
+  }
+
   @include screenSizes(desktopSmall) {
     width: 30vw;
   }
@@ -63,7 +67,7 @@ export default Vue.extend({
     position: absolute;
   }
 
-  .label--medium {
+  .label--moderate {
     @include spedometer__label;
     left: 45%;
     top: -18%;

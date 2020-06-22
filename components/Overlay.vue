@@ -314,6 +314,15 @@ export default Vue.extend({
   }
 }
 
+$carbonLabels: 'lowest', 'low', 'moderate', 'high';
+
+@each $label in $carbonLabels {
+  .container-carbon--#{$label} .label--#{$label} {
+    font-weight: bold;
+    opacity: 1;
+  }
+}
+
 .overlay__carbon-lvl {
   font-weight: bold;
 }
