@@ -924,9 +924,10 @@ input[type="number"] {
 
         @include screenSizes(tabletPortrait) {
           width: 100vw;
-          height: 70vh;
+          height: 77vh;
           top: 0;
           position: unset;
+          margin-top: 0;
         }
 
         &.vertical {
@@ -988,10 +989,10 @@ input[type="number"] {
           flex-direction: column;
           padding-left: 10px;
           padding-right: 10px;
+          height: fit-content;
 
           @include screenSizes(tabletPortrait) {
-            bottom: 25%;
-            // top: 58vh;
+            top: 62vh;
             width: 100vw;
           }
 

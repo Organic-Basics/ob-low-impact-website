@@ -83,7 +83,7 @@ export default Vue.extend({
         margin-top: -85px;
       }
 
-      @include screenSizes(largeDevices) {
+      @include screenSizesMin(largeDevices) {
         font-size: 115px;
         line-height: 170px;
       }

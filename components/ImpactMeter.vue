@@ -44,6 +44,7 @@ export default Vue.extend({
   pointer-events: none;
   position: relative;
   width: 28vw;
+  max-width: 620px;
 
   @include screenSizes(desktopSmall) {
     width: 30vw;
@@ -64,14 +65,30 @@ export default Vue.extend({
 
   .label--medium {
     @include spedometer__label;
-    left: 43%;
+    left: 45%;
     top: -18%;
+
+    @include screenSizes(phone) {
+      left: 43%;
+    }
+
+    @include screenSizesMin(largeDevices) {
+      top: -10%;
+    }
   }
 
   .label--low {
     @include spedometer__label;
-    left: 27%;
-    top: -10%;
+    left: 20%;
+    top: -5%;
+
+    @include screenSizes(desktopSmall) {
+      left: 25%;
+    }
+
+    @include screenSizesMin(largeDevices) {
+      top: 0;
+    }
   }
 
   .label--lowest {
@@ -82,12 +99,21 @@ export default Vue.extend({
     @include screenSizes(desktopSmall) {
       left: 0;
     }
+
   }
 
   .label--high {
     @include spedometer__label;
-    right: 23%;
-    top: -10%;
+    right: 20%;
+    top: -5%;
+
+    @include screenSizes(desktopSmall) {
+      right: 25%;
+    }
+
+    @include screenSizesMin(largeDevices) {
+      top: 0;
+    }
   }
 
   .label--highest {
@@ -97,7 +123,7 @@ export default Vue.extend({
     bottom: 52%;
 
     @include screenSizes(desktopSmall) {
-      right: -3%;
+      right: 0;
     }
   }
 

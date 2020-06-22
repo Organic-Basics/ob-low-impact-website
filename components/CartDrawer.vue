@@ -176,12 +176,14 @@ export default Vue.extend({
   background: #fff;
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 100%;
+  min-height: 100vh;
   justify-content: space-between;
   position: fixed;
   transition: left 600ms ease-in-out;
   left: 100%;
   padding: 15px;
+  bottom: 0;
   top: 0;
   width: 400px;
   right: 0;
@@ -323,6 +325,7 @@ export default Vue.extend({
     margin-left: -15px;
     border-top: 1px solid map-get($colors, 'black');
     padding-top: 15px;
+    padding-bottom: 30px;
 
     @include screenSizes(tabletPortrait) {
       width: 100vw;
