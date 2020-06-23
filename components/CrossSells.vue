@@ -60,7 +60,6 @@ export default Vue.extend({
       overflow: hidden;
 
       .product__crosssells--container {
-        // transform: translate3d(-751.516px, 0px, 0px);
         margin-right: 13px;
         display: flex;
       }

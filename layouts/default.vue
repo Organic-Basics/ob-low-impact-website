@@ -9,7 +9,7 @@
     <div class="cart__click-overlay" v-if="isCartOpen" @click="isCartOpen = false"></div>
     <cartDrawer :open="isCartOpen" @closed="isCartOpen = false" v-if="!$route.path.includes('offline') && !$route.path.includes('unavailable')" />
     <overlay :open="isOverlayOpen" :carbonIntensity="carbonIntensity" :mainSiteLink="mainSiteLink" @closed="isOverlayOpen = false" v-if="!$route.path.includes('offline') && !$route.path.includes('unavailable')" :footerData="{currentBytes, currentSavingsMultiplier, currentPage, totalSavings}"/>
-    <Footer :currentBytes="currentBytes" :currentSavingsMultiplier="currentSavingsMultiplier" :currentPage="currentPage" :totalSavings="totalSavings" v-if="!$route.path.includes('offline')"/>
+    <Footer :currentBytes="currentBytes" :currentSavingsMultiplier="currentSavingsMultiplier" :currentPage="currentPage" :totalSavings="totalSavings" v-if="!$route.path.includes('offline') && !$route.path.includes('unavailable')"/>
     <CookieBar/>
   </main>
 </template>
@@ -294,10 +294,6 @@ section {
   align-items: center;
   text-align: center;
   padding-top: 90px;
-
-  // @include screenSizes(tabletPortrait) {
-  //   margin: 0 auto 20px;
-  // }
 
   // Animations are only allowed on very low carbon intensity
   &.container-carbon--low *, &.container-carbon--moderate *, &.container-carbon--high * {

@@ -5,7 +5,7 @@
       <h3 class="unavailable__header--title">The low impact website is currently offline.</h3>
   	</header>
     <section class="unavailable__intro">
-      <h1 class="manifesto__heading--dramatic">Low</br>impact</br>website</h1>
+      <h1 class="manifesto__heading--dramatic">Offline</h1>
       <ImpactMeter />
     </section>
     <div class="unavailable__desc">
@@ -50,10 +50,7 @@ export default Vue.extend({
   .unavailable__header--title {
     margin: 5vh auto;
     font-size: 26px;
-
-    @include screenSizes(phone) {
-      margin-top: 0;
-    }
+    color: map-get($colors, 'carbonHigh');
   }
 }
 
@@ -62,35 +59,25 @@ export default Vue.extend({
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  padding: 30px 20px;
 
   svg, p {
     padding: 0 map-get($mobile, "sidePadding");
   }
 
   .manifesto__heading--dramatic {
-    max-width: 40vw;
+    -webkit-text-stroke: 1px map-get($colors, 'carbonHigh');
+    -webkit-text-fill-color: transparent;
     margin: auto;
-    margin-top: -5px;
-    font-size: 6vw;
-    line-height: 10vw;
     position: absolute;
-
-    @include screenSizes(tabletPortrait) {
-      font-size: 11vw;
-      line-height: 15vw;
-    }
-
-    @include screenSizes(phone) {
-      max-width: 90vw;
-      font-size: 14vw;
-      line-height: 20vw;
-
-    }
+    margin-top: -5px;
+    font-size: 8vw;
 
     @include screenSizesMin(largeDevices) {
       font-size: 115px;
-      line-height: 170px;
+    }
+
+    @include screenSizes(tabletPortrait) {
+      font-size: 17vw;
     }
   }
 
@@ -124,7 +111,6 @@ export default Vue.extend({
 .unavailable__desc {
   max-width: 45vw;
   max-width: 500px;
-  margin-top: 30px;
   padding: 0 20px;
   margin-left: auto;
   margin-right: auto;

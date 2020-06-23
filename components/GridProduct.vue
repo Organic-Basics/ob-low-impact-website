@@ -109,7 +109,6 @@ export default Vue.extend({
   }
 
   @include screenSizes(phone) {
-    // width: 50%;
     flex-basis: calc(50% - 20px);
   }
 
@@ -187,7 +186,6 @@ export default Vue.extend({
       fill: map-get($colors, "black") !important;
     }
 
-    // quickfix: hide shadows on prod grid
     g[opacity="0.15"] {
       display: none !important;
       opacity: 0 !important;
@@ -233,8 +231,6 @@ export default Vue.extend({
       max-width: 50%;
       min-width: 50%;
       position: absolute;
-      // top:50%;
-      // right: 50%;
       width: 40%;
       height: 50%;
 

@@ -393,7 +393,6 @@ export default Vue.extend({
       margin-bottom: 0;
     }
 
-    // Disabled for now until we can merge the fix on Github
     .product__one-liner {
       height: 0;
     }
@@ -823,8 +822,6 @@ export default Vue.extend({
             max-width: 50%;
             min-width: 50%;
             position: absolute;
-            // top:50%;
-            // right: 50%;
             width: 40%;
             height: 50%;
 

@@ -92,7 +92,6 @@ export default Vue.extend({
       if(item.node.discountAllocations.length > 0) {
         let discountAmount = parseFloat(item.node.discountAllocations[0].allocatedAmount.amount) / item.node.quantity
         let originalAmount = parseFloat(item.node.variant.priceV2.amount)
-        // Must be a string
         let newPrice = {
           amount: (originalAmount - discountAmount) + '',
           currencyCode: item.node.variant.priceV2.currencyCode

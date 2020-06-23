@@ -20,7 +20,6 @@
   }
 }
 
-/* Most-commonly used: phoneSmall, phone, tabletPortrait, desktop */
 // A specific mixin, if you want to target the devices by min-width instead of max
 @mixin screenSizesMin($size) {
   @if $size == phoneSmall {

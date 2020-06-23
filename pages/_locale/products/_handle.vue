@@ -273,11 +273,9 @@ export default Vue.extend({
               // Handle unisex products not having separate illustrations
               if (upSell.node.description.split("|").length > 2) {
                 if (upSell.node.description.split("|")[1] === "complete") {
-                  // TODO: tripleBundle is used for CSS styling, change it to complete bundle
                   upSell.node.completeBundle = true;
                   upSell.node.quantity = null;
                 } else if (upSell.node.description.split("|")[1] === "null") {
-                  // TODO: Special case where there was already a bundle with a description using "|" as separator
                   upSell.node.quantity = null;
                 } else {
                   // Case for quant bundles
@@ -937,12 +935,9 @@ input[type="number"] {
         .bundle__illustration {
           max-width: 40%;
           min-width: 90px;
-          // flex-grow: 1;
 
           &--quant {
             position: absolute;
-            // top:50%;
-            // right: 50%;
             width: 40%;
             height: 50%;
 
@@ -1096,7 +1091,6 @@ input[type="number"] {
                 .bundle__illustration {
                     max-width: 45%;
                     min-width: 90px;
-                    // flex-grow: 1;
                 }
                 .product__image-quant {
                     top: 25px;

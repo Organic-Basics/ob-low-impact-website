@@ -1,17 +1,6 @@
 /* eslint-disable */
 
 export default ({ app }) => {
-  // Only run on client-side and only in production mode
-  // if (process.env.NODE_ENV !== 'production') return
-  /*let statisticsConsent
-  if(app.store.state.cookieConsent) {
-    statisticsConsent = app.store.state.cookieConsent.find((a) => {
-      return a.type === 'statistics'
-    })
-  }
-  // if(!statisticsConsent.consent) return
-  let hasGABeenLoaded = false*/
-
   // Include Google Analytics Script
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -23,21 +12,7 @@ export default ({ app }) => {
 
   // Every time the route changes (fired on initialization too)
   app.router.afterEach((to, from) => {
-    // We tell Google Analytics to add a `pageview`
-    /*statisticsConsent = app.store.state.cookieConsent.find((a) => {
-      return a.type === 'statistics'
-    })
-    console.log(statisticsConsent)*/
-    /*if(statisticsConsent.consent) {
-      console.log('if')
-      if(!hasGABeenLoaded) {
-        console.log('loaded')*/
-
-        ga('set', 'page', to.fullPath)
-        ga('send', 'pageview')
-
-        // hasGABeenLoaded = true
-      /*}
-    }*/
+    ga('set', 'page', to.fullPath)
+    ga('send', 'pageview')
   })
 }
