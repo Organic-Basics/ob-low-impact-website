@@ -2,7 +2,7 @@
   <div class="spedometer__container">
     <span class="label--lowest">Lowest</span>
     <span class="label--low">Low</span>
-    <span class="label--medium">Medium</span>
+    <span class="label--moderate">Medium</span>
     <span class="label--high">High</span>
     <span class="label--highest">Highest</span>
     <svg id="speedometer" viewBox="0 0 240 133" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -44,6 +44,11 @@ export default Vue.extend({
   pointer-events: none;
   position: relative;
   width: 28vw;
+  max-width: 620px;
+
+  span {
+    opacity: .25;
+  }
 
   @include screenSizes(desktopSmall) {
     width: 30vw;
@@ -62,16 +67,32 @@ export default Vue.extend({
     position: absolute;
   }
 
-  .label--medium {
+  .label--moderate {
     @include spedometer__label;
-    left: 43%;
+    left: 45%;
     top: -18%;
+
+    @include screenSizes(phone) {
+      left: 43%;
+    }
+
+    @include screenSizesMin(largeDevices) {
+      top: -10%;
+    }
   }
 
   .label--low {
     @include spedometer__label;
-    left: 27%;
-    top: -10%;
+    left: 20%;
+    top: -5%;
+
+    @include screenSizes(desktopSmall) {
+      left: 25%;
+    }
+
+    @include screenSizesMin(largeDevices) {
+      top: 0;
+    }
   }
 
   .label--lowest {
@@ -82,12 +103,21 @@ export default Vue.extend({
     @include screenSizes(desktopSmall) {
       left: 0;
     }
+
   }
 
   .label--high {
     @include spedometer__label;
-    right: 23%;
-    top: -10%;
+    right: 20%;
+    top: -5%;
+
+    @include screenSizes(desktopSmall) {
+      right: 25%;
+    }
+
+    @include screenSizesMin(largeDevices) {
+      top: 0;
+    }
   }
 
   .label--highest {
@@ -97,7 +127,7 @@ export default Vue.extend({
     bottom: 52%;
 
     @include screenSizes(desktopSmall) {
-      right: -3%;
+      right: 0;
     }
   }
 

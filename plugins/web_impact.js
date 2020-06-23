@@ -10,7 +10,7 @@ exports.init = async function(opts) {
   browser = await puppeteer.launch()
 
   if(opts === undefined) {
-    // 
+    //
     opts = {...{
       viewport: {
         width: 1440,
@@ -24,7 +24,7 @@ exports.init = async function(opts) {
 exports.exit = async function() {
   await browser.close()
 }
- 
+
 exports.testURL = async function(url, isGreen, opts, pageViews) {
   return new Promise(async (resolve, reject) => {
     if(url === undefined) {
@@ -37,7 +37,7 @@ exports.testURL = async function(url, isGreen, opts, pageViews) {
     if(pageViews === undefined) pageViews = 1
 
     if(opts === undefined) {
-      // 
+      //
       opts = {...{
         viewport: {
           width: 1440,
@@ -51,7 +51,7 @@ exports.testURL = async function(url, isGreen, opts, pageViews) {
 
     await page.setCacheEnabled(false)
     await page.setViewport(opts.viewport)
-    
+
     let byteSize = 0
 
     page.on('response', async (response) => {
@@ -74,7 +74,7 @@ exports.testURL = async function(url, isGreen, opts, pageViews) {
     let estimatedCO2 = co2Emission.perByte(byteSize, isGreen)
 
     page.close()
-    
+
     resolve({
       bytes: byteSize,
       emissionsPerView: estimatedCO2,

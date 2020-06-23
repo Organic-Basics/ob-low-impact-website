@@ -34,9 +34,6 @@ export default Vue.extend({
   components: {
     GridProduct
   },
-  head() {
-    // WIP: set meta tags for this page
-  },
   data: () => {
     return {
       menuLinks: menuLinks
@@ -118,9 +115,7 @@ export default Vue.extend({
           collHandle = result.data.collectionByHandle.handle;
         }
 
-        // let variantPrice = result.data.collectionByHandle.products.edges.node.variants.edges.node.price
-
-        // create new array that only contains the Color product options
+        // New array that only contains the Color product options
         let productsData = [];
         if (result.data.collectionByHandle) {
           productsData = result.data.collectionByHandle.products.edges;
@@ -131,7 +126,7 @@ export default Vue.extend({
         for (let i = 0; i < productsData.length; i++) {
           let a = productsData[i];
           if (a.node.options) {
-            // find the Color product option
+            // Find the Color product option
             let colorOpt = a.node.options.find(b => b.name === "Color");
             if (colorOpt) a.node.colorValues = colorOpt.values;
             else a.node.colorValues = [];
@@ -282,6 +277,7 @@ export default Vue.extend({
 .collection {
   padding-left: 30px;
   padding-right: 30px;
+  width: 100%;
 
   @include screenSizes(tabletPortrait) {
     padding: 0;
@@ -301,7 +297,6 @@ export default Vue.extend({
     display: flex;
     flex-direction: row;
     align-items: flex-start;
-    // justify-content: space-between;
 
     @include screenSizes(phone) {
       width: 100vw;

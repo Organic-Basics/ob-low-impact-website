@@ -26,8 +26,6 @@ export default Vue.extend({
       })
       this.$store.commit('updateCookieConsent', cookieConsent)
       this.$store.dispatch('saveCookieConsent')
-
-      // this.$router.replace(this.$route.path)
     }
   },
   computed: {

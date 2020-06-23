@@ -44,7 +44,7 @@
     <div class="">
       <section class="product__main">
         <productSelect v-for="(prod, index) in products" v-if="prod.switchId == 0 || prod.switchId == switchId || prod.switchId === undefined" :key="index" :propsIdx="index" :propsProduct="prod" :propsUpSells="upSells" :isSingleProd="isSingleProduct" :addMessage="addMessage"
-        :mainProduct="mainProduct" @sizeClicked="onSizeChosen" @colorClicked="onColorChosen" @switched="switchId = switchId == 1 ? 2 : 1" @addToCartFromChild="addToCart()" @productToggled="toggleProduct" @sizeGuideOpened="isSizeGuideOpen = true"/>
+        :mainProduct="mainProduct" :contentfulData="contentfulData" @sizeClicked="onSizeChosen" @colorClicked="onColorChosen" @switched="switchId = switchId == 1 ? 2 : 1" @addToCartFromChild="addToCart()" @productToggled="toggleProduct" @sizeGuideOpened="isSizeGuideOpen = true"/>
       </section>
 
       <SizeGuide :isOpen="isSizeGuideOpen" @closeSizeGuide="isSizeGuideOpen = false" />
@@ -52,16 +52,11 @@
   </div>
 
   <!-- Disabled for now until we can merge the fix -->
-  <section class="product__content-block text--left" v-if="false">
+  <section class="product__content-block text--left" :class="{ hidden: contentfulData.hidden }" :style="{ backgroundColor: contentfulData.bgColor }">
     <div class="content-block__text">
-      <h3 class="content-block__title">Lorem ipsum</h3>
-      <h6 class="content-block__desc">
-        Created in premium Italian recycled nylon which takes 80% less water
-        to make and creates 90% fewer CO2 emissions in comparison to the
-        virgin fabric. It’s a minimal visible pantyline with a minimal
-        environmental impact.
-      </h6>
-    </div>
+        <h3 class="content-block__title"><span v-html="contentfulData.title"></span></h3>
+        <h6 class="content-block__desc"><span v-html="contentfulData.desc"></span></h6>
+      </div>
   </section>
 </div>
 </template>
@@ -73,6 +68,7 @@ import gql from 'graphql-tag'
 import ProductSelect from '~/components/Product/ProductSelect.vue'
 import ProductSlideshow from '~/components/Product/ProductSlideshow.vue'
 import SizeGuide from "~/components/SizeGuide.vue";
+import { createClient } from "~/plugins/contentful.js";
 
 
 export default Vue.extend({
@@ -94,8 +90,61 @@ export default Vue.extend({
   },
   async asyncData({
     app,
-    params
+    params,
+    env
   }) {
+     //------------------ Contentful fetching
+    const contentfulClient = createClient();
+    let contentfulData = {
+      hidden: true,
+      title: "",
+      oneLiner: null,
+      desc: "",
+      bgColor: "",
+      textColor: "#FFFFFF",
+      image: ""
+    };
+      async function fetchContentfulData(handle) {
+        try {
+          let entryData = await contentfulClient.getEntries({
+          content_type: env.CTF_PRODUCT_TYPE_ID,
+          "fields.url": handle
+          })
+      if (entryData.items.length > 0) {
+          let entry = entryData.items.shift();
+          // if a required field is missing, hide content block section
+          if (
+            entry.fields.contentBlockImage ||
+            entry.fields.contentBlockBgColor ||
+            entry.fields.contentBlockText
+          ) {
+            contentfulData.hidden = false;
+            contentfulData.title = entry.fields.contentBlockText.fields.title;
+            contentfulData.desc =
+              entry.fields.contentBlockText.fields.paragraph;
+            contentfulData.bgColor = entry.fields.contentBlockBgColor;
+            contentfulData.image =
+              entry.fields.contentBlockImage.fields.file.url;
+            // add text color if specified, else - white text
+            if (entry.fields.contentBlockTextColor) {
+              contentfulData.textColor = entry.fields.contentBlockTextColor;
+            }
+          }
+          // add one-liner description
+          if (entry.fields.oneLinerDescription) {
+            contentfulData.oneLiner = entry.fields.oneLinerDescription;
+          }
+        }
+        } catch (err){
+          console.error(err)
+        }
+
+
+      }
+
+      fetchContentfulData(params.handle)
+
+    //------------------ Contentful fetching
     try {
       if (app && app.apolloProvider) {
         await app.store.dispatch("fetchCarbonIntensity");
@@ -165,7 +214,8 @@ export default Vue.extend({
         let newData = {
           mainProduct: product,
           products: [],
-          isSingleProduct: isSingleProduct
+          isSingleProduct: isSingleProduct,
+          bundleData:{}
         };
 
         if (isSingleProduct) {
@@ -223,11 +273,9 @@ export default Vue.extend({
               // Handle unisex products not having separate illustrations
               if (upSell.node.description.split("|").length > 2) {
                 if (upSell.node.description.split("|")[1] === "complete") {
-                  // TODO: tripleBundle is used for CSS styling, change it to complete bundle
                   upSell.node.completeBundle = true;
                   upSell.node.quantity = null;
                 } else if (upSell.node.description.split("|")[1] === "null") {
-                  // TODO: Special case where there was already a bundle with a description using "|" as separator
                   upSell.node.quantity = null;
                 } else {
                   // Case for quant bundles
@@ -265,7 +313,7 @@ export default Vue.extend({
                 try {
                   return import("~/assets/svg/products/" + handle + ".svg?raw");
                 } catch (err) {
-                  console.log(err);
+                  console.error(err);
                   return null;
                 }
               };
@@ -293,7 +341,7 @@ export default Vue.extend({
               });
             });
           } catch (err) {
-            console.log(err);
+            console.error(err);
           }
           // Get rid of single products that may creep in via bad GraphQL search query
           newData.upSells = newData.upSells.filter((a) => {
@@ -387,7 +435,7 @@ export default Vue.extend({
               newData.productIllustration = productSvg.default;
             } else newData.productIllustration = "";
           } catch (err) {
-            console.log(err);
+            console.error(err);
             newData.productIllustration = "";
           }
         } else {
@@ -404,7 +452,7 @@ export default Vue.extend({
               try {
                 return import("~/assets/svg/products/" + handle + ".svg?raw");
               } catch (err) {
-                console.log(err);
+                console.error(err);
                 return null;
               }
             };
@@ -422,6 +470,7 @@ export default Vue.extend({
         }
 
         newData.upSells = newData.upSells ? newData.upSells : [];
+        newData.contentfulData = contentfulData;
 
         return newData;
       } else {
@@ -453,7 +502,7 @@ export default Vue.extend({
         };
       }
     } catch (err) {
-      console.log(err);
+      console.error(err);
       return {
         mainProduct: {
           images: {
@@ -873,9 +922,10 @@ input[type="number"] {
 
         @include screenSizes(tabletPortrait) {
           width: 100vw;
-          height: 70vh;
+          height: 77vh;
           top: 0;
           position: unset;
+          margin-top: 0;
         }
 
         &.vertical {
@@ -885,12 +935,9 @@ input[type="number"] {
         .bundle__illustration {
           max-width: 40%;
           min-width: 90px;
-          // flex-grow: 1;
 
           &--quant {
             position: absolute;
-            // top:50%;
-            // right: 50%;
             width: 40%;
             height: 50%;
 
@@ -937,10 +984,10 @@ input[type="number"] {
           flex-direction: column;
           padding-left: 10px;
           padding-right: 10px;
+          height: fit-content;
 
           @include screenSizes(tabletPortrait) {
-            bottom: 25%;
-            // top: 58vh;
+            top: 62vh;
             width: 100vw;
           }
 
@@ -980,6 +1027,7 @@ input[type="number"] {
             display: flex;
             justify-content: center;
             overflow: hidden;
+            position: relative;
             min-width: 50vw;
 
             @include screenSizes(tabletPortrait) {
@@ -996,6 +1044,11 @@ input[type="number"] {
 
             *[stroke*="#"] {
                 stroke: map-get($colors, "black") !important;
+                stroke-width: .3;
+            }
+
+            *[fill="grey"] {
+              fill: map-get($colors, "productGrey") !important;
             }
 
             *[fill*="#"] {
@@ -1038,7 +1091,6 @@ input[type="number"] {
                 .bundle__illustration {
                     max-width: 45%;
                     min-width: 90px;
-                    // flex-grow: 1;
                 }
                 .product__image-quant {
                     top: 25px;
@@ -1262,48 +1314,69 @@ input[type="number"] {
     .product__content-block {
         background: rgb(167, 143, 122);
         height: 100%;
-        padding: 60px 30px;
+        padding:0px;
         color: #fff;
         width: 100%;
+        display: flex;
+        &.hidden {
+          display: none;
+        }
 
         @include screenSizes(tabletPortrait) {
-            height: 500px;
-            padding: 5vw 20px;
+            padding: 0px;
+            flex-direction: column;
         }
 
         .content-block__text {
-            justify-content: flex-start;
-            display: flex;
-            flex-direction: row;
-            height: 100%;
+          padding: 10vw 30px;
+          display: flex;
+          flex:1;
 
-            @include screenSizes(tabletPortrait) {
-                flex-direction: column;
-                justify-content: space-around;
-            }
+          @include screenSizes(tabletPortrait) {
+            width: 100%;
+            flex-direction: column;
+            justify-content: space-around;
+            height: auto;
+          }
 
-            .content-block__title {
-                width: 40%;
-                color: #fff;
-                font-size: 26px;
+        .content-block__title {
+          width: 50%;
+          color: #fff;
+          font-size: 26px;
+          margin:20px 0px;
 
-                @include screenSizes(tabletPortrait) {
-                    width: 95%;
-                }
-            }
+          @include screenSizes(tabletPortrait) {
+            width: 95%;
+          }
+      }
 
-            .content-block__desc {
-                font-size: 16px;
-                max-width: 350px;
-                color: #fff;
+      .content-block__desc {
+        font-size: 16px;
+        max-width: 350px;
+        color: #fff;
 
-                @include screenSizes(tabletPortrait) {
-                    margin-top: 20px;
-                }
-            }
+        @include screenSizes(tabletPortrait) {
+          margin-top: 20px;
         }
+      }
     }
-}
+    .content-block__image {
+      width: 50%;
+
+      @include screenSizes(tabletPortrait) {
+        width: 100%;
+      }
+
+      img {
+        width: 100%;
+        @include screenSizes(tabletPortrait) {
+          width: 100%;
+        }
+      }
+
+    }
+  }
+
 
 .product__main--add-to-cart {
   font-family: 'Circular';
@@ -1313,5 +1386,6 @@ input[type="number"] {
   @include screenSizes(tabletPortrait) {
     margin-bottom: 100px;
   }
+}
 }
 </style>

@@ -11,9 +11,9 @@
           <h6 class="item__heading">{{item.node.title}}</h6>
           <div class="item__details">
             <div class="cart-drawer__quantity">
-              <h6 class="quant--decrement" @click="updateLineItem(item, -1)">–</h6>
+              <h6 class="quant--decrement" @click="updateLineItem(item, -1); trackGADecrement(item)">–</h6>
               <span>{{item.node.quantity}}</span>
-              <h6 class="quant--increment" @click="updateLineItem(item, 1)">+</h6>
+              <h6 class="quant--increment" @click="updateLineItem(item, 1); trackGAIncrement(item)">+</h6>
             </div>
             <h6 class="cart-drawer__title">{{item.node.variant.title}}</h6>
             <h6>{{ fetchComparePrice(item) !== 0 ? fetchComparePrice(item) : formatPrice(item.node.variant.priceV2, item.node.quantity) }}</h6>
@@ -36,7 +36,7 @@
         <span>Subtotal</span>
         <span>{{formatPrice($store.state.cart.totalPriceV2)}}</span>
       </h6>
-      <a :href="cleanCheckoutURL"><button class="cart-drawer__checkout">Checkout</button></a>
+      <a :href="cleanCheckoutURL" @click="trackGACheckout()"><button class="cart-drawer__checkout">Checkout</button></a>
     </footer>
   </div>
 </template>
@@ -92,7 +92,6 @@ export default Vue.extend({
       if(item.node.discountAllocations.length > 0) {
         let discountAmount = parseFloat(item.node.discountAllocations[0].allocatedAmount.amount) / item.node.quantity
         let originalAmount = parseFloat(item.node.variant.priceV2.amount)
-        // Must be a string
         let newPrice = {
           amount: (originalAmount - discountAmount) + '',
           currencyCode: item.node.variant.priceV2.currencyCode
@@ -116,6 +115,15 @@ export default Vue.extend({
       else {
         return ''
       }
+    },
+    trackGACheckout() {
+      ga('send', 'event', 'LIW: Checkout from cart drawer', 'Click', 'Clicked on checkout from drawer')
+    },
+    trackGAIncrement(item) {
+      ga('send', 'event', 'LIW: Added 1 of ' + item.node.title + ' from cart', 'Click')
+    },
+    trackGADecrement(item) {
+      ga('send', 'event', 'LIW: Removed 1 of ' + item.node.title + ' from cart', 'Click')
     }
   },
   computed: {
@@ -173,12 +181,14 @@ export default Vue.extend({
   background: #fff;
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 100%;
+  min-height: 100vh;
   justify-content: space-between;
   position: fixed;
   transition: left 600ms ease-in-out;
   left: 100%;
   padding: 15px;
+  bottom: 0;
   top: 0;
   width: 400px;
   right: 0;
@@ -320,6 +330,7 @@ export default Vue.extend({
     margin-left: -15px;
     border-top: 1px solid map-get($colors, 'black');
     padding-top: 15px;
+    padding-bottom: 30px;
 
     @include screenSizes(tabletPortrait) {
       width: 100vw;

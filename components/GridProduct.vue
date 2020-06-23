@@ -109,7 +109,6 @@ export default Vue.extend({
   }
 
   @include screenSizes(phone) {
-    // width: 50%;
     flex-basis: calc(50% - 20px);
   }
 
@@ -137,6 +136,7 @@ export default Vue.extend({
     .product__compare-price {
       margin-left: 8px;
       text-decoration: line-through;
+      color: map-get($colors, 'darkGrey');
     }
   }
 
@@ -176,10 +176,19 @@ export default Vue.extend({
     *[fill*="#"] {
       fill: map-get($colors, "productGrey") !important;
     }
-    
+
+    *[fill*="grey"] {
+      fill: map-get($colors, "productGrey") !important;
+    }
+
     // Tennis Socks fix
     *[fill*="#999"] {
       fill: map-get($colors, "black") !important;
+    }
+
+    g[opacity="0.15"] {
+      display: none !important;
+      opacity: 0 !important;
     }
   }
 }
@@ -222,8 +231,6 @@ export default Vue.extend({
       max-width: 50%;
       min-width: 50%;
       position: absolute;
-      // top:50%;
-      // right: 50%;
       width: 40%;
       height: 50%;
 

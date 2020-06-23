@@ -82,10 +82,20 @@ export default Vue.extend({
         line-height: 28vw;
         margin-top: -85px;
       }
+
+      @include screenSizesMin(largeDevices) {
+        font-size: 115px;
+        line-height: 170px;
+      }
     }
 
     .spedometer__container {
       width: auto;
+      margin: 40px;
+
+      @include screenSizes(phone) {
+        margin: 0;
+      }
 
       span {
         display: none;

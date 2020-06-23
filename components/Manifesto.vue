@@ -104,21 +104,20 @@ export default Vue.extend({
             justify-content: flex-end;
         }
 
-        // not working
         &:nth-child(2n) {
-            .manifesto__inner {
-                flex-direction: row-reverse;
+          .manifesto__inner {
+            flex-direction: row-reverse;
 
-                .manifesto__text {
-                    margin-left: 5%;
+            .manifesto__text {
+              margin-left: 5%;
 
-                    @include screenSizes(tabletPortrait) {
-                        max-width: 42%;
-                        margin-left: 8%;
-                        margin-right: 0;
-                    }
-                }
-            }
+              @include screenSizes(tabletPortrait) {
+                max-width: 42%;
+                margin-left: 8%;
+                margin-right: 0;
+              }
+              }
+          }
         }
 
         @include screenSizes(desktopSmall) {

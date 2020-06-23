@@ -1,6 +1,8 @@
+const config = require('./.contentful.json')
+
 let WebImpactPlugin
-if(process.env.NODE_ENV === 'development') {
-  WebImpactPlugin = require('./plugins/web_impact_entry');
+if (process.env.NODE_ENV === 'development') {
+  WebImpactPlugin = require('./plugins/web_impact_entry')
 }
 require('dotenv').config()
 
@@ -106,8 +108,13 @@ module.exports = {
             'X-Shopify-Storefront-Access-Token': process.env.VUE_APP_GRAPHQL_SECRET_DEV
           }
         }
-      },
+      }
     }
+  },
+  env: {
+    CTF_SPACE_ID: config.CTF_SPACE_ID,
+    CTF_CDA_ACCESS_TOKEN: config.CTF_CDA_ACCESS_TOKEN,
+    CTF_PRODUCT_TYPE_ID: config.CTF_PRODUCT_TYPE_ID
   },
   pwa: {},
   /*
@@ -118,7 +125,7 @@ module.exports = {
     ** You can extend webpack config here
     */
     extend (config, ctx) {
-      if(process.env.NODE_ENV === 'development' && ctx.isClient) {
+      if (process.env.NODE_ENV === 'development' && ctx.isClient) {
         config.plugins.push(new WebImpactPlugin(false))
         config.node = {
           fs: 'empty'

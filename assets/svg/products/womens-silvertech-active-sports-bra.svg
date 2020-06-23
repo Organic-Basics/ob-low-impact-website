@@ -3,7 +3,7 @@
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"  viewBox="0 0 75 75" enable-background="new 0 0 75 75" xml:space="preserve"><g id="STA_Womens">
 	<g>
-		<path fill="none" stroke="#99979A" stroke-width="0.5" stroke-miterlimit="10" d="M52.151,27.837
+		<path fill="grey" stroke="#99979A" stroke-width="0.5" stroke-miterlimit="10" d="M52.151,27.837
 			c1.577-8.979,1.577-9.076,1.577-9.076h-1.183c0,0-1.45,8.9-3.354,12.628c-2.286,4.471-8.021,4.734-11.643,4.734
 			c-4.534,0-9.454-0.264-11.74-4.734c-1.904-3.728-3.353-12.628-3.353-12.628H21.27c0,0,0.1,0.098,1.579,9.076
 			c0.145,0.874,0.208,1.694,0.204,2.467c-0.037,8.205-7.702,10.753-7.702,10.753l1.51,15.182h7.862H36.07h0.099h2.664h0.098h16.447

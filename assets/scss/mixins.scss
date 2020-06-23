@@ -1,47 +1,43 @@
 /* Most-commonly used: phoneSmall, phone, tabletPortrait, desktop */
 @mixin screenSizes($size) {
-    @if $size == phoneSmall {
-      @media (max-width: 360px) {@content;}
-    }
-    @else if $size == phone {
-        @media (max-width: 420px) {@content;}
-    }
-    @else if $size == tabletPortrait {
-        @media (max-width: 768px) {@content;}
-    }
-    @else if $size == desktopSmall {
-      @media (max-width: 1280px) {@content;}
-    }
-    @else if $size == desktop {
-        @media (max-width: 1366px) {@content;}
-    }
-    @else if $size == desktopLarge {
-        @media (max-width: 1920px) {@content;}
-    }
-    @else if $size == largeDevices {
-        @media (min-width: 1921px) {@content;}
-    }
+  @if $size == phoneSmall {
+    @media (max-width: 360px) {@content;}
+  }
+  @else if $size == phone {
+      @media (max-width: 420px) {@content;}
+  }
+  @else if $size == tabletPortrait {
+      @media (max-width: 768px) {@content;}
+  }
+  @else if $size == desktopSmall {
+    @media (max-width: 1280px) {@content;}
+  }
+  @else if $size == desktop {
+      @media (max-width: 1366px) {@content;}
+  }
+  @else if $size == desktopLarge {
+      @media (max-width: 1915px) {@content;}
+  }
 }
 
-/* Most-commonly used: phoneSmall, phone, tabletPortrait, desktop */
 // A specific mixin, if you want to target the devices by min-width instead of max
 @mixin screenSizesMin($size) {
-    @if $size == phoneSmall {
-      @media (min-width: 360px) {@content;}
-    }
-    @else if $size == phone {
-        @media (min-width: 420px) {@content;}
-    }
-    @else if $size == tabletPortrait {
-        @media (min-width: 768px) {@content;}
-    }
-    @else if $size == desktopSmall {
-      @media (min-width: 1280px) {@content;}
-    }
-    @else if $size == desktop {
-        @media (min-width: 1366px) {@content;}
-    }
-    @else if $size == desktopLarge {
-        @media (min-width: 1920px) {@content;}
-    }
+  @if $size == phoneSmall {
+    @media (min-width: 360px) {@content;}
+  }
+  @else if $size == phone {
+      @media (min-width: 420px) {@content;}
+  }
+  @else if $size == tabletPortrait {
+      @media (min-width: 768px) {@content;}
+  }
+  @else if $size == desktopSmall {
+    @media (min-width: 1280px) {@content;}
+  }
+  @else if $size == desktop {
+      @media (min-width: 1366px) {@content;}
+  }
+  @else if $size == largeDevices {
+      @media (min-width: 1916px) {@content;}
+  }
 }

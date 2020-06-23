@@ -1,7 +1,9 @@
 <template>
   <div :class="'bg--grey overlay overlay--' + open">
     <header class="overlay__header">
-      <a :href="mainSiteLink">Switch to regular store</a>
+      <a :href="mainSiteLink" @click="trackGA()" class="overlay__header--switch">
+        <span><img src="~/assets/svg/switch_icon.svg" alt="Switch to regular store"></span>Switch to regular store
+      </a>
       <h5 @click="closeOverlay()">Close</h5>
     </header>
 
@@ -24,7 +26,7 @@
     </section>
 
     <section class="bg--white">
-      <h2 class="text--left">The internet uses electricity.</br>Quite a bit.</h2>
+      <h2 class="text--left text__internet">The internet uses electricity.</br>Quite a bit.</h2>
       <img class="image--data-center" src="~/assets/svg/data_center.svg" alt="Internet energy consumption illustration">
 
       <div class="overlay__questions--container">
@@ -55,7 +57,8 @@ export default Vue.extend({
   props: {
     open: Boolean,
     carbonIntensity: Object,
-    footerData: Object
+    footerData: Object,
+    mainSiteLink: String
   },
   components: {
     Footer,
@@ -103,13 +106,15 @@ export default Vue.extend({
           question: 'How?',
           description: 'We have formulated a set of 10 guidelines to help radically limit the amount of data transfer required to run an online store or website. We call it “The Low Impact Manifesto”.'
         }
-      ],
-      mainSiteMap: mainSiteMap
+      ]
     }
   },
   methods: {
     closeOverlay: function () {
       this.$emit('closed', true)
+    },
+    trackGA() {
+      ga('send', 'event', 'LIW: Switched to Regular store', 'Click', 'Clicked on overlay link')
     }
   },
   computed: {
@@ -119,14 +124,6 @@ export default Vue.extend({
       })
       if(carbonName) return carbonName.name.toLowerCase()
       else return '...'
-    },
-    mainSiteLink () {
-      let mainSiteData = this.mainSiteMap.mainSiteMap
-      let mainSite = mainSiteData.find((a) => {
-        return a.currency == this.$store.state.activeCurrency
-      })
-      let mainSiteUrl = 'https://' + mainSite.url + this.$route.path.replace('/' + this.$store.state.activeCurrency, '')
-      return mainSiteUrl
     }
   }
 })
@@ -186,7 +183,15 @@ export default Vue.extend({
   justify-content: space-between;
   margin: 20px;
 
-  a {
+  .overlay__header--switch {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+
+    img {
+      margin-right: 7px;
+    }
+
     @include screenSizesMin(tabletPortrait) {
       display: none;
     }
@@ -241,6 +246,9 @@ export default Vue.extend({
       text-align: left;
       margin-top: 20px;
       width: 25vw;
+      display: flex;
+      flex-direction: column;
+      min-width: 307px;
 
       @include screenSizes(desktopSmall) {
         width: auto;
@@ -259,10 +267,19 @@ export default Vue.extend({
         display: flex;
         flex-direction: row;
         justify-content: space-between;
-        padding: 7px 0;
+        padding: 5px 0;
 
         h6:first-child {
           margin-right: 25px;
+          flex-basis: 25%;
+
+          @include screenSizes(phoneSmall) {
+            margin-right: 15px;
+          }
+        }
+
+        h6:nth-child(2) {
+          flex-basis: 75%;
         }
       }
     }
@@ -273,42 +290,12 @@ export default Vue.extend({
     flex-direction: column;
     align-items: center;
     margin: auto;
-    // width: 28vw;
-    //
-    // @include screenSizes(desktopSmall) {
-    //   width: 30vw;
-    // }
+  }
+}
 
-    // @include screenSizes(tabletPortrait) {
-    //   display: block;
-    //   width: unset;
-    // }
-
-    // #speedometer {
-    //   width: 23vw;
-    //
-    //   @include screenSizes(tabletPortrait) {
-    //     width: 90%;
-    //   }
-    // }
-
-    /*.label--highest {
-      left: 12.5vw;
-      top: 6vw;
-    }
-
-    .label--lowest {
-      left: -12.5vw;
-      top: 10vw;
-    }
-
-    .label--low {
-      left: -7vw;
-    }
-
-    .label--high {
-      left: 7vw;
-    }*/
+.text__internet {
+  @include screenSizes(phone) {
+    font-size: 25px;
   }
 }
 
@@ -324,6 +311,15 @@ export default Vue.extend({
   }
   .container-carbon--high & {
     color: map-get($colors, 'carbonHigh');
+  }
+}
+
+$carbonLabels: 'lowest', 'low', 'moderate', 'high';
+
+@each $label in $carbonLabels {
+  .container-carbon--#{$label} .label--#{$label} {
+    font-weight: bold;
+    opacity: 1;
   }
 }
 

@@ -1,15 +1,15 @@
 <template>
   <main :class="'container container-carbon--' + carbonIntensity.index + ' ' + $route.name" ref="container">
-    <button class="read-more" @click="openOverlay" v-if="!$route.path.includes('offline')">
+    <button class="read-more" @click="openOverlay" v-if="!$route.path.includes('offline') && !$route.path.includes('unavailable')">
       <img src="~/assets/svg/read-more.svg" alt="Read more">
     </button>
-    <Navigation @openCart="openCart" @openSidebar="openSidebar" v-if="!$route.path.includes('offline')" />
+    <Navigation @openCart="openCart" @openSidebar="openSidebar" :mainSiteLink="mainSiteLink" v-if="!$route.path.includes('offline') && !$route.path.includes('unavailable')" />
     <nuxt/>
-    <sidebar :open="isSidebarOpen" @closed="isSidebarOpen = false" v-if="!$route.path.includes('offline')"/>
+    <sidebar :open="isSidebarOpen" @closed="isSidebarOpen = false" v-if="!$route.path.includes('offline') && !$route.path.includes('unavailable')" />
     <div class="cart__click-overlay" v-if="isCartOpen" @click="isCartOpen = false"></div>
-    <cartDrawer :open="isCartOpen" @closed="isCartOpen = false" v-if="!$route.path.includes('offline')"/>
-    <overlay :open="isOverlayOpen" :carbonIntensity="carbonIntensity" @closed="isOverlayOpen = false" v-if="!$route.path.includes('offline')" :footerData="{currentBytes, currentSavingsMultiplier, currentPage, totalSavings}"/>
-    <Footer :currentBytes="currentBytes" :currentSavingsMultiplier="currentSavingsMultiplier" :currentPage="currentPage" :totalSavings="totalSavings" v-if="!$route.path.includes('offline')"/>
+    <cartDrawer :open="isCartOpen" @closed="isCartOpen = false" v-if="!$route.path.includes('offline') && !$route.path.includes('unavailable')" />
+    <overlay :open="isOverlayOpen" :carbonIntensity="carbonIntensity" :mainSiteLink="mainSiteLink" @closed="isOverlayOpen = false" v-if="!$route.path.includes('offline') && !$route.path.includes('unavailable')" :footerData="{currentBytes, currentSavingsMultiplier, currentPage, totalSavings}"/>
+    <Footer :currentBytes="currentBytes" :currentSavingsMultiplier="currentSavingsMultiplier" :currentPage="currentPage" :totalSavings="totalSavings" v-if="!$route.path.includes('offline') && !$route.path.includes('unavailable')"/>
     <CookieBar/>
   </main>
 </template>
@@ -23,6 +23,7 @@ import CartDrawer from '~/components/CartDrawer.vue'
 import Footer from '~/components/Footer.vue'
 import CookieBar from '~/components/CookieBar.vue'
 import Navigation from '~/components/Navigation.vue'
+import mainSiteMap from '~/assets/json/mainSiteMap.json'
 
 import * as CO2 from '~/node_modules/@tgwf/co2/src/co2.js'
 const emissions = new CO2()
@@ -52,6 +53,7 @@ export default Vue.extend({
       isOverlayOpen: false,
       isCartOpen: false,
       isSidebarOpen: false,
+      mainSiteMap: mainSiteMap,
       pageMap: [
         {
           key: 'locale',
@@ -74,6 +76,12 @@ export default Vue.extend({
         {
           key: 'offline',
           name: 'offline page',
+          lowImpactSize: 0,
+          normalSize: 0
+        },
+        {
+          key: 'unavailable',
+          name: 'unavailable page',
           lowImpactSize: 0,
           normalSize: 0
         },
@@ -119,6 +127,7 @@ export default Vue.extend({
       this.isCartOpen = false;
       this.isOverlayOpen = true;
       this.isSidebarOpen = false;
+      ga('send', 'event', 'LIW: Opened "Learn More" overlay', 'Click', 'Clicked on Learn More button')
     },
     saveEntries: function(isRouteChange) {
       let entries = performance.getEntriesByType('resource')
@@ -223,6 +232,19 @@ export default Vue.extend({
           forecast: this.$store.state.carbonIntensity.intensity.forecast
         }
       }
+    },
+    mainSiteLink: function() {
+      let mainSiteData = this.mainSiteMap.mainSiteMap
+      let mainSite = mainSiteData.find((a) => {
+        return a.currency == this.$store.state.activeCurrency
+      })
+      if(mainSite) {
+        let mainSiteUrl = 'https://' + mainSite.url + this.$route.path.replace('/' + this.$store.state.activeCurrency, '')
+        return mainSiteUrl
+      }
+      else {
+        return
+      }
     }
   }
 })
@@ -256,6 +278,10 @@ html {
 
 section {
   padding: map-get($mobile, "sectionPadding");
+
+  @include screenSizes(phoneSmall) {
+    padding: 40px 20px;
+  }
 }
 
 .container {
@@ -267,10 +293,6 @@ section {
   align-items: center;
   text-align: center;
   padding-top: 90px;
-
-  // @include screenSizes(tabletPortrait) {
-  //   margin: 0 auto 20px;
-  // }
 
   // Animations are only allowed on very low carbon intensity
   &.container-carbon--low *, &.container-carbon--moderate *, &.container-carbon--high * {

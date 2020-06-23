@@ -4,19 +4,17 @@
       <div>
           <h4 class="product__title">{{mainProduct.title}}</h4>
           <!-- Disabled for now until we can merge the fix -->
-          <span class="product__one-liner product__description--desktop" v-if="false">Our best-selling organic cotton bra. No wires — yet plenty of support.</span>
+          <span v-html="contentfulData.oneLiner" class="product__one-liner product__description--desktop"></span>
       </div>
       <h3 class="product__main--price">{{parseInt(mainProduct.priceRange.minVariantPrice.amount)}} {{mainProduct.priceRange.minVariantPrice.currencyCode}}
         <span class="product__main--compare-price" v-if="mainProduct.variants.edges[0].node.compareAtPrice !== null && mainProduct.variants.edges[0].node.compareAtPrice !== '0.00'">
-          {{ mainProduct.variants.edges[0].node.compareAtPrice }} {{mainProduct.priceRange.minVariantPrice.currencyCode}}
+          {{Math.floor(mainProduct.variants.edges[0].node.compareAtPrice)}} {{mainProduct.priceRange.minVariantPrice.currencyCode}}
         </span>
       </h3>
     </div>
     <div class="product__main--form">
       <!-- Disabled for now until we can merge the fix -->
-      <div v-if="isSingleProd && false">
-        <h6 class="product__one-liner product__description--mobile">Clean-cut, seamless look and feel thongs made with recycled materials.</h6>
-      </div>
+      <h6 v-html="contentfulData.oneLiner" class="product__one-liner product__description--mobile"></h6>
       <!-- Single product selection -->
       <div v-if="isSingleProd" class="product__main--selection-container">
         <div class="product__main--selection">
@@ -266,6 +264,7 @@ export default Vue.extend({
     propsUpSells: Array,
     isSingleProd: Boolean,
     mainProduct: Object,
+    contentfulData: Object,
     addMessage: String
   },
   computed: {
@@ -316,6 +315,7 @@ export default Vue.extend({
         idx: this.propsIdx
       });
       this.isAdding = true;
+      ga('send', 'event', 'LIW: Added ' + this.mainProduct.title + ' to cart', 'Click', 'Added ' + this.mainProduct.title + ' to cart')
     },
     formatPrice(amount, currencyCode) {
       let price = new Intl.NumberFormat("en-US", {
@@ -363,6 +363,16 @@ export default Vue.extend({
 
   .product__selection {
     width: 100%;
+
+    &:first-child {
+      .product__description--mobile {
+        display: none;
+
+        @include screenSizes(tabletPortrait) {
+          display: block;
+        }
+      }
+    }
   }
 
   .product__main--top {
@@ -383,7 +393,6 @@ export default Vue.extend({
       margin-bottom: 0;
     }
 
-    // Disabled for now until we can merge the fix on Github
     .product__one-liner {
       height: 0;
     }
@@ -402,6 +411,8 @@ export default Vue.extend({
       margin: 0 0 0 10px;
       width: 110px;
       text-align: right;
+      display: flex;
+      flex-direction: column;
     }
 
     .product__main--compare-price {
@@ -448,6 +459,7 @@ export default Vue.extend({
       @include screenSizes(tabletPortrait) {
         text-align: center;
         color: map-get($colors, 'darkGrey');
+        margin: 20px auto;
       }
     }
 
@@ -810,8 +822,6 @@ export default Vue.extend({
             max-width: 50%;
             min-width: 50%;
             position: absolute;
-            // top:50%;
-            // right: 50%;
             width: 40%;
             height: 50%;
 

@@ -5,8 +5,8 @@
       <div v-html="productIllustration" v-if="!shouldShowImages && productIllustration" class="slideshow__illustration"></div>
       <div class="product__image-label" v-if="!shouldShowImages">
         <span class="product__image-label--bold">
-          <span v-if="$store.state.carbonIntensity.intensity.index === 'lowest' || $store.state.carbonIntensity.intensity.index === 'low'"><span class="label__tap">Tap</span><span class="label__click">Click</span> to see real images</span>
-          <span v-else-if="$store.state.carbonIntensity.intensity.index === 'moderate'"><span class="label__tap">Tap</span><span class="label__click">Click</span> to see low quality images (~{{ (lowResCost).toFixed(2)}}g CO2)</span>
+          <span v-if="$store.state.carbonIntensity.intensity.index === 'lowest'"><span class="label__tap">Tap</span><span class="label__click">Click</span> to see real images</span>
+          <span v-else-if="$store.state.carbonIntensity.intensity.index === 'moderate' || $store.state.carbonIntensity.intensity.index === 'low'"><span class="label__tap">Tap</span><span class="label__click">Click</span> to see low quality images (~{{ (lowResCost).toFixed(2)}}g CO2)</span>
           <span v-else>Real images unavailable</span>
         </span>
         <span>
@@ -21,8 +21,10 @@
           </span>
         </span>
       </div>
-      <div v-for="(image, index) in mainProduct.images.edges">
+      <div v-for="(image, index) in mainProduct.images.edges" class="image-container">
         <img :src="shouldShowImages ? image.node.transformedSrc : ''" v-if="shouldShowImages">
+        <div class="image__click image__click--left" @click="scrollToImage(-1, $event)"></div>
+        <div class="image__click image__click--right" @click="scrollToImage(1, $event)"></div>
       </div>
     </div>
     <!-- Bundle slideshow -->
@@ -108,6 +110,17 @@ export default Vue.extend({
   methods: {
     showImages() {
       this.$emit('showImages')
+    },
+    scrollToImage(direction, evt) {
+      let imgContainer = evt.target.parentElement
+      let nextImage
+      if(direction < 0) nextImage = imgContainer.previousElementSibling
+      else nextImage = imgContainer.nextElementSibling
+      if(nextImage !== null) {
+        let nextImagePos = nextImage.offsetLeft
+        let slideshowElem = imgContainer.offsetParent
+        slideshowElem.scrollLeft = nextImagePos
+      }
     }
   }
 })
@@ -115,4 +128,62 @@ export default Vue.extend({
 </script>
 
 <style lang="scss">
+@import "~assets/scss/mixins.scss";
+
+$arrowSize: 15px;
+
+.slideshow__illustration, .bundle__illustration:first-child {
+  @include screenSizes(phone) {
+    margin-top: -50px;
+  }
+}
+
+.image-container {
+  &:last-child .image__click--right {
+    display: none;
+  }
+  &:first-child .image__click--left {
+    display: none;
+  }
+
+  .image__click {
+    align-items: center;
+    display: flex;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    width: 25%;
+
+    &.image__click--right {
+      justify-content: flex-end;
+      right: 0;
+
+      &::after {
+        border-left: $arrowSize solid black;
+        padding-left: $arrowSize;
+      }
+    }
+    &.image__click--left {
+      justify-content: flex-start;
+      left: 0;
+
+      &:first-child {
+        display: none;
+      }
+
+      &::after {
+        border-right: $arrowSize solid black;
+        padding-right: $arrowSize;
+      }
+    }
+
+    &::after {
+      border-bottom: $arrowSize solid transparent;
+      border-top: $arrowSize solid transparent;
+      content: '';
+      height: 0;
+      width: 0;
+    }
+  }
+}
 </style>
