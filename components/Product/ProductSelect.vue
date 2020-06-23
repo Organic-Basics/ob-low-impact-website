@@ -315,6 +315,7 @@ export default Vue.extend({
         idx: this.propsIdx
       });
       this.isAdding = true;
+      ga('send', 'event', 'LIW: Added ' + this.mainProduct.title + ' to cart', 'Click', 'Added ' + this.mainProduct.title + ' to cart')
     },
     formatPrice(amount, currencyCode) {
       let price = new Intl.NumberFormat("en-US", {

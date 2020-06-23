@@ -11,9 +11,9 @@
           <h6 class="item__heading">{{item.node.title}}</h6>
           <div class="item__details">
             <div class="cart-drawer__quantity">
-              <h6 class="quant--decrement" @click="updateLineItem(item, -1)">–</h6>
+              <h6 class="quant--decrement" @click="updateLineItem(item, -1); trackGADecrement(item)">–</h6>
               <span>{{item.node.quantity}}</span>
-              <h6 class="quant--increment" @click="updateLineItem(item, 1)">+</h6>
+              <h6 class="quant--increment" @click="updateLineItem(item, 1); trackGAIncrement(item)">+</h6>
             </div>
             <h6 class="cart-drawer__title">{{item.node.variant.title}}</h6>
             <h6>{{ fetchComparePrice(item) !== 0 ? fetchComparePrice(item) : formatPrice(item.node.variant.priceV2, item.node.quantity) }}</h6>
@@ -36,7 +36,7 @@
         <span>Subtotal</span>
         <span>{{formatPrice($store.state.cart.totalPriceV2)}}</span>
       </h6>
-      <a :href="cleanCheckoutURL" @click="trackGA()"><button class="cart-drawer__checkout">Checkout</button></a>
+      <a :href="cleanCheckoutURL" @click="trackGACheckout()"><button class="cart-drawer__checkout">Checkout</button></a>
     </footer>
   </div>
 </template>
@@ -117,8 +117,14 @@ export default Vue.extend({
         return ''
       }
     },
-    trackGA() {
+    trackGACheckout() {
       ga('send', 'event', 'LIW: Checkout from cart drawer', 'Click', 'Clicked on checkout from drawer')
+    },
+    trackGAIncrement(item) {
+      ga('send', 'event', 'LIW: Added 1 of ' + item.node.title + ' from cart', 'Click')
+    },
+    trackGADecrement(item) {
+      ga('send', 'event', 'LIW: Removed 1 of ' + item.node.title + ' from cart', 'Click')
     }
   },
   computed: {
