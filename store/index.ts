@@ -278,10 +278,6 @@ export const actions: ActionTree<RootState, RootState> = {
   	} catch(err) {
   		console.error(err)
   	}
-
-    if(this.app.router) {
-      // this.app.router.replace('/unavailable')
-    }
   },
 
   async fetchActiveCurrency (store:any) {
