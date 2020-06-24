@@ -280,7 +280,7 @@ export const actions: ActionTree<RootState, RootState> = {
   	}
 
     if(this.app.router) {
-      this.app.router.replace('/unavailable')
+      // this.app.router.replace('/unavailable')
     }
   },
 
