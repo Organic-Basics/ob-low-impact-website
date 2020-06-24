@@ -15,7 +15,7 @@
               <span>{{item.node.quantity}}</span>
               <h6 class="quant--increment" @click="updateLineItem(item, 1); trackGAIncrement(item)">+</h6>
             </div>
-            <h6 class="cart-drawer__title">{{item.node.variant.title}}</h6>
+            <h6 class="cart-drawer__title">{{cleanTitle(item.node.variant.title)}}</h6>
             <h6>{{ fetchComparePrice(item) !== 0 ? fetchComparePrice(item) : formatPrice(item.node.variant.priceV2, item.node.quantity) }}</h6>
           </div>
           <div class="item__discount">
@@ -115,6 +115,13 @@ export default Vue.extend({
       else {
         return ''
       }
+    },
+    cleanTitle: function(title) {
+      let titles = title.split(' / ')
+      titles = titles.filter(a => {
+        return !(a[0] === 'V' && a.length < 3) && !a.includes('RPK')
+      })
+      return titles.join(' / ')
     },
     trackGACheckout() {
       ga('send', 'event', 'LIW: Checkout from cart drawer', 'Click', 'Clicked on checkout from drawer')

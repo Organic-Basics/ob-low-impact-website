@@ -80,7 +80,8 @@ export default Vue.extend({
       switchId: 1,
       shouldShowImages: false,
       bundleIllustrations: 0,
-      isSizeGuideOpen: false
+      isSizeGuideOpen: false,
+      sizeOOS: false
     };
   },
   components: {
@@ -189,6 +190,7 @@ export default Vue.extend({
                         value
                       },
                       id,
+                      title,
                       availableForSale,
                       compareAtPrice
                     }
@@ -199,6 +201,7 @@ export default Vue.extend({
           `
         });
         let product = result.data.productByHandle;
+        console.log(product)
         let bundleTag = "";
         let isSingleProduct = result.data.productByHandle.tags.some(tag => {
           let isBundleTag = tag.includes("combo") || tag.includes("quant");
@@ -535,6 +538,7 @@ export default Vue.extend({
     addMessage() {
       if (this.isAdding) return "Adding...";
       else if (this.incomplete) return "Select color and size";
+      else if (this.sizeOOS) return "Size is out of stock"
       else return "Add to cart";
     },
     // g CO2 per byte: 0,000002318
@@ -577,7 +581,7 @@ export default Vue.extend({
         ];
       }
 
-      if(this.incomplete) {
+      if(this.incomplete || this.sizeOOS) {
         this.isAdding = false
       }
       else {
@@ -686,29 +690,44 @@ export default Vue.extend({
     updateChosenId(idx) {
       for (let i = 0; i < this.products.length; i++) {
         if (i === idx) {
-          let chosenVariant = this.products[i].variants.edges.find(a => {
+          let versionOpt = this.products[i].options.find(a => {
+            return a.name === 'Variant'
+          })
+
+          let chosenVariant
+          let variantVersions = this.products[i].variants.edges.filter(a => {
             let colorOpt = a.node.selectedOptions.find(b => {
-              return b.name === "Color";
-            });
+              return b.name === 'Color'
+            })
             let sizeOpt = a.node.selectedOptions.find(b => {
-              return b.name === "Size";
-            });
+              return b.name === 'Size'
+            })
+            
             return (
               this.products[i].chosenColor === colorOpt.value &&
               this.products[i].chosenSize === sizeOpt.value
-            );
-          });
+            )
+          })
+
+          for(let j = 0; j < variantVersions.length; j++) {
+            if(variantVersions[j].node.availableForSale) chosenVariant = variantVersions[j]
+          }
+
           if (chosenVariant) {
             this.products = this.products.map((a, index) => {
               if (index === idx) {
-                a.chosenId = chosenVariant.node.id;
+                a.chosenId = chosenVariant.node.id
               }
-              return a;
+              return a
             });
-            this.products[i].isProdOpen = false;
+            this.products[i].isProdOpen = false
             if (this.products[i + 1]) {
-              this.products[i + 1].isProdOpen = true;
+              this.products[i + 1].isProdOpen = true
             }
+            this.sizeOOS = false
+          }
+          else {
+            this.sizeOOS = true
           }
         }
       }
