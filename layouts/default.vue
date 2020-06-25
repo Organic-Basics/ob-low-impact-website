@@ -2,6 +2,7 @@
   <main :class="'container container-carbon--' + carbonIntensity.index + ' ' + $route.name" ref="container">
     <button class="read-more" @click="openOverlay" v-if="!$route.path.includes('offline') && !$route.path.includes('unavailable')">
       <img src="~/assets/svg/read-more.svg" alt="Read more">
+      <img src="~/assets/svg/read-more-middle.svg" alt="Read more">
     </button>
     <Navigation @openCart="openCart" @openSidebar="openSidebar" :mainSiteLink="mainSiteLink" v-if="!$route.path.includes('offline') && !$route.path.includes('unavailable')" />
     <nuxt/>
@@ -338,6 +339,9 @@ section {
   top: 20vh;
   background: none;
   left: 15vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   @include screenSizes(tabletPortrait) {
     left: 10vw;
@@ -349,13 +353,34 @@ section {
     padding: 0;
   }
 
-  img {
+  img:first-child {
     width: 75px;
+    animation-name: buttonRotate;
+    animation-duration: 40s;
+    animation-iteration-count: infinite;
 
     @include screenSizes(phone) {
       width: 70px;
     }
   }
+
+  img:nth-child(2) {
+    position: absolute;
+    height: 28px;
+
+    @include screenSizes(phone) {
+      height: 25px;
+    }
+  }
+}
+
+@keyframes buttonRotate {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 .cart__click-overlay {
@@ -366,5 +391,7 @@ section {
   width: 100vw;
   top: 0;
 }
+
+
 
 </style>

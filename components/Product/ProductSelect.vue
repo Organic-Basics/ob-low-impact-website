@@ -618,6 +618,14 @@ export default Vue.extend({
       padding: 1.5rem 0;
     }
 
+    .product__main--color {
+      margin-right: 30px;
+
+      @include screenSizes(tabletPortrait) {
+        margin-right: 0;
+      }
+    }
+
     .product__main--selection {
       display: flex;
       flex-direction: column;
@@ -631,6 +639,7 @@ export default Vue.extend({
         color: map-get($colors, "darkGrey");
         margin-top: 10px;
         margin-bottom: 20px;
+        width: 100%;
       }
 
       .product__bundle--top {

@@ -52,7 +52,7 @@
   </div>
 
   <!-- Disabled for now until we can merge the fix -->
-  <section class="product__content-block text--left" :class="{ hidden: contentfulData.hidden }" :style="{ backgroundColor: contentfulData.bgColor }">
+  <section class="product__content-block text--left" :class="{ hidden: contentfulData.hidden }">
     <div class="content-block__text">
         <h3 class="content-block__title"><span v-html="contentfulData.title"></span></h3>
         <h6 class="content-block__desc"><span v-html="contentfulData.desc"></span></h6>
@@ -1105,7 +1105,7 @@ input[type="number"] {
 
             *[stroke*="#"] {
                 stroke: map-get($colors, "black") !important;
-                stroke-width: .3;
+                stroke-width: .2;
             }
 
             *[fill="#E2E2E2"] {
@@ -1373,7 +1373,7 @@ input[type="number"] {
     }
 
     .product__content-block {
-        background: rgb(167, 143, 122);
+        background: map-get($colors, 'bgYellow');
         height: 100%;
         padding:0px;
         color: #fff;
@@ -1391,7 +1391,7 @@ input[type="number"] {
         .content-block__text {
           padding: 12vw 30px;
           display: flex;
-          flex:1;
+          flex: 1;
 
           @include screenSizes(tabletPortrait) {
             width: 100%;
@@ -1402,7 +1402,7 @@ input[type="number"] {
 
         .content-block__title {
           width: 50%;
-          color: #fff;
+          color: map-get($colors, 'green');
           font-size: 26px;
           margin:0 0 20px;
 
@@ -1414,7 +1414,7 @@ input[type="number"] {
       .content-block__desc {
         font-size: 16px;
         max-width: 350px;
-        color: #fff;
+        color: map-get($colors, 'green');
 
         @include screenSizes(tabletPortrait) {
           margin-top: 20px;

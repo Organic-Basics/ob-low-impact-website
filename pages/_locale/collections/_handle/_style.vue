@@ -287,9 +287,13 @@ export default Vue.extend({
     margin: 20px auto;
     text-align: center;
 
-    @include screenSizes(phone) {
+    @include screenSizes(tabletPortrait) {
       text-align: center;
-      margin-left: auto;
+      margin-left: auto !important;
+    }
+
+    @include screenSizes(desktopSmall) {
+      margin-left: 15%;
     }
   }
 
@@ -308,7 +312,7 @@ export default Vue.extend({
       padding: 0 20px;
       position: sticky;
       top: 160.5px;
-      width: 20%;
+      width: 15%;
 
       > h6 {
         font-weight: bold;
@@ -329,16 +333,25 @@ export default Vue.extend({
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    flex-basis: 60%;
+    flex-basis: 70%;
     margin: 0 0 20% 0;
+
+    @include screenSizes(desktopSmall) {
+      flex-basis: 85%;
+    }
 
     @include screenSizes(tabletPortrait) {
       justify-content: space-between;
       max-width: 100vw;
-      padding-left: 10px;
-      padding-right: 10px;
+      padding-left: 25px;
+      padding-right: 25px;
       flex-basis: 100%;
       margin: 0;
+    }
+
+    @include screenSizes(phone) {
+      padding-left: 10px;
+      padding-right: 10px;
     }
   }
 }

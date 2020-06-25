@@ -324,6 +324,11 @@ export default Vue.extend({
     .menu__link {
       width: fit-content;
       margin: auto;
+      margin-bottom: 5px;
+    }
+
+    h2 {
+      margin-bottom: 20px;
     }
   }
 }

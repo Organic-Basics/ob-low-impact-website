@@ -27,4 +27,8 @@ export default Vue.extend({
   stroke: map-get($colors, 'black');
   fill: none;
 }
+
+#cart__icon g {
+  stroke-width: 1.3;
+}
 </style>

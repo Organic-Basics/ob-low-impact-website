@@ -67,8 +67,8 @@ export default Vue.extend({
       max-width: 40vw;
       margin: auto;
       margin-top: -90px;
-      font-size: 8vw;
-      line-height: 10.5vw;
+      font-size: 103px;
+      line-height: 112px;
       position: absolute;
 
       @include screenSizes(tabletPortrait) {
@@ -103,8 +103,7 @@ export default Vue.extend({
       }
 
       #speedometer {
-        width: 30vw;
-        max-width: 100%;
+        width: 500px;
 
         @include screenSizes(tabletPortrait) {
           width: 70vw;

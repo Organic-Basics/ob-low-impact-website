@@ -63,7 +63,7 @@ export default Vue.extend({
   }
 
   @mixin spedometer__label {
-    font-size: 12px;
+    font-size: 14px;
     position: absolute;
   }
 
@@ -140,7 +140,7 @@ export default Vue.extend({
     }
 
     @mixin spedometer__label {
-      font-size: 12px;
+      font-size: 14px;
       position: absolute;
     }
 

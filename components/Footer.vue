@@ -62,7 +62,7 @@ export default Vue.extend({
     display: flex;
     flex-direction: row;
     padding: 0;
-    height: 370px;
+    height: 400px;
 
     @include screenSizes(tabletPortrait) {
       flex-direction: column;
