@@ -265,7 +265,7 @@ export const actions: ActionTree<RootState, RootState> = {
 
       // DEBUG HERE
       // Change value to 'very low', 'low', 'moderate', 'high' or 'very high' at your leisure
-      // carbonIntensity.intensity.index = 'moderate'
+      // carbonIntensity.intensity.index = 'low'
 
       if(carbonIntensity.intensity.index === 'very high') {
         if(this.app.router) {

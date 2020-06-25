@@ -36,8 +36,8 @@
         </div>
       </div>
 
-      <nuxt-link :to="'/' + $store.state.activeCurrency + '#manifesto'">
-        <h1 @click="closeOverlay()" class="manifesto__heading--dramatic"><span>The</span> low impact <span>manifesto</span></h1>
+      <nuxt-link :to="'/' + $store.state.activeCurrency + '#manifesto'" @click="closeOverlay()">
+        <h1  class="manifesto__heading--dramatic"><span>The</span> low impact <span>manifesto</span></h1>
       </nuxt-link>
 
     </section>
@@ -231,7 +231,7 @@ export default Vue.extend({
       text-align: left;
       padding-top: 20px;
       padding-bottom: 20px;
-
+      font-size: 13px;
 
       @media screen and (max-width: 960px) {
         width: 100%;
@@ -261,6 +261,11 @@ export default Vue.extend({
 
       li:not(.active) {
         opacity: 0.25;
+        font-weight: normal;
+
+        h6:first-child, h6:nth-child(2) {
+          font-weight: normal;
+        }
       }
 
       li {
@@ -269,9 +274,12 @@ export default Vue.extend({
         justify-content: space-between;
         padding: 5px 0;
 
+
         h6:first-child {
           margin-right: 25px;
           flex-basis: 25%;
+          font-weight: bold;
+          font-size: 13px;
 
           @include screenSizes(phoneSmall) {
             margin-right: 15px;
@@ -280,6 +288,8 @@ export default Vue.extend({
 
         h6:nth-child(2) {
           flex-basis: 75%;
+          font-weight: bold;
+          font-size: 13px;
         }
       }
     }
@@ -295,7 +305,7 @@ export default Vue.extend({
 
 .text__internet {
   @include screenSizes(phone) {
-    font-size: 25px;
+    font-size: 21px;
   }
 }
 
@@ -361,7 +371,7 @@ $carbonLabels: 'lowest', 'low', 'moderate', 'high';
     max-width: 360px;
 
     span {
-      margin-right: 20px;
+      margin-right: 30px;
       min-width: 45px;
       max-width: auto;
     }

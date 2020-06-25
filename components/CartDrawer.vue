@@ -255,7 +255,7 @@ export default Vue.extend({
     .item__image {
       background: map-get($colors, 'productGrey');
       display: flex;
-      min-height: 83px;
+      height: 83px;
       margin-right: 20px;
       min-width: 67px;
       width: 20%;
@@ -341,6 +341,7 @@ export default Vue.extend({
 
     @include screenSizes(tabletPortrait) {
       width: 100vw;
+      padding-bottom: 65px;
     }
 
     .footer__text--discount, .footer__text--total {

@@ -86,10 +86,6 @@ export default Vue.extend({
     left: 20%;
     top: -5%;
 
-    @include screenSizes(desktopSmall) {
-      left: 25%;
-    }
-
     @include screenSizesMin(largeDevices) {
       top: 0;
     }
@@ -110,10 +106,6 @@ export default Vue.extend({
     @include spedometer__label;
     right: 20%;
     top: -5%;
-
-    @include screenSizes(desktopSmall) {
-      right: 25%;
-    }
 
     @include screenSizesMin(largeDevices) {
       top: 0;

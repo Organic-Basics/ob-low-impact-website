@@ -9,7 +9,7 @@
         <nuxt-link :to="`${$store.state.activeCurrency}/collections/all-mens-products`"><h2>Shop men</h2></nuxt-link>
       </div>
       <li><nuxt-link :to="'/' + $store.state.activeCurrency + '#manifesto'">
-        <img src="~/assets/svg/scroll.svg" alt="Scroll down arrow">
+        <img class="manifesto__scroll-down" src="~/assets/svg/whatwhatwhat.svg" alt="Scroll down arrow">
       </nuxt-link></li>
     </div>
   </section>
@@ -57,9 +57,10 @@ export default Vue.extend({
     flex-direction: column;
 
     @include screenSizes(phone) {
-      height: 100vh;
+      height: auto;
       justify-content: flex-start;
-      padding-top: 18vh;
+      padding-top: 15vh;
+      padding-bottom: 12vh;
     }
 
     .manifesto__heading--dramatic {
@@ -108,6 +109,10 @@ export default Vue.extend({
         @include screenSizes(tabletPortrait) {
           width: 70vw;
         }
+
+        @include screenSizes(phone) {
+          width: 85vw;
+        }
       }
     }
 
@@ -152,6 +157,10 @@ export default Vue.extend({
         a {
           text-decoration: none;
         }
+      }
+
+      .manifesto__scroll-down {
+        width: 50px;
       }
     }
   }

@@ -284,7 +284,7 @@ export default Vue.extend({
   }
 
   .collection__heading {
-    margin: 30px auto 20px;
+    margin: 20px auto;
     text-align: center;
 
     @include screenSizes(phone) {
@@ -335,7 +335,7 @@ export default Vue.extend({
     @include screenSizes(tabletPortrait) {
       justify-content: space-between;
       max-width: 100vw;
-      padding-left: 20px;
+      padding-left: 10px;
       padding-right: 10px;
       flex-basis: 100%;
       margin: 0;

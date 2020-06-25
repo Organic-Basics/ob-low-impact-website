@@ -5,7 +5,7 @@
 	<text transform="matrix(1 0 0 1 25.0278 5.5386)" display="inline"><tspan x="0" y="0" fill="#9B9694" font-family="'CircularAirPro-Bold'" font-size="4.4">S</tspan><tspan x="2.649" y="0" fill="#9B9694" font-family="'CircularAirPro-Bold'" font-size="4.4">T </tspan><tspan x="6.459" y="0" fill="#9B9694" font-family="'CircularAirPro-Bold'" font-size="4.4">A</tspan><tspan x="9.592" y="0" fill="#9B9694" font-family="'CircularAirPro-Bold'" font-size="4.4">c</tspan><tspan x="12.012" y="0" fill="#9B9694" font-family="'CircularAirPro-Bold'" font-size="4.4">t</tspan><tspan x="13.666" y="0" fill="#9B9694" font-family="'CircularAirPro-Bold'" font-size="4.4">i</tspan><tspan x="14.876" y="0" fill="#9B9694" font-family="'CircularAirPro-Bold'" font-size="4.4">v</tspan><tspan x="17.212" y="0" fill="#9B9694" font-family="'CircularAirPro-Bold'" font-size="4.4">e </tspan><tspan x="20.732" y="0" fill="#9B9694" font-family="'CircularAirPro-Bold'" font-size="4.4">T</tspan><tspan x="23.042" y="0" fill="#9B9694" font-family="'CircularAirPro-Bold'" font-size="4.4">ee </tspan></text>
 </g><g id="STA_Womens">
 	<g>
-		<path fill="grey" stroke="#99979A" stroke-width="0.5" stroke-miterlimit="10" d="M51.241,18.143l-8.22-4.126
+		<path fill="#E2E2E2" stroke="#99979A" stroke-width="0.5" stroke-miterlimit="10" d="M51.241,18.143l-8.22-4.126
 			c0,0-1.757,0.902-5.521,0.906c-3.765-0.004-5.523-0.906-5.523-0.906l-8.218,4.126c-3.069,2.666-7.405,11.32-7.405,11.32
 			s5.04,4.084,6.802,5.242c0.353-0.353,1.669-1.821,1.669-1.821s0,0.721-0.745,27.446c2.203,0.539,12.842,0.648,13.408,0.654h0.013
 			h0.012c0.567-0.006,11.206-0.115,13.409-0.654c-0.746-26.725-0.746-27.446-0.746-27.446s2.063,1.468,2.415,1.821

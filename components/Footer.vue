@@ -106,6 +106,7 @@ export default Vue.extend({
         position: relative;
         height: 150%;
         width: 75%;
+        padding: 30px 20px 20px;
 
         @include screenSizes(tabletPortrait) {
           width: 100%;
@@ -122,6 +123,10 @@ export default Vue.extend({
 
   .footer__bottom {
     background: #D9D9D9;
+
+    @include screenSizes(phone) {
+      padding: 40px 20px;
+    }
 
     .footer__help--text {
       margin-top: 50px;

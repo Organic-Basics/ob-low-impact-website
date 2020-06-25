@@ -702,7 +702,7 @@ export default Vue.extend({
             let sizeOpt = a.node.selectedOptions.find(b => {
               return b.name === 'Size'
             })
-            
+
             return (
               this.products[i].chosenColor === colorOpt.value &&
               this.products[i].chosenSize === sizeOpt.value
@@ -963,33 +963,70 @@ input[type="number"] {
             &:first-child {
               top: 15%;
               left: 15%;
+
+              @include screenSizes(phone) {
+                top: 20%;
+                left: 13%;
+              }
             }
+
+            &:nth-child(2) {
+              @include screenSizes(phone) {
+                top: 30%;
+              }
+            }
+
             &:last-child {
               top: 30%;
               right: 15%;
+
+              @include screenSizes(phone) {
+                top: 35%;
+                right: 13%;
+              }
             }
 
             &.five {
               &:first-child {
                 top: 0%;
                 left: 0%;
+
+                @include screenSizes(phone) {
+                  top: 8%;
+                }
               }
               &:nth-child(2) {
                 top: 12%;
                 left: 12%;
+
+                @include screenSizes(phone) {
+                  top: 20%;
+                }
               }
               &:nth-child(3) {
                 top: 25%;
                 left: 25%;
+
+                @include screenSizes(phone) {
+                  top: 33%;
+                }
               }
 
               &:nth-child(4) {
                 top: 37%;
                 left: 37%;
+
+                @include screenSizes(phone) {
+                  top: 45%;
+                }
               }
               &:last-child {
                 top: 50%;
                 left: 50%;
+
+                @include screenSizes(phone) {
+                  top: 58%;
+                }
               }
             }
           }
@@ -1006,7 +1043,8 @@ input[type="number"] {
           height: fit-content;
 
           @include screenSizes(tabletPortrait) {
-            top: 62vh;
+            bottom: 27vh;
+            top: auto;
             width: 100vw;
           }
 
@@ -1040,6 +1078,10 @@ input[type="number"] {
             }
         }
 
+        .product__image-label--desc {
+          max-width: 300px;
+        }
+
         > div {
             align-items: center;
             background: map-get($colors, "productGrey");
@@ -1066,7 +1108,7 @@ input[type="number"] {
                 stroke-width: .3;
             }
 
-            *[fill="grey"] {
+            *[fill="#E2E2E2"] {
               fill: map-get($colors, "productGrey") !important;
             }
 
@@ -1347,7 +1389,7 @@ input[type="number"] {
         }
 
         .content-block__text {
-          padding: 10vw 30px;
+          padding: 12vw 30px;
           display: flex;
           flex:1;
 
@@ -1362,7 +1404,7 @@ input[type="number"] {
           width: 50%;
           color: #fff;
           font-size: 26px;
-          margin:20px 0px;
+          margin:0 0 20px;
 
           @include screenSizes(tabletPortrait) {
             width: 95%;

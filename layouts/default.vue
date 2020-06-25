@@ -353,7 +353,7 @@ section {
     width: 75px;
 
     @include screenSizes(phone) {
-      width: 60px;
+      width: 70px;
     }
   }
 }

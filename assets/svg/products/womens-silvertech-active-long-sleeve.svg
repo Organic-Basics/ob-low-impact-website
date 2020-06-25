@@ -41,7 +41,7 @@
 		<path fill="none" stroke="#99979A" stroke-width="0.5" stroke-miterlimit="10" d="M43.669,14.556c0,0-0.058,4.517-6.156,4.517"/>
 		<path fill="none" stroke="#99979A" stroke-width="0.5" stroke-miterlimit="10" d="M37.5,60.735L37.5,60.735h0.013h0.011
 			c0.547-0.005,10.817-0.11,12.944-0.631V33.586"/>
-		<path fill="grey" stroke="#99979A" stroke-width="0.5" stroke-miterlimit="10" d="M37.5,59.626L37.5,59.626h-0.013h-0.011
+		<path fill="#E2E2E2" stroke="#99979A" stroke-width="0.5" stroke-miterlimit="10" d="M37.5,59.626L37.5,59.626h-0.013h-0.011
 			c-0.548-0.006-10.817-0.11-12.944-0.632V32.478c0,0-3.39,22.618-3.869,26.024l-5.026-0.527c0.586-20.28,1.156-35.85,7.146-39.728
 			l9.374-3.982c0,0,1.696,0.871,5.33,0.875"/>
 		<path fill="none" stroke="#99979A" stroke-width="0.5" stroke-miterlimit="10" d="M24.533,32.477c0,0,0.192-11.157-1.749-14.229"

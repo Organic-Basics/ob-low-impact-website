@@ -109,7 +109,8 @@ export default Vue.extend({
   }
 
   @include screenSizes(phone) {
-    flex-basis: calc(50% - 20px);
+    flex-basis: calc(50% - 5px);
+    margin-right: 0;
   }
 
   img {

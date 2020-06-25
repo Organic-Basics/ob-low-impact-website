@@ -5,7 +5,7 @@
 	<text transform="matrix(1 0 0 1 27.3115 5.332)" display="inline"><tspan x="0" y="0" fill="#9B9694" font-family="'CircularAirPro-Bold'" font-size="4.4">T</tspan><tspan x="2.31" y="0" fill="#9B9694" font-family="'CircularAirPro-Bold'" font-size="4.4">ee</tspan></text>
 </g><g id="OC_Mens">
 	<g>
-		<path fill="grey" stroke="#99979A" stroke-width="0.5" stroke-miterlimit="10" d="M52.204,18.248l-9.374-3.982
+		<path fill="#E2E2E2" stroke="#99979A" stroke-width="0.5" stroke-miterlimit="10" d="M52.204,18.248l-9.374-3.982
 			c0,0-1.696,0.871-5.33,0.875c-3.634-0.004-5.33-0.875-5.33-0.875l-9.374,3.982c-2.963,2.574-7.868,10.928-7.868,10.928
 			s5.586,4.662,7.285,5.779c0.341-0.34,2.332-2.478,2.332-2.478v26.519c2.127,0.521,12.395,0.626,12.943,0.631v0.001H37.5h0.012
 			v-0.001c0.547-0.005,10.816-0.11,12.943-0.631V32.477c0,0,1.992,2.138,2.332,2.478c1.699-1.117,7.285-5.779,7.285-5.779

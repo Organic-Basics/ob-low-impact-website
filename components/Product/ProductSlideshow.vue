@@ -9,7 +9,7 @@
           <span v-else-if="$store.state.carbonIntensity.intensity.index === 'moderate' || $store.state.carbonIntensity.intensity.index === 'low'"><span class="label__tap">Tap</span><span class="label__click">Click</span> to see low quality images (~{{ (lowResCost).toFixed(2)}}g CO2)</span>
           <span v-else>Real images unavailable</span>
         </span>
-        <span>
+        <span class="product__image-label--desc">
           <span v-if="$store.state.carbonIntensity.intensity.index !== 'high' && $store.state.carbonIntensity.intensity.index !== 'moderate'">
             (~{{ ($store.state.carbonIntensity.intensity.index === 'very low' ? highResCost : lowResCost).toFixed(2)}}g CO2)
           </span>
@@ -132,11 +132,11 @@ export default Vue.extend({
 
 $arrowSize: 15px;
 
-.slideshow__illustration, .bundle__illustration:first-child {
-  @include screenSizes(phone) {
-    margin-top: -50px;
-  }
-}
+// .slideshow__illustration, .bundle__illustration:first-child {
+//   @include screenSizes(phone) {
+//     margin-top: -50px;
+//   }
+// }
 
 .image-container {
   &:last-child .image__click--right {
