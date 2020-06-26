@@ -79,7 +79,7 @@ export default Vue.extend({
       padding: 30px;
 
       @include screenSizes(tabletPortrait) {
-        padding: 20px;
+        padding: 50px 20px;
       }
 
       .footer__metrics--item {

@@ -63,12 +63,17 @@ export default Vue.extend({
       padding-bottom: 12vh;
     }
 
+    @include screenSizesMin(largeDevices) {
+      padding-top: 200px;
+      padding-bottom: 100px;
+    }
+
     .manifesto__heading--dramatic {
       max-width: 40vw;
       margin: auto;
-      margin-top: -90px;
+      margin-top: -84px;
       font-size: 103px;
-      line-height: 112px;
+      line-height: 125px;
       position: absolute;
 
       @include screenSizes(tabletPortrait) {
@@ -86,7 +91,7 @@ export default Vue.extend({
 
       @include screenSizesMin(largeDevices) {
         font-size: 115px;
-        line-height: 170px;
+        line-height: 152px;
       }
     }
 
@@ -111,6 +116,10 @@ export default Vue.extend({
 
         @include screenSizes(phone) {
           width: 85vw;
+        }
+
+        @include screenSizesMin(largeDevices) {
+          width: 800px;
         }
       }
     }

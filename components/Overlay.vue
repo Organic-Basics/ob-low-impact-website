@@ -30,7 +30,7 @@
       <img class="overlay__arrow-down" src="~/assets/svg/arrow_down.svg" alt="Arrow pointing down">
     </div>
 
-    <section class="bg--white">
+    <section class="bg--white overlay__internet">
       <h2 class="text--left text__internet">The internet uses electricity.</br>Quite a bit.</h2>
       <img class="image--data-center" src="~/assets/svg/data_center.svg" alt="Internet energy consumption illustration">
 
@@ -239,7 +239,7 @@ export default Vue.extend({
     justify-content: space-between;
     margin: auto;
     align-items: center;
-
+    max-width: 1400px;
 
     @media screen and (max-width: 960px) {
       padding: 0;
@@ -323,6 +323,10 @@ export default Vue.extend({
     align-items: center;
     margin: auto;
   }
+}
+
+.overlay__internet {
+  padding-top: 100px;
 }
 
 .text__internet {

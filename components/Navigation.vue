@@ -293,7 +293,7 @@ export default Vue.extend({
       height: 100%;
       justify-content: center;
       position: absolute;
-      top: 2px;
+      top: 1px;
       right: -21px;
       width: 100%;
 
