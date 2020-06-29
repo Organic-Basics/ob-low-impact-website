@@ -11,17 +11,6 @@ config.dev = process.env.NODE_ENV !== 'production'
 let isAllowed = true
 
 async function start () {
-  // Uncomment the following lines to take the site truly offline.
-  /*fastify.addHook('onRequest', (request, reply, done) => {
-    if(request.ip !== process.env.COMPANY_IP && request.ip !== process.env.JEPSTER_IP && request.ip !== process.env.RUP_IP && !config.dev) {
-      isAllowed = false
-      reply.send('The Organic Basics Low Impact Website is not available right now.\nTry our normal website at www.organicbasics.com ')
-    }
-    else {
-      done()
-    }
-  })*/
-
   // Instantiate nuxt.js
   const nuxt = new Nuxt(config)
 

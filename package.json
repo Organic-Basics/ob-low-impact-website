@@ -2,7 +2,7 @@
   "name": "ob-low-impact-website",
   "version": "1.0.0",
   "description": "Organic Basics&#39; Low Impact Website project",
-  "author": "Jesper Fogh",
+  "author": "Organic Basics",
   "private": true,
   "engines": {
     "node": "12.x.x"
@@ -14,6 +14,7 @@
     "generate": "nuxt generate",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore ."
   },
+  "license": "CSL",
   "dependencies": {
     "@nuxtjs/apollo": "^4.0.0-rc19",
     "@nuxtjs/axios": "^5.3.6",
