@@ -13,11 +13,11 @@
       <line class="st0" x1="16.1" y1="57.3" x2="32.9" y2="67"/>
       <line class="st0" x1="170" y1="16.1" x2="160.3" y2="32.9"/>
       <line class="st0" x1="211.2" y1="57.3" x2="194.4" y2="67"/>
-      <g>
+      <g id="speedometer__needle">
       	<polyline class="st0" points="111.8,102.1 71.3,74.2 76.3,97.3 41.2,72.2 	"/>
+        <polyline class="st0" points="50.9,70.8 41.2,72.2 43.2,81.9 "/>
+        <polyline class="st0" points="102.1,103.6 111.8,102.1 109.7,92.4 "/>
       </g>
-      <polyline class="st0" points="50.9,70.8 41.2,72.2 43.2,81.9 "/>
-      <polyline class="st0" points="102.1,103.6 111.8,102.1 109.7,92.4 "/>
     </svg>
   </div>
 </template>
@@ -145,39 +145,24 @@ export default Vue.extend({
       fill: none;
     }
 
-    .container-carbon--very-low & #speedometer__needle {
-      transform: rotate(45deg);
-      transform-origin: 2% 84%;
+    .container-carbon--highest & #speedometer__needle {
+      transform: rotate(134deg);
+      transform-origin: 50% 89%;
     }
 
     .container-carbon--low & #speedometer__needle {
-      transform: rotate(75deg);
-      transform-origin: 20% 75%;
+      transform-origin: 50% 115%;
+      transform: rotate(25deg);
     }
 
     .container-carbon--moderate & #speedometer__needle {
-      transform: rotate(105deg);
-      transform-origin: 30% 66%;
+      transform: rotate(55deg);
+      transform-origin: 52% 104%;
     }
 
     .container-carbon--high & #speedometer__needle {
-      transform: rotate(135deg);
-      transform-origin: 37% 61%;
-
-      #needle__line {
-        transform: scale(0.8) rotate(130deg);
-        transform-origin: 17% 31%;
-      }
-
-      #needle__arrow-up {
-        transform-origin: 5.5% 44%;
-        transform: rotate(130deg) scale(.8);
-      }
-
-      #needle__arrow-down {
-        transform-origin: 28.5% 18%;
-        transform: rotate(130deg) scale(.8);
-      }
+      transform-origin: 48% 89%;
+      transform: rotate(103deg);
     }
   }
 }
