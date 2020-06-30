@@ -22,7 +22,7 @@ const productQuery = (imageScale) => {
             }
           }
         },
-        variants(first: 50) {
+        variants(first: 100) {
           edges {
             node {
               selectedOptions {

@@ -192,9 +192,15 @@ export default Vue.extend({
           }
           products.push(a);
         }
+        // Sort bundles in the bottom
         products.sort((a, b) => {
           let result = a.node.bundleIllustrations ? 1 : -1
           return result
+        })
+        // Sort by amount of variants (more or less equals most popular products)
+        products.sort((a, b) => {
+          if(a.node.variants.edges.length > b.node.variants.edges.length) return -1
+          else return 1
         })
 
         return {
