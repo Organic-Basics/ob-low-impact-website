@@ -62,7 +62,7 @@ export default Vue.extend({
     display: flex;
     flex-direction: row;
     padding: 0;
-    height: 370px;
+    height: 400px;
 
     @include screenSizes(tabletPortrait) {
       flex-direction: column;
@@ -79,7 +79,7 @@ export default Vue.extend({
       padding: 30px;
 
       @include screenSizes(tabletPortrait) {
-        padding: 20px;
+        padding: 50px 20px;
       }
 
       .footer__metrics--item {
@@ -106,6 +106,7 @@ export default Vue.extend({
         position: relative;
         height: 150%;
         width: 75%;
+        padding: 30px 20px 20px;
 
         @include screenSizes(tabletPortrait) {
           width: 100%;
@@ -122,6 +123,10 @@ export default Vue.extend({
 
   .footer__bottom {
     background: #D9D9D9;
+
+    @include screenSizes(phone) {
+      padding: 40px 20px;
+    }
 
     .footer__help--text {
       margin-top: 50px;

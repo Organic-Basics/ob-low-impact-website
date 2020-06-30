@@ -52,7 +52,7 @@
   </div>
 
   <!-- Disabled for now until we can merge the fix -->
-  <section class="product__content-block text--left" :class="{ hidden: contentfulData.hidden }" :style="{ backgroundColor: contentfulData.bgColor }">
+  <section class="product__content-block text--left" :class="{ hidden: contentfulData.hidden }">
     <div class="content-block__text">
         <h3 class="content-block__title"><span v-html="contentfulData.title"></span></h3>
         <h6 class="content-block__desc"><span v-html="contentfulData.desc"></span></h6>
@@ -84,7 +84,8 @@ export default Vue.extend({
       switchId: 1,
       shouldShowImages: false,
       bundleIllustrations: 0,
-      isSizeGuideOpen: false
+      isSizeGuideOpen: false,
+      sizeOOS: false
     };
   },
   components: {
@@ -114,12 +115,13 @@ export default Vue.extend({
           query: gql `
             query {
               productByHandle(handle: "${params.handle}") {
-              ${productQuery(imageScale)}
+                ${productQuery(imageScale)}
               }
             }
           `
         });
         let product = result.data.productByHandle;
+        console.log(product)
         let bundleTag = "";
         let isSingleProduct = result.data.productByHandle.tags.some(tag => {
           let isBundleTag = tag.includes("combo") || tag.includes("quant");
@@ -434,6 +436,7 @@ export default Vue.extend({
     addMessage() {
       if (this.isAdding) return "Adding...";
       else if (this.incomplete) return "Select color and size";
+      else if (this.sizeOOS) return "Size is out of stock"
       else return "Add to cart";
     },
     // g CO2 per byte: 0,000002318
@@ -476,7 +479,7 @@ export default Vue.extend({
         ];
       }
 
-      if(this.incomplete) {
+      if(this.incomplete || this.sizeOOS) {
         this.isAdding = false
       }
       else {
@@ -585,29 +588,44 @@ export default Vue.extend({
     updateChosenId(idx) {
       for (let i = 0; i < this.products.length; i++) {
         if (i === idx) {
-          let chosenVariant = this.products[i].variants.edges.find(a => {
+          let versionOpt = this.products[i].options.find(a => {
+            return a.name === 'Variant'
+          })
+
+          let chosenVariant
+          let variantVersions = this.products[i].variants.edges.filter(a => {
             let colorOpt = a.node.selectedOptions.find(b => {
-              return b.name === "Color";
-            });
+              return b.name === 'Color'
+            })
             let sizeOpt = a.node.selectedOptions.find(b => {
-              return b.name === "Size";
-            });
+              return b.name === 'Size'
+            })
+
             return (
               this.products[i].chosenColor === colorOpt.value &&
               this.products[i].chosenSize === sizeOpt.value
-            );
-          });
+            )
+          })
+
+          for(let j = 0; j < variantVersions.length; j++) {
+            if(variantVersions[j].node.availableForSale) chosenVariant = variantVersions[j]
+          }
+
           if (chosenVariant) {
             this.products = this.products.map((a, index) => {
               if (index === idx) {
-                a.chosenId = chosenVariant.node.id;
+                a.chosenId = chosenVariant.node.id
               }
-              return a;
+              return a
             });
-            this.products[i].isProdOpen = false;
+            this.products[i].isProdOpen = false
             if (this.products[i + 1]) {
-              this.products[i + 1].isProdOpen = true;
+              this.products[i + 1].isProdOpen = true
             }
+            this.sizeOOS = false
+          }
+          else {
+            this.sizeOOS = true
           }
         }
       }
@@ -843,33 +861,70 @@ input[type="number"] {
             &:first-child {
               top: 15%;
               left: 15%;
+
+              @include screenSizes(phone) {
+                top: 20%;
+                left: 13%;
+              }
             }
+
+            &:nth-child(2) {
+              @include screenSizes(phone) {
+                top: 30%;
+              }
+            }
+
             &:last-child {
               top: 30%;
               right: 15%;
+
+              @include screenSizes(phone) {
+                top: 35%;
+                right: 13%;
+              }
             }
 
             &.five {
               &:first-child {
                 top: 0%;
                 left: 0%;
+
+                @include screenSizes(phone) {
+                  top: 8%;
+                }
               }
               &:nth-child(2) {
                 top: 12%;
                 left: 12%;
+
+                @include screenSizes(phone) {
+                  top: 20%;
+                }
               }
               &:nth-child(3) {
                 top: 25%;
                 left: 25%;
+
+                @include screenSizes(phone) {
+                  top: 33%;
+                }
               }
 
               &:nth-child(4) {
                 top: 37%;
                 left: 37%;
+
+                @include screenSizes(phone) {
+                  top: 45%;
+                }
               }
               &:last-child {
                 top: 50%;
                 left: 50%;
+
+                @include screenSizes(phone) {
+                  top: 58%;
+                }
               }
             }
           }
@@ -886,7 +941,8 @@ input[type="number"] {
           height: fit-content;
 
           @include screenSizes(tabletPortrait) {
-            top: 62vh;
+            bottom: 27vh;
+            top: auto;
             width: 100vw;
           }
 
@@ -920,6 +976,10 @@ input[type="number"] {
             }
         }
 
+        .product__image-label--desc {
+          max-width: 300px;
+        }
+
         > div {
             align-items: center;
             background: map-get($colors, "productGrey");
@@ -943,10 +1003,10 @@ input[type="number"] {
 
             *[stroke*="#"] {
                 stroke: map-get($colors, "black") !important;
-                stroke-width: .3;
+                stroke-width: .2;
             }
 
-            *[fill="grey"] {
+            *[fill="#E2E2E2"] {
               fill: map-get($colors, "productGrey") !important;
             }
 
@@ -1211,7 +1271,7 @@ input[type="number"] {
     }
 
     .product__content-block {
-        background: rgb(167, 143, 122);
+        background: map-get($colors, 'bgYellow');
         height: 100%;
         padding:0px;
         color: #fff;
@@ -1227,9 +1287,9 @@ input[type="number"] {
         }
 
         .content-block__text {
-          padding: 10vw 30px;
+          padding: 12vw 30px;
           display: flex;
-          flex:1;
+          flex: 1;
 
           @include screenSizes(tabletPortrait) {
             width: 100%;
@@ -1240,9 +1300,9 @@ input[type="number"] {
 
         .content-block__title {
           width: 50%;
-          color: #fff;
+          color: map-get($colors, 'green');
           font-size: 26px;
-          margin:20px 0px;
+          margin:0 0 20px;
 
           @include screenSizes(tabletPortrait) {
             width: 95%;
@@ -1252,7 +1312,7 @@ input[type="number"] {
       .content-block__desc {
         font-size: 16px;
         max-width: 350px;
-        color: #fff;
+        color: map-get($colors, 'green');
 
         @include screenSizes(tabletPortrait) {
           margin-top: 20px;

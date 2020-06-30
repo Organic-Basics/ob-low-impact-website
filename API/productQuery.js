@@ -30,6 +30,7 @@ const productQuery = (imageScale) => {
                 value
               },
               id,
+              title,
               availableForSale,
               compareAtPrice
             }

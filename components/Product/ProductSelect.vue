@@ -3,7 +3,6 @@
     <div class="product__main--top" v-if="isSingleProd || propsProduct.key == 0">
       <div>
           <h4 class="product__title">{{mainProduct.title}}</h4>
-          <!-- Disabled for now until we can merge the fix -->
           <span v-html="contentfulData.oneLiner" class="product__one-liner product__description--desktop"></span>
       </div>
       <h3 class="product__main--price">{{parseInt(mainProduct.priceRange.minVariantPrice.amount)}} {{mainProduct.priceRange.minVariantPrice.currencyCode}}
@@ -13,7 +12,6 @@
       </h3>
     </div>
     <div class="product__main--form">
-      <!-- Disabled for now until we can merge the fix -->
       <h6 v-html="contentfulData.oneLiner" class="product__one-liner product__description--mobile"></h6>
       <!-- Single product selection -->
       <div v-if="isSingleProd" class="product__main--selection-container">
@@ -114,8 +112,7 @@
                       v-for="(size, index) in cleanOptions.size.values"
                       :class="[
                         'variant__size',
-                        size === propsProduct.chosenSize ? 'variant--chosen' : '',
-                        oosSizes.includes(size) ? 'variant--oos' : ''
+                        size === propsProduct.chosenSize ? 'variant--chosen' : ''
                       ]"
                       @click="chooseSize(size, propsIdx)"
                     >
@@ -280,19 +277,26 @@ export default Vue.extend({
     oosSizes() {
       let oosVariants = this.propsProduct.variants.edges.filter(a => {
         let colorOpt = a.node.selectedOptions.find(b => {
-          return b.name === "Color";
-        });
+          return b.name === 'Color'
+        })
+        let sizeOpt = a.node.selectedOptions.find(b => {
+          return b.name === 'Size'
+        })
+        let versionOpt = a.node.selectedOptions.find(b => {
+          return b.name === 'Variant'
+        })
         return (
           this.propsProduct.chosenColor === colorOpt.value &&
+          this.propsProduct.chosenSize === sizeOpt.value &&
           !a.node.availableForSale
-        );
-      });
+        )
+      })
       return oosVariants.map(a => {
         let sizeOpt = a.node.selectedOptions.find(b => {
-          return b.name === "Size";
-        });
+          return b.name === 'Size'
+        })
         return sizeOpt.value;
-      });
+      })
     }
   },
   methods: {
@@ -300,43 +304,41 @@ export default Vue.extend({
       this.$emit("colorClicked", {
         color: color,
         idx: this.propsIdx
-      });
+      })
     },
     chooseSize(size) {
-      if (!this.oosSizes.includes(size)) {
-        this.$emit("sizeClicked", {
-          size: size,
-          idx: this.propsIdx
-        });
-      }
+      this.$emit("sizeClicked", {
+        size: size,
+        idx: this.propsIdx
+      })
     },
     addToCartFromChild() {
       this.$emit("addToCartFromChild", {
         idx: this.propsIdx
-      });
-      this.isAdding = true;
+      })
+      this.isAdding = true
       ga('send', 'event', 'LIW: Added ' + this.mainProduct.title + ' to cart', 'Click', 'Added ' + this.mainProduct.title + ' to cart')
     },
     formatPrice(amount, currencyCode) {
       let price = new Intl.NumberFormat("en-US", {
         style: "currency",
         currency: currencyCode
-      }).format(amount);
+      }).format(amount)
 
-      if (currencyCode === "DKK") price = price.replace(".00", "");
-      return price;
+      if (currencyCode === "DKK") price = price.replace(".00", "")
+      return price
     },
     switchProduct() {
-      this.$emit("switched");
-      this.propsProduct.switchProduct.isProdOpen = true;
+      this.$emit("switched")
+      this.propsProduct.switchProduct.isProdOpen = true
     },
     toggleBundleProd() {
       this.$emit("productToggled", {
         idx: this.propsIdx
-      });
+      })
     },
     toggleBundleTabs() {
-      this.isTabOpen = !this.isTabOpen;
+      this.isTabOpen = !this.isTabOpen
     }
   }
 });
@@ -616,6 +618,14 @@ export default Vue.extend({
       padding: 1.5rem 0;
     }
 
+    .product__main--color {
+      margin-right: 30px;
+
+      @include screenSizes(tabletPortrait) {
+        margin-right: 0;
+      }
+    }
+
     .product__main--selection {
       display: flex;
       flex-direction: column;
@@ -629,6 +639,7 @@ export default Vue.extend({
         color: map-get($colors, "darkGrey");
         margin-top: 10px;
         margin-bottom: 20px;
+        width: 100%;
       }
 
       .product__bundle--top {

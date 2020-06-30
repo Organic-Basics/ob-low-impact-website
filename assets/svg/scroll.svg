@@ -2,14 +2,14 @@
 <svg width="70px" height="114px" viewBox="0 0 70 114" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <title>Group 2</title>
     <g id="Desktop" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Landing-page" transform="translate(-1146.000000, -696.000000)">
+        <g id="Landing-page-Copy-2" transform="translate(-1146.000000, -696.000000)">
             <g id="Group-2" transform="translate(1146.664928, 696.855926)">
-                <text id="?" transform="translate(51.895778, 17.500000) rotate(-315.000000) translate(-51.895778, -17.500000) " font-family="CircularAirPro-Book, Circular Air Pro" font-size="26" font-weight="300" fill="#000000">
-                    <tspan x="44.8957783" y="27">?</tspan>
-                </text>
-                <g id="Group-5" transform="translate(0.000000, 30.039845)" stroke="#005245" stroke-width="2">
-                    <polyline id="Stroke-1" points="0.7067 72.6766 8.4017 80.3716 16.0967 72.6766"></polyline>
-                    <path d="M36.821,0.7498 C15.557,19.5048 12.294,41.9388 29.545,52.0418 C36.738,56.2538 43.93,51.9948 43.93,44.0018 C43.93,36.0098 32.348,31.6828 25.555,34.3928 C7.135,41.7418 7.996,55.4958 8.402,80.1988" id="Stroke-3"></path>
+              <text id="?" transform="translate(51.895778, 17.500000) rotate(-315.000000) translate(-51.895778, -17.500000) " font-family="CircularAirPro-Book, Circular Air Pro" font-size="26" font-weight="300" fill="#000000">
+                <tspan x="44.8957783" y="27">?</tspan>
+              </text>
+              <g id="Group-5" transform="translate(0.000000, 30.039845)" stroke="#005245" stroke-width="2">
+                  <polyline id="Stroke-1" points="0.7067 72.6766 8.4017 80.3716 16.0967 72.6766"></polyline>
+                  <path d="M36.821,0.7498 C15.557,19.5048 12.294,41.9388 29.545,52.0418 C36.738,56.2538 43.93,51.9948 43.93,44.0018 C43.93,36.0098 32.348,31.6828 25.555,34.3928 C7.135,41.7418 7.996,55.4958 8.402,80.1988" id="Stroke-3"></path>
                 </g>
             </g>
         </g>
