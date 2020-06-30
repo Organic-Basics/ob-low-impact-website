@@ -13,6 +13,7 @@ const productsQuery = `edges {
       variants(first:50) {
         edges {
           node {
+            id,
             priceV2 {
               amount,
               currencyCode
