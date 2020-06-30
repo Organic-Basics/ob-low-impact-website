@@ -192,6 +192,10 @@ export default Vue.extend({
           }
           products.push(a);
         }
+        products.sort((a, b) => {
+          let result = a.node.bundleIllustrations ? 1 : -1
+          return result
+        })
 
         return {
           // nuxt el : query var
