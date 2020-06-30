@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="313px" height="164px" viewBox="0 0 313 164" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Group 2</title>
+    <defs>
+        <text id="text-1" font-family="CircularAirPro-Bold, Circular Air Pro" font-size="47.2349324" font-weight="bold" line-spacing="56.9597715" fill="#285246" fill-opacity="0">
+            <tspan x="0" y="98.5999934">low</tspan>
+        </text>
+        <filter x="-0.6%" y="-0.9%" width="101.2%" height="101.8%" filterUnits="objectBoundingBox" id="filter-2">
+            <feMorphology radius="1" operator="erode" in="SourceAlpha" result="shadowSpreadInner1"></feMorphology>
+            <feOffset dx="0" dy="0" in="shadowSpreadInner1" result="shadowOffsetInner1"></feOffset>
+            <feComposite in="shadowOffsetInner1" in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="shadowInnerInner1"></feComposite>
+            <feColorMatrix values="0 0 0 0 0.156862745   0 0 0 0 0.321568627   0 0 0 0 0.274509804  0 0 0 1 0" type="matrix" in="shadowInnerInner1"></feColorMatrix>
+        </filter>
+        <filter x="-0.6%" y="-0.9%" width="101.2%" height="101.8%" filterUnits="objectBoundingBox" id="filter-3">
+            <feMorphology radius="1" operator="erode" in="SourceAlpha" result="shadowSpreadInner1"></feMorphology>
+            <feOffset dx="0" dy="0" in="shadowSpreadInner1" result="shadowOffsetInner1"></feOffset>
+            <feComposite in="shadowOffsetInner1" in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="shadowInnerInner1"></feComposite>
+            <feColorMatrix values="0 0 0 0 0.156862745   0 0 0 0 0.321568627   0 0 0 0 0.274509804  0 0 0 1 0" type="matrix" in="shadowInnerInner1"></feColorMatrix>
+        </filter>
+        <text id="text-4" font-family="CircularAirPro-Bold, Circular Air Pro" font-size="47.2349324" font-weight="bold" line-spacing="56.9597715" fill="#285246" fill-opacity="0">
+            <tspan x="93.3499946" y="98.5999934">impact</tspan>
+        </text>
+        <filter x="-0.3%" y="-0.9%" width="100.7%" height="101.8%" filterUnits="objectBoundingBox" id="filter-5">
+            <feMorphology radius="1" operator="erode" in="SourceAlpha" result="shadowSpreadInner1"></feMorphology>
+            <feOffset dx="0" dy="0" in="shadowSpreadInner1" result="shadowOffsetInner1"></feOffset>
+            <feComposite in="shadowOffsetInner1" in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="shadowInnerInner1"></feComposite>
+            <feColorMatrix values="0 0 0 0 0.156862745   0 0 0 0 0.321568627   0 0 0 0 0.274509804  0 0 0 1 0" type="matrix" in="shadowInnerInner1"></feColorMatrix>
+        </filter>
+        <filter x="-0.3%" y="-0.9%" width="100.7%" height="101.8%" filterUnits="objectBoundingBox" id="filter-6">
+            <feMorphology radius="1" operator="erode" in="SourceAlpha" result="shadowSpreadInner1"></feMorphology>
+            <feOffset dx="0" dy="0" in="shadowSpreadInner1" result="shadowOffsetInner1"></feOffset>
+            <feComposite in="shadowOffsetInner1" in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="shadowInnerInner1"></feComposite>
+            <feColorMatrix values="0 0 0 0 0.156862745   0 0 0 0 0.321568627   0 0 0 0 0.274509804  0 0 0 1 0" type="matrix" in="shadowInnerInner1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="Mobile" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="iPhone-11-Pro-Copy-118" transform="translate(-16.000000, -1655.000000)" fill="#285246">
+            <g id="Group-2" transform="translate(16.860396, 1655.584104)">
+                <text id="The-Copy-10" font-family="CircularAirPro-Bold, Circular Air Pro" font-size="47.2349324" font-weight="bold" line-spacing="56.9597715">
+                    <tspan x="85.8499946" y="47">The</tspan>
+                </text>
+                <g id="low-copy-10" fill-opacity="0">
+                    <use filter="url(#filter-2)" xlink:href="#text-1"></use>
+                    <use filter="url(#filter-3)" xlink:href="#text-1"></use>
+                </g>
+                <g id="impact-copy-10" fill-opacity="0">
+                    <use filter="url(#filter-5)" xlink:href="#text-4"></use>
+                    <use filter="url(#filter-6)" xlink:href="#text-4"></use>
+                </g>
+                <text id="manifesto-copy-10" font-family="CircularAirPro-Bold, Circular Air Pro" font-size="47.2349324" font-weight="bold" line-spacing="56.9597715">
+                    <tspan x="93.4130763" y="152.775167">manifesto</tspan>
+                </text>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -109,7 +109,8 @@ export default Vue.extend({
   }
 
   @include screenSizes(phone) {
-    flex-basis: calc(50% - 20px);
+    flex-basis: calc(50% - 5px);
+    margin-right: 0;
   }
 
   img {
@@ -161,11 +162,16 @@ export default Vue.extend({
   flex-wrap: wrap;
   background: map-get($colors, "productGrey");
   align-items: center;
-  height: 180px;
+  height: 220px;
   position: relative;
 
   @include screenSizes(tabletPortrait) {
     height: 150px;
+    padding: 15px;
+  }
+
+  @include screenSizesMin(largeDevices) {
+    height: 250px;
   }
 
   svg {
@@ -202,11 +208,15 @@ export default Vue.extend({
   overflow: hidden;
   background: map-get($colors, "productGrey");
   align-items: center;
-  height: 180px;
+  height: 220px;
   position: relative;
 
   @include screenSizes(tabletPortrait) {
     height: 150px;
+  }
+
+  @include screenSizesMin(largeDevices) {
+    height: 250px;
   }
 
   .product__illustration {

@@ -137,7 +137,7 @@ export default Vue.extend({
 
   .sidebar__body {
     padding: map-get($mobile, 'sectionPadding');
-    margin-top: 100px;
+    margin-top: 70px;
     margin-left: 20px;
 
     h3 {

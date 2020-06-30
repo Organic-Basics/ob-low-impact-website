@@ -8,38 +8,42 @@
     </header>
 
     <section class="overlay__body">
-      <ImpactMeter />
-      <h5 class="overlay__carbon">Carbon intensity: {{carbonIntensity.forecast}}g CO2/kWh</h5>
-      <div class="overlay__text--container">
-        <h6 class="overlay__carbon--desc">Our server’s carbon intensity is currently <span class="overlay__carbon-lvl">{{ carbonIndexName }}</span>. This site will continuously adapt to reflect the amount of renewable energy it’s running on.</h6>
-        <ul class="overlay__carbon-indices">
-          <li v-for="carbonIndex in carbonIndices" :class="(carbonIndex.key === carbonIntensity.index ? 'active' : '')">
-            <h6>{{carbonIndex.name}}</h6>
-            <h6>{{carbonIndex.description}}</h6>
-          </li>
-        </ul>
-      </div>
-      <div class="overlay__questions">
-        <h5 class="text--green">What, why, how?</h5>
-        <img class="overlay__arrow-down" src="~/assets/svg/arrow_down.svg" alt="Arrow pointing down">
+      <div class="overlay__body--main">
+        <div class="">
+          <ImpactMeter />
+          <h5 class="overlay__carbon">Carbon intensity: {{carbonIntensity.forecast}}g CO2/kWh</h5>
+        </div>
+        <div class="overlay__text--container">
+          <h6 class="overlay__carbon--desc">Our server’s carbon intensity is currently <span class="overlay__carbon-lvl">{{ carbonIndexName }}</span>. This site will continuously adapt to reflect the amount of renewable energy it’s running on.</h6>
+          <ul class="overlay__carbon-indices">
+            <li v-for="carbonIndex in carbonIndices" :class="(carbonIndex.key === carbonIntensity.index ? 'active' : '')">
+              <h6>{{carbonIndex.name}}</h6>
+              <h6>{{carbonIndex.description}}</h6>
+            </li>
+          </ul>
+        </div>
       </div>
     </section>
 
-    <section class="bg--white">
+    <div class="overlay__questions">
+      <h5 class="text--green">What, why, how?</h5>
+      <img class="overlay__arrow-down" src="~/assets/svg/arrow_down.svg" alt="Arrow pointing down">
+    </div>
+
+    <section class="bg--white overlay__internet">
       <h2 class="text--left text__internet">The internet uses electricity.</br>Quite a bit.</h2>
       <img class="image--data-center" src="~/assets/svg/data_center.svg" alt="Internet energy consumption illustration">
 
       <div class="overlay__questions--container">
-        <div class="overlay__questions--description text--left" v-for="item in threeQuestions">
+        <div class="overlay__questions--description text--left" v-for="(item, index) in threeQuestions">
           <span>{{ item.question }}</span>
-          <h6>{{ item.description }}</h6>
+          <div class="">
+            <h6>{{ item.description }}</h6>
+            <h6 @click="closeOverlay()" class="overlay__questions--link"><nuxt-link v-if="index === 2"  :to="'/' + $store.state.activeCurrency + '#manifesto'">Read the manifesto</nuxt-link></h6>
+          </div>
+
         </div>
       </div>
-
-      <nuxt-link :to="'/' + $store.state.activeCurrency + '#manifesto'">
-        <h1 @click="closeOverlay()" class="manifesto__heading--dramatic"><span>The</span> low impact <span>manifesto</span></h1>
-      </nuxt-link>
-
     </section>
 
     <Footer :currentBytes="footerData.currentBytes" :currentSavingsMultiplier="footerData.currentSavingsMultiplier" :currentPage="footerData.currentPage" :totalSavings="footerData.totalSavings"/>
@@ -207,6 +211,24 @@ export default Vue.extend({
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  height: 70vh;
+
+  @include screenSizes(phoneSmall) {
+    margin-top: 40px;
+  }
+
+  .overlay__body--main {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-end;
+
+    @media screen and (max-width: 960px) {
+      width: 100%;
+      flex-direction: column;
+      align-items: center;
+    }
+  }
 
   .overlay__text--container {
     position: absolute;
@@ -217,7 +239,7 @@ export default Vue.extend({
     justify-content: space-between;
     margin: auto;
     align-items: center;
-
+    max-width: 1400px;
 
     @media screen and (max-width: 960px) {
       padding: 0;
@@ -227,11 +249,11 @@ export default Vue.extend({
     }
 
     .overlay__carbon--desc {
-      max-width: 25vw;
+      max-width: 340px;
       text-align: left;
       padding-top: 20px;
       padding-bottom: 20px;
-
+      font-size: 14px;
 
       @media screen and (max-width: 960px) {
         width: 100%;
@@ -256,11 +278,16 @@ export default Vue.extend({
       }
 
       @media screen and (max-width: 960px) {
-        width: 100%;
+        max-width: fit-content;
       }
 
       li:not(.active) {
         opacity: 0.25;
+        font-weight: normal;
+
+        h6:first-child, h6:nth-child(2) {
+          font-weight: normal;
+        }
       }
 
       li {
@@ -269,9 +296,12 @@ export default Vue.extend({
         justify-content: space-between;
         padding: 5px 0;
 
+
         h6:first-child {
           margin-right: 25px;
           flex-basis: 25%;
+          font-weight: bold;
+          font-size: 14px;
 
           @include screenSizes(phoneSmall) {
             margin-right: 15px;
@@ -280,6 +310,8 @@ export default Vue.extend({
 
         h6:nth-child(2) {
           flex-basis: 75%;
+          font-weight: bold;
+          font-size: 14px;
         }
       }
     }
@@ -293,18 +325,25 @@ export default Vue.extend({
   }
 }
 
+.overlay__internet {
+  padding-top: 100px;
+}
+
 .text__internet {
+  max-width: 1300px;
+  margin: auto;
+
   @include screenSizes(phone) {
-    font-size: 25px;
+    font-size: 21px;
   }
 }
 
 .overlay__carbon {
   .container-carbon--very-low & {
-    color: map-get($colors, 'green');;
+    color: map-get($colors, 'green');
   }
   .container-carbon--low & {
-    color: map-get($colors, 'green');;
+    color: map-get($colors, 'green');
   }
   .container-carbon--moderate & {
     color: map-get($colors, 'impactYellow');
@@ -314,7 +353,7 @@ export default Vue.extend({
   }
 }
 
-$carbonLabels: 'lowest', 'low', 'moderate', 'high';
+$carbonLabels: 'very-low', 'low', 'moderate', 'high';
 
 @each $label in $carbonLabels {
   .container-carbon--#{$label} .label--#{$label} {
@@ -345,8 +384,9 @@ $carbonLabels: 'lowest', 'low', 'moderate', 'high';
 .overlay__questions--container {
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: space-between;
   margin: 60px auto;
+  max-width: 1300px;
 
   @include screenSizes(tabletPortrait) {
     flex-direction: column;
@@ -361,9 +401,15 @@ $carbonLabels: 'lowest', 'low', 'moderate', 'high';
     max-width: 360px;
 
     span {
-      margin-right: 20px;
+      margin-right: 30px;
       min-width: 45px;
       max-width: auto;
+    }
+
+    .overlay__questions--link {
+      padding-top: 15px;
+      color: map-get($colors, 'green');
+      font-weight: bold;
     }
   }
 }

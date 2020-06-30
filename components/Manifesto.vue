@@ -6,6 +6,11 @@
       <img :src="point.imgSrc" :alt="point.imgAlt">
     </div>
   </div>
+  <div class="manifesto__open-source text--left">
+    <span>Transparent code</span>
+    <p>We decided to make the source code of the Low Impact Website publicly available for companies wanting to make their own website greener.
+      <a href="https://github.com/Organic-Basics/ob-low-impact-website" target="_blank">Check it out on Github</a></p>
+  </div>
 </div>
 </template>
 
@@ -73,6 +78,7 @@ export default Vue.extend({
 </script>
 
 <style lang="scss">
+@import "~assets/scss/variables.scss";
 @import "~assets/scss/mixins.scss";
 
 .manifesto__container {
@@ -145,6 +151,25 @@ export default Vue.extend({
             margin-right: 8%;
           }
         }
+    }
+
+    .manifesto__open-source {
+      padding: 150px 1% 0 0;
+      max-width: 340px;
+
+      span {
+        font-size: 12px;
+      }
+
+      p {
+        font-size: 15px;
+        margin-top: 2px;
+      }
+
+      a {
+        color: map-get($colors, "green");
+        font-weight: bold;
+      }
     }
 }
 </style>

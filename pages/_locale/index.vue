@@ -9,7 +9,7 @@
         <nuxt-link :to="`${$store.state.activeCurrency}/collections/all-mens-products`"><h2>Shop men</h2></nuxt-link>
       </div>
       <li><nuxt-link :to="'/' + $store.state.activeCurrency + '#manifesto'">
-        <img src="~/assets/svg/scroll.svg" alt="Scroll down arrow">
+        <img class="manifesto__scroll-down" src="~/assets/svg/whatwhatwhat.svg" alt="Scroll down arrow">
       </nuxt-link></li>
     </div>
   </section>
@@ -57,17 +57,23 @@ export default Vue.extend({
     flex-direction: column;
 
     @include screenSizes(phone) {
-      height: 100vh;
+      height: auto;
       justify-content: flex-start;
-      padding-top: 18vh;
+      padding-top: 15vh;
+      padding-bottom: 12vh;
+    }
+
+    @include screenSizesMin(largeDevices) {
+      padding-top: 200px;
+      padding-bottom: 100px;
     }
 
     .manifesto__heading--dramatic {
       max-width: 40vw;
       margin: auto;
-      margin-top: -90px;
-      font-size: 8vw;
-      line-height: 10.5vw;
+      margin-top: -84px;
+      font-size: 103px;
+      line-height: 125px;
       position: absolute;
 
       @include screenSizes(tabletPortrait) {
@@ -85,7 +91,7 @@ export default Vue.extend({
 
       @include screenSizesMin(largeDevices) {
         font-size: 115px;
-        line-height: 170px;
+        line-height: 152px;
       }
     }
 
@@ -102,11 +108,18 @@ export default Vue.extend({
       }
 
       #speedometer {
-        width: 30vw;
-        max-width: 100%;
+        width: 500px;
 
         @include screenSizes(tabletPortrait) {
           width: 70vw;
+        }
+
+        @include screenSizes(phone) {
+          width: 85vw;
+        }
+
+        @include screenSizesMin(largeDevices) {
+          width: 800px;
         }
       }
     }
@@ -152,6 +165,10 @@ export default Vue.extend({
         a {
           text-decoration: none;
         }
+      }
+
+      .manifesto__scroll-down {
+        width: 50px;
       }
     }
   }

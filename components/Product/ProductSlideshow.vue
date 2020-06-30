@@ -9,7 +9,7 @@
           <span v-else-if="$store.state.carbonIntensity.intensity.index === 'moderate' || $store.state.carbonIntensity.intensity.index === 'low'"><span class="label__tap">Tap</span><span class="label__click">Click</span> to see low quality images (~{{ (lowResCost).toFixed(2)}}g CO2)</span>
           <span v-else>Real images unavailable</span>
         </span>
-        <span>
+        <span class="product__image-label--desc">
           <span v-if="$store.state.carbonIntensity.intensity.index !== 'high' && $store.state.carbonIntensity.intensity.index !== 'moderate'">
             (~{{ ($store.state.carbonIntensity.intensity.index === 'very low' ? highResCost : lowResCost).toFixed(2)}}g CO2)
           </span>
@@ -62,19 +62,16 @@
       </div>
       <div class="product__image-label" v-if="!shouldShowImages">
         <span class="product__image-label--bold">
-          <span v-if="$store.state.carbonIntensity.intensity.index !== 'high'"
-            >Tap to see real photos</span
-          >
-          <span v-else>Real photos unavailable</span>
+          <span v-if="$store.state.carbonIntensity.intensity.index === 'lowest'"><span class="label__tap">Tap</span><span class="label__click">Click</span> to see real images</span>
+          <span v-else-if="$store.state.carbonIntensity.intensity.index === 'moderate' || $store.state.carbonIntensity.intensity.index === 'low'"><span class="label__tap">Tap</span><span class="label__click">Click</span> to see low quality images (~{{ (lowResCost).toFixed(2)}}g CO2)</span>
+          <span v-else>Real images unavailable</span>
         </span>
-        <span>
-          <span v-if="$store.state.carbonIntensity.intensity.index !== 'high'">
-            (~{{
-              ($store.state.carbonIntensity.intensity.index === "very low"
-                ? highResCost
-                : lowResCost
-              ).toFixed(2)
-            }}g CO2)
+        <span class="product__image-label--desc">
+          <span v-if="$store.state.carbonIntensity.intensity.index !== 'high' && $store.state.carbonIntensity.intensity.index !== 'moderate'">
+            (~{{ ($store.state.carbonIntensity.intensity.index === 'very low' ? highResCost : lowResCost).toFixed(2)}}g CO2)
+          </span>
+          <span v-else-if="$store.state.carbonIntensity.intensity.index === 'moderate'">
+            (Our server energy mix needs to be more green for high quality images)
           </span>
           <span v-else>
             (Our server energy mix needs to be more green)
@@ -132,11 +129,11 @@ export default Vue.extend({
 
 $arrowSize: 15px;
 
-.slideshow__illustration, .bundle__illustration:first-child {
-  @include screenSizes(phone) {
-    margin-top: -50px;
-  }
-}
+// .slideshow__illustration, .bundle__illustration:first-child {
+//   @include screenSizes(phone) {
+//     margin-top: -50px;
+//   }
+// }
 
 .image-container {
   &:last-child .image__click--right {
@@ -156,24 +153,30 @@ $arrowSize: 15px;
 
     &.image__click--right {
       justify-content: flex-end;
-      right: 0;
+      right: 20px;
 
       &::after {
-        border-left: $arrowSize solid black;
-        padding-left: $arrowSize;
+        background-image: url('../../assets/svg/slideshowArrow.svg');
+        background-size: cover;
+        background-repeat: no-repeat;
+        padding: 10px;
+        margin-top: -25px;
       }
     }
     &.image__click--left {
       justify-content: flex-start;
-      left: 0;
+      left: 20px;
 
       &:first-child {
         display: none;
       }
 
       &::after {
-        border-right: $arrowSize solid black;
-        padding-right: $arrowSize;
+        background-image: url('../../assets/svg/slideshowArrow.svg');
+        background-size: cover;
+        background-repeat: no-repeat;
+        padding: 10px;
+        transform: rotate(180deg);
       }
     }
 
@@ -181,8 +184,8 @@ $arrowSize: 15px;
       border-bottom: $arrowSize solid transparent;
       border-top: $arrowSize solid transparent;
       content: '';
-      height: 0;
-      width: 0;
+      height: 20px;
+      width: 20px;
     }
   }
 }

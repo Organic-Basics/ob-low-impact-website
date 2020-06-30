@@ -293,7 +293,7 @@ export default Vue.extend({
       height: 100%;
       justify-content: center;
       position: absolute;
-      top: 2px;
+      top: 1px;
       right: -21px;
       width: 100%;
 
@@ -324,6 +324,11 @@ export default Vue.extend({
     .menu__link {
       width: fit-content;
       margin: auto;
+      margin-bottom: 5px;
+    }
+
+    h2 {
+      margin-bottom: 20px;
     }
   }
 }
