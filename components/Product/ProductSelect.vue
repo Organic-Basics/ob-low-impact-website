@@ -33,7 +33,7 @@
             <div class="product__main--option product__main--size">
               <h6 class="product__main--option--title">Size</h6>
               <div class="product__main--option-picker">
-                <span v-for="(size, index) in cleanOptions.size ? cleanOptions.size.values : []" :class="['variant__size', size === propsProduct.chosenSize ? 'variant--chosen' : '', oosSizes.includes(size) ? 'variant--oos' : '']" @click="chooseSize(size, propsIdx)">{{ size }}</span>
+                <span v-for="(size, index) in cleanOptions.size ? cleanOptions.size.values : []" :class="['variant__size', size === propsProduct.chosenSize ? 'variant--chosen' : '']" @click="chooseSize(size, propsIdx)">{{ size }}</span>
               </div>
             </div>
           </div>
@@ -141,7 +141,7 @@
       <!-- Tabs -->
       <ProductTabs v-if="isSingleProd" :propsProduct="propsProduct" />
 
-      <div class="product__main--extra" v-if="propsProduct.isLastProduct">
+      <div class="product__main--extra" v-if="isSingleProd || propsProduct.isLastProduct">
         <span class="product__main--shipping">
           Free CO2 neutral worldwide shipping available.
         </span>
@@ -273,30 +273,6 @@ export default Vue.extend({
         size: size,
         color: color
       };
-    },
-    oosSizes() {
-      let oosVariants = this.propsProduct.variants.edges.filter(a => {
-        let colorOpt = a.node.selectedOptions.find(b => {
-          return b.name === 'Color'
-        })
-        let sizeOpt = a.node.selectedOptions.find(b => {
-          return b.name === 'Size'
-        })
-        let versionOpt = a.node.selectedOptions.find(b => {
-          return b.name === 'Variant'
-        })
-        return (
-          this.propsProduct.chosenColor === colorOpt.value &&
-          this.propsProduct.chosenSize === sizeOpt.value &&
-          !a.node.availableForSale
-        )
-      })
-      return oosVariants.map(a => {
-        let sizeOpt = a.node.selectedOptions.find(b => {
-          return b.name === 'Size'
-        })
-        return sizeOpt.value;
-      })
     }
   },
   methods: {
