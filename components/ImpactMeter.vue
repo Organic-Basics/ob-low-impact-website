@@ -1,6 +1,6 @@
 <template>
   <div class="spedometer__container">
-    <span class="label--lowest">Lowest</span>
+    <span class="label--very-low">Lowest</span>
     <span class="label--low">Low</span>
     <span class="label--moderate">Medium</span>
     <span class="label--high">High</span>
@@ -86,7 +86,7 @@ export default Vue.extend({
     }
   }
 
-  .label--lowest {
+  .label--very-low {
     @include spedometer__label;
     left: -3%;
     bottom: 52%;
