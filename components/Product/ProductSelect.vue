@@ -261,7 +261,7 @@ export default Vue.extend({
     propsUpSells: Array,
     isSingleProd: Boolean,
     mainProduct: Object,
-    contentfulData: Object || Promise,
+    contentfulData: Object,
     addMessage: String
   },
   computed: {

@@ -98,7 +98,10 @@ export default Vue.extend({
     env
   }) {
     //------------------ Contentful fetching
-    let contentfulData = fetchContentfulData(params.handle, env.CTF_PRODUCT_TYPE_ID)
+    let contentfulData = {}
+    fetchContentfulData(params.handle, env.CTF_PRODUCT_TYPE_ID)
+    .then(res=>contentfulData = res)
+    .catch(err=>console.log(err))
 
     try {
       if (app && app.apolloProvider) {
@@ -120,7 +123,6 @@ export default Vue.extend({
           `
         });
         let product = result.data.productByHandle;
-        console.log(product)
         let bundleTag = "";
         let isSingleProduct = result.data.productByHandle.tags.some(tag => {
           let isBundleTag = tag.includes("combo") || tag.includes("quant");
