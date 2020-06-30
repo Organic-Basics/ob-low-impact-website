@@ -340,10 +340,10 @@ export default Vue.extend({
 
 .overlay__carbon {
   .container-carbon--very-low & {
-    color: map-get($colors, 'green');;
+    color: map-get($colors, 'green');
   }
   .container-carbon--low & {
-    color: map-get($colors, 'green');;
+    color: map-get($colors, 'green');
   }
   .container-carbon--moderate & {
     color: map-get($colors, 'impactYellow');
@@ -353,7 +353,7 @@ export default Vue.extend({
   }
 }
 
-$carbonLabels: 'lowest', 'low', 'moderate', 'high';
+$carbonLabels: 'very-low', 'low', 'moderate', 'high';
 
 @each $label in $carbonLabels {
   .container-carbon--#{$label} .label--#{$label} {

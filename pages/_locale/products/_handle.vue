@@ -51,7 +51,6 @@
     </div>
   </div>
 
-  <!-- Disabled for now until we can merge the fix -->
   <section class="product__content-block text--left" :class="{ hidden: contentfulData.hidden }">
     <div class="content-block__text">
         <h3 class="content-block__title"><span v-html="contentfulData.title"></span></h3>
