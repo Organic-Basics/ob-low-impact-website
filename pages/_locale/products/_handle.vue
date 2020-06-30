@@ -100,10 +100,7 @@ export default Vue.extend({
   }) {
     //------------------ Contentful fetching
     let contentfulData = {}
-    fetchContentfulData(params.handle, env.CTF_PRODUCT_TYPE_ID)
-    .then(res=>contentfulData = res)
-    .catch(err=>console.log(err))
-
+    contentfulData = await fetchContentfulData(params.handle, env.CTF_PRODUCT_TYPE_ID)
     try {
       if (app && app.apolloProvider) {
         await app.store.dispatch("fetchCarbonIntensity");
