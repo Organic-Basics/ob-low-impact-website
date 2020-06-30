@@ -9,7 +9,7 @@
   <div class="manifesto__open-source text--left">
     <span>Transparent code</span>
     <p>We decided to make the source code of the Low Impact Website publicly available for companies wanting to make their own website greener.
-      <a href="https://github.com/Organic-Basics/ob-low-impact-website" target="_blank">Check it out Github</a></p>
+      <a href="https://github.com/Organic-Basics/ob-low-impact-website" target="_blank">Check it out on Github</a></p>
   </div>
 </div>
 </template>
