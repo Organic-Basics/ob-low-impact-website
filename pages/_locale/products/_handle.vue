@@ -68,7 +68,11 @@ import gql from 'graphql-tag'
 import ProductSelect from '~/components/Product/ProductSelect.vue'
 import ProductSlideshow from '~/components/Product/ProductSlideshow.vue'
 import SizeGuide from "~/components/SizeGuide.vue";
-import { createClient } from "~/plugins/contentful.js";
+import fetchContentfulData from "~/API/fetchContentfulData";
+import productQuery from '~/API/productQuery'
+import getIllustrations from '~/plugins/getIllustrations'
+
+
 
 
 export default Vue.extend({
@@ -93,58 +97,9 @@ export default Vue.extend({
     params,
     env
   }) {
-     //------------------ Contentful fetching
-    const contentfulClient = createClient();
-    let contentfulData = {
-      hidden: true,
-      title: "",
-      oneLiner: null,
-      desc: "",
-      bgColor: "",
-      textColor: "#FFFFFF",
-      image: ""
-    };
-      async function fetchContentfulData(handle) {
-        try {
-          let entryData = await contentfulClient.getEntries({
-          content_type: env.CTF_PRODUCT_TYPE_ID,
-          "fields.url": handle
-          })
-      if (entryData.items.length > 0) {
-          let entry = entryData.items.shift();
-          // if a required field is missing, hide content block section
-          if (
-            entry.fields.contentBlockImage ||
-            entry.fields.contentBlockBgColor ||
-            entry.fields.contentBlockText
-          ) {
-            contentfulData.hidden = false;
-            contentfulData.title = entry.fields.contentBlockText.fields.title;
-            contentfulData.desc =
-              entry.fields.contentBlockText.fields.paragraph;
-            contentfulData.bgColor = entry.fields.contentBlockBgColor;
-            contentfulData.image =
-              entry.fields.contentBlockImage.fields.file.url;
-            // add text color if specified, else - white text
-            if (entry.fields.contentBlockTextColor) {
-              contentfulData.textColor = entry.fields.contentBlockTextColor;
-            }
-          }
-          // add one-liner description
-          if (entry.fields.oneLinerDescription) {
-            contentfulData.oneLiner = entry.fields.oneLinerDescription;
-          }
-        }
-        } catch (err){
-          console.error(err)
-        }
-
-
-      }
-
-      fetchContentfulData(params.handle)
-
     //------------------ Contentful fetching
+    let contentfulData = fetchContentfulData(params.handle, env.CTF_PRODUCT_TYPE_ID)
+
     try {
       if (app && app.apolloProvider) {
         await app.store.dispatch("fetchCarbonIntensity");
@@ -159,41 +114,7 @@ export default Vue.extend({
           query: gql `
             query {
               productByHandle(handle: "${params.handle}") {
-                title,
-                id,
-                handle,
-                description,
-                priceRange {
-                  minVariantPrice {
-                    amount,
-                    currencyCode
-                  }
-                },
-                tags,
-                options {
-                  name,
-                  values
-                }
-                images(first: 10) {
-                  edges {
-                    node {
-                      transformedSrc(maxWidth: 390, maxHeight: 390, crop: CENTER, scale: ${imageScale})
-                    }
-                  }
-                },
-                variants(first: 50) {
-                  edges {
-                    node {
-                      selectedOptions {
-                        name,
-                        value
-                      },
-                      id,
-                      availableForSale,
-                      compareAtPrice
-                    }
-                  }
-                }
+              ${productQuery(imageScale)}
               }
             }
           `
@@ -309,29 +230,8 @@ export default Vue.extend({
               });
 
               // ---------------- LAZY LOADING PHASE FOR BUNDLES
-              const functionWithPromise = handle => {
-                try {
-                  return import("~/assets/svg/products/" + handle + ".svg?raw");
-                } catch (err) {
-                  console.error(err);
-                  return null;
-                }
-              };
 
-              const anAsyncFunction = async handle => {
-                const result = functionWithPromise(handle);
-                return result;
-              };
-
-              const getIllustrations = async () => {
-                return Promise.all(
-                  illuHandles.map(handle => {
-                    return anAsyncFunction(handle);
-                  })
-                );
-              };
-
-              getIllustrations().then(data => {
+              getIllustrations(illuHandles).then(data => {
                 upSell.node.bundleIllustrations = data.map(
                   illu => illu.default
                 );
@@ -390,7 +290,6 @@ export default Vue.extend({
           let bundleProducts = bundleResult.data.products.edges;
           // Remove Gift boxes
 
-          // Can we apply a filter method instead ??
           let giftboxIndex = bundleProducts.findIndex(a => {
             if (a.node.title === "Gift Box") return true;
           });

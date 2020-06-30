@@ -29,6 +29,8 @@ import VueApollo from 'vue-apollo'
 import gql from 'graphql-tag'
 import GridProduct from '~/components/GridProduct.vue'
 import menuLinks from '~/assets/json/menuLinks.json'
+import collectionQuery from '~/API/collectionQuery'
+import getIllustrations from '~/plugins/getIllustrations'
 
 export default Vue.extend({
   components: {
@@ -44,41 +46,6 @@ export default Vue.extend({
       if (ctx.app && ctx.app.apolloProvider) {
         let client = ctx.app.apolloProvider.clients[ctx.params.locale];
         let result;
-
-        let productsQuery = `edges {
-          node {
-            handle,
-            title,
-            id,
-            tags,
-            options {
-              name,
-              values
-            },
-            description,
-            onlineStoreUrl,
-            variants(first:50) {
-              edges {
-                node {
-                  id,
-                  priceV2 {
-                    amount,
-                    currencyCode
-                  },
-                  compareAtPrice
-                }
-              }
-            },
-            images(first: 1) {
-              edges {
-                node {
-                  transformedSrc(maxWidth: 300, maxHeight: 390, crop: CENTER)
-                }
-              }
-            }
-          }
-        }`;
-
         let title = "";
         let collHandle =""
         if (ctx.params.style) {
@@ -91,7 +58,7 @@ export default Vue.extend({
             query: gql`
               query {
                 products(first: 100, query: "${styleQuery}") {
-                  ${productsQuery}
+                  ${collectionQuery}
                 }
               }
             `
@@ -105,23 +72,17 @@ export default Vue.extend({
                   title,
                   handle
                   products(first: 100) {
-                    ${productsQuery}
+                    ${collectionQuery}
                   }
                 }
               }
             `
           });
-          title = result.data.collectionByHandle.title;
-          collHandle = result.data.collectionByHandle.handle;
+          ({title, collHandle} = result.data.collectionByHandle.title)
         }
 
         // New array that only contains the Color product options
-        let productsData = [];
-        if (result.data.collectionByHandle) {
-          productsData = result.data.collectionByHandle.products.edges;
-        } else {
-          productsData = result.data.products.edges;
-        }
+        let productsData = result.data.collectionByHandle ? result.data.collectionByHandle.products.edges : result.data.products.edges
         let products = [];
         for (let i = 0; i < productsData.length; i++) {
           let a = productsData[i];
@@ -213,30 +174,8 @@ export default Vue.extend({
                 }
               });
 
-              const functionWithPromise = handle => {
-                try {
-                  return import("~/assets/svg/products/" + handle + ".svg?raw");
-                } catch (err) {
-                  console.log(err);
-                  return null;
-                }
-              };
-
-              const anAsyncFunction = async handle => {
-                const result = functionWithPromise(handle);
-                return result;
-              };
-
-              const getIllustrations = async () => {
-                return Promise.all(
-                  illuHandles.map(handle => {
-                    return anAsyncFunction(handle);
-                  })
-                );
-              };
-
               // This is where the lazy load of the illustrations is triggered
-              await getIllustrations().then(data => {
+              await getIllustrations(illuHandles).then(data => {
                 // The illustrations for the bundle are added to a new property inside of the bundle
                 a.node.bundleIllustrations = data.map(illu => illu.default);
                 // We select the first illustration as the main bundle illustration in case of quantity bundles

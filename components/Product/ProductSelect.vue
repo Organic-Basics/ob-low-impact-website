@@ -24,7 +24,7 @@
               <h6 class="product__main--option--title">Color<span v-if="propsProduct.chosenColor">: <span class="product__color-choice">{{propsProduct.chosenColor}}</span></span>
               </h6>
               <div class="product__main--option-picker">
-                <span v-for="(color, index) in cleanOptions.color.values" @click="chooseColor(color, propsIdx)"
+                <span v-for="(color, index) in cleanOptions.color ? cleanOptions.color.values : []" @click="chooseColor(color, propsIdx)"
                   :class="['variant__selector', color === propsProduct.chosenColor ? 'variant--chosen' : '']">
                   <span class="variant__selector--border"></span>
                   <span :class="'variant__selector--center variant--' + color.toLowerCase().split(' ').join('')"></span>
@@ -35,7 +35,7 @@
             <div class="product__main--option product__main--size">
               <h6 class="product__main--option--title">Size</h6>
               <div class="product__main--option-picker">
-                <span v-for="(size, index) in cleanOptions.size.values" :class="['variant__size', size === propsProduct.chosenSize ? 'variant--chosen' : '', oosSizes.includes(size) ? 'variant--oos' : '']" @click="chooseSize(size, propsIdx)">{{ size }}</span>
+                <span v-for="(size, index) in cleanOptions.size ? cleanOptions.size.values : []" :class="['variant__size', size === propsProduct.chosenSize ? 'variant--chosen' : '', oosSizes.includes(size) ? 'variant--oos' : '']" @click="chooseSize(size, propsIdx)">{{ size }}</span>
               </div>
             </div>
           </div>
@@ -264,7 +264,7 @@ export default Vue.extend({
     propsUpSells: Array,
     isSingleProd: Boolean,
     mainProduct: Object,
-    contentfulData: Object,
+    contentfulData: Object || Promise,
     addMessage: String
   },
   computed: {
