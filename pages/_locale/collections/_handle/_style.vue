@@ -124,6 +124,7 @@ export default Vue.extend({
                   .replace(/womens-/g, "")
                   .replace(/mens-/g, "");
               }
+
               let productSvg = await import(
                 "~/assets/svg/products/" + illuHandle + ".svg?raw"
               );
