@@ -53,8 +53,20 @@ module.exports = {
     '@nuxtjs/apollo',
     // Doc: https://github.com/nuxt-community/dotenv-module
     '@nuxtjs/dotenv',
-    '@nuxtjs/svg'
+    '@nuxtjs/svg',
+    'nuxt-ssr-cache'
   ],
+  /*
+  ** nuxt-ssr-cache module configuration
+  ** See https://github.com/arash16/nuxt-ssr-cache#setup
+  */
+  cache: {
+    pages: [
+      // these are prefixes of pages that need to be cached
+      // if you want to cache all pages, just include '/'
+      '/eur/collections/all-womens-products'
+    ]
+  },
   /*
   ** Axios module configuration
   ** See https://axios.nuxtjs.org/options
