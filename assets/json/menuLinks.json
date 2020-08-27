@@ -22,6 +22,10 @@
       "name" : "Dresses"
     },
     {
+      "url" : "/collections/all-womens-products/style-shirts",
+      "name" : "Shirts"
+    },
+    {
       "url" : "/collections/all-womens-products/style-socks",
       "name" : "Socks"
     },
@@ -54,6 +58,10 @@
     {
       "url" : "/collections/all-mens-products/style-tops",
       "name" : "Tees & Tops"
+    },
+    {
+      "url" : "/collections/all-mens-products/style-shirts",
+      "name" : "Shirts"
     },
     {
       "url" : "/collections/mens-accessories",

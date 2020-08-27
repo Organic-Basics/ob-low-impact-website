@@ -496,12 +496,13 @@ export default Vue.extend({
             display: flex;
             flex-direction: row;
             margin-right: 15px;
+            flex-wrap: wrap;
 
             .variant__selector {
               width: 40px;
               height: 40px;
               border-radius: 50%;
-              margin-right: 1rem;
+              margin: 1rem 1rem 0 0;
               display: inline-flex;
               position: relative;
 

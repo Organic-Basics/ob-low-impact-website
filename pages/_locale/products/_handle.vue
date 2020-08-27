@@ -71,9 +71,6 @@ import fetchContentfulData from "~/API/fetchContentfulData";
 import productQuery from '~/API/productQuery'
 import getIllustrations from '~/plugins/getIllustrations'
 
-
-
-
 export default Vue.extend({
   data() {
     return {
@@ -110,27 +107,54 @@ export default Vue.extend({
           1;
 
         let client = app.apolloProvider.clients[params.locale];
+        let mainProductHandle = params.handle
+        if(mainProductHandle.includes('over-shirt') && !mainProductHandle.includes('womens')) {
+          mainProductHandle = mainProductHandle.replace('mens-', 'womens-')
+        }
         let result = await client.query({
           query: gql `
             query {
-              productByHandle(handle: "${params.handle}") {
+              productByHandle(handle: "${mainProductHandle}") {
                 ${productQuery(imageScale)}
               }
             }
           `
         });
+        let pseudoHandle = params.handle
+        let pseudoResult
+        if(pseudoHandle !== mainProductHandle) {
+          pseudoResult = await client.query({
+            query: gql `
+              query {
+                productByHandle(handle: "${pseudoHandle}") {
+                  ${productQuery(imageScale)}
+                }
+              }
+            `
+          });
+        }
         let product = result.data.productByHandle;
+        // Override images for pseudo products
+        if(pseudoResult) {
+          product.images = pseudoResult.data.productByHandle.images
+        }
         let bundleTag = "";
         let isSingleProduct = result.data.productByHandle.tags.some(tag => {
+          // Check for bundle tags
           let isBundleTag = tag.includes("combo") || tag.includes("quant");
           if (isBundleTag) {
+            // If the bundle tag is longer than 2 pieces, it's a single product
             if (tag.split("-").length > 2) {
               return true;
             } else {
               bundleTag = tag;
+              return false
             }
           }
-          return false;
+          // If there's no bundle tag, it's a single product
+          else {
+            return true
+          }
         });
         let newData = {
           mainProduct: product,
@@ -222,8 +246,9 @@ export default Vue.extend({
 
               illuHandles.forEach(handle => {
                 if (
-                  handle.includes("accessories") ||
-                  handle.includes("socks")
+                  handle.includes('accessories') ||
+                  handle.includes('socks') ||
+                  handle.includes('over-shirt')
                 ) {
                   handle = handle.replace(/womens-/g, "").replace(/mens-/g, "");
                 }
@@ -315,10 +340,11 @@ export default Vue.extend({
         //  LOADING SVGS BASED ON IF THEY ARE SINGLE PRODUCTS OR BUNDLES
 
         if (isSingleProduct) {
-          let illuHandle = params.handle;
+          let illuHandle = mainProductHandle;
           if (
             illuHandle.includes("accessories") ||
-            illuHandle.includes("socks")
+            illuHandle.includes("socks") ||
+            illuHandle.includes('over-shirt')
           ) {
             illuHandle = illuHandle
               .replace(/womens-/g, "")
@@ -342,7 +368,7 @@ export default Vue.extend({
             let {
               handle
             } = product;
-            if (handle.includes("accessories") || handle.includes("socks")) {
+            if (handle.includes("accessories") || handle.includes("socks") || handle.includes('over-shirt')) {
               handle = handle.replace(/womens-/g, "").replace(/mens-/g, "");
             }
 

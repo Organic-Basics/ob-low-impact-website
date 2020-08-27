@@ -95,18 +95,20 @@ export default Vue.extend({
             a.node.colorValues = [];
           }
 
+          let bundleTag = ''
           let isSingleProduct = a.node.tags.some(tag => {
-            let bundleTag = "";
-            let isBundleTag = tag.includes("combo") || tag.includes("quant");
+            let isBundleTag = tag.includes('combo') || tag.includes('quant');
             if (isBundleTag) {
-              if (tag.split("-").length > 2) {
+              if (tag.split('-').length > 2) {
                 return true;
-              } else {
-                bundleTag = tag;
               }
+              else {
+                bundleTag = tag
+              }
+              return false
             }
-            return false;
           });
+          if(!bundleTag) isSingleProduct = true
           // productIllustration for single and quantity products
           // bundleIllustrations for Bundles
           let productIllustration = "";
@@ -118,7 +120,8 @@ export default Vue.extend({
               let illuHandle = a.node.handle;
               if (
                 illuHandle.includes("accessories") ||
-                illuHandle.includes("socks")
+                illuHandle.includes("socks") ||
+                illuHandle.includes('over-shirt')
               ) {
                 illuHandle = illuHandle
                   .replace(/womens-/g, "")
@@ -169,7 +172,8 @@ export default Vue.extend({
               illuHandles.forEach(handle => {
                 if (
                   handle.includes("accessories") ||
-                  handle.includes("socks")
+                  handle.includes("socks") ||
+                  handle.includes('over-shirt')
                 ) {
                   handle = handle.replace(/womens-/g, "").replace(/mens-/g, "");
                 }

@@ -111,7 +111,7 @@ module.exports = {
   },
   env: {
     CTF_SPACE_ID: process.env.VUE_APP_CONTENTFUL_SPACE_ID,
-    CTF_CDA_ACCESS_TOKEN: process.env.VUE_APP_CONTENTFUL_ACCESS_TOKEN,
+    CTF_CDA_ACCESS_TOKEN: process.env.NODE_ENV === 'development' ? process.env.VUE_APP_CONTENTFUL_DEV_TOKEN : process.env.VUE_APP_CONTENTFUL_ACCESS_TOKEN,
     CTF_PRODUCT_TYPE_ID: 'product'
   },
   pwa: {},
