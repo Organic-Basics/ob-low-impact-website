@@ -772,7 +772,6 @@ function prepProducts(products, bundleData) {
 
         products[i].isLastProduct = true
       }
-      console.log(products[i].isLastProduct)
     }
   }
 
