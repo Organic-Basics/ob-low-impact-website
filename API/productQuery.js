@@ -15,7 +15,7 @@ const productQuery = (imageScale) => {
           name,
           values
         }
-        images(first: 10) {
+        images(first: 25) {
           edges {
             node {
               transformedSrc(maxWidth: 390, maxHeight: 390, crop: CENTER, scale: ${imageScale})
