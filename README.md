@@ -22,10 +22,10 @@ To build this website, we wrote down 10 rules for how to make a low impact websi
 
 ## Setup
 
-The Low Impact Website uses Shopify's [Storefront API](https://shopify.dev/docs/storefront-api) to fetch products and basic ecommerce functionality.
+The Low Impact Website uses Shopify's [Storefront API](https://shopify.dev/docs/storefront-api) to fetch products and basic e-commerce functionality.
 It uses the [Nuxt.js framework](https://github.com/nuxt/nuxt.js).
 
-### Installation
+### Installation process
 
 To get started, you first need to install [Yarn](https://yarnpkg.com/), and then run `yarn install`.
 
