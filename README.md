@@ -6,11 +6,11 @@ The internet is dirty. Data transfer requires electricity, which creates carbon 
 
 ## Low Impact Manifesto
 
-To build this website, we wrote down 10 rules for how to make a low impact website. We share these openly, so you can use it in your own project.
+To build this website, we wrote down 10 rules for how making a low impact website. We share these openly, so you can use it in your own project.
 
 ### A low impact website:
     1. Does not load any images before they are actively requested by the user.
-    2. Minimizes the power consumption on the users device.
+    2. Minimizes the power consumption on the user's device.
     3. Adapts to reflect the amount of renewable energy it’s currently running on.
     4. Informs the user of the impact of their browsing behavior.
     5. Does not make use of videos.
@@ -22,7 +22,7 @@ To build this website, we wrote down 10 rules for how to make a low impact websi
 
 ## Setup
 
-The Low Impact Website uses Shopify's [Storefront API](https://shopify.dev/docs/storefront-api) to fetch products and basic ecommerce functionality.
+The Low Impact Website uses Shopify's [Storefront API](https://shopify.dev/docs/storefront-api) to fetch products and basic e-commerce functionality.
 It uses the [Nuxt.js framework](https://github.com/nuxt/nuxt.js).
 
 ### Installation
@@ -60,9 +60,9 @@ For a more detailed explanation on how things work, check out [Nuxt.js docs](htt
 
 ## Disclaimer
 
-The Low Impact Website code is highly customized to the Organic Basics' website setup, and will more than likely not easily transfer to your setup.
+The Low Impact Website code is highly customized to the Organic Basics website setup, and will more than likely not easily transfer to your setup.
 
-Thus the main outcomes of making this code available to the public will likely be in sharing learnings and techniques, instead of providing a plug-and-play solution for low impact websites. But if you want to make such a thing, let us know! 
+Thus the main outcomes of making this code available to the public will likely be in sharing learnings and techniques, instead of providing a plug-and-play solution for low impact websites. But if you want to do such a thing, let us know! 
 
 ## Support
 
