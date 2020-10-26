@@ -57,7 +57,7 @@ export default Vue.extend({
             // Apollo GraphQL query: fetch data
             query: gql`
               query {
-                products(first: 100, query: "${styleQuery}") {
+                products(first: 120, query: "${styleQuery}") {
                   ${collectionQuery}
                 }
               }
@@ -71,7 +71,7 @@ export default Vue.extend({
                 collectionByHandle(handle: "${ctx.params.handle}") {
                   title,
                   handle
-                  products(first: 100) {
+                  products(first: 120) {
                     ${collectionQuery}
                   }
                 }
