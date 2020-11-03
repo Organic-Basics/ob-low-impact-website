@@ -53,8 +53,14 @@ module.exports = {
     '@nuxtjs/apollo',
     // Doc: https://github.com/nuxt-community/dotenv-module
     '@nuxtjs/dotenv',
-    '@nuxtjs/svg'
+    '@nuxtjs/svg',
+    'nuxt-ssr-cache'
   ],
+  cache: {
+    pages: [
+      '/'
+    ]
+  },
   /*
   ** Axios module configuration
   ** See https://axios.nuxtjs.org/options

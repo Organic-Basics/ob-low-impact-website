@@ -28,6 +28,7 @@
     "fastify": "^2.14.1",
     "graphql-tag": "^2.10.3",
     "nuxt": "^2.0.0",
+    "nuxt-ssr-cache": "^1.5.2",
     "swiper": "^5.4.2",
     "vue-awesome-swiper": "^4.1.1"
   },
