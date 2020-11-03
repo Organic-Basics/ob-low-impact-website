@@ -67,6 +67,14 @@ module.exports = {
   */
   apollo: {
     clientConfigs: {
+      default: {
+        httpEndpoint: process.env.VUE_APP_GRAPHQL_URI_EU,
+        httpLinkOptions: {
+          headers: {
+            'X-Shopify-Storefront-Access-Token': process.env.VUE_APP_GRAPHQL_SECRET_EU
+          }
+        }
+      },
       eur: {
         httpEndpoint: process.env.VUE_APP_GRAPHQL_URI_EU,
         httpLinkOptions: {

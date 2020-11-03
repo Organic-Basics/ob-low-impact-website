@@ -1,63 +1,52 @@
 <template>
-<div class="product__container">
-  <div class="product__above">
-    <ProductSlideshow :isSingleProduct="isSingleProduct" :productIllustration="productIllustration" :shouldShowImages="shouldShowImages" @showImages="showImages()" :highResCost="highResCost" :lowResCost="lowResCost" :mainProduct="mainProduct" :bundleData="bundleData" :products="products" :switchId="switchId"/>
-    <!-- Sticky bar -->
-    <div class="product__sticky">
-      <div class="product__sticky-top">
-        <div class="product__sticky-top-left">
-          <h6 class="product__sticky-title">{{ mainProduct.title }}</h6>
-          <p class="product__sticky-price">
-            {{ parseInt(mainProduct.priceRange.minVariantPrice.amount) }}
-            {{ mainProduct.priceRange.minVariantPrice.currencyCode }}
-          </p>
+  <div class="product__container">
+    <div class="product__above">
+      <ProductSlideshow :isSingleProduct="isSingleProduct" :productIllustration="productIllustration" :shouldShowImages="shouldShowImages" @showImages="showImages()" :highResCost="highResCost" :lowResCost="lowResCost" :mainProduct="mainProduct" :bundleData="bundleData" :products="products" :switchId="switchId"/>
+      <!-- Sticky bar -->
+      <div class="product__sticky">
+        <div class="product__sticky-top">
+          <div class="product__sticky-top-left">
+            <h6 class="product__sticky-title">{{ mainProduct.title }}</h6>
+            <p class="product__sticky-price">
+              {{ parseInt(mainProduct.priceRange.minVariantPrice.amount) }}
+              {{ mainProduct.priceRange.minVariantPrice.currencyCode }}
+            </p>
+          </div>
+          <div class="product__sticky-top-right" v-if="isSingleProduct">
+            <div class="product__sticky-size">{{ products[0] ? products[0].chosenSize : '' }}</div>
+            <div :class="'product__sticky-color variant--' + (products[0] ? products[0].chosenColor.toLowerCase().split(' ').join('') : '')">
+              <span />
+            </div>
+          </div>
         </div>
-        <div class="product__sticky-top-right" v-if="isSingleProduct">
-          <div class="product__sticky-size">{{ products[0].chosenSize }}</div>
-          <div :class="
-              'product__sticky-color variant--' +
-                products[0].chosenColor
-                  .toLowerCase()
-                  .split(' ')
-                  .join('')
-            ">
-            <span></span>
+        <div class="product__sticky-bottom">
+          <div class="product__sticky--buttons">
+            <div class="product__main--quantity">
+              <span class="product__main--decrement" @click="quantity = parseInt(quantity) > 1 ? parseInt(quantity) - 1 : parseInt(quantity)">-</span>
+              <input v-model="quantity" class="product__main--quant-picker" type="number" name="quantity" min="1" >
+              <span class="product__main--increment" @click="quantity = parseInt(quantity) + 1">+</span>
+            </div>
+            <button class="product__main--add-to-cart" name="add-to-cart" @click="addToCart()">{{addMessage}}</button>
           </div>
         </div>
       </div>
-      <div class="product__sticky-bottom">
-        <div class="product__sticky--buttons">
-          <div class="product__main--quantity">
-            <span class="product__main--decrement" @click="
-                quantity =
-                  parseInt(quantity) > 1
-                    ? parseInt(quantity) - 1
-                    : parseInt(quantity)
-              ">-</span>
-            <input class="product__main--quant-picker" type="number" name="quantity" v-model="quantity" min="1" />
-            <span class="product__main--increment" @click="quantity = parseInt(quantity) + 1">+</span>
-          </div>
-          <button class="product__main--add-to-cart" name="add-to-cart" @click="addToCart()">{{addMessage}}</button>
-        </div>
-      </div>
-    </div>
-    <div class="">
-      <section class="product__main">
-        <productSelect v-for="(prod, index) in products" v-if="prod.switchId == 0 || prod.switchId == switchId || prod.switchId === undefined" :key="index" :propsIdx="index" :propsProduct="prod" :propsUpSells="upSells" :isSingleProd="isSingleProduct" :addMessage="addMessage"
-        :mainProduct="mainProduct" :contentfulData="contentfulData" @sizeClicked="onSizeChosen" @colorClicked="onColorChosen" @switched="switchId = switchId == 1 ? 2 : 1" @addToCartFromChild="addToCart()" @productToggled="toggleProduct" @sizeGuideOpened="isSizeGuideOpen = true"/>
-      </section>
+      <div class="">
+        <section class="product__main">
+          <productSelect v-for="(prod, index) in products" v-if="prod.switchId == 0 || prod.switchId == switchId || prod.switchId === undefined" :key="index" :propsIdx="index" :propsProduct="prod" :propsUpSells="upSells" :isSingleProd="isSingleProduct" :addMessage="addMessage"
+                         :mainProduct="mainProduct" :contentfulData="contentfulData" @sizeClicked="onSizeChosen" @colorClicked="onColorChosen" @switched="switchId = switchId == 1 ? 2 : 1" @addToCartFromChild="addToCart()" @productToggled="toggleProduct" @sizeGuideOpened="isSizeGuideOpen = true"/>
+        </section>
 
-      <SizeGuide :isOpen="isSizeGuideOpen" @closeSizeGuide="isSizeGuideOpen = false" />
+        <SizeGuide :isOpen="isSizeGuideOpen" @closeSizeGuide="isSizeGuideOpen = false" />
+      </div>
     </div>
+
+    <section class="product__content-block text--left" :class="{ hidden: contentfulData ? contentfulData.hidden : false }">
+      <div class="content-block__text">
+        <h3 class="content-block__title"><span v-html="contentfulData ? contentfulData.title : ''"/></h3>
+        <h6 class="content-block__desc"><span v-html="contentfulData ? contentfulData.desc : ''"/></h6>
+      </div>
+    </section>
   </div>
-
-  <section class="product__content-block text--left" :class="{ hidden: contentfulData.hidden }">
-    <div class="content-block__text">
-        <h3 class="content-block__title"><span v-html="contentfulData.title"></span></h3>
-        <h6 class="content-block__desc"><span v-html="contentfulData.desc"></span></h6>
-      </div>
-  </section>
-</div>
 </template>
 
 <script>
@@ -66,13 +55,13 @@ import VueApollo from 'vue-apollo'
 import gql from 'graphql-tag'
 import ProductSelect from '~/components/Product/ProductSelect.vue'
 import ProductSlideshow from '~/components/Product/ProductSlideshow.vue'
-import SizeGuide from "~/components/SizeGuide.vue";
-import fetchContentfulData from "~/API/fetchContentfulData";
+import SizeGuide from '~/components/SizeGuide.vue'
+import fetchContentfulData from '~/API/fetchContentfulData'
 import productQuery from '~/API/productQuery'
 import getIllustrations from '~/plugins/getIllustrations'
 
 export default Vue.extend({
-  data() {
+  data () {
     return {
       quantity: 1,
       isAdding: false,
@@ -82,14 +71,14 @@ export default Vue.extend({
       bundleIllustrations: 0,
       isSizeGuideOpen: false,
       sizeOOS: false
-    };
+    }
   },
   components: {
     ProductSelect,
     SizeGuide,
     ProductSlideshow
   },
-  async asyncData({
+  async asyncData ({
     app,
     params,
     env
@@ -99,87 +88,86 @@ export default Vue.extend({
     contentfulData = await fetchContentfulData(params.handle, env.CTF_PRODUCT_TYPE_ID) 
     try {
       if (app && app.apolloProvider) {
-        await app.store.dispatch("fetchCarbonIntensity");
+        await app.store.dispatch('fetchCarbonIntensity')
         // Use hi-res images on very low carbon intensity
-        let imageScale =
-          app.store.state.carbonIntensity.intensity.index === "very low" ?
-          2 :
-          1;
+        const imageScale =
+          app.store.state.carbonIntensity.intensity.index === 'very low' ?
+            2 :
+            1
 
-        let client = app.apolloProvider.clients[params.locale];
+        const client = app.apolloProvider.clients[params.locale]
         let mainProductHandle = params.handle
-        if(mainProductHandle.includes('over-shirt') && !mainProductHandle.includes('womens')) {
+        if (mainProductHandle.includes('over-shirt') && !mainProductHandle.includes('womens')) {
           mainProductHandle = mainProductHandle.replace('mens-', 'womens-')
         }
-        let result = await client.query({
-          query: gql `
+        const result = await client.query({
+          query: gql`
             query {
               productByHandle(handle: "${mainProductHandle}") {
                 ${productQuery(imageScale)}
               }
             }
           `
-        });
-        let pseudoHandle = params.handle
+        })
+        const pseudoHandle = params.handle
         let pseudoResult
-        if(pseudoHandle !== mainProductHandle) {
+        if (pseudoHandle !== mainProductHandle) {
           pseudoResult = await client.query({
-            query: gql `
+            query: gql`
               query {
                 productByHandle(handle: "${pseudoHandle}") {
                   ${productQuery(imageScale)}
                 }
               }
             `
-          });
+          })
         }
-        let product = result.data.productByHandle;
+        const product = result.data.productByHandle
         // Override images for pseudo products
-        if(pseudoResult) {
+        if (pseudoResult) {
           product.images = pseudoResult.data.productByHandle.images
         }
-        let bundleTag = "";
-        let isSingleProduct = result.data.productByHandle.tags.some(tag => {
+        let bundleTag = ''
+        bundleTag = result.data.productByHandle.tags.find((tag) => {
           // Check for bundle tags
-          let isBundleTag = tag.includes("combo") || tag.includes("quant");
+          const isBundleTag = tag.includes('combo') || tag.includes('quant')
           if (isBundleTag) {
             // If the bundle tag is longer than 2 pieces, it's a single product
-            if (tag.split("-").length > 2) {
-              return true;
-            } else {
-              bundleTag = tag;
+            if (tag.split('-').length > 2) {
               return false
+            } else {
+              return true
             }
+          } else {
+            // If there's no bundle tag, it's a single product
+            return false
           }
-          // If there's no bundle tag, it's a single product
-          else {
-            return true
-          }
-        });
-        let newData = {
+        })
+        const isSingleProduct = bundleTag ? false : true
+        const newData = {
           mainProduct: product,
           products: [],
-          isSingleProduct: isSingleProduct,
-          bundleData:{}
-        };
+          isSingleProduct,
+          bundleData: {}
+        }
 
         if (isSingleProduct) {
-          newData.products = prepProducts([product]);
+          newData.products = prepProducts([product])
 
-          let bundleTags = [];
-          for (let tag of product.tags) {
+          const bundleTags = []
+          for (const tag of product.tags) {
             if (
-              (tag.includes("combo") || tag.includes("quant")) &&
+              (tag.includes('combo') || tag.includes('quant')) &&
               tag.length > 5
             ) {
-              let parsedTag = tag.split("-").splice(0, 2);
-              parsedTag = parsedTag.join("-");
-              bundleTags.push(`tag:'${parsedTag}'`);
+              let parsedTag = tag.split('-').splice(0, 2)
+              parsedTag = parsedTag.join('-')
+              bundleTags.push(`tag:'${parsedTag}'`)
             }
           }
 
-          let bundleTagsStr = bundleTags.join(" OR ");
-          let upSellsResult = await client.query({
+          const bundleTagsStr = bundleTags.join(' OR ')
+          const upSellsResult = await client.query({
             query: gql `{
               products(query: "${bundleTagsStr} AND (NOT tag:'combo' OR NOT tag:'quant')", first: 15) {
                 edges {
@@ -205,75 +193,75 @@ export default Vue.extend({
                 }
               }
             }`
-          });
+          })
 
           // Sometimes query returns mainProduct as well. Filter that out.
-          newData.upSells = upSellsResult.data.products.edges.filter(a => {
-            return a.node.title !== newData.mainProduct.title;
-          });
+          newData.upSells = upSellsResult.data.products.edges.filter((a) => {
+            return a.node.title !== newData.mainProduct.title
+          })
 
           // Lazy load of the illustrations for each upSell
           try {
-            newData.upSells.forEach(upSell => {
+            newData.upSells.forEach((upSell) => {
               // Handle unisex products not having separate illustrations
-              if (upSell.node.description.split("|").length > 2) {
-                if (upSell.node.description.split("|")[1] === "complete") {
-                  upSell.node.completeBundle = true;
-                  upSell.node.quantity = null;
-                } else if (upSell.node.description.split("|")[1] === "null") {
-                  upSell.node.quantity = null;
+              if (upSell.node.description.split('|').length > 2) {
+                if (upSell.node.description.split('|')[1] === 'complete') {
+                  upSell.node.completeBundle = true
+                  upSell.node.quantity = null
+                } else if (upSell.node.description.split('|')[1] === 'null') {
+                  upSell.node.quantity = null
                 } else {
                   // Case for quant bundles
-                  upSell.node.quantity = parseInt(upSell.node.description.split("|")[1]);
+                  upSell.node.quantity = parseInt(upSell.node.description.split('|')[1])
                 }
               } else {
-                upSell.node.quantity = null;
+                upSell.node.quantity = null
               }
 
               // Getting the svg filenames to load bundle illustrations
-              let illuHandles = [];
+              let illuHandles = []
               if (upSell.node.completeBundle) {
                 illuHandles = upSell.node.description
-                  .split("|")[0]
-                  .split("---")
-                  .slice(0, 3);
+                  .split('|')[0]
+                  .split('---')
+                  .slice(0, 3)
               } else {
                 illuHandles = upSell.node.description
-                  .split("|")[0]
-                  .split("---")
-                  .slice(0, 2);
+                  .split('|')[0]
+                  .split('---')
+                  .slice(0, 2)
               }
 
-              illuHandles.forEach(handle => {
+              illuHandles.forEach((handle) => {
                 if (
                   handle.includes('accessories') ||
                   handle.includes('socks') ||
                   handle.includes('over-shirt')
                 ) {
-                  handle = handle.replace(/womens-/g, "").replace(/mens-/g, "");
+                  handle = handle.replace(/womens-/g, '').replace(/mens-/g, '')
                 }
-              });
+              })
 
               // ---------------- LAZY LOADING PHASE FOR BUNDLES
 
-              getIllustrations(illuHandles).then(data => {
+              getIllustrations(illuHandles).then((data) => {
                 upSell.node.bundleIllustrations = data.map(
                   illu => illu.default
-                );
+                )
                 upSell.node.productIllustration =
-                  upSell.node.bundleIllustrations[0];
+                  upSell.node.bundleIllustrations[0]
                 // ----------------- LAZY LOADING PHASE FOR BUNDLES
-              });
-            });
+              })
+            })
           } catch (err) {
-            console.error(err);
+            console.error(err)
           }
           // Get rid of single products that may creep in via bad GraphQL search query
           newData.upSells = newData.upSells.filter((a) => {
             return !a.node.description.includes('///')
           })
         } else {
-          let bundleResult = await client.query({
+          const bundleResult = await client.query({
             query: gql `
               query {
                 products(query: "tag:${bundleTag} AND (tag:'combo' OR tag:'quant')", first: 5) {
@@ -311,109 +299,109 @@ export default Vue.extend({
                 }
               }
             `
-          });
-          let bundleProducts = bundleResult.data.products.edges;
+          })
+          const bundleProducts = bundleResult.data.products.edges
           // Remove Gift boxes
 
-          let giftboxIndex = bundleProducts.findIndex(a => {
-            if (a.node.title === "Gift Box") return true;
-          });
-          if (giftboxIndex > -1) bundleProducts.splice(giftboxIndex, 1);
+          const giftboxIndex = bundleProducts.findIndex((a) => {
+            if (a.node.title === 'Gift Box') { return true }
+          })
+          if (giftboxIndex > -1) { bundleProducts.splice(giftboxIndex, 1) }
 
           // Sometimes query returns mainProduct as well. Filter that out.
-          const cleanedBundleProducts = bundleProducts.filter(product => {
-            return product.node.title !== newData.mainProduct.title;
-          });
+          const cleanedBundleProducts = bundleProducts.filter((product) => {
+            return product.node.title !== newData.mainProduct.title
+          })
 
           newData.bundleData = {
             tag: bundleTag,
             name: product.title,
-            type: bundleTag.split("-")[0],
+            type: bundleTag.split('-')[0],
             quantProducts: 0
-          };
+          }
           newData.products = prepProducts(
             cleanedBundleProducts,
             newData.bundleData
-          );
+          )
         }
 
         //  LOADING SVGS BASED ON IF THEY ARE SINGLE PRODUCTS OR BUNDLES
 
         if (isSingleProduct) {
-          let illuHandle = mainProductHandle;
+          let illuHandle = mainProductHandle
           if (
-            illuHandle.includes("accessories") ||
-            illuHandle.includes("socks") ||
+            illuHandle.includes('accessories') ||
+            illuHandle.includes('socks') ||
             illuHandle.includes('over-shirt')
           ) {
             illuHandle = illuHandle
-              .replace(/womens-/g, "")
-              .replace(/mens-/g, "");
+              .replace(/womens-/g, '')
+              .replace(/mens-/g, '')
           }
 
           try {
-            let productSvg = await import(
-              "~/assets/svg/products/" + illuHandle + ".svg?raw"
-            );
+            const productSvg = await import(
+              '~/assets/svg/products/' + illuHandle + '.svg?raw'
+            )
 
             if (productSvg.default) {
-              newData.productIllustration = productSvg.default;
-            } else newData.productIllustration = "";
+              newData.productIllustration = productSvg.default
+            } else { newData.productIllustration = '' }
           } catch (err) {
-            console.error(err);
-            newData.productIllustration = "";
+            console.error(err)
+            newData.productIllustration = ''
           }
         } else {
-          await newData.products.forEach(product => {
+          await newData.products.forEach((product) => {
             let {
               handle
-            } = product;
-            if (handle.includes("accessories") || handle.includes("socks") || handle.includes('over-shirt')) {
-              handle = handle.replace(/womens-/g, "").replace(/mens-/g, "");
+            } = product
+            if (handle.includes('accessories') || handle.includes('socks') || handle.includes('over-shirt')) {
+              handle = handle.replace(/womens-/g, '').replace(/mens-/g, '')
             }
 
             // ----------------- LAZY LOADING PHASE FOR BUNDLES
-            const functionWithPromise = handle => {
+            const functionWithPromise = (handle) => {
               try {
-                return import("~/assets/svg/products/" + handle + ".svg?raw");
+                return import('~/assets/svg/products/' + handle + '.svg?raw')
               } catch (err) {
-                console.error(err);
-                return null;
+                console.error(err)
+                return null
               }
+            }
+
+            const getIllustration = async (handle) => {
+              const result = await functionWithPromise(handle)
+              product.illustration = result.default
+              newData.productIllustration = product.illustration
+              return result.default
             };
 
-            const getIllustration = async handle => {
-              const result = await functionWithPromise(handle);
-              product.illustration = result.default;
-              newData.productIllustration = product.illustration;
-              return result.default;
-            };
-
-            getIllustration(handle);
+            getIllustration(handle)
             // ----------------- LAZY LOADING PHASE FOR BUNDLES
-          });
+          })
         }
 
-        newData.upSells = newData.upSells ? newData.upSells : [];
-        newData.contentfulData = contentfulData;
+        newData.upSells = newData.upSells ? newData.upSells : []
+        newData.contentfulData = contentfulData
 
-        return newData;
+        return newData
       } else {
         return {
           mainProduct: {
             images: {
               edges: [{
                 node: {
-                  transformedSrc: ""
+                  transformedSrc: ''
                 }
               }]
             },
-            title: "",
-            productIllustration: "",
+            title: '',
+            productIllustration: '',
             priceRange: {
               minVariantPrice: {
-                amount: "",
-                currencyCode: ""
+                amount: '',
+                currencyCode: ''
               }
             }
           },
@@ -421,28 +409,28 @@ export default Vue.extend({
           products: [],
           isSingleProduct: true,
           bundleData: {
-            tag: "",
-            name: ""
+            tag: '',
+            name: ''
           }
-        };
+        }
       }
     } catch (err) {
-      console.error(err);
+      console.error(err)
       return {
         mainProduct: {
           images: {
             edges: [{
               node: {
-                transformedSrc: ""
+                transformedSrc: ''
               }
             }]
           },
-          title: "",
-          productIllustration: "",
+          title: '',
+          productIllustration: '',
           priceRange: {
             minVariantPrice: {
-              amount: "",
-              currencyCode: ""
+              amount: '',
+              currencyCode: ''
             }
           }
         },
@@ -450,109 +438,110 @@ export default Vue.extend({
         products: [],
         isSingleProduct: true,
         bundleData: {
-          tag: "",
-          name: ""
+          tag: '',
+          name: ''
         }
-      };
+      }
     }
   },
   computed: {
-    addMessage() {
-      if (this.isAdding) return "Adding...";
-      else if (this.incomplete) return "Select color and size";
-      else if (this.sizeOOS) return "Size is out of stock"
-      else return "Add to cart";
+    addMessage () {
+      if (this.isAdding) {
+        return 'Adding...'
+      } else if (this.incomplete) {
+        return 'Select color and size'
+      } else if (this.sizeOOS) {
+        return 'Size is out of stock'
+      } else {
+        return 'Add to cart'
+      }
     },
     // g CO2 per byte: 0,000002318
     // Avg per low image: 6,5 kb => 6656 bytes
     // Avg per high image: 22 kb => 22528 bytes
-    highResCost() {
-      const co2PerHighImage = 0.05;
-      if (this.mainProduct)
-        return this.mainProduct.images.edges.length * co2PerHighImage;
-      else return co2PerHighImage;
+    highResCost () {
+      const co2PerHighImage = 0.05
+      if (this.mainProduct) {
+        return this.mainProduct.images.edges.length * co2PerHighImage
+      } else {
+        return co2PerHighImage
+      }
     },
-    lowResCost() {
-      const co2PerLowImage = 0.015;
-      if (this.mainProduct)
-        return this.mainProduct.images.edges.length * co2PerLowImage;
-      else return co2PerLowImage;
+    lowResCost () {
+      const co2PerLowImage = 0.015
+      if (this.mainProduct) {
+        return this.mainProduct.images.edges.length * co2PerLowImage
+      } else { return co2PerLowImage }
     }
   },
   methods: {
-    openCart() {
-      this.$emit("openCartFromHandle");
+    openCart () {
+      this.$emit('openCartFromHandle')
     },
 
-    async addToCart() {
-      this.isAdding = true;
-      let cartIds = this.$store.getters.cartIds;
+    async addToCart () {
+      this.isAdding = true
+      let cartIds = this.$store.getters.cartIds
 
-      this.$parent.$emit("openCartFromNuxtChild");
+      this.$parent.$emit('openCartFromNuxtChild')
 
-      let customAttributes = [];
+      let customAttributes = []
       if (this.bundleData && this.bundleData.tag && this.bundleData.name) {
         customAttributes = [{
-            key: "_bundle_id",
-            value: this.bundleData.tag
-          },
-          {
-            key: "Bundle",
-            value: this.bundleData.name
-          }
-        ];
+          key: '_bundle_id',
+          value: this.bundleData.tag
+        },
+        {
+          key: 'Bundle',
+          value: this.bundleData.name
+        }
+        ]
       }
 
-      if(this.incomplete || this.sizeOOS) {
+      if (this.incomplete || this.sizeOOS) {
         this.isAdding = false
       }
       else {
-        for (let prod of this.products) {
+        for (const prod of this.products) {
           // If the product has a switchId, and it's not the active one, skip loop
-          if (
-            prod.switchId != 0 &&
-            prod.switchId != this.switchId &&
-            prod.switchId !== undefined
-          )
-            continue;
+          // eslint-disable-next-line eqeqeq
+          if (prod.switchId != 0 && prod.switchId != this.switchId && prod.switchId !== undefined) { continue }
 
           // If this id is already in the cart, increase the quantity of it before sending to Shopify
-          cartIds = cartIds.map(a => {
+          cartIds = cartIds.map((a) => {
             if (
-              a.variantId === prod.chosenId &&
-              JSON.stringify(a.customAttributes) ==
-              JSON.stringify(customAttributes)
+              // eslint-disable-next-line eqeqeq
+              a.variantId === prod.chosenId && JSON.stringify(a.customAttributes) == JSON.stringify(customAttributes)
             ) {
-              a.quantity += parseInt(this.quantity);
-              return a;
+              a.quantity += parseInt(this.quantity)
+              return a
             } else {
-              return a;
+              return a
             }
-          });
+          })
 
           // If this id is not in the cart, add it to the cartIds that are sent to Shopify
           if (
-            !cartIds.some(a => {
+            !cartIds.some((a) => {
               return (
-                a.variantId === prod.chosenId &&
-                JSON.stringify(a.customAttributes) ==
-                JSON.stringify(customAttributes)
-              );
+                // eslint-disable-next-line eqeqeq
+                a.variantId === prod.chosenId && JSON.stringify(a.customAttributes) == JSON.stringify(customAttributes)
+              )
             })
           ) {
-            let newCartId = {
+            const newCartId = {
               variantId: prod.chosenId,
               quantity: parseInt(this.quantity)
-            };
-            if (this.bundleData && this.bundleData.tag && this.bundleData.name) {
-              newCartId.customAttributes = customAttributes;
             }
-            cartIds = [...cartIds, ...[newCartId]];
+            if (this.bundleData && this.bundleData.tag && this.bundleData.name) {
+              newCartId.customAttributes = customAttributes
+            }
+            cartIds = [...cartIds, ...[newCartId]]
           }
         }
 
-        let result = await this.$apollo.mutate({
-          mutation: gql `
+        await this.$apollo.mutate({
+          mutation: gql`
             mutation(
               $checkoutId: ID!
               $lineItems: [CheckoutLineItemInput!]!
@@ -590,49 +579,45 @@ export default Vue.extend({
             lineItems: cartIds,
             checkoutAttributes: {
               customAttributes: [{
-                key: "isLowImpactWebsite",
-                value: "true"
+                key: 'isLowImpactWebsite',
+                value: 'true'
               }]
             }
           }
-        });
-        this.isAdding = false;
-        this.$store.dispatch("fetchCart");
+        })
+        this.isAdding = false
+        this.$store.dispatch('fetchCart')
       }
     },
 
-    showImages() {
+    showImages () {
       // Only show images if intensity is lower than high
-      this.shouldShowImages =
-        this.$store.state.carbonIntensity.intensity.index === "high" ?
-        false :
-        true;
+      this.shouldShowImages = this.$store.state.carbonIntensity.intensity.index !== 'high'
     },
 
-    updateChosenId(idx) {
+    updateChosenId (idx) {
       for (let i = 0; i < this.products.length; i++) {
         if (i === idx) {
-          let versionOpt = this.products[i].options.find(a => {
-            return a.name === 'Variant'
-          })
-
           let chosenVariant
-          let variantVersions = this.products[i].variants.edges.filter(a => {
-            let colorOpt = a.node.selectedOptions.find(b => {
+          const variantVersions = this.products[i].variants.edges.filter((a) => {
+            const colorOpt = a.node.selectedOptions.find((b) => {
               return b.name === 'Color'
             })
-            let sizeOpt = a.node.selectedOptions.find(b => {
+            const sizeOpt = a.node.selectedOptions.find((b) => {
               return b.name === 'Size'
             })
 
+            if (!this.products[i]) {
+              return false
+            }
             return (
               this.products[i].chosenColor === colorOpt.value &&
               this.products[i].chosenSize === sizeOpt.value
             )
           })
 
-          for(let j = 0; j < variantVersions.length; j++) {
-            if(variantVersions[j].node.availableForSale) chosenVariant = variantVersions[j]
+          for (let j = 0; j < variantVersions.length; j++) {
+            if (variantVersions[j].node.availableForSale) { chosenVariant = variantVersions[j] }
           }
 
           if (chosenVariant) {
@@ -641,7 +626,7 @@ export default Vue.extend({
                 a.chosenId = chosenVariant.node.id
               }
               return a
-            });
+            })
             this.products[i].isProdOpen = false
             if (this.products[i + 1]) {
               this.products[i + 1].isProdOpen = true
@@ -655,49 +640,49 @@ export default Vue.extend({
       }
 
       this.incomplete = !this.products.some((a) => {
-        if(a.chosenId) return true
-        else return false
+        if (a.chosenId) { return true }
+        else { return false }
       })
     },
 
-    onSizeChosen(data) {
+    onSizeChosen (data) {
       this.products = this.products.map((a, i) => {
         if (i === data.idx) {
-          a.chosenSize = data.size;
+          a.chosenSize = data.size
         }
-        return a;
-      });
-      this.updateChosenId(data.idx);
+        return a
+      })
+      this.updateChosenId(data.idx)
     },
 
-    onColorChosen(data) {
+    onColorChosen (data) {
       this.products = this.products.map((a, i) => {
         if (i === data.idx) {
-          a.chosenColor = data.color;
+          a.chosenColor = data.color
         }
-        return a;
-      });
-      this.updateChosenId(data.idx);
+        return a
+      })
+      this.updateChosenId(data.idx)
     },
 
-    toggleProduct(data) {
+    toggleProduct (data) {
       this.products = this.products.map((a, i) => {
         if (i === data.idx) {
-          a.isProdOpen = !a.isProdOpen;
+          a.isProdOpen = !a.isProdOpen
         } else {
-          a.isProdOpen = false;
+          a.isProdOpen = false
         }
-        return a;
-      });
+        return a
+      })
     }
   }
-});
+})
 
-function prepProducts(products, bundleData) {
-  let productTemplate = {
-    chosenColor: "",
-    chosenSize: "",
-    chosenId: "",
+function prepProducts (products, bundleData) {
+  const productTemplate = {
+    chosenColor: '',
+    chosenSize: '',
+    chosenId: '',
     isProdOpen: false,
     tabs: {
       desc: [],
@@ -705,96 +690,94 @@ function prepProducts(products, bundleData) {
       materialCare: [],
       features: []
     }
-  };
+  }
 
-  let quantProducts = [];
+  const quantProducts = []
 
   for (let i = 0; i < products.length; i++) {
-    if (products[i].node)
-      products[i] = { ...productTemplate,
-        ...products[i].node
-      };
-    else products[i] = { ...productTemplate,
-      ...products[i]
-    };
+    if (products[i].node) {
+      products[i] = { ...productTemplate, ...products[i].node }
+    } else {
+      products[i] = { ...productTemplate, ...products[i] }
+    }
 
     if (products[i].variants.edges.length > 1) {
       // Preselect the first color, if there's only one to choose from
       if (
-        products[i].options.find(a => a.name === "Color").values.length === 1
+        products[i].options.find(a => a.name === 'Color').values.length === 1
       ) {
         products[i].chosenColor = products[
           i
         ].variants.edges[0].node.selectedOptions.find(
-          a => a.name === "Color"
-        ).value;
+          a => a.name === 'Color'
+        ).value
       }
     }
-    if (products[i].description.split("|").length > 1) {
-      let productText = products[i].description.split("|");
-      products[i].tabs.desc = productText[0].split("///");
-      products[i].tabs.fitSize = productText[1].split("///");
-      products[i].tabs.materialCare = productText[2].split("///");
-      products[i].tabs.features = productText[3].split(",");
+    if (products[i].description.split('|').length > 1) {
+      const productText = products[i].description.split('|')
+      if (productText.length > 0) { products[i].tabs.desc = productText[0].split('///') }
+      if (productText.length > 1) { products[i].tabs.fitSize = productText[1].split('///') }
+      if (productText.length > 2) { products[i].tabs.materialCare = productText[2].split('///') }
+      if (productText.length > 3) { products[i].tabs.features = productText[3].split(',') }
     }
 
     if (bundleData) {
-      let productBundleTag = products[i].tags.find(tag => {
-        return tag.includes(bundleData.tag);
-      });
-      products[i].switchId = parseInt(productBundleTag.split("-")[3]);
+      const productBundleTag = products[i].tags.find((tag) => {
+        return tag.includes(bundleData.tag)
+      })
+      products[i].switchId = parseInt(productBundleTag.split('-')[3])
 
-      if (productBundleTag.includes("quant")) {
-        let quantCount = parseInt(productBundleTag.split("-")[4]);
+      if (productBundleTag.includes('quant')) {
+        const quantCount = parseInt(productBundleTag.split('-')[4])
         for (let j = 0; j < quantCount - 1; j++) {
-          let quantProduct = JSON.parse(JSON.stringify(products[0]));
-          quantProducts.push(quantProduct);
+          const quantProduct = JSON.parse(JSON.stringify(products[0]))
+          quantProducts.push(quantProduct)
         }
       }
     }
   }
 
-  products = products.concat(quantProducts);
+  products = products.concat(quantProducts)
 
   if (bundleData) {
     // Figure out which switch product corresponds to this one
-    products = products.map(a => {
+    products = products.map((a) => {
       if (a.switchId === 1) {
-        a.switchProduct = products.find(a => {
-          return a.switchId === 2;
-        });
+        a.switchProduct = products.find((a) => {
+          return a.switchId === 2
+        })
       } else if (a.switchId === 2) {
-        a.switchProduct = products.find(a => {
-          return a.switchId === 1;
-        });
+        a.switchProduct = products.find((a) => {
+          return a.switchId === 1
+        })
       }
-      return a;
-    });
+      return a
+    })
 
     // Sort products based on their switchId. Non-switchables go first, then switchId = 1, etc.
     products.sort((a, b) => {
-      if (a.switchId < b.switchId) return -1;
-      else return 1;
-    });
+      if (a.switchId < b.switchId) { return -1 }
+      else { return 1 }
+    })
 
     // Add a unique key to the products
     // Since switch products share the same number in the bundle list view, we need to set this here
-    let switchListIndex;
+    let switchListIndex
     for (let i = 0; i < products.length; i++) {
-      products[i].key = i;
+      products[i].key = i
 
       if (i === 0) {
-        products[i].isProdOpen = true;
+        products[i].isProdOpen = true
       }
-      if(i === products.length - 1) products[i].isLastProduct = true
-      else products[i].isLastProduct = false
+      if (i === products.length - 1) { products[i].isLastProduct = true }
+      else { products[i].isLastProduct = false }
 
       if (products[i].switchId < 1) {
-        products[i].listIndex = i;
+        products[i].listIndex = i
       } else {
         // Set the switchListIndex to the first index found
-        if (!switchListIndex) switchListIndex = i;
-        products[i].listIndex = switchListIndex;
+        if (!switchListIndex) { switchListIndex = i }
+        products[i].listIndex = switchListIndex
 
         products[i].isLastProduct = true
       }
@@ -803,10 +786,10 @@ function prepProducts(products, bundleData) {
 
   bundleData &&
     (bundleData.quantProducts = products.reduce((acc, product) => {
-      return product.switchId > 1 ? acc : acc + 1;
-    }, 0));
+      return product.switchId > 1 ? acc : acc + 1
+    }, 0))
 
-  return products;
+  return products
 }
 </script>
 
