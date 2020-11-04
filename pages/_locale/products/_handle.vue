@@ -130,7 +130,7 @@ export default Vue.extend({
         let bundleTag = ''
         bundleTag = result.data.productByHandle.tags.find((tag) => {
           // Check for bundle tags
-          const isBundleTag = tag.includes('combo') || tag.includes('quant')
+          const isBundleTag = tag.includes('combo-') || tag.includes('quant-')
           if (isBundleTag) {
             // If the bundle tag is longer than 2 pieces, it's a single product
             if (tag.split('-').length > 2) {
