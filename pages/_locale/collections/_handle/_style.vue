@@ -38,21 +38,21 @@ export default Vue.extend({
   },
   data: () => {
     return {
-      menuLinks: menuLinks
+      menuLinks
     }
   },
-  async asyncData(ctx) {
+  async asyncData (ctx) {
     try {
       if (ctx.app && ctx.app.apolloProvider) {
-        let client = ctx.app.apolloProvider.clients[ctx.params.locale];
-        let result;
-        let title = "";
-        let collHandle =""
+        const client = ctx.app.apolloProvider.clients[ctx.params.locale]
+        let result
+        let title = ''
+        let collHandle =''
         if (ctx.params.style) {
-          let gender = ctx.params.handle.match(/[wo]*mens/g);
-          let style = ctx.params.style.replace(/style-/, "");
-          title = style.charAt(0).toUpperCase() + style.slice(1);
-          let styleQuery = `${gender}, ${style}`;
+          const gender = ctx.params.handle.match(/[wo]*mens/g)
+          const style = ctx.params.style.replace(/style-/, '')
+          title = style.charAt(0).toUpperCase() + style.slice(1)
+          const styleQuery = `${gender}, ${style}`
           result = await client.query({
             // Apollo GraphQL query: fetch data
             query: gql`
@@ -62,7 +62,7 @@ export default Vue.extend({
                 }
               }
             `
-          });
+          })
         } else {
           result = await client.query({
             // Apollo GraphQL query: fetch data
@@ -78,151 +78,157 @@ export default Vue.extend({
               }
             `
           });
-          ({title, collHandle} = result.data.collectionByHandle.title)
+          ({ title, collHandle } = result.data.collectionByHandle.title)
         }
 
         // New array that only contains the Color product options
-        let productsData = result.data.collectionByHandle ? result.data.collectionByHandle.products.edges : result.data.products.edges
-        let products = [];
+        const productsData = result.data.collectionByHandle ? result.data.collectionByHandle.products.edges : result.data.products.edges
+        const products = []
         for (let i = 0; i < productsData.length; i++) {
-          let a = productsData[i];
+          const a = productsData[i]
           if (a.node.options) {
             // Find the Color product option
-            let colorOpt = a.node.options.find(b => b.name === "Color");
-            if (colorOpt) a.node.colorValues = colorOpt.values;
-            else a.node.colorValues = [];
+            const colorOpt = a.node.options.find(b => b.name === 'Color')
+            if (colorOpt) {
+              a.node.colorValues = colorOpt.values
+            } else {
+              a.node.colorValues = []
+            }
           } else {
-            a.node.colorValues = [];
+            a.node.colorValues = []
           }
 
           let bundleTag = ''
-          let isSingleProduct = a.node.tags.some(tag => {
-            let isBundleTag = tag.includes('combo') || tag.includes('quant');
+          let isSingleProduct = a.node.tags.some((tag) => {
+            const isBundleTag = tag.includes('combo') || tag.includes('quant')
             if (isBundleTag) {
               if (tag.split('-').length > 2) {
-                return true;
+                return true
               }
               else {
                 bundleTag = tag
               }
               return false
             }
-          });
-          if(!bundleTag) isSingleProduct = true
+          })
+          if (!bundleTag) {
+            isSingleProduct = true
+          }
           // productIllustration for single and quantity products
           // bundleIllustrations for Bundles
-          let productIllustration = "";
-          let bundleIllustrations = "";
-          a.node.isSingleProduct = isSingleProduct;
+          a.node.isSingleProduct = isSingleProduct
           if (isSingleProduct) {
             try {
               // Handle unisex products not having separate illustrations
-              let illuHandle = a.node.handle;
+              let illuHandle = a.node.handle
               if (
-                illuHandle.includes("accessories") ||
-                illuHandle.includes("socks") ||
+                illuHandle.includes('accessories') ||
+                illuHandle.includes('socks') ||
                 illuHandle.includes('over-shirt')
               ) {
                 illuHandle = illuHandle
-                  .replace(/womens-/g, "")
-                  .replace(/mens-/g, "");
+                  .replace(/womens-/g, '')
+                  .replace(/mens-/g, '')
               }
 
-              let productSvg = await import(
-                "~/assets/svg/products/" + illuHandle + ".svg?raw"
-              );
+              const productSvg = await import(
+                '~/assets/svg/products/' + illuHandle + '.svg?raw'
+              )
               if (productSvg.default)
-                a.node.productIllustration = productSvg.default;
+                a.node.productIllustration = productSvg.default
             } catch (err) {
-              console.log(err);
-              a.node.productIllustration = "";
+              console.log(err)
+              a.node.productIllustration = ''
             }
           } else {
             // Loading illustrations for Bundles
             try {
               // Handle unisex products not having separate illustrations
-              if (a.node.description.split("|").length > 2) {
-                if (a.node.description.split("|")[1] === "complete") {
+              if (a.node.description.split('|').length > 2) {
+                if (a.node.description.split('|')[1] === 'complete') {
                   // In case of combo bundles with three or more products
-                  a.node.completeBundle = true;
-                  a.node.quantity = null;
-                } else if (a.node.description.split("|")[1] === "null") {
-                  a.node.quantity = null;
+                  a.node.completeBundle = true
+                  a.node.quantity = null
+                } else if (a.node.description.split('|')[1] === 'null') {
+                  a.node.quantity = null
                 } else {
-                  a.node.quantity = a.node.description.split("|")[1];
+                  a.node.quantity = a.node.description.split('|')[1]
                 }
               } else {
                 // In case of combo bundles
-                a.node.quantity = null;
+                a.node.quantity = null
               }
 
-              let illuHandles = [];
+              let illuHandles = []
               if (a.node.completeBundle) {
                 illuHandles = a.node.description
-                  .split("|")[0]
-                  .split("---")
-                  .slice(0, 3);
+                  .split('|')[0]
+                  .split('---')
+                  .slice(0, 3)
               } else {
                 illuHandles = a.node.description
-                  .split("|")[0]
-                  .split("---")
-                  .slice(0, 2);
+                  .split('|')[0]
+                  .split('---')
+                  .slice(0, 2)
               }
 
-              illuHandles.forEach(handle => {
+              illuHandles.forEach((handle) => {
                 if (
-                  handle.includes("accessories") ||
-                  handle.includes("socks") ||
+                  handle.includes('accessories') ||
+                  handle.includes('socks') ||
                   handle.includes('over-shirt')
                 ) {
-                  handle = handle.replace(/womens-/g, "").replace(/mens-/g, "");
+                  handle = handle.replace(/womens-/g, '').replace(/mens-/g, '')
                 }
-              });
+              })
 
               // This is where the lazy load of the illustrations is triggered
-              await getIllustrations(illuHandles).then(data => {
+              await getIllustrations(illuHandles).then((data) => {
                 // The illustrations for the bundle are added to a new property inside of the bundle
-                a.node.bundleIllustrations = data.map(illu => illu.default);
+                a.node.bundleIllustrations = data.map(illu => illu.default)
                 // We select the first illustration as the main bundle illustration in case of quantity bundles
-                a.node.productIllustration = a.node.bundleIllustrations[0];
-              });
+                a.node.productIllustration = a.node.bundleIllustrations[0]
+              })
             } catch (err) {
-              console.log(err);
+              console.log(err)
             }
           }
           if (a.node.quantity) {
             for (let i = 0; i < a.node.quantity - 1; i++) {
-              a.node.bundleIllustrations.push(a.node.productIllustration);
+              a.node.bundleIllustrations.push(a.node.productIllustration)
             }
           }
-          products.push(a);
+          products.push(a)
         }
         // Sort bundles in the bottom
-        products.sort((a, b) => {
-          let result = a.node.bundleIllustrations ? 1 : -1
+        products.sort((a) => {
+          const result = a.node.bundleIllustrations ? 1 : -1
           return result
         })
         // Sort by amount of variants (more or less equals most popular products)
         products.sort((a, b) => {
-          if(a.node.variants.edges.length > b.node.variants.edges.length) return -1
-          else return 1
+          if (a.node.variants.edges.length > b.node.variants.edges.length) {
+            return -1
+          } else {
+            return 1
+          }
         })
 
         return {
           // nuxt el : query var
-          products: products,
+          products,
           collectionTitle: title,
-          collHandle: collHandle
-        };
+          collHandle
+        }
       } else {
-        return { products: [], collectionTitle: "", collHandle: "" };
+        return { products: [], collectionTitle: '', collHandle: '' }
       }
     } catch (err) {
-      console.error(err);
-      return { products: [], collectionTitle: "", collHandle: "" };
+      console.error(err)
+      return { products: [], collectionTitle: '', collHandle: '' }
     }
   }
-});
+})
 </script>
 
 <style lang="scss">
