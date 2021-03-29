@@ -1,17 +1,24 @@
 <template>
-  <main :class="'container container-carbon--' + carbonIntensity.index + ' ' + $route.name" ref="container">
-    <button class="read-more" @click="openOverlay" v-if="!$route.path.includes('offline') && !$route.path.includes('unavailable')">
+  <main ref="container" :class="'container container-carbon--' + carbonIntensity.index + ' ' + $route.name">
+    <button v-if="!$route.path.includes('offline') && !$route.path.includes('unavailable')" class="read-more" @click="openOverlay">
       <img src="~/assets/svg/read-more.svg" alt="Read more">
       <img src="~/assets/svg/read-more-middle.svg" alt="Read more">
     </button>
-    <Navigation @openCart="openCart" @openSidebar="openSidebar" :mainSiteLink="mainSiteLink" v-if="!$route.path.includes('offline') && !$route.path.includes('unavailable')" />
-    <nuxt/>
-    <sidebar :open="isSidebarOpen" @closed="isSidebarOpen = false" v-if="!$route.path.includes('offline') && !$route.path.includes('unavailable')" />
-    <div class="cart__click-overlay" v-if="isCartOpen" @click="isCartOpen = false"></div>
-    <cartDrawer :open="isCartOpen" @closed="isCartOpen = false" v-if="!$route.path.includes('offline') && !$route.path.includes('unavailable')" />
-    <overlay :open="isOverlayOpen" :carbonIntensity="carbonIntensity" :mainSiteLink="mainSiteLink" @closed="isOverlayOpen = false" v-if="!$route.path.includes('offline') && !$route.path.includes('unavailable')" :footerData="{currentBytes, currentSavingsMultiplier, currentPage, totalSavings}"/>
-    <Footer :currentBytes="currentBytes" :currentSavingsMultiplier="currentSavingsMultiplier" :currentPage="currentPage" :totalSavings="totalSavings" v-if="!$route.path.includes('offline') && !$route.path.includes('unavailable')"/>
-    <CookieBar/>
+    <Navigation v-if="!$route.path.includes('offline') && !$route.path.includes('unavailable')" :main-site-link="mainSiteLink" @openCart="openCart" @openSidebar="openSidebar" />
+    <nuxt />
+    <sidebar v-if="!$route.path.includes('offline') && !$route.path.includes('unavailable')" :open="isSidebarOpen" @closed="isSidebarOpen = false" />
+    <div v-if="isCartOpen" class="cart__click-overlay" @click="isCartOpen = false" />
+    <cartDrawer v-if="!$route.path.includes('offline') && !$route.path.includes('unavailable')" :open="isCartOpen" @closed="isCartOpen = false" />
+    <overlay
+      v-if="!$route.path.includes('offline') && !$route.path.includes('unavailable')"
+      :open="isOverlayOpen"
+      :carbon-intensity="carbonIntensity"
+      :main-site-link="mainSiteLink"
+      :footer-data="{currentBytes, currentSavingsMultiplier, currentPage, totalSavings}"
+      @closed="isOverlayOpen = false"
+    />
+    <Footer v-if="!$route.path.includes('offline') && !$route.path.includes('unavailable')" :current-bytes="currentBytes" :current-savings-multiplier="currentSavingsMultiplier" :current-page="currentPage" :total-savings="totalSavings" />
+    <CookieBar />
   </main>
 </template>
 
@@ -30,7 +37,7 @@ import * as CO2 from '~/node_modules/@tgwf/co2/src/co2.js'
 const emissions = new CO2()
 
 export default Vue.extend({
-  name: 'default',
+  name: 'Default',
   components: {
     Navigation,
     Overlay,
@@ -39,22 +46,13 @@ export default Vue.extend({
     Footer,
     CookieBar
   },
-  async beforeMount() {
-    let dispatch = await this.$store.dispatch('initStore')
-  },
-  async mounted() {
-    this.saveEntries(true)
-  },
-  updated() {
-    this.saveEntries()
-  },
   data: () => {
     return {
       transferredObjects: [],
       isOverlayOpen: false,
       isCartOpen: false,
       isSidebarOpen: false,
-      mainSiteMap: mainSiteMap,
+      mainSiteMap,
       pageMap: [
         {
           key: 'locale',
@@ -105,40 +103,94 @@ export default Vue.extend({
       visitedPages: []
     }
   },
+  computed: {
+    totalBytes () {
+      if (this.transferredObjects.length > 0) {
+        return this.transferredObjects.reduce((acc, cur) => {
+          if (typeof acc !== 'number') {
+            acc = cur.byteSize
+          } else {
+            acc += cur.byteSize
+          }
+          return acc
+        })
+      } else {
+        return 0
+      }
+    },
+    totalCarbon () {
+      const estimatedCO2 = emissions.perByte(this.totalBytes, true)
+      return estimatedCO2
+    },
+    carbonIntensity () {
+      if (!this.$store.state.carbonIntensity.intensity) {
+        return {
+          index: '...',
+          forecast: 0
+        }
+      } else {
+        return {
+          index: this.$store.state.carbonIntensity.intensity.index.replace(' ', '-'),
+          forecast: this.$store.state.carbonIntensity.intensity.forecast
+        }
+      }
+    },
+    mainSiteLink () {
+      const mainSiteData = this.mainSiteMap.mainSiteMap
+      const mainSite = mainSiteData.find((a) => {
+        return a.currency == this.$store.state.activeCurrency
+      })
+      if (mainSite) {
+        const mainSiteUrl = 'https://' + mainSite.url + this.$route.path.replace('/' + this.$store.state.activeCurrency, '')
+        return mainSiteUrl
+      } else {
+
+      }
+    }
+  },
   watch: {
-    '$route': {
-      handler: function(val) {
+    $route: {
+      handler (val) {
         setTimeout(() => { this.saveEntries(true) }, 500)
       },
       deep: true
-    },
+    }
+  },
+  async beforeMount () {
+    const dispatch = await this.$store.dispatch('initStore')
+  },
+  async mounted () {
+    this.saveEntries(true)
+  },
+  updated () {
+    this.saveEntries()
   },
   methods: {
-    openCart(){
-      this.isCartOpen = true;
-      this.isOverlayOpen = false;
-      this.isSidebarOpen = false;
+    openCart () {
+      this.isCartOpen = true
+      this.isOverlayOpen = false
+      this.isSidebarOpen = false
     },
-    openSidebar(){
-      this.isCartOpen = false;
-      this.isOverlayOpen = false;
-      this.isSidebarOpen = true;
+    openSidebar () {
+      this.isCartOpen = false
+      this.isOverlayOpen = false
+      this.isSidebarOpen = true
     },
-    openOverlay(){
-      this.isCartOpen = false;
-      this.isOverlayOpen = true;
-      this.isSidebarOpen = false;
+    openOverlay () {
+      this.isCartOpen = false
+      this.isOverlayOpen = true
+      this.isSidebarOpen = false
       ga('send', 'event', 'LIW: Opened "Learn More" overlay', 'Click', 'Clicked on Learn More button')
     },
-    saveEntries: function(isRouteChange) {
-      let entries = performance.getEntriesByType('resource')
-      for(let ent of entries) {
-        let entJson = ent.toJSON()
-        let newEntry = {
+    saveEntries (isRouteChange) {
+      const entries = performance.getEntriesByType('resource')
+      for (const ent of entries) {
+        const entJson = ent.toJSON()
+        const newEntry = {
           name: entJson.name,
           byteSize: entJson.transferSize
         }
-        if(!this.transferredObjects.some((a) => {
+        if (!this.transferredObjects.some((a) => {
           return a.name === newEntry.name
         })) {
           this.transferredObjects.push(newEntry)
@@ -151,20 +203,17 @@ export default Vue.extend({
       this.currentBytes = this.currentPage.lowImpactSize
       this.currentSavingsMultiplier = 1 / (this.currentPage.lowImpactSize / this.currentPage.normalSize)
 
-      let thisSaving = this.currentPage.lowImpactSize
-
-      if(isRouteChange) {
+      if (isRouteChange) {
         this.visitedPages.push(this.currentPage)
       }
 
       let usedBytes = 0
-      if(this.visitedPages.length > 0) {
-        if(entries.length > 0) {
+      if (this.visitedPages.length > 0) {
+        if (entries.length > 0) {
           usedBytes = entries.reduce((acc, cur) => {
-            if(typeof acc !== 'number') {
+            if (typeof acc !== 'number') {
               acc = cur.transferSize
-            }
-            else {
+            } else {
               acc += cur.transferSize
             }
             return acc
@@ -172,12 +221,11 @@ export default Vue.extend({
         }
 
         // Fix for Safari, which doesn't have transferSize
-        if(Number.isNaN(usedBytes)) {
+        if (Number.isNaN(usedBytes)) {
           usedBytes = this.visitedPages.reduce((acc, cur) => {
-            if(typeof acc !== 'number') {
+            if (typeof acc !== 'number') {
               acc = cur.lowImpactSize
-            }
-            else {
+            } else {
               acc += cur.lowImpactSize
             }
             return acc
@@ -186,65 +234,15 @@ export default Vue.extend({
 
         let conventionalBytes = 0
         conventionalBytes = this.visitedPages.reduce((acc, cur) => {
-          if(typeof acc !== 'number') {
+          if (typeof acc !== 'number') {
             acc = cur.normalSize
-          }
-          else {
+          } else {
             acc += cur.normalSize
           }
           return acc
         }, 0)
 
         this.totalSavings = emissions.perByte(Math.abs(conventionalBytes - usedBytes), true)
-      }
-    }
-  },
-  computed: {
-    totalBytes: function() {
-      if(this.transferredObjects.length > 0) {
-        return this.transferredObjects.reduce((acc, cur) => {
-          if(typeof acc !== 'number') {
-            acc = cur.byteSize
-          }
-          else {
-            acc += cur.byteSize
-          }
-          return acc
-        })
-      }
-      else {
-        return 0
-      }
-    },
-    totalCarbon: function() {
-      let estimatedCO2 = emissions.perByte(this.totalBytes, true)
-      return estimatedCO2
-    },
-    carbonIntensity: function() {
-      if(!this.$store.state.carbonIntensity.intensity) {
-        return {
-          index: '...',
-          forecast: 0
-        }
-      }
-      else {
-        return {
-          index: this.$store.state.carbonIntensity.intensity.index.replace(' ', '-'),
-          forecast: this.$store.state.carbonIntensity.intensity.forecast
-        }
-      }
-    },
-    mainSiteLink: function() {
-      let mainSiteData = this.mainSiteMap.mainSiteMap
-      let mainSite = mainSiteData.find((a) => {
-        return a.currency == this.$store.state.activeCurrency
-      })
-      if(mainSite) {
-        let mainSiteUrl = 'https://' + mainSite.url + this.$route.path.replace('/' + this.$store.state.activeCurrency, '')
-        return mainSiteUrl
-      }
-      else {
-        return
       }
     }
   }
@@ -257,7 +255,6 @@ export default Vue.extend({
 @import "~assets/scss/typography.scss";
 @import "~assets/scss/main.scss";
 @import "~assets/scss/z-index.scss";
-
 
 html {
   background: map-get($colors, "bgGrey");
@@ -391,7 +388,5 @@ section {
   width: 100vw;
   top: 0;
 }
-
-
 
 </style>
