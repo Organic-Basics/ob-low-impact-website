@@ -10,6 +10,9 @@ const productsQuery = `edges {
       },
       description,
       onlineStoreUrl,
+      hiddenColors: metafield(namespace: "products", key: "hidden_colors") {
+        value
+      }
       variants(first:50) {
         edges {
           node {

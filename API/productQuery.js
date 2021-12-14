@@ -10,6 +10,9 @@ const productQuery = (imageScale) => {
             currencyCode
           }
         },
+        hiddenColors: metafield(namespace: "products", key: "hidden_colors") {
+          value
+        }
         tags,
         options {
           name,

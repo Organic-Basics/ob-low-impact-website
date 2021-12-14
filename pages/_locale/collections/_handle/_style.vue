@@ -195,7 +195,9 @@ export default Vue.extend({
           }
           if (a.node.quantity) {
             for (let i = 0; i < a.node.quantity - 1; i++) {
-              a.node.bundleIllustrations.push(a.node.productIllustration)
+              if(a.node && a.node.bundleIllustrations) {
+                a.node.bundleIllustrations.push(a.node.productIllustration)
+              }
             }
           }
           products.push(a)
