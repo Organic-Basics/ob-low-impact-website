@@ -271,6 +271,9 @@ export default Vue.extend({
                       id,
                       handle,
                       description,
+                      hiddenColors: metafield(namespace: "products", key: "hidden_colors") {
+                        value
+                      }
                       priceRange {
                         minVariantPrice {
                           amount,
