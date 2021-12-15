@@ -172,7 +172,7 @@
             <div
               :class="{product__illustration: true, quantityBundle: upSell.node.quantity, five: upSell.node.quantity === 5}"
               v-for="n in upSell.node.quantity"
-              v-html="upSell.node.bundleIllustrations[0]"
+              v-html="upSell.node.bundleIllustrations ? upSell.node.bundleIllustrations[0] : ''"
               v-if="upSell.node.quantity"
             ></div>
             <!-- <span class="product__image-quant variant--black" v-if="upSell.node.quantity">
@@ -269,11 +269,18 @@ export default Vue.extend({
       let size = this.propsProduct.options.find(a => a.name === "Size");
       let color = this.propsProduct.options.find(a => a.name === "Color");
 
+      // Hide colors if metafield hiddenColors is found
+      if (this.propsProduct?.hiddenColors?.value) {
+        const hiddenColors = this.propsProduct?.hiddenColors?.value
+        const filteredColors = color.values.filter(colorOpt => !hiddenColors?.includes(colorOpt))
+        color.values = filteredColors
+      }
+
       return {
         size: size,
         color: color
       };
-    }
+    },
   },
   methods: {
     chooseColor(color) {
