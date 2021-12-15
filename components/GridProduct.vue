@@ -63,7 +63,7 @@
         </div>
         <div class="variant__container">
           <span
-            v-for="color in productData.colorValues"
+            v-for="color in filteredColorValues"
             :class="
               'variant__selector variant--' +
                 [
@@ -88,7 +88,14 @@ export default Vue.extend({
   name: "GridProduct",
   props: {
     productData: Object
-  }
+  },
+  computed: {
+    filteredColorValues () {
+      const hiddenColors = this.productData?.hiddenColors?.value
+      const filteredColors = this.productData?.colorValues?.filter(colorOpt => !hiddenColors?.includes(colorOpt))
+      return filteredColors || null
+    }
+  },
 });
 </script>
 

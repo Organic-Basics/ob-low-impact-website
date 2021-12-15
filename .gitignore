@@ -89,3 +89,6 @@ sw.*
 
 # Vim swap files
 *.swp
+
+# Useful snippets for development
+.snippets
