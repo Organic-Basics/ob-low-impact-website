@@ -1,45 +1,48 @@
 const productQuery = (imageScale) => {
-    return(
-        `title,
-        id,
-        handle,
-        description,
-        priceRange {
-          minVariantPrice {
-            amount,
-            currencyCode
-          }
-        },
-        hiddenColors: metafield(namespace: "products", key: "hidden_colors") {
-          value
-        }
-        tags,
-        options {
-          name,
-          values
-        }
-        images(first: 25) {
-          edges {
-            node {
-              transformedSrc(maxWidth: 390, maxHeight: 390, crop: CENTER, scale: ${imageScale})
-            }
-          }
-        },
-        variants(first: 100) {
-          edges {
-            node {
-              selectedOptions {
-                name,
-                value
-              },
-              id,
-              title,
-              availableForSale,
-              compareAtPrice
-            }
-          }
-        }
-      `)
+  return (
+    `title,
+    id,
+    handle,
+    description,
+    priceRange {
+      minVariantPrice {
+        amount,
+        currencyCode
+      }
+    },
+    hiddenColors: metafield(namespace: "products", key: "hidden_colors") {
+      value
+    },
+    hiddenSizes: metafield(namespace: "products", key: "hidden_sizes") {
+      value
+    },
+    tags,
+    options {
+      name,
+      values
     }
+    images(first: 25) {
+      edges {
+        node {
+          transformedSrc(maxWidth: 390, maxHeight: 390, crop: CENTER, scale: ${imageScale})
+        }
+      }
+    },
+    variants(first: 100) {
+      edges {
+        node {
+          selectedOptions {
+            name,
+            value
+          },
+          id,
+          title,
+          availableForSale,
+          compareAtPrice
+        }
+      }
+    }
+  `)
+}
 
-  export default productQuery
+export default productQuery
