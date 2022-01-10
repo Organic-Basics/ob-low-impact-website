@@ -12,7 +12,10 @@ const productsQuery = `edges {
       onlineStoreUrl,
       hiddenColors: metafield(namespace: "products", key: "hidden_colors") {
         value
-      }
+      },
+      hiddenSizes: metafield(namespace: "products", key: "hidden_sizes") {
+        value
+      },
       variants(first:50) {
         edges {
           node {

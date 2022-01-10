@@ -276,6 +276,14 @@ export default Vue.extend({
         color.values = filteredColors
       }
 
+      // Hide sizes if metafield hiddenSizes is found
+      if (this.propsProduct?.hiddenSizes?.value) {
+        const hiddenSizes = this.propsProduct?.hiddenSizes?.value
+        // We need to enclosed the size option in double // since this makes them unique (Shopify hack)
+        const filteredSizes = size.values.filter(sizeOpt => !hiddenSizes?.includes(`//${sizeOpt}//`))
+        size.values = filteredSizes
+      }
+
       return {
         size: size,
         color: color
