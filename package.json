@@ -40,7 +40,7 @@
     "babel-eslint": "^10.0.1",
     "eslint": "^6.1.0",
     "eslint-plugin-nuxt": ">=0.4.2",
-    "node-sass": "^4.14.0",
+    "node-sass": "^7.0.0",
     "nodemon": "^1.18.9",
     "puppeteer": "^3.0.2",
     "sass-loader": "^8.0.2"
